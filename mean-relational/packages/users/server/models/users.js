@@ -46,10 +46,10 @@ module.exports = function(sequelize, DataTypes) {
 					salt = new Buffer(salt, 'base64');
 					return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
 				}
-			},
-			associate: function(models) {
-				User.hasMany(models.Article);
-			}
+			}//,
+			/*associate: function(models) {
+				User.hasMany(models.product);
+			}*/
 		}
 	);
 

@@ -10,11 +10,11 @@ angular
         var vm = this;
         vm.global = Global;
         vm.menu = [{
-            'title': 'Articles',
-            'link': 'articles'
+            'title': 'products',
+            'link': 'products'
         }, {
-            'title': 'Create New Article',
-            'link': 'create-article'
+            'title': 'Create New product',
+            'link': 'create-product'
         }];
 
         vm.isCollapsed = false;

@@ -1,3 +1,4 @@
+
   <div ng-controller="HeaderController as hdctr">
           <div class="inner">
               <div class="logo pull-left">
@@ -31,3 +32,578 @@
               </div>
           </div>
       </div>
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600,700' rel='stylesheet' type='text/css'>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="<?= base_url() ?>assets/vendors/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+  <link rel="stylesheet" href="system/assets/css/style2.css"/>
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="system/assets/css/perfect-scrollbar.min.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/css/theme-sky.css" type="text/css">
+  <link type="text/css" rel="stylesheet" href="<?= base_url() ?>assets/vendors/lightslider/css/lightslider.css" />
+  <link rel="stylesheet" href="system/assets/vendors/select2/dist/css/select2.min.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/css/gsdk-base.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/css/loginRegModal.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/css/star-rating.min.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/vendors/css/magnifier.css" type="text/css">
+  <link rel="stylesheet" href="system/assets/vendors/css/gallery.css" type="text/css">
+  <script type="text/javascript">
+      var flashMessage = "";
+      var baseURL = "";
+  </script>
+<div id="mySidenav" class="sidenav normal-bg">
+    
+    <li class="user-name dark-bg">
+        <span><img src="<?=$avatarURL?>"/></span>
+        <span class="sideMenus">Ahsan Khan</span>
+        <div class="user_info">
+            <span class="text-center sideMenus"><br> Score</span>
+            <span class="text-center sideMenus"><br>Friends</span>
+            <span class="text-center sideMenus"><br> Rank</span>
+        </div>
+    </li>
+    <a href="<?= base_url('products'); ?>"><i class="fa fa-adn"></i><span class="sideMenus">Shop</span></a>
+    <a href="<?= base_url('products'); ?>"><i class="fa fa-adn <?php if($this->router->fetch_class() === 'products' and
+            $this->router->fetch_method() === 'index'){
+            echo 'active';
+        }?>"></i><span class="sideMenus">My Anerve</span></a>
+    <a href="<?= base_url('offers'); ?>"><i class="fa fa-adn <?php if($this->router->fetch_class() === 'offers' and
+            $this->router->fetch_method() === 'index'){
+            echo 'active';
+        }?>"></i><span class="sideMenus">Offers</span></a>
+    <li class="dropdown sideDropDown">
+        <a class="dropdown-toggle" id="sideDrop" data-toggle="dropdown" href="#"><i class="fa fa-bullseye"></i><span class="sideMenus">Aisles
+           <i><span id="caretIcon" class="glyphicon glyphicon-menu-down pull-right"></span></a></i>
+        <ul class="dropdown-menu sideSubMenus normal-bg">
+            <li><a class="asile-menus" title="<?=$aisle->aisle_description?>" data-id="<?=$aisle->aisleId?>"><?=$aisle->aisle_name?></a></li>
+        </ul>
+    </li>
+    <a href="<?= base_url('products'); ?>"><i class="fa fa-adn <?php if($this->router->fetch_class() === 'products' and
+            $this->router->fetch_method() === 'index'){
+            echo 'active';
+        }?>"></i><span class="sideMenus">Snoop In</span></a>
+    <a href="<?= base_url('products'); ?>"><i class="fa fa-adn <?php if($this->router->fetch_class() === 'products' and
+            $this->router->fetch_method() === 'index'){
+            echo 'active';
+        }?>"></i><span class="sideMenus">Stores</span></a>
+    <li class="dropdown sideDropDown">
+        <a class="dropdown-toggle" id="sideDrop" data-toggle="dropdown" href="#"><i class="fa fa-bullseye"></i><span class="sideMenus">My Circles
+           <i><span id="caretIcon" class="glyphicon glyphicon-menu-down pull-right"></span></a></i>
+        <ul class="dropdown-menu sideSubMenus normal-bg">
+            <li><a href="<?=base_url('circle/friends')?>"><i class="fa fa-circle-o"></i><span class="sideMenus"> My Friends</span></a></li>
+            <li><a href="<?=base_url('circle/find_friends');?>"><i class="fa fa-circle-o"></i><span class="sideMenus"> Find Friends</span></a></li>
+        </ul>
+    </li>
+</div>
+<div class="container">
+    <div class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid light-bg nav_bar_one" >
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span style="cursor:pointer" class="navbar-brand fa fa-bars" onclick="sideNavBar()"></span>
+                <a target="_blank" href="<?=base_url()?>" class="navbar-brand">Anerve</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right navbar-menu" style="float:left;margin-left:0px;">
+
+                <li style="float:left;width:30px">
+                    <a id="menuBarBtn"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                </li>
+                <li style="float:left;width:30px">
+                    <a style="padding-left: 8px;height: 50px;" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    <div class="search-field">
+                        <input type="text" class="form-control" />
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </div>
+                </li>
+            </ul>
+            <div class="collapse navbar-collapse" style="width:100%">
+                <ul class="nav navbar-nav visible-xs">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="<?= base_url('products'); ?>">Shop</a></li>
+
+                    <li class="
+                        <?php if($this->router->fetch_class() === 'products' and
+                        $this->router->fetch_method() === 'index'){
+                        echo 'active';
+                    }?>
+                    "><a href="<?= base_url('products'); ?>">My Anerve</a></li>
+                    <li class="
+                        <?php if($this->router->fetch_class() === 'offers' and
+                        $this->router->fetch_method() === 'index'){
+                        echo 'active';
+                    }?>
+                    "><a href="<?= base_url('offers'); ?>">Offers</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Aisles
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php foreach($aisles as $aisle) { ?>
+                                <li><a class="asile-menus" title="<?=$aisle->aisle_description?>" data-id="<?=$aisle->aisleId?>"><?=$aisle->aisle_name?></a></li>
+                            <?php }?>
+                        </ul>
+                    </li>
+                    <li class="
+                        <?php if($this->router->fetch_class() === 'products' and
+                        $this->router->fetch_method() === 'index'){
+                        echo 'active';
+                    }?>
+                    "><a href="<?= base_url('products'); ?>">Snoop In</a></li>
+                    <li class="
+                        <?php if($this->router->fetch_class() === 'products' and
+                            $this->router->fetch_method() === 'index'){
+                            echo 'active';
+                        }?>
+                    "><a href="<?= base_url('products'); ?>">Stores</a></li>
+
+                    <li class="dropdown
+                        <?php if($this->router->fetch_class() === 'circle' and
+                            ($this->router->fetch_method() === 'find_friends' OR $this->router->fetch_method() === 'friends')){
+                            echo 'active';
+                         }?>
+                    ">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Circles
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?=base_url('circle/friends')?>">My Friends</a></li>
+                            <li><a href="<?=base_url('circle/find_friends');?>">Find Friends</a></li>
+                        </ul>
+                    </li>
+                    <?php if($this->session->userdata('userType')=='P'){?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Seller
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?=base_url('seller/addProduct')?>">Add New Product</a></li>
+                            <li><a href="<?=base_url('seller');?>">Products List</a></li>
+                        </ul>
+                    </li>
+                    <?php }?>
+                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user"></span>
+                                <strong><?=$firstName?></strong>
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="navbar-login">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <p class="text-center">
+                                                    <span class="glyphicon glyphicon-user icon-size"></span>
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <p class="text-left"><strong><?=$firstName.' '.$lastName?></strong></p>
+                                                <p class="text-left small"><?=$email?></p>
+                                                <p class="text-left">
+                                                    <a href="<?=base_url('user/profile')?>" class="btn btn-primary btn-block btn-sm">Profile</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider navbar-login-session-bg"></li>
+                                <li class="submenus-main"><a href="#">Account Settings <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
+                                <li class="divider"></li>
+                                <?php if($this->session->userdata('usr_role')=='A'){ ?>
+                                    <li class="submenus-main"><a href="<?=base_url('admin')?>">Admin <span class="glyphicon glyphicon-user pull-right"></span></a></li>
+                                    <li class="divider"></li>
+                                <?php } else if ($this->session->userdata('usr_role')=='P'){ ?>
+                                    <li class="submenus-main"><a href="<?=base_url('admin')?>">Seller <span class="glyphicon glyphicon-user pull-right"></span></a></li>
+                                    <li class="divider"></li>
+                                <?php }?>
+                                <li class="submenus-main"><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
+                                <li class="divider"></li>
+                                <li class="submenus-main"><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
+                                <li class="divider"></li>
+                                <li class="submenus-main"><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
+                                <li class="divider"></li>
+                                <li class="submenus-main"><a class="site_logout" >Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <?php $this->load->view('components/nav_bar/friends_invites',$this->data);  ?>
+                    <ul class="nav navbar-nav navbar-right" >
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span data-toggle="tooltip" data-placement="bottom" title="Apps" class="fa fa-asterisk"></span>
+                            </a>
+                            <ul id="friend_invites" class="dropdown-menu">
+                                <li class="dropdown-toolbar">
+                                    <span class="dropdown-toolbar-title">Social Apps </span>
+                                </li>
+
+                                <li data-id="">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <i class="fa fa-tumblr-square icon-sm-size"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong ><a href="#" class="user_link_color">Tumblr</strong>
+                                        <div class="notification-meta">
+                                            <?php if($this->session->userdata('tumblrUser')) {?>
+                                                <small data-toggle="modal" data-target="#tumblr_modal" class="timestamp create_tumblr_post btn btn-primary btn-xs">Create New Post</small> <?php }?>
+                                            <div class="pull-right actionBtns">
+                                                <?php if(!$this->session->userdata('tumblrUser')) { ?>
+                                                    <a style="color:white;" href="<?=base_url('Login/connectTumblr')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
+                                                <?php } else { ?>
+                                                    <a style="color:white;" data-value="tumblr"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li data-id="">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <i class="fa fa-pinterest-square icon-sm-size"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong ><a href="#" class="user_link_color">Pinterest</strong>
+                                        <div class="notification-meta">
+                                            <small data-toggle="modal" data-target="#pint_modal" class="timestamp btn btn-primary btn-xs">Create New Pin</small>
+                                            <div class="pull-right actionBtns">
+                                                <?php if(!$this->session->userdata('pint_token')) { ?>
+                                                    <a style="color:white;" href="<?=base_url('Login/pintConnect')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
+                                                <?php } else { ?>
+                                                    <a style="color:white;" data-value="pinterest"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li data-id="">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <i class="fa fa-twitter-square icon-sm-size"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong ><a href="#" class="user_link_color">Twitter</a></strong>
+                                        <div class="notification-meta">
+                                            <?php if($this->session->userdata('twitter_access_token')){ ?>
+                                            <small data-toggle="modal" data-target="#twitter_modal" class="timestamp create_tumblr_post btn btn-primary btn-xs">Tweet</small>
+                                            <?php }?>
+                                            <div class="pull-right actionBtns">
+                                                <?php if(!$this->session->userdata('twitter_access_token')) { ?>
+                                                    <a style="color:white;" href="<?=base_url('Login/twitterLogin')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
+                                                <?php } else if($this->session->userdata('login_type')!='twitter') { ?>
+                                                    <a style="color:white;" data-value="twitter"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php /* ?>
+                                <li data-id="">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <i class="fa fa-google-plus-square icon-sm-size"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong ><a href="#" class="user_link_color">Google Plus</a></strong>
+                                        <div class="notification-meta">
+                                            <small class="timestamp">Google Plus</small>
+                                            <div class="pull-right actionBtns">
+                                                <?php if(!$this->session->userdata('gplus_token')) { ?>
+                                                    <a style="color:white;" href="<?=$this->googleplus->loginURL()?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
+                                                <?php } else if($this->session->userdata('login_type')!='google') { ?>
+                                                    <a style="color:white;" data-value="google"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php */ ?>
+                                <?php /*?>
+                                <li data-id="">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <i class="fa fa-facebook-square icon-sm-size"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong ><a href="#" class="user_link_color">Facebook</a></strong>
+                                        <div class="notification-meta">
+                                            <small class="timestamp">Facebook</small>
+                                            <div class="pull-right actionBtns">
+                                                <?php if(!$this->session->userdata('fb_access_token')) { ?>
+                                                    <a style="color:white;" href="<?php echo $this->facebook->login_url(); ?>" class="btn-primary btn-sm" >Connect</a>
+                                                <?php } else if($this->session->userdata('login_type')!='facebook') { ?>
+                                                    <a style="color:white;"  class="btn-danger facebook-disconnect btn-sm" >Disconnect</a>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php */ ?>
+
+
+
+                                <li class="dropdown-footer text-center">
+                                    <a href="#">View All</a>
+                                </li>
+                            </ul>
+
+                        </li>
+                    </ul>
+               
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#myModal"><strong>Login</strong></a>
+                    </li>
+                </ul>
+  
+            </div>
+        </div>
+    </div>
+    <style>
+        .circular-menu-wrapper{position: fixed;    width: 100px;
+            height: 204px;
+            top: 30%;
+            z-index: 10000;}
+        .circular-menus{position:relative;height:100%;width:100%}
+        .circular-menus a, .circular-menu-btn{position:absolute;
+            cursor: pointer;
+            border-radius: 100%;
+            width: 50px;
+            padding: 8px;    padding-top: 13px;
+            color: white;
+            background-color: #298ae3;text-align:center;
+            height: 50px;
+            display: inline-block;}
+        .circular-menus {display: none;}
+        .circular-menus a i{font-size: 18px;}
+        .circular-menu-btn{top: 76px;background: #d9534f;left: -13px;text-align: center;cursor:pointer}
+        .circular-menus a span{
+            display: none;
+            position: absolute;
+            bottom: 41px;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            border-radius: 100%;
+            background: #d9534f;}
+        .cartProductBtn{
+            background-image: url('<?//=$avatarURL?>')!important;}
+    </style>
+
+    <div class="container-fluid productsContainer" style="display:none;">
+        <div class="container-fluid productWrapper aisle">
+
+
+            <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 wrapper-right">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="ticker-wrapper">
+                    <ul class="vertical-ticker firstCol2">
+                        <ul class="user-cart-wrap vertical-ticker"></ul>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="tickerTwo">
+                    <ul class="vertical-ticker secondCol2">
+                        <ul class="user-cart-wrap vertical-ticker"></ul>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="tickerThree">
+                    <ul class="vertical-ticker thirdCol2">
+                        <ul class="user-cart-wrap vertical-ticker"></ul>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="tickerFour">
+                    <ul class="vertical-ticker fourthCol2">
+                        <ul class="user-cart-wrap vertical-ticker"></ul>
+                    </ul>
+                </div>
+                <!--        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="tickerFour"><ul class="vertical-ticker fourthCol"></ul></div>-->
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="members_wrapper" class="members_wrapper modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div>
+                        <strong class="col-md-4 col-sm-4 col-xs-4 font-size20">Cart Members:</strong>
+                        <div class="col-md-7 col-sm-6 col-xs-6">
+                            <input type="text" placeholder="Search Member" class="form-control search-online-friend">
+                            <i class="fa fa-search btn btn-sm btn-primary search-member"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Comment Modal -->
+
+    <!-- Read More Modal -->
+    <div id="comment_modal" class="comment-modal modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title social-post"><img class="img-circle" src="<?=base_url('assets/images/user1.jpg')?>" /> <strong>Salman Malik</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <textarea rows="6" class="col-md-12" readonly placeholder="Give your comment here...">
+                    </textarea>
+                </div>
+                <div class="modal-footer">
+<!--                    <a class="btn btn-primary">Send</a>-->
+                    <a class="btn btn-default comment-close" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Confirm dialog modal -->
+    <div id="confirm_modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="padding: 15px;float:left">
+                <div class="col-md-12">Are you Sure To Delete This Item?</div>
+                <input type="hidden" value="" class="del-item" />
+                <div class="col-md-12 text-right">
+                    <a class="btn btn-danger btn-sm yes">Yes</a>
+                    <a class="btn btn-default btn-sm modal-close" data-dismiss="modal">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ <!-- Suggest item with comment modal (show when item drop on friend zone) -->
+    <div id="friend_item_share" class="comment-modal modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title social-post"><i class="fa fa-share"></i> <strong>Share Item</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="owner" data-name="" />
+                    <input type="hidden" class="prodBrand" data-name="" />
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="col-md-12"><strong>Share <span class="item-name"></span></strong></div>
+                            <div class="col-md-12"><img class="prodImg" src="" style="max-height:150px; max-width:150px"/></div>
+                            <div class="col-md-12 more_zone_members"><strong> with <span class="username"></span></strong><br><img class="user_image img-circle" src="" /></div>
+                        </div>
+                        <div class="col-md-6">
+                            <textarea rows="2" class="col-md-12" placeholder="Give your comment here..." ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary shareItem">Share</a>
+                    <a class="btn btn-default close-modal" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a id="stop"></a>
+    <a id="start"></a>
+    <div class="container-fluid page-parent">
+
+        <section id="adv_search_outer" class="full-width adv_search_outer">
+            <div class="search_container clearfix">
+                <form method="get" action="http://www.thomsoncollection.com/search-locations/">
+                    <div class="adv_search_inner col_1 no_left_padding">
+                        Find Your Product
+                    </div>
+
+                    <div class="adv_search_inner col_2">
+                        <div class="val_holder clearfix">
+                            <label>by Filter1</label>
+                            <span><img src="http://www.thomsoncollection.com/wp-content/themes/thomson/images/drop_down_arrow.png"></span>
+                        </div>
+                        <select id="destination" name="destination" class="adv_search_dropdowns">
+                            <option value="" selected="selected">Select Filter</option>
+                            <option value="africa">Africa</option>
+                            <option value="americas">Latin America</option>
+                            <option value="asia">Asia</option>
+                            <option value="europe">Europe</option>
+                            <option value="polar-pacific">Polar &amp; Pacific</option>
+                        </select>
+                    </div>
+
+                    <div class="adv_search_inner col_3">
+                        <div class="val_holder clearfix">
+                            <label>by Filter2</label>
+                            <span><img src="http://www.thomsoncollection.com/wp-content/themes/thomson/images/drop_down_arrow.png"></span>
+                        </div>
+                        <select id="experience" name="experience" class="adv_search_dropdowns">
+                            <option value="" selected="selected">Select Filter</option>
+                            <option value="active">Active</option>
+                            <option value="art">Arts &amp; Culture</option>
+                            <option value="culinary">Culinary</option>
+                            <option value="multi">Multi-Generation</option>
+                            <option value="photo">Photography</option>
+                            <option value="wild">Wildlife</option>
+                        </select>
+                    </div>
+
+                    <div class="adv_search_inner col_4 no_border">
+                        <div class="val_holder clearfix">
+                            <label>by Filter3</label>
+                            <span><img src="http://www.thomsoncollection.com/wp-content/themes/thomson/images/drop_down_arrow.png"></span>
+                        </div>
+                        <select id="month" name="month" class="adv_search_dropdowns">
+                            <option value="-1">Select Year</option>
+
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+
+                    <div class="adv_search_inner col_5 no_border no_padding">
+                        <button type="submit" class="adv_search_button tc-btn">Go</button>
+                    </div>
+
+                </form>
+            </div><!--/container-->
+        </section>
+
+

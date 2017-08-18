@@ -1,0 +1,21 @@
+.light-bg{background-color:#298ae3;}
+
+.light-font{color:rgb(92, 187, 83);}
+
+.normal-bg{background-color:#1c66bd;color:white}
+
+.dark-bg{background-color:#124a9e;color:white}
+
+.dark-font{color:#1c66bd;}
+
+.navbar-inverse .navbar-nav>.active>a,
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus,
+.navbar-inverse .navbar-nav>.active>a:hover{background-color: #124a9e;}
+
+.navbar-inverse .navbar-nav>li>a:hover{background-color: #124a9e;}
+
+.menu-item{background-color:#298ae3;}
+
+.sidenav a:hover{color: #fff;background-color:#124a9e;border-left-color: #3c8dbc;}
+
+.nav-tabs-bg>li.active>a, .nav-tabs>li.active>a:focus{background-color:#298ae3;color:white;}

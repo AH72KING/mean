@@ -10,10 +10,10 @@ angular.module('mean', [
 
   /*feature areas*/
   'mean.system',
-  'mean.articles',
+  'mean.products',
   'mean.users'
 ]);
 
 angular.module('mean.system', []);
-angular.module('mean.articles', []);
+angular.module('mean.products', []);
 angular.module('mean.users',[]);

@@ -1,0 +1,17 @@
+<section>
+
+	<div class="products-view">
+		<form ng-submit="arctr.create()">
+		  <div class="form-group">
+		    <label for="name">Name</label>
+		    <input type="text"  class="form-control" id="name" placeholder="name" ng-model="arctr.name">
+		  </div>
+		  <div class="form-group">
+		    <label for="specs">Specs</label>
+		    <textarea name="specs" placeholder="specs" id="specs" ng-model="arctr.specs" class="form-control" rows="10"></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
+
+</section>
