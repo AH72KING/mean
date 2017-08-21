@@ -21,7 +21,7 @@
 
         //methods
          function create() {
-            var product = new products({
+            var product = new Products({
                 title: vm.title,
                 content: vm.content
             });

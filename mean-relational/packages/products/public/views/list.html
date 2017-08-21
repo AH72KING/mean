@@ -1,23 +1,23 @@
 <link href="/products/assets/css/style.css" type="text/css">
 <section ng-init="arctr.find()">
-	<div class="main">
+	<div class="">
         <div class="product_grid">
 			<ul class="products unstyled product_list list">
 				<li style="box-shadow: 0px 2px 0px 0 #cccccc;" class="product_item" ng-repeat="product in arctr.products">
 					<div class="product_image">
-		                <a data-ng-href="/products/{{product.id}}">
-		                	<img src="/products/assets/{{product.img_loc}}" alt="">
+		                <a data-ng-href="/products/{{product.prod.id}}">
+		                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
 		                </a>
 		            </div>
 		            <div class="product_details">
-		            	<strong>{{product.name}}</strong>
+		            	<strong>{{product.prod.name}}</strong>
 		                <span class="usr">by Syed Haider Hassan</span>
 		                <div class="icons_info">
 		                    <span class="icon"><i class="fa fa-heart"></i>
-		                    	<span>{{product.prodlove}}%</span>
+		                    	<span>{{product.prod.prodlove}}%</span>
 		                    </span>
 		                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
-		                    <span>{{product.updatedAt | date:'medium'}}</span>
+		                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
 		                    <!--div>{{product.specs}}</div-->
 		                </div>
 					</div>
@@ -25,5 +25,5 @@
 			</ul>
 		</div>
 	</div>
-	<h1 data-ng-hide="!arctr.products || arctr.products.length">No products yet. <br> Why don't you <a href="/products/create">Create One</a>?</h1>
+	<!--h1 data-ng-hide="!arctr.products || arctr.products.length">No products yet. <br> Why don't you <a href="/products/create">Create One</a>?</h1-->
 </section>

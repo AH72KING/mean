@@ -95,7 +95,7 @@
         </ul>
     </li>
 </div>
-<div class="container">
+<div class="container-fluid">
     <div class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid light-bg nav_bar_one" >
             <div class="navbar-header">
@@ -232,7 +232,6 @@
                             </ul>
                         </li>
                     </ul>
-                    <?php $this->load->view('components/nav_bar/friends_invites',$this->data);  ?>
                     <ul class="nav navbar-nav navbar-right" >
 
                         <li class="dropdown">
@@ -253,14 +252,14 @@
                                     <div class="media-body">
                                         <strong ><a href="#" class="user_link_color">Tumblr</strong>
                                         <div class="notification-meta">
-                                            <?php if($this->session->userdata('tumblrUser')) {?>
-                                                <small data-toggle="modal" data-target="#tumblr_modal" class="timestamp create_tumblr_post btn btn-primary btn-xs">Create New Post</small> <?php }?>
+                                            
+                                                <small data-toggle="modal" data-target="#tumblr_modal" class="timestamp create_tumblr_post btn btn-primary btn-xs">Create New Post</small> 
                                             <div class="pull-right actionBtns">
-                                                <?php if(!$this->session->userdata('tumblrUser')) { ?>
+                                                
                                                     <a style="color:white;" href="<?=base_url('Login/connectTumblr')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
-                                                <?php } else { ?>
+                                                
                                                     <a style="color:white;" data-value="tumblr"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
-                                                <?php }?>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -276,11 +275,11 @@
                                         <div class="notification-meta">
                                             <small data-toggle="modal" data-target="#pint_modal" class="timestamp btn btn-primary btn-xs">Create New Pin</small>
                                             <div class="pull-right actionBtns">
-                                                <?php if(!$this->session->userdata('pint_token')) { ?>
+                                                
                                                     <a style="color:white;" href="<?=base_url('Login/pintConnect')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
-                                                <?php } else { ?>
+                                               
                                                     <a style="color:white;" data-value="pinterest"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
-                                                <?php }?>
+                                              
                                             </div>
                                         </div>
                                     </div>
@@ -294,20 +293,20 @@
                                     <div class="media-body">
                                         <strong ><a href="#" class="user_link_color">Twitter</a></strong>
                                         <div class="notification-meta">
-                                            <?php if($this->session->userdata('twitter_access_token')){ ?>
+                                           
                                             <small data-toggle="modal" data-target="#twitter_modal" class="timestamp create_tumblr_post btn btn-primary btn-xs">Tweet</small>
-                                            <?php }?>
+                                           
                                             <div class="pull-right actionBtns">
-                                                <?php if(!$this->session->userdata('twitter_access_token')) { ?>
+                                                
                                                     <a style="color:white;" href="<?=base_url('Login/twitterLogin')?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
-                                                <?php } else if($this->session->userdata('login_type')!='twitter') { ?>
+                                               
                                                     <a style="color:white;" data-value="twitter"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
-                                                <?php }?>
+                                                
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <?php /* ?>
+                               
                                 <li data-id="">
                                     <div class="media-left">
                                         <div class="media-object">
@@ -319,17 +318,16 @@
                                         <div class="notification-meta">
                                             <small class="timestamp">Google Plus</small>
                                             <div class="pull-right actionBtns">
-                                                <?php if(!$this->session->userdata('gplus_token')) { ?>
+                                                
                                                     <a style="color:white;" href="<?=$this->googleplus->loginURL()?>" class="btn-primary tumlbr-connect btn-sm" >Connect</a>
-                                                <?php } else if($this->session->userdata('login_type')!='google') { ?>
+                                            
                                                     <a style="color:white;" data-value="google"  class="btn-danger social-disconnect btn-sm" >Disconnect</a>
-                                                <?php }?>
+                                              
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <?php */ ?>
-                                <?php /*?>
+                                
                                 <li data-id="">
                                     <div class="media-left">
                                         <div class="media-object">
@@ -341,16 +339,16 @@
                                         <div class="notification-meta">
                                             <small class="timestamp">Facebook</small>
                                             <div class="pull-right actionBtns">
-                                                <?php if(!$this->session->userdata('fb_access_token')) { ?>
+                                                
                                                     <a style="color:white;" href="<?php echo $this->facebook->login_url(); ?>" class="btn-primary btn-sm" >Connect</a>
-                                                <?php } else if($this->session->userdata('login_type')!='facebook') { ?>
+                                              
                                                     <a style="color:white;"  class="btn-danger facebook-disconnect btn-sm" >Disconnect</a>
-                                                <?php }?>
+                                                
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <?php */ ?>
+                               
 
 
 
