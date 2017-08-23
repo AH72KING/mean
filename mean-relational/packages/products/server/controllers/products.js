@@ -98,8 +98,8 @@ exports.show = function(req, res) {
  * List of products
  */
 exports.all = function(req, res) {
-    var http = require('http');
-    var url = 'http://localhost:8080/Anerve/anerveWs/AnerveService/getAllProdsInLocDefault/PK/81/20';
+   var http = require('http');
+    var url = 'http://localhost:8080/Anerve/anerveWs/AnerveService/getAllProdsInLocDefault/PK/81/2';
     var data = '';
     var productsData = '';
      var body = '';
@@ -112,7 +112,6 @@ exports.all = function(req, res) {
 
         res2.on('end', function(){
             data = JSON.parse(body);
-            console.log('Data From API: ', data);
             productsData =  res.jsonp(data);
         return productsData;
             
@@ -120,6 +119,14 @@ exports.all = function(req, res) {
     }).on('error', function(e){
               console.log('Got an error: ', e);
     });
+    /*db.product.findAll().then(function(products){
+        return res.jsonp(products);
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });*/
 };
 
 /**

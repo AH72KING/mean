@@ -25,5 +25,7 @@
 			</ul>
 		</div>
 	</div>
-	<!--h1 data-ng-hide="!arctr.products || arctr.products.length">No products yet. <br> Why don't you <a href="/products/create">Create One</a>?</h1-->
+	{{arctr.list}}
+	<span>Time (in ms): {{timeInMs}}</span>
+	<h1 data-ng-hide="!arctr.products || arctr.products.length">No products yet. <br> Why don't you <a href="/products/create">Create One</a>?</h1>
 </section>

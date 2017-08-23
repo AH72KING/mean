@@ -4,8 +4,8 @@
 /**
 * Module dependencies.
 */
-var users = require('../../../users/server/controllers/users'),
-products = require('../controllers/products');
+//var users = require('../../../users/server/controllers/users');
+var products = require('../controllers/products');
 
 
 module.exports = function(app) {
