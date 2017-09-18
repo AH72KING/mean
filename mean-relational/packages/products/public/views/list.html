@@ -1,31 +1,163 @@
+
 <link href="/products/assets/css/style.css" type="text/css">
-<section ng-init="arctr.find()">
+<a id="stop"></a>
+<a id="start"></a>
+<script type="text/javascript" >
+	$(function(){
+     $('.vertical-ticker').totemticker({
+            row_height   :    '250px',
+            // next      :    '#ticker-next',
+            // previous  :    '#ticker-previous',
+            stop         :    '#stop',
+            start        :    '#start',
+            mousestop    :    true,
+        });
+       
+	   	$(document).on('mouseleave','.vertical-ticker', function(){
+	        $('#stop').trigger('click');
+	        $('#start').trigger('click');
+	    });
+    });
+</script>
+<br><br><br>
+<section class="product-flow-container" ng-init="arctr.find()">
 	<div class="">
-        <div class="product_grid">
-			<ul class="products unstyled product_list list">
-				<li style="box-shadow: 0px 2px 0px 0 #cccccc;" class="product_item" ng-repeat="product in arctr.products">
-					<div class="product_image">
-		                <a data-ng-href="/products/{{product.prod.id}}">
-		                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
-		                </a>
-		            </div>
-		            <div class="product_details">
-		            	<strong>{{product.prod.name}}</strong>
-		                <span class="usr">by Syed Haider Hassan</span>
-		                <div class="icons_info">
-		                    <span class="icon"><i class="fa fa-heart"></i>
-		                    	<span>{{product.prod.prodlove}}%</span>
-		                    </span>
-		                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
-		                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
-		                    <!--div>{{product.specs}}</div-->
-		                </div>
+        <div id="myproducts" class="product_grid">
+        	<div class="col-sm-12 ui-widget-content">
+        		<div class="row">
+        			<div class="col-sm-7 five-three">
+        				<div class="row">
+          					<div class="col-sm-4">
+				        		<ul id="cart-list" class="products vertical-ticker unstyled product_list list cartCol Col" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}" style="height:95vh;background:#345;" >
+				        		<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
+				                        
+						                <li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{product.prod.prodBrandId}}">
+						                	<div class="product_image">
+									            <a data-ng-href="/products/{{product.prod.prodBrandId}}">
+									                <img src="/products/assets/{{product.prod.img_loc}}" alt="">
+									            </a>
+									        </div>
+									    </li>
+									    <li class="product_item" ng-repeat="product in arctr.products[6].grpcart_products" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products[6].grpcart_products" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
+										<div class="product_image">
+							                <a data-ng-href="/products/{{product.ProdBrandId}}">
+							                	<img src="/products/assets/{{product.img_loc}}" alt="">
+							                </a>
+							            </div>
+									</li>
+				                    <div class="placeholder" ng-hide="hideMe()">Add your items here</div>
+				                </ul>
+							</div>
+				        	<div class="col-sm-4">
+								<ul class="products vertical-ticker unstyled product_list list firstCol Col">
+								<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
+									<li class="product_item" ng-repeat="product in arctr.products[0].col1" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products[0].col1" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.prod.prodBrandId}}">
+										<div class="product_image">
+							                <a data-ng-href="/products/{{product.prod.prodBrandId}}">
+							                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
+							                </a>
+							            </div>
+							            <!--div class="product_details">
+							            	<strong>{{product.prod.name}}</strong>
+							                <span class="usr">by Syed Haider Hassan </span>
+							                <div class="icons_info">
+							                    <span class="icon"><i class="fa fa-heart"></i>
+							                    	<span>{{product.prod.prodlove}}%</span>
+							                    </span>
+							                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
+							                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
+							                    <div>{{product.specs}}</div>
+							                </di>
+										</div-->
+										<!--div class="product-id" ng-init="lastProductID = product.prod.prodBrandId">{{lastProductID = product.prod.prodBrandId}}</div-->
+									</li>
+								</ul>
+							</div>
+							<div class="col-sm-4">
+								<ul class="products vertical-ticker unstyled product_list list secondCol Col">
+								<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
+									<li class="product_item" ng-repeat="product in arctr.products[1].col2" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products[1].col2" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.prod.prodBrandId}}">
+										<div class="product_image">
+							                <a data-ng-href="/products/{{product.prod.prodBrandId}}">
+							                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
+							                </a>
+							            </div>
+										<!--div class="product_details">
+							            	<strong>{{product.prod.name}}</strong>
+							                <span class="usr">by Syed Haider Hassan </span>
+							                <div class="icons_info">
+							                    <span class="icon"><i class="fa fa-heart"></i>
+							                    	<span>{{product.prod.prodlove}}%</span>
+							                    </span>
+							                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
+							                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
+							                    <div>{{product.specs}}</div>
+							                </di>
+										</div-->
+										<!--div class="product-id" ng-init="lastProductID = product.prod.prodBrandId">{{lastProductID = product.prod.prodBrandId}}</div-->
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
-				</li>
-			</ul>
+					<div class="col-sm-5 five-two">
+				        <div class="row">
+				          	<div class="col-sm-6">
+								<ul class="products vertical-ticker unstyled product_list list thirdCol Col">
+									<li class="product_item" ng-repeat="product in arctr.products[2].col3" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products[2].col3" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.prod.prodBrandId}}">
+											<div class="product_image">
+								                <a data-ng-href="/products/{{product.prod.prodBrandId}}">
+								                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
+								                </a>
+								            </div>
+								            <!--div class="product_details">
+								            	<strong>{{product.prod.name}}</strong>
+								                <span class="usr">by Syed Haider Hassan </span>
+								                <div class="icons_info">
+								                    <span class="icon"><i class="fa fa-heart"></i>
+								                    	<span>{{product.prod.prodlove}}%</span>
+								                    </span>
+								                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
+								                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
+								                    <div>{{product.specs}}</div>
+								                </di>
+											</div-->
+											<!--div class="product-id" ng-init="lastProductID = product.prod.prodBrandId">{{lastProductID = product.prod.prodBrandId}}</div-->
+									</li>
+								</ul>
+							</div>
+							<div class="col-sm-6">
+								<ul class="products vertical-ticker unstyled product_list list fourthCol Col">
+								<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
+									<li class="product_item" ng-repeat="product in arctr.products[3].col4" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products[3].col4" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.prod.prodBrandId}}">
+										<div class="product_image">
+							                <a data-ng-href="/products/{{product.prod.prodBrandId}}" >
+							                	<img src="/products/assets/{{product.prod.img_loc}}" alt="">
+							                </a>
+							            </div>
+							            <!--div class="product_details">
+							            	<strong>{{product.prod.name}}</strong>
+							                <span class="usr">by Syed Haider Hassan </span>
+							                <div class="icons_info">
+							                    <span class="icon"><i class="fa fa-heart"></i>
+							                    	<span>{{product.prod.prodlove}}%</span>
+							                    </span>
+							                    <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
+							                    <span>{{product.prod.updatedAt | date:'medium'}}</span>
+							                    <div>{{product.specs}}</div>
+							                </di>
+										</div-->
+										<!--div class="product-id" ng-init="lastProductID = product.prod.prodBrandId">{{lastProductID = product.prod.prodBrandId}}</div-->
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="product-id">{{arctr.products[arctr.products.length -1].prod.prodBrandId}}</div>
 		</div>
 	</div>
-	{{arctr.list}}
-	<span>Time (in ms): {{timeInMs}}</span>
 	<h1 data-ng-hide="!arctr.products || arctr.products.length">No products yet. <br> Why don't you <a href="/products/create">Create One</a>?</h1>
 </section>
+<span>Time (in ms): {{timeInMs}}</span>

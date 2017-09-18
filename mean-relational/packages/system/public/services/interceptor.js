@@ -38,6 +38,11 @@
 
     function config($httpProvider){
       $httpProvider.interceptors.push('httpInterceptor');
+      $httpProvider.defaults.headers.common = {};
+        $httpProvider.defaults.headers.post = {};
+        $httpProvider.defaults.headers.get = {};
+        $httpProvider.defaults.headers.put = {};
+        $httpProvider.defaults.headers.patch = {};
     }
 
 })();

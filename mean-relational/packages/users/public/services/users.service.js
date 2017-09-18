@@ -82,18 +82,19 @@ angular
 
             function login(user) {
                 // this is an ugly hack due to mean-admin needs
+                console.log('user.service.js');
+                console.log(user);
                 $http.post('/api/login', {
-                        email: user.email,
+                        username: user.username,
                         password: user.password
                     })
                     .success(function(res) {
+                        console.log(res);
                         self.onIdentity(res);
                     })
                     .error(function(err) {
-                        self.onIdFail(err);
+                       self.onIdFail(err);
                     });
-
-
             }
 
 
@@ -164,8 +165,9 @@ angular
 
                     // Not Authenticated
                     else {
-                        $timeout(deferred.reject);
-                        $location.url('/auth/login');
+                        $timeout(deferred.resolve);
+                        //$timeout(deferred.reject);
+                        //$location.url('/auth/login');
                     }
                 });
 

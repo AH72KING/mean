@@ -9,6 +9,7 @@
       function IndexController(Global){
         var vm = this;
         vm.global = Global;
+       // var $ = require("jquery");
       }
   
 })();

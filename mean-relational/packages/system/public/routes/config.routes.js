@@ -6,6 +6,14 @@
          .module('mean')
          .config(configState)
          .config(configLoaction)
+         .config(['$httpProvider', function($httpProvider) {
+              $httpProvider.defaults.headers.common = {};
+              $httpProvider.defaults.headers.post = {};
+              $httpProvider.defaults.headers.get = {};
+              $httpProvider.defaults.headers.put = {};
+              $httpProvider.defaults.headers.patch = {};
+            }
+         ])
          .run(function($rootScope, $state) {
              $rootScope.$state = $state;
          });

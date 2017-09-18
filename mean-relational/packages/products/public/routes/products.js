@@ -5,11 +5,12 @@
   angular
          .module('mean.products')
          .config(config);
+         
 
-  config.$inject = ['$stateProvider'];
+  config.$inject = ['$stateProvider','$httpProvider'];
 
 
-  function config($stateProvider){
+  function config($stateProvider,$httpProvider){
 
       // states for my app
       $stateProvider
@@ -37,6 +38,13 @@
             controller: 'productsController',
             controllerAs: 'arctr'
         });
+        $httpProvider.defaults.headers.common = {};
+        $httpProvider.defaults.headers.post = {};
+        $httpProvider.defaults.headers.get = {};
+        $httpProvider.defaults.headers.put = {};
+        $httpProvider.defaults.headers.patch = {};
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
   }
 

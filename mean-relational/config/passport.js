@@ -11,12 +11,12 @@ var winston = require('./winston');
 
 //Serialize sessions
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  done(null, user.USERID);
 });
 
 passport.deserializeUser(function(id, done) {
 
-    db.User.find({where: {id: id}})
+    db.User.find({where: {USERID: id}})
     .then(function(user){
         if(!user) return done('error');
         winston.info('Session: { id: ' + user.id + ', username: ' + user.username + ' }');
@@ -28,11 +28,11 @@ passport.deserializeUser(function(id, done) {
 
 //Use local strategy
 passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
+    usernameField: 'USERNAME',
+    passwordField: 'PASSWORD'
   },
-  function(email, password, done) {
-    db.User.find({ where: { email: email }}).then(function(user) {
+  function(username, password, done) {
+    db.User.find({ where: { USERNAME: username }}).then(function(user) {
       if (!user) {
         done(null, false, { message: 'Unknown user' });
       } else if (!user.authenticate(password)) {

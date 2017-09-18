@@ -7,6 +7,7 @@ angular.module('mean', [
   /*3rd-party modules*/
   'ui.router',
   'ui.bootstrap',
+  'ngDragDrop',
 
   /*feature areas*/
   'mean.system',
