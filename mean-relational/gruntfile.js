@@ -143,12 +143,15 @@ module.exports = function(grunt) {
     grunt.option('force', true);
     //Default task(s).
       if (process.env.NODE_ENV === 'production') {
-          grunt.registerTask('default', ['clean','ngAnnotate','uglify','cssmin', 'concurrent']);
+          //grunt.registerTask('default', ['clean','ngAnnotate','uglify','cssmin', 'concurrent']);
+          grunt.registerTask('default', ['ngAnnotate', 'concurrent']);
       }else{
-          grunt.registerTask('default', ['clean','csslint','jshint', 'concurrent']);
+          //grunt.registerTask('default', ['clean','csslint','jshint', 'concurrent']);
+          grunt.registerTask('default', ['concurrent']);
       }
 
-    grunt.registerTask('annotate',['clean','ngAnnotate']);
+    //grunt.registerTask('annotate',['clean','ngAnnotate']);
+    grunt.registerTask('annotate',['ngAnnotate']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);

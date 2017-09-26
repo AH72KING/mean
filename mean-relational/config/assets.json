@@ -2,7 +2,10 @@
     "core": {
         "css": {
             "bower_components/build/css/dist.min.css": [
-                "bower_components/bootstrap/dist/css/bootstrap.min.css"
+                "bower_components/bootstrap/dist/css/bootstrap.min.css",
+                "bower_components/angular-material/angular-material.css",
+                "https://fonts.googleapis.com/icon?family=Material+Icons",
+                "bower_components/flag-icon-css/css/flag-icon.min.css"
             ]
         },
         "js": {
@@ -13,7 +16,11 @@
                 "bower_components/angular-mocks/angular-mocks.js",
                 "bower_components/angular-ui-router/release/angular-ui-router.min.js",
                 "bower_components/angular-bootstrap/ui-bootstrap.min.js",
-                "bower_components/angular-dragdrop/src/angular-dragdrop.js"
+                "bower_components/angular-dragdrop/src/angular-dragdrop.js",
+                "bower_components/angular-animate/angular-animate.js",
+                "bower_components/angular-aria/angular-aria.js",
+                "bower_components/angular-material/angular-material.js",
+                "bower_components/angular-messages/angular-messages.js"
             ]
         }
     }

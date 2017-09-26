@@ -12,6 +12,7 @@ var app = express();
 
         //var baseUrl = 'http://localhost:3000/';
         var ip = '192.168.100.88';
+        //var ip = '192.168.1.88';
         //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
         var headers = {
@@ -141,7 +142,7 @@ exports.show = function(req, res) {
  */
 exports.all = function(req, res) {
    db.product.findAll().then(function(product){
-        var productsData = [];
+        var productsData = {};
         var col1 = [];
         var col2 = [];
         var col3 = [];
@@ -168,27 +169,57 @@ exports.all = function(req, res) {
                 }
                 
             }
-        productsData.push({'col1':col1});
-        productsData.push({'col2':col2});
-        productsData.push({'col3':col3});
-        productsData.push({'col4':col4});
+
+        productsData['col1'] = col1;
+        productsData['col2'] = col2;
+        productsData['col3'] = col3;
+        productsData['col4'] = col4;
+
         var grp_cartId = localStorage.getItem('grp_cartId');
+
         if(grp_cartId !== undefined && grp_cartId !== null){
-            productsData.push({'grp_cartId':grp_cartId});
-            var Query = 'select a.ProdBrandId,a.name, a.cost_price, a.specs ,a.img_loc from productbrands a, group_cart_products b, grpcart_products c where a.prodbrandId=b.crt_item and b.groupCartProductId=c.groupCartProductId and c.grp_cartId = '+grp_cartId;
-            productsData.push({'Query':Query});
+
+            productsData['grp_cartId'] = grp_cartId;
+            var Query = 'select a.ProdBrandId,a.name, a.cost_price, a.specs ,a.img_loc ,b.groupCartProductId from productbrands a, group_cart_products b, grpcart_products c where a.prodbrandId=b.crt_item and b.groupCartProductId=c.groupCartProductId and c.grp_cartId = '+grp_cartId+' order by b.actiontime DESC';
+            productsData['Query'] = Query;
+
             db.sequelize.query(Query,{raw: false}).then(grpcart_products => {
-                var productIds = [];
-                grpcart_products[0].forEach(function(row,index) {
-                   // if(productIds.indexOf(row['grpcart_productsId']) === -1) {
-                       // console.log( row );
-                        productIds.push( row );
-                    //}
+                var productRow = {};
+                productsData['productRow']= typeof productRow;
+               grpcart_products[0].forEach(function(row,index) {
+                     
+                       if (row['ProdBrandId'] in productRow){
+
+                            var $key = row['ProdBrandId'];
+                            var $oldRow = productRow[$key]
+                           row['qunatity'] = 1 + $oldRow['qunatity'];
+                           row['groupCartProductId'] = row['groupCartProductId']+','+$oldRow['groupCartProductId'];
+
+                           productRow[$key] = row;
+
+                       }else{
+
+                            //productRow[row['groupCartProductId']] = row;
+                            productRow[row['ProdBrandId']] = row;
+                            row['qunatity'] = 1;
+                            row['groupCartProductId'] = row['groupCartProductId'];
+
+                            //productRow.push( row );
+
+                       }
                 });
-                productsData.push({'grpcart_products':productIds});
+                 //productsData.push({'grpcart_products':productRow});
+                productsData['products_cart']= productRow;
+                
+                productsData['grpcart_products'] = grpcart_products[0];
+
+
+                var itemsInCart = grpcart_products[0].length;
+                productsData['itemsInCart'] = itemsInCart;
                 return res.jsonp(productsData);
+
             }).catch(function(err){
-                    productsData.push({'errors':'Sorry Error Found '+err});
+                    productsData['errors'] = 'Sorry Error Found '+err;
                     return res.jsonp(productsData);
             });
             
@@ -317,6 +348,49 @@ exports.addToCart_guest = function(req, res) {
 exports.getGroupCart = function(req, res) {
     var grp_cartId = localStorage.getItem('grp_cartId');
     return res.jsonp(grp_cartId);
+};
+
+/**
+ * Remove Cart Item
+ */
+exports.nl_removefromCart = function(req, res) {
+    var cartID = req.body.cartID;
+    var productID = req.body.productID;
+    console.log(cartID+'__'+productID);
+     //return res.jsonp(cartID+'__'+productID);
+    var http = require('http');
+    //var url = ApiBaseUrl+'nl_removefromCart/'+cartID+'/'+productID+'/';
+    var body = '';
+    var data = [];
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: ApiBasePath+'nl_removefromCart/'+cartID+'/'+productID+'/',
+        method: 'GET',
+        headers: headers
+    };
+    console.log(ApiBasePath+'nl_removefromCart/'+cartID+'/'+productID+'/');
+    req = http.request(options,function(res2){
+
+        res2.on('data', function(chunk) {
+             body += chunk;
+        });
+
+        res2.on('end', function() { 
+            //console.log(body);
+            //data = JSON.stringify(body);
+            //console.log(data);
+            data = JSON.parse(body);  
+            //console.log(data);
+            return res.jsonp(data);
+        });
+    });
+
+    req.on('error', function(e){
+        console.log('problem with request:'+ e.message);
+    });
+
+    req.end();
 };
 
 /**

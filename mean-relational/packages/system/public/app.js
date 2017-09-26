@@ -8,6 +8,10 @@ angular.module('mean', [
   'ui.router',
   'ui.bootstrap',
   'ngDragDrop',
+  'ngMaterial',
+  'ngMessages',
+  //'snap',
+  //'pageslide-directive',
 
   /*feature areas*/
   'mean.system',

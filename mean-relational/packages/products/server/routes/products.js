@@ -16,6 +16,9 @@ app.get('/api/createCart_guest', products.createCart_guest);
 
 app.route('/api/addToCart_guest').post(products.addToCart_guest);
 
+app.route('/api/nl_removefromCart').post(products.nl_removefromCart);
+
+
 /*app.route('/api/products')
     .get(products.getGroupCart);*/
     //.post(users.requiresLogin, products.create);

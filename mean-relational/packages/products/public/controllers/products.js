@@ -5,14 +5,16 @@ import 'rxjs/add/operator/map';*/
 (function(){
     angular
       .module('mean.products')
-      .controller('productsController',productsController);
+      .controller('productsController',productsController)
+      .directive('sidenavPushIn',sidenavPushIn);
 
-      productsController.$inject = ['$stateParams', '$location', 'Global', 'products','$state', '$scope', '$timeout', '$http', 'Session'];
+      productsController.$inject = ['$stateParams', '$location', 'Global', 'products','$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$log'];
 
-  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session){
+  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $log){
         var vm = this;
         var baseUrl = 'http://localhost:3000/';
         var ip = '192.168.100.88';
+        //var ip = '192.168.1.88';
         var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var headers = {
                    'Access-Control-Allow-Origin': '*',
@@ -32,7 +34,35 @@ import 'rxjs/add/operator/map';*/
           cartCreated = true ;
           grp_cartId = Session.getItem('grp_cartId');
         }*/
-        $scope.cart = [];
+        $scope.cart = []; // cart Array
+
+
+
+        $scope.toggleLeft = buildToggler('left');
+        $scope.toggleRight = buildToggler('right');
+        $scope.lockLeft = false;
+        $scope.isLeftOpen = function() {
+          return $mdSidenav('left').isOpen();
+        }
+        $scope.isRightOpen = function() {
+          return $mdSidenav('right').isOpen();
+        }
+
+        /**
+         * Build handler to open/close a SideNav; when animation finishes
+         * report completion in console
+         */
+        function buildToggler(navID) {
+          var debounceFn = $mdUtil.debounce(function() {
+            $mdSidenav(navID)
+              .toggle()
+              .then(function() {
+                $log.debug("toggle " + navID + " is done");
+              });
+          }, 300);
+
+          return debounceFn;
+        }
 
         $scope.hideMe = function() {
           if(vm.products !== undefined){
@@ -59,6 +89,7 @@ import 'rxjs/add/operator/map';*/
         $scope.$watch('lastProductID', function() {
             //alert('hey, lastProductID has changed!');
         });
+      
 
         //methods
          function create() {
@@ -105,9 +136,11 @@ import 'rxjs/add/operator/map';*/
         }
 
         function find() {
-            products.query(function(products) {
+            //products.query(function(products) {
+            products.get(function(products) {
                  vm.products = products;
-                 grp_cartId = products[4].grp_cartId;
+                 console.log(products);
+                 grp_cartId = products['grp_cartId'];
                  console.log('grp_cartId '+grp_cartId);
                  vm.lastProductID = 0;
             });
@@ -142,23 +175,72 @@ import 'rxjs/add/operator/map';*/
         $scope.productDropInCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
             var prodBrandId = CurrentProduct.attr('data-product-id');
-            if(!cartCreated){
-              if(isGuest){  
-                $scope.createCart_guest(prodBrandId);
+            //var prodBrandId = CurrentProduct.attr('data-product-grp-cart-id');
+            if(prodBrandId !== undefined){
+              if(!cartCreated){
+                if(isGuest){  
+                  $scope.createCart_guest(prodBrandId);
+                }
+              }else{
+                if(isGuest){  
+                  $scope.addToCart_guest(grp_cartId,prodBrandId);
+               }
               }
-            }else{
-              if(isGuest){  
-                $scope.addToCart_guest(grp_cartId,prodBrandId);
-             }
             }
         };
         $scope.productDropOutFromCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
-            var prodBrandId = CurrentProduct.attr('data-product-id'); 
-              $scope.removeFromCart_guest(grp_cartId,prodBrandId);
+            //var prodBrandId = CurrentProduct.attr('data-product-id'); 
+            var prodBrandId   = CurrentProduct.attr('data-product-grp-cart-id');
+            var ProductIndex  = CurrentProduct.attr('data-index');
+            var ProductArrayType  = CurrentProduct.attr('data-type');
+            if(ProductArrayType !== undefined && ProductArrayType === 'grpcart_products'){
+              //unset($scope.products[6]['grpcart_products'][ProductIndex]);
+              //myArray.splice(key, 1);
+              //console.log(ProductIndex);
+              //console.log(vm.products[6].grpcart_products);
+              //console.log(vm.products[6].grpcart_products[ProductIndex]);
+              vm.products[6].grpcart_products.splice(ProductIndex, 1)
+               //console.log(vm.products[6].grpcart_products);
+            }
+            if(ProductArrayType !== undefined && ProductArrayType === 'cart'){
+              //unset($scope.cart[ProductIndex]);
+              //console.log($scope.cart);
+              //console.log(ProductIndex);
+              $scope.cart.splice(ProductIndex, 1);
+              //console.log($scope.cart);
+            }
+            
+              ui.draggable.remove();
+            if(prodBrandId !== undefined && grp_cartId !== undefined){
+              $scope.nl_removefromCart(grp_cartId,prodBrandId);
+            }
         };
-        
 
+/*        $scope.cartTotalPriceF = function () {   
+            var itemsAddInCart = $scope.cart;
+            var itemsInCart    = vm.products.products[6].grpcart_products;
+            var itemsInCartPrice = 0;
+
+            for (var i = 0; i < itemsInCart.length - 1; i++) {
+              itemsInCartPrice = itemsInCartPrice + itemsInCart[i].cost_price;
+            }
+           for (var i = 0; i < itemsAddInCart.length - 1; i++) {
+              itemsInCartPrice = itemsInCartPrice + itemsAddInCart[i].prod.cost_price;
+            }
+            console.log(itemsInCartPrice);
+        };
+
+        $scope.cartTotalProductsF = function () {   
+            var itemsAddInCart = $scope.cart;
+            var itemsInCart    = vm.products.products[6].grpcart_products;
+            var TotalItemsInCart    = itemsInCart.length+itemsAddInCart.length ;
+            console.log(TotalItemsInCart);
+        };
+         $scope.cartTotalPrice    = $scope.cartTotalPriceF();
+       $scope.cartTotalProducts   = $scope.cartTotalProductsF();*/
+    
+    
         $scope.createCart_guest  = function (prodBrandId) {
            var url = baseUrl+'api/createCart_guest';
            //var url = ApiBaseUrl+'createCart_guest/PK/';
@@ -232,11 +314,11 @@ import 'rxjs/add/operator/map';*/
                 }); 
 
         };
-        $scope.removeFromCart_guest  = function (cartID, productID) {
-          console.log('removed from guest cart');
-          console.log('cartID'+cartID);
-          console.log('productID'+productID);
-          /*var url = baseUrl+'api/addToCart_guest';
+        $scope.nl_removefromCart  = function (cartID, productID) {
+          //console.log('removed from guest cart');
+          //console.log('cartID'+cartID);
+          //console.log('productID'+productID);
+            var url = baseUrl+'api/nl_removefromCart';
             var postData = {cartID:cartID,productID:productID};
             var configObj = { method: 'POST',url: url, data: postData, headers: headers};
                 $http(configObj)
@@ -249,7 +331,7 @@ import 'rxjs/add/operator/map';*/
                         console.log('Error: ', errorResponse.status);
                         console.log(errorResponse);
                 }); 
-          */
+          
         };
         
 
@@ -305,3 +387,26 @@ import 'rxjs/add/operator/map';*/
         };
       }
 })();
+function sidenavPushIn(){
+        return {
+            restrict: 'A',
+            require: '^mdSidenav',
+            link: function ($scope, element, attr, sidenavCtrl) {
+                var body = angular.element(document.body);
+                body.addClass('md-sidenav-push-in');
+                var cssClass = (element.hasClass('md-sidenav-left') ? 'md-sidenav-left' : 'md-sidenav-right') + '-open';
+                var stateChanged = function (state) {
+                    body[state ? 'addClass' : 'removeClass'](cssClass);
+                };
+                // overvwrite default functions and forward current state to custom function
+                angular.forEach(['open', 'close', 'toggle'], function (fn) {
+                    var org = sidenavCtrl[fn];
+                    sidenavCtrl[fn] = function () {
+                        var res = org.apply(sidenavCtrl, arguments);
+                        stateChanged(sidenavCtrl.isOpen());
+                        return res;
+                    };
+                });
+            }
+        };
+    }
