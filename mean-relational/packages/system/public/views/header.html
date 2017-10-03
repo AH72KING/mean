@@ -30,13 +30,34 @@
 });
 
 </script>
+  <div layout="column" class="sidenavdemoBasicUsage">
 
+  <section layout="row" flex="">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="isLeftOpen()">
+
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+      </md-toolbar>
+      <md-content layout-padding="" >
+        <md-button ng-click="close()" class="md-primary" hide-gt-md="">
+          Close Sidenav Left
+        </md-button>
+        <p hide-md="" show-gt-md="">
+          This sidenav is locked open on your device. To go back to the default behavior, narrow your display.
+        </p>
+      </md-content>
+
+    </md-sidenav>
   <div ng-controller="HeaderController as hdctr" layout="column" ng-cloak>
         <div class="inner"> 
               <div class="logo pull-left">
                   <ul class="nav navbar-nav navbar-right navbar-menu" style="float:left;margin-left:0px;">
-                      <li style="float:left;width:30px">
-                          <a id="menuBarBtn"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                      <li>
+                        <div>
+                            <md-button ng-click="toggleLeft()" class="md-primary">
+                                <i class="fa fa-bars" aria-hidden="true"></i>
+                            </md-button>
+                          </div>
                       </li>
                       <li style="float:left;width:30px">
                           <a style="padding-left: 8px;height: 50px;" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></a>

@@ -1,0 +1,48 @@
+<ul id="cart-list" class="products vertical-ticker unstyled product_list list cartCol Col" style="height:95vh;" >
+						        		<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
+						                    	<li class="col-lg-12 drop-zone my_drop_box my_cart_box text-center" data-insertInline="true" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}">
+											    	<div class="cart-price">
+				                                        <strong class="total-price">${{cartTotalPrice | number : 2 }}</strong><!--span>95</span-->
+				                                    </div>
+				                                    <div class="cart-items-thumbnail">
+				                                    	<ul class="product_item_thumbnail">
+				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{product.prod.prodBrandId}}" data-index="{{$index}}" data-type="cart" >
+											                	<div class="product_image">
+														            <a data-ng-href="/products/{{product.prod.prodBrandId}}">
+														                <img src="{{UploadUrl}}{{product.prod.img_loc}}" alt="">
+
+														            </a>
+														        </div>
+														    </li>
+														    <!--ng-if="$index < 3" -->	
+				                                    		<li ng-repeat="items in arctr.products['grpcart_products'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-grp-cart-id="{{items.groupCartProductId}}"  data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-type="grpcart_products">
+				                                    			<a data-ng-href="/products/{{items.ProdBrandId}}">
+													                <img src="{{UploadUrl}}{{items.img_loc}}" alt="">
+													            </a>
+				                                    		</li>
+				                                    	</ul>
+				                                    </div>
+				                                    <div class="product-in_cart-count" ng-show="((arctr.products['grpcart_products']).length + (cart).length) > 3">
+				                                    	<div class="counter">
+				                                    		<span class="add-icon">+</span>
+					                                    	<span class="total-count">
+					                                    		{{cartProductCount = ((arctr.products['grpcart_products']).length + (cart).length) - 3}}
+					                                    	</span>
+					                                    </div>
+				                                    </div>
+			                                        <input type="hidden" class="zone-type" value="my_zone">
+			                                        <div class="my-zone-detail">
+			                                            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="toggleRight()" data-original-title="1">
+			                                            	Checkout >>
+			                                            </a>
+			                                        </div>
+			                                    </li>
+											    <li class="product_item" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
+													<div class="product_image">
+										                <a data-ng-href="/products/{{product.ProdBrandId}}">
+										                	<img src="{{UploadUrl}}{{product.img_loc}}" alt="">
+										                </a>
+										            </div>
+												</li>
+						                    <!--div class="placeholder" ng-hide="hideMe()">Add your items here</div-->
+						                </ul>

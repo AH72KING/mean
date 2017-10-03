@@ -1,0 +1,69 @@
+<div class="product-detail-container">
+	<div class="product_image">
+		<div class="product-taga" ng-click="ProductDetail()" >
+			<img src="{{UploadUrl}}{{CurrentProductDetail.img_loc}}" alt="">
+		</div>
+		<div class="product-thumbnail-container">
+			<div class="thumbnails thumbnail-left">
+				<div class="product-image-thumbnail">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img1}}" alt="">
+				</div>
+				<div class="product-image-thumbnail">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img2}}" alt="">
+				</div>
+			</div>
+			<div class="thumbnails  thumbnail-right">
+				<div class="product-image-thumbnail">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img3}}" alt="">
+				</div>
+				<div class="product-image-thumbnail">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img4}}" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cost-price">
+		<div class="price-detail">
+			<span class="price">{{CurrentProductDetail.cost_price}}</span>
+			<span class="price-currency">{{CurrentProductDetail.currency}}</span>
+		</div>
+	</div>
+	<div class="buttons">
+		<div class="btn btn-add-to-cart">
+			add to cart
+		</div>
+		<div class="btn btn-buy-now">
+			buy now
+		</div>
+	</div>
+	<div class="product-owners">
+		<p>People who owns this product</p>
+		<!--ul>
+			<li>
+				<img src="images/owner1.jgp" alt="owners">
+			</li>
+		</ul-->
+	</div>
+	<div class="tabs-container">
+	  	<div class="tab-actions">
+	      <button ng-click="tabContent='first'">First</button>
+	      <button ng-click="tabContent='second'">Second</button>
+	  	</div>
+	  	<div class="tab-contents">
+		  	<div class="init-first" ng-init="tabContent='first'"></div>
+			<div class="tabs-content" ng-show="tabContent === 'first'">
+				 <div class="product_details">
+					<div class="specs">
+							{{CurrentProductDetail.specs}}
+					</div>
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'second'">
+				<div class="price">
+						{{CurrentProductDetail.cost_price}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

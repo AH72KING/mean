@@ -3,7 +3,19 @@
 /**
  * Module dependencies.
  */
+const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
+const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
+
+const stripe = require("stripe")(keySecret);
+const bodyParser = require("body-parser");
 var express     = require('express');
+
+const app = express();
+app.use(express.static("public"));
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 var cluster = require('cluster');
 var env             = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var config          = require('./config/config');
@@ -24,7 +36,6 @@ var allowCrossDomain = function(req, res, next) {
       next();
     }
 };
-var app = express();
 app.use(cors());
 app.use(allowCrossDomain);
 // Add headers

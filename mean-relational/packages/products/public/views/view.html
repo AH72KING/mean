@@ -1,14 +1,35 @@
+        <br>
+        <br>
+        <br>
 <section ng-init="arctr.findOne()">
-    <span>{{arctr.product.updated_at | date:'medium'}}</span>/
-    <span>{{arctr.product.User.name}}</span>
-    <h2>{{arctr.product.title}}</h2>
-    <div ng-show="arctr.global.user.id == arctr.product.user_id">
-        <a class="btn btn-info btn-xs" href="/products/{{arctr.product.id}}/edit">
+    <span>{{arctr.product.dateadded | date:'medium'}}</span>
+    <h2>{{arctr.product.name}}</h2>
+    <div ng-show="arctr.global.user.id == arctr.product.ProdBrandId">
+        <a class="btn btn-info btn-xs" href="/products/{{arctr.product.ProdBrandId}}/edit">
         	Edit
         </a>
         <a class="btn btn-danger btn-xs" ng-click="arctr.remove();">
-          Borrar
+            Delete
         </a>
     </div>
-    <div>{{arctr.product.content}}</div>
+    <div>{{arctr.product.specs}}</div>
+        <div class="product_item" data-product-id="{{arctr.product.ProdBrandId}}"">
+        <div class="product_details">
+            <strong>{{arctr.product.name}}</strong>
+            <span class="location">{{arctr.product.location}}</span>
+            <div class="icons_info">
+                <span class="icon"><i class="fa fa-trophy"></i><span>50</span></span>
+                <span>{{arctr.product.dateadded | date:'medium'}}</span>
+                <div>{{arctr.product.specs}}</div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="product_image">
+            <a data-ng-href="/products/{{arctr.product.ProdBrandId}}" >
+                <img src="{{UploadUrl}}{{arctr.product.img_loc}}" alt="">
+            </a>
+        </div>
+    </div>
 </section>

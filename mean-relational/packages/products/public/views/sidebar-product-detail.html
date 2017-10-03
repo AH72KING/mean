@@ -1,0 +1,17 @@
+	<md-sidenav sidenav-push-in class="product-detail-side-bar md-sidenav-right md-whiteframe-z2" md-component-id="ProductDetail" md-is-locked-open="isProductDetailOpen()">
+		<div class="row product-row-container">
+			<div class="col col-md-12">
+				<div class="product-header clearfix">
+					<div class="product-head">
+						<strong>{{CurrentProductDetail.name}}</strong><span>({{CurrentProductDetail.code}})</span>
+					</div>
+				</div>		
+				<div class="product-body">
+					<div ng-include="'products/views/product-detail-side.html'"></div>
+				</div>
+				<div class="product-footer">
+					
+				</div>			
+			</div>
+		</div>
+	</md-sidenav>

@@ -4,9 +4,9 @@ angular
     .module('mean.system')
     .controller('HeaderController',HeaderController);
 
-    HeaderController.$inject = ['$http','$state', 'Global'];
+    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log'];
 
-    function HeaderController($http,$state,Global){
+    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log){
         var vm = this;
         vm.global = Global;
         vm.menu = [{
@@ -30,6 +30,37 @@ angular
             $state.go('auth.login');
 
           });
+        }
+        $scope.toggleLeft     = buildToggler('left');
+        $scope.toggleRight    = buildToggler('right');
+        //$scope.ProductDetail  = buildToggler('ProductDetail');
+        $scope.lockLeft = false;
+        
+        $scope.isLeftOpen = function() {
+          return $mdSidenav('left').isOpen();
+        }
+        $scope.isRightOpen = function() {
+          return $mdSidenav('right').isOpen();
+        }
+        $scope.isProductDetailOpen = function() {
+          return $mdSidenav('ProductDetail').isOpen();
+        }
+
+
+        /**
+         * Build handler to open/close a SideNav; when animation finishes
+         * report completion in console
+         */
+        function buildToggler(navID) {
+          var debounceFn = $mdUtil.debounce(function() {
+            $mdSidenav(navID)
+              .toggle()
+              .then(function() {
+                $log.debug("toggle " + navID + " is done");
+              });
+          }, 300);
+
+          return debounceFn;
         }
         /*$scope.toggleLeft = buildDelayedToggler('left');
         $scope.toggleRight = buildToggler('right');

@@ -5,15 +5,19 @@ import 'rxjs/add/operator/map';*/
 (function(){
     angular
       .module('mean.products')
-      .controller('productsController',productsController)
-      .directive('sidenavPushIn',sidenavPushIn);
+      .controller('productsController',productsController);
+      
 
-      productsController.$inject = ['$stateParams', '$location', 'Global', 'products','$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$log'];
+      productsController.$inject = ['$stateParams', '$location', 'Global', 'products','$state', '$scope', '$rootScope',  '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$log'];
 
-  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $log){
+  function productsController($stateParams, $location, Global, products, $state, $scope, $rootScope, $timeout, $http, Session, $mdSidenav, $mdUtil, $log){
         var vm = this;
         var baseUrl = 'http://localhost:3000/';
         var ip = '192.168.100.88';
+       // var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
+        var UploadUrl = 'http://localhost:3000/products/assets/';
+        $scope.cartTotalPrice = 0;
+        $scope.UploadUrl = UploadUrl;        
         //var ip = '192.168.1.88';
         var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var headers = {
@@ -25,11 +29,19 @@ import 'rxjs/add/operator/map';*/
                    'Access-Control-Allow-Credentials': 'true'
                 };
 
-
+        $scope.addShippingButton = true;        
+        $scope.hideShippingAddress = true;        
+        $scope.hideMyZoneCart = false; 
+        $scope.proceedButton = false;
+        $scope.paymentButton = false;
+        $scope.shippingAddressAdded = false;
 
         var cartCreated = false;
         var grp_cartId = null;
         var isGuest = true; 
+
+        $scope.CurrentProductDetail  = '';
+
         /*if(Session.getItem('grp_cartId') != undefined){
           cartCreated = true ;
           grp_cartId = Session.getItem('grp_cartId');
@@ -38,14 +50,19 @@ import 'rxjs/add/operator/map';*/
 
 
 
-        $scope.toggleLeft = buildToggler('left');
-        $scope.toggleRight = buildToggler('right');
+        $scope.toggleLeft     = buildToggler('left');
+        $scope.toggleRight    = buildToggler('right');
+        $scope.ProductDetail  = buildToggler('ProductDetail');
         $scope.lockLeft = false;
+
         $scope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
         }
         $scope.isRightOpen = function() {
           return $mdSidenav('right').isOpen();
+        }
+        $scope.isProductDetailOpen = function() {
+          return $mdSidenav('ProductDetail').isOpen();
         }
 
         /**
@@ -71,6 +88,155 @@ import 'rxjs/add/operator/map';*/
             return false;
           }
         };
+
+
+     
+
+        $scope.showShippingAddressForm = function() {
+
+            var totalAmountToPay = $scope.cartTotalPrice;
+                totalAmountToPay = totalAmountToPay.toFixed(2).toString();
+                totalAmountToPay = parseInt (totalAmountToPay.replace('.',''));
+            var Token = '';
+            var checkoutHandler = (window).StripeCheckout.configure({
+              key: "pk_test_sZay0UdHi8gZBfIRtvWefcLy",
+              locale: "auto"
+            });   
+            checkoutHandler.open({
+              name: 'Anerve Shop',
+              description: 'Friends Shopping Platform',
+              amount:  totalAmountToPay,
+              token: handleToken
+            });
+
+           /* $scope.addShippingButton = false; 
+            $scope.hideShippingAddress = false; 
+            $scope.hideMyZoneCart = true;
+            $scope.proceedButton = true;
+            $scope.paymentButton = false;  */
+             
+        }
+
+        $scope.submitShippingAddressForm = function() {  
+            $scope.shippingAddressAdded = true;
+            $scope.addShippingButton = false;
+            $scope.paymentButton = true;
+            $scope.proceedButton = false;
+            $scope.hideMyZoneCart = false;
+            $scope.hideShippingAddress = true; 
+        }
+
+        $scope.doPayment = function() {
+            var totalAmountToPay = $scope.cartTotalPrice;
+                totalAmountToPay = totalAmountToPay.toFixed(2).toString();
+                totalAmountToPay = parseInt (totalAmountToPay.replace('.',''));
+            var Token = '';
+            var checkoutHandler = (window).StripeCheckout.configure({
+              key: "pk_test_sZay0UdHi8gZBfIRtvWefcLy",
+              locale: "auto"
+            });   
+            checkoutHandler.open({
+              name: 'Anerve Shop',
+              description: 'Friends Shopping Platform',
+              amount:  totalAmountToPay,
+              token: handleToken
+            });
+
+
+
+           /* var handler = (window).StripeCheckout.configure({
+              key: 'pk_test_sZay0UdHi8gZBfIRtvWefcLy',
+              locale: 'auto',
+              token: function (token) {
+                // You can access the token ID with `token.id`.
+                // Get the token ID to your server-side code for use.
+                  Token = token.id;
+                  console.log(token);
+                  var stripe = require("stripe")("pk_test_sZay0UdHi8gZBfIRtvWefcLy");
+
+                  // Token is created using Stripe.js or Checkout!
+                  // Get the payment token ID submitted by the form:
+                  // Using Express
+                  // Charge the user's card:
+                  stripe.charges.create({
+                    amount: totalAmountToPay,
+                    source: Token,
+                  }, function(err, charge) {
+                      console.log(charge);
+                  });
+              }
+            });
+             
+            handler.open({
+              //image : 'https://stripe.com/img/documentation/checkout/marketplace.png',
+              name: 'Anerve Shop',
+              description: 'Friends Shopping Platform',
+              amount:  totalAmountToPay
+              //billingAddress: 'true'
+              //shippingAddress :'true'
+            });*/
+            // Set your secret key: remember to change this to your live secret key in production
+            // See your keys here: https://dashboard.stripe.com/account/apikeys*/
+           
+        }
+
+
+        /*function handleToken(token) {
+            fetch("/charge", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(token)
+          })
+          .then(response => {
+            if (!response.ok)
+              throw response;
+            return response.json();
+          })
+          .then(output => {
+            console.log("Purchase succeeded:", output);
+          })
+          .catch(err => {
+            console.log("Purchase failed:", err);
+          })
+        }*/
+        function handleToken(token){
+            var url = baseUrl+'api/charge';
+
+             var totalAmountToPay = $scope.cartTotalPrice;
+                totalAmountToPay = totalAmountToPay.toFixed(2).toString();
+                totalAmountToPay = parseInt (totalAmountToPay.replace('.',''));
+
+
+            var TokenId = token.id;
+            var CardID = token.card.id;
+            var Email   = 'ahsandev.creative@gmail.com';//token.email;
+            var Amount   = totalAmountToPay;
+            var postData = {TokenId:TokenId,Email:Email,Amount:Amount,CardID:CardID};
+             var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                  $http(configObj)
+                      .then(function onFulfilled(response) {
+                          var dataJson    = JSON.parse(JSON.stringify(response.data));
+                          var amount      = dataJson.amount;
+                          var amount_refunded = dataJson.amount_refunded;
+                          var created     = dataJson.created;
+                          var currency    = dataJson.currency;
+                          var destination = dataJson.destination;
+                          var status      = dataJson.status;
+                          console.log(dataJson);
+                          
+                      }).catch( function onRejection(errorResponse) {
+                          console.log('Error: ', errorResponse.status);
+                          console.log(errorResponse);
+                  }); 
+        }
+        $scope.showProductDetail = function(productID) {   
+              if(angular.isNumber(productID)){
+                $scope.CurrentProductDetail = CurrentProduct(productID);
+                $scope.isProductDetailOpen();
+              }
+        };
+          
+
 
 
 
@@ -139,10 +305,10 @@ import 'rxjs/add/operator/map';*/
             //products.query(function(products) {
             products.get(function(products) {
                  vm.products = products;
-                 console.log(products);
                  grp_cartId = products['grp_cartId'];
-                 console.log('grp_cartId '+grp_cartId);
+                 $scope.cartTotalPrice = products['TotalCartPrice'];
                  vm.lastProductID = 0;
+                 getList();
             });
          }
 
@@ -150,26 +316,88 @@ import 'rxjs/add/operator/map';*/
             products.get({
                 productId: $stateParams.productId
               }, function(product) {
+                console.log(product);
                 vm.product = product;
             });
         }
+        function CurrentProduct(productId) {
+            products.get({
+                productId: productId
+              }, function(product) {
+                $scope.CurrentProductDetail = product;
+                console.log(product);
+                return product;
+            });
+        }
 
-       /* function getList(){
+       function getList(){
            $scope.startTimeout();
-        }*/
+        }
 
         $scope.startCount = 0;  
         $scope.startTimeout = function () {  
             $scope.startCount = $scope.startCount + 1;  
             $scope.getProducts();
-            vm.mytimeout = $timeout($scope.startTimeout, 1000);  
+            vm.mytimeout = $timeout($scope.startTimeout, 10000);  
         };
-
-        
 
         $scope.stopTimeout = function () {  
             $timeout.cancel(vm.mytimeout);  
             console.log('Timer Stopped No More Products');  
+        };
+
+        $scope.getProducts = function () {
+                var lastProductID = $scope.lastProductID;
+                if(lastProductID === undefined){
+                    lastProductID = vm.lastProductID;
+                }
+                var nextProducts = 16;
+                var body = '';
+                var data = '';
+                var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/'+lastProductID+'/'+nextProducts;
+                
+               
+                var configObj = { method: 'GET',url: url, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        body = response.data;
+                        var newData = JSON.stringify(body);
+                        data = JSON.parse(newData);
+
+                          if(data.length < 2){
+                            $scope.stopTimeout();
+                          }
+
+                          $scope.addObject(data);
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
+        };
+
+        $scope.addObject = function (data) {
+                var counter = 0;
+                var localLoopProductBrandID = 1;
+                 angular.forEach(data,function(value){
+                    counter++;
+                    
+                    if(counter === 1){
+                      $scope.arctr.products['col1'].push(value);
+                    }
+                    if(counter === 2){
+                      $scope.arctr.products['col2'].push(value);
+                    }
+                    if(counter === 3){
+                      $scope.arctr.products['col3'].push(value);
+                    }
+                    if(counter === 4){
+                      $scope.arctr.products['col4'].push(value);
+                      counter = 0;
+                    }
+                    localLoopProductBrandID = value.prod.prodBrandId;         
+                });
+                $scope.lastProductID = localLoopProductBrandID;     
         };
 
         $scope.productDropInCart  = function (event , ui) {   
@@ -333,80 +561,6 @@ import 'rxjs/add/operator/map';*/
                 }); 
           
         };
-        
 
-        $scope.getProducts = function () {
-                var lastProductID = $scope.lastProductID;
-                if(lastProductID === undefined){
-                    lastProductID = vm.lastProductID;
-                }
-                var nextProducts = 16;
-                var body = '';
-                var data = '';
-                var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/'+lastProductID+'/'+nextProducts;
-                
-               
-                var configObj = { method: 'GET',url: url, headers: headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        body = response.data;
-                        var newData = JSON.stringify(body);
-                        data = JSON.parse(newData);
-                        //console.log(data);
-                        console.log(data.length);
-                     if(data.length < 2){
-                        $scope.stopTimeout();
-                      }
-                         $scope.addObject(data);
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-        };
-        $scope.addObject = function (data) {
-                var counter = 0;
-                 angular.forEach(data,function(value){
-                    counter++;
-                    $scope.lastProductID = value.prod.prodBrandId;
-                    if(counter === 1){
-                      $scope.arctr.products[0].col1.push(value);
-                    }
-                    if(counter === 2){
-                      $scope.arctr.products[1].col2.push(value);
-                    }
-                    if(counter === 3){
-                      $scope.arctr.products[2].col3.push(value);
-                    }
-                    if(counter === 4){
-                      $scope.arctr.products[3].col4.push(value);
-                      counter = 0;
-                    }
-                    
-                });
-                
-        };
       }
 })();
-function sidenavPushIn(){
-        return {
-            restrict: 'A',
-            require: '^mdSidenav',
-            link: function ($scope, element, attr, sidenavCtrl) {
-                var body = angular.element(document.body);
-                body.addClass('md-sidenav-push-in');
-                var cssClass = (element.hasClass('md-sidenav-left') ? 'md-sidenav-left' : 'md-sidenav-right') + '-open';
-                var stateChanged = function (state) {
-                    body[state ? 'addClass' : 'removeClass'](cssClass);
-                };
-                // overvwrite default functions and forward current state to custom function
-                angular.forEach(['open', 'close', 'toggle'], function (fn) {
-                    var org = sidenavCtrl[fn];
-                    sidenavCtrl[fn] = function () {
-                        var res = org.apply(sidenavCtrl, arguments);
-                        stateChanged(sidenavCtrl.isOpen());
-                        return res;
-                    };
-                });
-            }
-        };
-    }

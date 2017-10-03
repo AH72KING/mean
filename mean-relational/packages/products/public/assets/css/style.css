@@ -2352,7 +2352,7 @@ a.cart-member-img {
     background-color: white;
 }
 strong.total-price {
-    font-size: 60px;
+    font-size: 44px;
 }
 .product_item.cart_item .owner_img,
 .friend-card-icons,
@@ -3380,7 +3380,7 @@ strong.total-price {
     cursor: pointer
 }
 section.product-flow-container {
-    height: 870px;
+    /* height: 870px; */
     overflow: hidden;
     clear: both;
 }

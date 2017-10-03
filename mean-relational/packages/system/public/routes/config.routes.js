@@ -34,12 +34,12 @@
           url: '/',
           templateUrl: 'system/views/index.html',
           controller:'IndexController',
-          controllerAs:'idctr',
-          resolve: {
+          controllerAs:'idctr'//,
+          /*resolve: {
           loggedin: function(MeanUser) {
                   return MeanUser.checkLoggedin();
               }
-           }
+           }*/
         });
   }
 

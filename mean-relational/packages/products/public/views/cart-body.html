@@ -1,0 +1,45 @@
+<ul class="my-zone-cart-items" ng-hide="hideMyZoneCart">
+		            <li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{product.prod.prodBrandId}}" data-index="{{$index}}" data-type="cart">
+						<div class="product_image">
+							<a data-ng-href="/products/{{product.prod.prodBrandId}}">
+								<img src="{{UploadUrl}}{{product.prod.img_loc}}" alt="">
+							</a>
+						</div>
+						<div class="product-detail">
+							<div class="product-name">	
+								<h3>{{product.prod.name}}</h3>
+							</div>
+							<div class="quantity-price-container">
+								<span class="quantity-multiple-icon">X</span>
+								<span class="product-quantity">{{product.prod.quantity}}</span>								
+								<span class="equal-icon">=</span>								
+								<span class="product-price" data-cost="{{product.prod.cost_price}}">{{product.prod.cost_price}}</span>								
+							</div>
+							<div class="shipping-details">	
+								<p>Free Shipping to <span class="country-flag">Australia</span></p>
+							</div>
+						</div>
+					</li>
+					<!--ng-if="$index < 3" -->	
+		           <li class="product_item" ng-repeat="items in arctr.products.products_cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-grp-cart-id="{{items.groupCartProductId}}"  data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-type="grpcart_products">
+		           		<div class="product_image">
+							<a data-ng-href="/products/{{items.ProdBrandId}}">
+								<img src="{{UploadUrl}}{{items.img_loc}}" alt="">
+							</a>
+						</div>
+						<div class="product-detail">
+							<div class="product-name">	
+								<h3>{{items.name}}</h3>
+							</div>
+							<div class="quantity-price-container">
+								<span class="quantity-multiple-icon">X</span>
+								<span class="product-quantity">{{items.qunatity}}</span>								
+								<span class="equal-icon">=</span>								
+								<span class="product-price" data-cost="{{items.cost_price}}">{{items.cost_price}}</span>								
+							</div>
+							<div class="shipping-details">	
+								<p>Free Shipping to </p> <span class="flag-icon flag-icon-au"></span>
+							</div>
+						</div>
+		            </li>
+				</ul>

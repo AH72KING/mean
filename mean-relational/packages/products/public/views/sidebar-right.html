@@ -1,0 +1,42 @@
+	<md-sidenav sidenav-push-in class="my-zone-side-bar md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="isRightOpen()">
+		<div class="row cart-row-container">
+			<div class="col col-md-12">
+				<div class="zone-header clearfix">
+					<div class="zone-head-left">
+						<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+						<h2>MY ZONE</h2>		
+					</div>
+					<div class="zone-head-right">
+						<div class="cart-price">
+			                <strong class="total-price">${{cartTotalPrice | number : 2 }}</strong><!--span>95</span-->
+			            </div>	
+			            <div class="shipping-address-icon" ng-show="shippingAddressAdded">
+			                <i class="fa fa-truck fa-flip-horizontal" aria-hidden="true"></i>
+			            </div>	
+			            <div class="checkout-confirm-icon">
+			                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+			            </div>	
+					</div>
+				</div>		
+				<div class="zone-body">
+					<div ng-include="'products/views/cart-body.html'"></div>
+					<div ng-include="'products/views/shipping-form.html'"></div>
+				</div>
+				<div class="zone-footer">
+					<div ng-include="'products/views/buttons.html'"></div>
+				</div>
+				<!--form action="/charge" method="POST">
+				  <script
+				    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				    data-key="pk_test_sZay0UdHi8gZBfIRtvWefcLy"
+				    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+				    data-name="Matt's Widgets and Gizmos"
+				    data-description="2 widgets ($20.00)"
+				    data-amount="2000"
+				    data-billingAddress="true"
+				    data-shippingAddress="true">
+				  </script>
+				</form-->				
+			</div>
+		</div>
+	</md-sidenav>

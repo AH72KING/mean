@@ -31,13 +31,13 @@
             templateUrl: 'products/views/edit.html',
             controller: 'productsController',
             controllerAs: 'arctr'
-        })
-        .state('view product', {
+        });
+        /*.state('view product', {
             url:'/products/:productId',
             templateUrl: 'products/views/view.html',
             controller: 'productsController',
             controllerAs: 'arctr'
-        });
+        });*/
         $httpProvider.defaults.headers.common = {};
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.get = {};

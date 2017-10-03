@@ -10,6 +10,7 @@ var products = require('../controllers/products');
 
 module.exports = function(app) {
 // product Routes
+app.route('/api/charge').post(products.charge);
 app.route('/api/products').get(products.all);
 
 app.get('/api/createCart_guest', products.createCart_guest);

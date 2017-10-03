@@ -10,6 +10,18 @@ var LocalStorage = require('node-localstorage').LocalStorage,
 var cors = require('cors');
 var app = express();
 
+const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
+const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
+
+const stripe = require("stripe")(keySecret);
+const bodyParser = require("body-parser");
+
+app.use(express.static("public"));
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+
         //var baseUrl = 'http://localhost:3000/';
         var ip = '192.168.100.88';
         //var ip = '192.168.1.88';
@@ -141,7 +153,9 @@ exports.show = function(req, res) {
  * List of products
  */
 exports.all = function(req, res) {
-   db.product.findAll().then(function(product){
+
+    //db.product.findAll().then(function(product){
+   db.product.findAll({limit: 12}).then(function(product){
         var productsData = {};
         var col1 = [];
         var col2 = [];
@@ -182,7 +196,7 @@ exports.all = function(req, res) {
             productsData['grp_cartId'] = grp_cartId;
             var Query = 'select a.ProdBrandId,a.name, a.cost_price, a.specs ,a.img_loc ,b.groupCartProductId from productbrands a, group_cart_products b, grpcart_products c where a.prodbrandId=b.crt_item and b.groupCartProductId=c.groupCartProductId and c.grp_cartId = '+grp_cartId+' order by b.actiontime DESC';
             productsData['Query'] = Query;
-
+            var TotalCartPrice = 0 ;
             db.sequelize.query(Query,{raw: false}).then(grpcart_products => {
                 var productRow = {};
                 productsData['productRow']= typeof productRow;
@@ -207,7 +221,9 @@ exports.all = function(req, res) {
                             //productRow.push( row );
 
                        }
+                        TotalCartPrice  = TotalCartPrice + row['cost_price'];
                 });
+               productsData['TotalCartPrice']= TotalCartPrice;
                  //productsData.push({'grpcart_products':productRow});
                 productsData['products_cart']= productRow;
                 
@@ -392,6 +408,50 @@ exports.nl_removefromCart = function(req, res) {
 
     req.end();
 };
+/**
+ * Do Charge
+ */
+exports.charge =  function(req, res){
+   // return res.jsonp('I Am Here');
+
+   var token = req.body.TokenId; // Using Express
+   var amount = req.body.Amount;
+
+    // Charge the user's card:
+    stripe.charges.create({
+      amount: amount,
+      currency: "usd",
+      description: "Anerve Shop Friends Shopping Platform",
+      source: token,
+    }, function(err, charge) {
+        console.log(charge);
+        console.log(err);
+         return res.jsonp(charge);
+    });
+
+
+  /*var amount = req.body.Amount;
+  
+      stripe.customers.create({
+        email: req.body.Email,
+        card: req.body.CardID
+      })
+      .then(customer =>
+        stripe.charges.create({
+          name: 'Anerve Shop',      
+          amount:amount,
+          description: "Anerve Shop Friends Shopping Platform",
+          currency: "usd",
+          customer: customer.id
+        }))
+      .then(charge => res.send(charge))
+      .catch(err => {
+        console.log("Error:", err);
+        console.log(err);
+        res.status(500).send({error: err});
+      });*/
+};
+
 
 /**
  * Get Group Cart Products
