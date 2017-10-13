@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 var db = require('../../../../config/sequelize');
+ var http = require('http');
  //console.log('user server controller');
 /**
  * Auth callback
@@ -25,10 +26,10 @@ exports.signin = function(req, res) {
 
 
 exports.login = function(req, res) {
-    console.log('user server controller login');
-    console.log(req);
-    console.log(req.body.EMAIL);
-    console.log(req.get('referer'));
+   // console.log('user server controller login');
+    //console.log(req);
+    //console.log(req.body.EMAIL);
+   // console.log(req.get('referer'));
     //return ;
     res.json({
         user: req.user,
@@ -69,10 +70,10 @@ exports.session = function(req, res) {
  */
 exports.create = function(req, res) {
     console.log('create server controller user.js ');
-    console.log(req.body);
+   // console.log(req.body);
     var user = db.User.build(req.body);
     console.log('create server controller user.js db.User.build');
-    console.log(user);
+    //console.log(user);
 
     user.provider = 'local';
     user.salt = user.makeSalt();
@@ -141,4 +142,41 @@ exports.hasAuthorization = function(req, res, next) {
       return res.send(401, 'User is not authorized');
     }
     next();
+};
+exports.loggedInJavaToo1 = function(USERID,USERNAME,PASSWORD) {
+var headers = {
+                           'Access-Control-Allow-Origin': '*',
+                           'Content-Type' : 'application/json; charset=UTF-8',
+                           'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+                           'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
+                           'Access-Control-Max-Age': '3600',
+                           'Access-Control-Allow-Credentials': 'true'
+                        };
+                    //var ip = '192.168.100.88';
+                    var ip = '192.168.1.88';
+                    var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
+                    //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
+                   
+                    var body = '';
+                    var data = [];
+                    var options = {
+                            hostname: ip,
+                            port: '8080',
+                            path: ApiBasePath+'loginservice/'+USERNAME+'/'+PASSWORD,
+                            method: 'GET',
+                            headers: headers
+                        };
+
+                        http.request(options,function(res2){
+
+                            res2.on('data', function(chunk) {
+                                 body += chunk;
+                            });
+
+                            res2.on('end', function() { 
+                                data = JSON.parse(body);  
+                                console.log('loginservice');
+                                console.log(data);
+                            });
+                        });
 };

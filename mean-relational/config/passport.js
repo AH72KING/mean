@@ -11,16 +11,16 @@ var winston = require('./winston');
 
 //Serialize sessions
 passport.serializeUser(function(user, done) {
-     console.log('config Passport.js serializeUser');
-    console.log(user);
-    console.log(done);
+     //console.log('config Passport.js serializeUser');
+    //console.log(user);
+    //console.log(done);
   done(null, user.USERID);
 });
 
 passport.deserializeUser(function(USERID, done) {
-        console.log('config Passport.js deserializeUser');
-    console.log(USERID);
-    console.log(done);
+        //console.log('config Passport.js deserializeUser');
+    //console.log(USERID);
+    //console.log(done);
     db.User.find({where: {USERID: USERID}})
     .then(function(user){
 
@@ -38,22 +38,27 @@ passport.use(new LocalStrategy({
     passwordField: 'PASSWORD'
   },
   function(USERNAME, PASSWORD, done) {
-    console.log('config Passport.js LocalStrategy');
-    console.log(USERNAME);
-    console.log(PASSWORD);
+    //console.log('config Passport.js LocalStrategy');
+    //console.log(USERNAME);
+    //console.log(PASSWORD);
     db.User.find({ where: { USERNAME: USERNAME }}).then(function(user) {
-            console.log('db.User.find');
-            console.log(USERNAME);
-            console.log(user);
+            //console.log('db.User.find');
+            //console.log(USERNAME);
+            //console.log(user);
       if (!user) {
+        //console.log('Unknown user');
         done(null, false, { message: 'Unknown user' });
       } else if (!user.authenticate(PASSWORD)) {
+        //console.log('Invalid PASSWORD');
         done(null, false, { message: 'Invalid PASSWORD'});
       } else {
+            //user.loggedInJavaToo(user.USERID,USERNAME,PASSWORD);
+        //console.log('USERNAME user confirm');
         winston.info('Login (local) : { USERID: ' + user.USERID + ', USERNAME: ' + user.USERNAME + ' }');
         done(null, user);
       }
     }).catch(function(err){
+         //console.log('err err');
       done(err);
     });
   }

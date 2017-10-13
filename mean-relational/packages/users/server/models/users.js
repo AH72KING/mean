@@ -3,56 +3,10 @@
 	* User Model
 	*/
 
-var crypto = require('crypto');
-
+//var crypto = require('crypto');
+var bcrypt = require('bcrypt');
+ var http = require('http');
 module.exports = function(sequelize, DataTypes) {
-    //console.log('exports server user models ');
-/*
-	var User = sequelize.define('User',
-		{
-			name: DataTypes.STRING,
-			email: {
-				type: DataTypes.STRING,
-				unique: true,
-				isEmail: true,
-				notEmpty: true
-			},
-			username: {
-				type: DataTypes.STRING,
-				unique: true,
-				notEmpty: true
-			},
-			hashedPassword: DataTypes.STRING,
-			provider: DataTypes.STRING,
-			salt: DataTypes.STRING,
-			facebookUserId: DataTypes.INTEGER,
-			twitterUserId: DataTypes.INTEGER,
-			twitterKey: DataTypes.STRING,
-			twitterSecret: DataTypes.STRING,
-			github: DataTypes.STRING,
-			openId: DataTypes.STRING
-		},
-		{
-			instanceMethods: {
-				makeSalt: function() {
-					return crypto.randomBytes(16).toString('base64');
-				},
-				authenticate: function(plainText){
-					return this.encryptPassword(plainText, this.salt) === this.hashedPassword;
-				},
-				encryptPassword: function(password, salt) {
-					if (!password || !salt){
-						return '';
-					}
-					salt = new Buffer(salt, 'base64');
-					return crypto.pbkdf2Sync(password, salt, 10000, 64,'sha1').toString('base64');
-				}
-			},
-			associate: function(models) {
-				//User.hasMany(models.product);
-			}
-		}*/
-	
 	var User = sequelize.define('User',
 		{
 			USERID: {
@@ -124,22 +78,22 @@ module.exports = function(sequelize, DataTypes) {
 		{
 			instanceMethods: {
 				makeSalt: function() {
-					return crypto.randomBytes(16).toString('base64');
+					return bcrypt.genSaltSync(10);//crypto.randomBytes(16).toString('base64');
 				},
 				authenticate: function(plainText){
-					console.log('model user plain text');
-					console.log(plainText);
-					return this.encryptPassword(plainText, this.salt) === this.hashedPassword;
+					return bcrypt.compareSync(plainText,this.hashedPassword); //this.encryptPassword(plainText, bcrypt.genSaltSync(10)) === this.hashedPassword;
 				},
 				encryptPassword: function(PASSWORD, salt) {
-					console.log('model user encryptPassword');
-					console.log(PASSWORD);
-					console.log(salt);
+					salt = bcrypt.genSaltSync(10);
 					if (!PASSWORD || !salt){
 						return '';
 					}
-					salt = new Buffer(salt, 'base64');
-					return crypto.pbkdf2Sync(PASSWORD, salt, 10000, 64, 'sha1').toString('base64');
+					return bcrypt.hashSync(PASSWORD, salt); //crypto.pbkdf2Sync(PASSWORD, salt, 10000, 64, 'sha1').toString('base64');
+				},
+				loggedInJavaToo: function(USERID,USERNAME,PASSWORD){
+					console.log('loggedInJavaToo');
+					User.loggedInJavaToo1(USERID,USERNAME,PASSWORD);
+					
 				}
 			},
 			tableName: 'users'

@@ -38,6 +38,8 @@
     "angular-ui-router": "^1.0.3",
     "angular2": "^2.0.0-beta.21",
     "async": "latest",
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "bower": "^1.8.2",
     "cluster": "^0.7.7",
