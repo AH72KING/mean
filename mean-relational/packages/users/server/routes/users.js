@@ -7,6 +7,7 @@
 var passport = require('passport');
 
 module.exports = function(app) {
+  //console.log('exports server user routes ');
 // User Routes
 var users = require('../controllers/users');
 
@@ -21,11 +22,11 @@ app.post('/api/register', users.create);
 
 app.route('/api/logout')
   .get(users.signout);
-
-app.route('/api/login').post(users.login);
-       /*.post(passport.authenticate('local', {
+  
+app.route('/api/login')
+       .post(passport.authenticate('local', {
            failureFlash: true
-       }), users.login);*/
+       }), users.login);
 
 app.route('/api/loggedin')
       .get(function(req, res) {

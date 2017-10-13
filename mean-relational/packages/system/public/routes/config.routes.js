@@ -6,14 +6,6 @@
          .module('mean')
          .config(configState)
          .config(configLoaction)
-         .config(['$httpProvider', function($httpProvider) {
-              $httpProvider.defaults.headers.common = {};
-              $httpProvider.defaults.headers.post = {};
-              $httpProvider.defaults.headers.get = {};
-              $httpProvider.defaults.headers.put = {};
-              $httpProvider.defaults.headers.patch = {};
-            }
-         ])
          .run(function($rootScope, $state) {
              $rootScope.$state = $state;
          });
@@ -34,12 +26,12 @@
           url: '/',
           templateUrl: 'system/views/index.html',
           controller:'IndexController',
-          controllerAs:'idctr'//,
-          /*resolve: {
+          controllerAs:'idctr',
+          resolve: {
           loggedin: function(MeanUser) {
                   return MeanUser.checkLoggedin();
               }
-           }*/
+           }
         });
   }
 

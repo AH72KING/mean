@@ -11,15 +11,21 @@ var winston = require('./winston');
 
 //Serialize sessions
 passport.serializeUser(function(user, done) {
+     console.log('config Passport.js serializeUser');
+    console.log(user);
+    console.log(done);
   done(null, user.USERID);
 });
 
-passport.deserializeUser(function(id, done) {
-
-    db.User.find({where: {USERID: id}})
+passport.deserializeUser(function(USERID, done) {
+        console.log('config Passport.js deserializeUser');
+    console.log(USERID);
+    console.log(done);
+    db.User.find({where: {USERID: USERID}})
     .then(function(user){
+
         if(!user) return done('error');
-        winston.info('Session: { id: ' + user.id + ', username: ' + user.username + ' }');
+        winston.info('Session: { USERID: ' + user.USERID + ', USERNAME: ' + user.USERNAME + ' }');
         done(null, user);
     }).catch(function(err){
         done(err, null);
@@ -31,14 +37,20 @@ passport.use(new LocalStrategy({
     usernameField: 'USERNAME',
     passwordField: 'PASSWORD'
   },
-  function(username, password, done) {
-    db.User.find({ where: { USERNAME: username }}).then(function(user) {
+  function(USERNAME, PASSWORD, done) {
+    console.log('config Passport.js LocalStrategy');
+    console.log(USERNAME);
+    console.log(PASSWORD);
+    db.User.find({ where: { USERNAME: USERNAME }}).then(function(user) {
+            console.log('db.User.find');
+            console.log(USERNAME);
+            console.log(user);
       if (!user) {
         done(null, false, { message: 'Unknown user' });
-      } else if (!user.authenticate(password)) {
-        done(null, false, { message: 'Invalid password'});
+      } else if (!user.authenticate(PASSWORD)) {
+        done(null, false, { message: 'Invalid PASSWORD'});
       } else {
-        winston.info('Login (local) : { id: ' + user.id + ', username: ' + user.username + ' }');
+        winston.info('Login (local) : { USERID: ' + user.USERID + ', USERNAME: ' + user.USERNAME + ' }');
         done(null, user);
       }
     }).catch(function(err){

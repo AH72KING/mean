@@ -21,20 +21,25 @@ angular
         vm.logout = logout;
 
         function logout(){
-          $http.get('/api/logout').success(function() {
-            vm.global = {
-              user: false,
-              authenticated: false
-            };
+          $http.get('/api/logout').then(function() {
+              vm.global = {
+                user: false,
+                authenticated: false
+              };
 
-            $state.go('auth.login');
+              $state.go('auth.login');
 
-          });
+            },function(err){
+                console.log(err);
+            }
+          );
         }
         $scope.toggleLeft     = buildToggler('left');
         $scope.toggleRight    = buildToggler('right');
         //$scope.ProductDetail  = buildToggler('ProductDetail');
-        $scope.lockLeft = false;
+        $scope.lockLeft = true;
+        $scope.lockRight = true;
+
         
         $scope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();

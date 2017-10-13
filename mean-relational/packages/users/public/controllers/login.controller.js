@@ -7,7 +7,7 @@
       LoginCtrl.$inject = ['$rootScope', '$http', '$location','MeanUser'];
 
       function LoginCtrl($rootScope, $http, $location,MeanUser){
-
+            //console.log('login.controller .LoginCtrl');
             //declare internal variables
             var vm = this;
 
@@ -20,7 +20,8 @@
 
             //declare logical scope methods controller
             function login(){
-              vm.meanuser.login(vm.user);
+              console.log('login.controller .login');
+               vm.meanuser.login(vm.user);
             }
 
       }

@@ -30,7 +30,7 @@
 });
 
 </script>
-  <div layout="column" class="sidenavdemoBasicUsage">
+  <div class="sidenavdemoBasicUsage header-container"> <!--layout="column"--> 
 
   <section layout="row" flex="">
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="isLeftOpen()">
@@ -48,7 +48,7 @@
       </md-content>
 
     </md-sidenav>
-  <div ng-controller="HeaderController as hdctr" layout="column" ng-cloak>
+  <div ng-controller="HeaderController as hdctr" class="header-container-inner" ng-cloak ><!--layout="column"-->
         <div class="inner"> 
               <div class="logo pull-left">
                   <ul class="nav navbar-nav navbar-right navbar-menu" style="float:left;margin-left:0px;">
@@ -73,7 +73,7 @@
                     </li>
                   </ul>
               </div>
-              <div class="right pull-right">
+              <div class="right pull-right user-action-button-container">
                   <ul  class="navbar-nav nav" data-ng-hide="hdctr.global.authenticated">
                       <li><a ui-sref='auth.register'>Join</a></li>
                       <li class="divider-vertical"></li>
@@ -83,7 +83,7 @@
 
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
-                            <span>{{hdctr.global.user.name}}</span> <b class="caret"></b>
+                            <span>{{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}</span> <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#" ng-click="hdctr.logout()">Log Out</a></li>

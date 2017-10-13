@@ -9,10 +9,11 @@ angular
     MeanUser.$inject = ['Global','$rootScope', '$http', '$location', '$stateParams', '$q', '$timeout','$window'];
 
     function MeanUser (Global,$rootScope, $http, $location, $stateParams, $q, $timeout,$window) {
-
+            //console.log('user services MeanUser');
             var self;
 
             function MeanUserKlass() {
+                console.log('user services MeanUserKlass');
                 this.name = 'users';
                 this.user = {};
                 this.loggedin = false;
@@ -45,13 +46,13 @@ angular
 
 
             function onIdentity(response) {
-
+                console.log('user services onIdentity');
                 var user = response.user ? response.user : response;
 
                 self.loggedin = true;
                 self.isAdmin = false;
                 self.user = user;
-                self.name = user.name;
+                self.name = user.GIVNAME;
 
                 //Global Services
                 Global.user = user;
@@ -71,6 +72,7 @@ angular
             }
 
             function onIdFail(response) {
+                console.log('user services onIdFail');
                 self.loginError = 'Authentication failed.';
                 self.registerError = response;
                 self.validationError = response.msg;
@@ -81,136 +83,159 @@ angular
 
 
             function login(user) {
+                 console.log('user service login');
                 // this is an ugly hack due to mean-admin needs
-                console.log('user.service.js');
-                console.log(user);
                 $http.post('/api/login', {
-                        username: user.username,
-                        password: user.password
+                        USERNAME: user.USERNAME,
+                        PASSWORD: user.PASSWORD
                     })
-                    .success(function(res) {
+                    .then(function (res) {
                         console.log(res);
                         self.onIdentity(res);
-                    })
-                    .error(function(err) {
-                       self.onIdFail(err);
+                    }, function(err) {
+                        console.log(err);
+                        self.onIdFail(err);
+
                     });
             }
-
 
             function register(user) {
-                $http.post('/api/register', {
-                        email: user.email,
-                        password: user.password,
-                        username: user.username,
-                        name: user.name
+                 $http.post('/api/register', {
+                        EMAIL: user.EMAIL,
+                        PASSWORD: user.PASSWORD,
+                        USERNAME: user.USERNAME,
+                        GIVNAME: user.GIVNAME,
+                        SURNAME: user.SURNAME
                     })
-                    .success(self.onIdentity)
-                    .error(function(err) {
+                     .then(function (res) {
+                        self.onIdentity(res);
+                    }, function(err) {
+                        console.log(err);
                         self.onIdFail(err);
+
                     });
             }
 
-
             function resetpassword(user) {
-                $http.post('/api/reset/' + $stateParams.tokenId, {
-                        password: user.password,
+                 $http.post('/api/reset/' + $stateParams.tokenId, {
+                        PASSWORD: user.PASSWORD,
                         confirmPassword: user.confirmPassword
                     })
-                    .success(function(res) {
+                 .then(function (res) {
                         self.onIdentity(res);
-                    })
-                    .error(function(err) {
+                    }, function(err) {
+                        console.log(err);
                         self.onIdFail(err);
+
                     });
             }
 
             function forgotpassword(user) {
-                $http.post('/api/forgot-password', {
-                        text: user.email
+                  $http.post('/api/forgot-password', {
+                        text: user.EMAIL
                     })
-                    .success(function(response) {
-                        $rootScope.$emit('forgotmailsent', response);
-                    })
-                    .error(function(err) {
-                        self.onIdFail(err);
+                 .then(function (res) {
+                        $rootScope.$emit('forgotmailsent', res);
+                    }, function(err) {
+                        console.log(err);
+                         self.onIdFail(err);
+
                     });
             }
 
             function logout() {
+                    console.log('user services logout');
+                 $http.get('/api/logout')
+                        .then(function () {
+                            self.user = {};
+                            self.loggedin = false;
+                            self.isAdmin = false;
 
-                $http.get('/api/logout').success(function() {
-                    self.user = {};
-                    self.loggedin = false;
-                    self.isAdmin = false;
+                            //Global Services
+                            Global.user = null;
+                            Global.authenticated = false;
 
-                    //Global Services
-                    Global.user = null;
-                    Global.authenticated = false;
-
-                    $rootScope.$emit('logout');
-                });
+                        $rootScope.$emit('logout');
+                     }, function(err) {
+                            //some error
+                            console.log(err);
+                    });
 
             }
 
             function checkLoggedin() {
+                 console.log(' service users checkLoggedin');
                 var deferred = $q.defer();
 
-                // Make an AJAX call to check if the user is logged in
-                $http.get('/api/loggedin').success(function(user) {
-                    // Authenticated
-                    if (user !== '0') {
-                        $timeout(deferred.resolve);
-                    }
+                $http.get('/api/loggedin')
+                        .then(function (user) {
+                            // Authenticated
+                            console.log(user);
+                            console.log(user.data);
+                            if (user.data !== '0') {
+                                $timeout(deferred.resolve);
+                            }
 
-                    // Not Authenticated
-                    else {
-                        $timeout(deferred.resolve);
-                        //$timeout(deferred.reject);
-                        //$location.url('/auth/login');
-                    }
-                });
+                            // Not Authenticated
+                            else {
+                                $timeout(deferred.reject);
+                                location.url('/auth/login');
+                            }
+                        }, function(err) {
+                            //some error
+                            console.log(err);
+                    });
 
                 return deferred.promise;
             }
 
             function checkLoggedOut() {
+                console.log(' service users checkLoggedOut');
                 // Check if the user is not connected
                 // Initialize a new promise
                 var deferred = $q.defer();
 
                 // Make an AJAX call to check if the user is logged in
-                $http.get('/api/loggedin').success(function(user) {
-                    // Authenticated
-                    if (user !== '0') {
-                        $timeout(deferred.reject);
-                        $location.url('/');
-                    }
-                    // Not Authenticated
-                    else {
-                        $timeout(deferred.resolve);
-                    }
-                });
+                    $http.get('/api/loggedin')
+                        .then(function (user) {
+                          // Authenticated
+                            if (user !== '0') {
+                                $timeout(deferred.reject);
+                                $location.url('/');
+                            }
+                            // Not Authenticated
+                            else {
+                                $timeout(deferred.resolve);
+                            }
+                        }, function(err) {
+                            //some error
+                            console.log(err);
+                    });
 
                 return deferred.promise;
             }
 
             function checkAdmin() {
+                 console.log('user services checkAdmin');
                 var deferred = $q.defer();
 
                 // Make an AJAX call to check if the user is logged in
-                $http.get('/api/loggedin').success(function(user) {
-                    // Authenticated
-                    if (user !== '0' && user.roles.indexOf('admin') !== -1) {
-                        $timeout(deferred.resolve);
-                    }
+                    $http.get('/api/loggedin')
+                        .then(function (user) {
+                          // Authenticated
+                            if (user !== '0' && user.roles.indexOf('admin') !== -1) {
+                                $timeout(deferred.resolve);
+                            }
 
-                    // Not Authenticated or not Admin
-                    else {
-                        $timeout(deferred.reject);
-                        $location.url('/');
-                    }
-                });
+                            // Not Authenticated or not Admin
+                            else {
+                                $timeout(deferred.reject);
+                                $location.url('/');
+                            }
+                        }, function(err) {
+                            //some error
+                            console.log(err);
+                    });
 
                 return deferred.promise;
             }

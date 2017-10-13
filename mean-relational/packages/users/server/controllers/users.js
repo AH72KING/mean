@@ -3,11 +3,12 @@
  * Module dependencies.
  */
 var db = require('../../../../config/sequelize');
-
+ //console.log('user server controller');
 /**
  * Auth callback
  */
 exports.authCallback = function(req, res) {
+    console.log('user server controller authCallback');
     res.redirect('/');
 };
 
@@ -15,6 +16,7 @@ exports.authCallback = function(req, res) {
  * Show login form
  */
 exports.signin = function(req, res) {
+     console.log('user server controller signin');
     res.render('users/signin', {
         title: 'Signin',
         message: req.flash('error')
@@ -23,6 +25,11 @@ exports.signin = function(req, res) {
 
 
 exports.login = function(req, res) {
+    console.log('user server controller login');
+    console.log(req);
+    console.log(req.body.EMAIL);
+    console.log(req.get('referer'));
+    //return ;
     res.json({
         user: req.user,
         redirect: req.get('referer')
@@ -33,6 +40,7 @@ exports.login = function(req, res) {
  * Show sign up form
  */
 exports.signup = function(req, res) {
+    console.log('user server controller signup');
     res.render('users/signup', {
         title: 'Sign up',
     });
@@ -42,7 +50,7 @@ exports.signup = function(req, res) {
  * Logout
  */
 exports.signout = function(req, res) {
-    console.log('Logout: { id: ' + req.user.id + ', username: ' + req.user.username + '}');
+    console.log('Logout: { USERID: ' + req.user.USERID + ', USERNAME: ' + req.user.USERNAME + '}');
     req.logout();
     res.redirect('/');
 };
@@ -51,6 +59,8 @@ exports.signout = function(req, res) {
  * Session
  */
 exports.session = function(req, res) {
+    console.log('user server controller session');
+
     res.redirect('/');
 };
 
@@ -58,20 +68,25 @@ exports.session = function(req, res) {
  * Create user
  */
 exports.create = function(req, res) {
-
+    console.log('create server controller user.js ');
+    console.log(req.body);
     var user = db.User.build(req.body);
+    console.log('create server controller user.js db.User.build');
+    console.log(user);
 
     user.provider = 'local';
     user.salt = user.makeSalt();
-    user.hashedPassword = user.encryptPassword(req.body.password, user.salt);
-    console.log('New User (local) : { id: ' + user.id + ' username: ' + user.username + ' }');
+    user.hashedPassword = user.encryptPassword(req.body.PASSWORD, user.salt);
+    console.log('New User (local) : { USERID: ' + user.USERID + ' USERNAME: ' + user.USERNAME + ' }');
 
     user.save().then(function(){
       req.logIn(user, function(err){
+        console.log(err);
         if(err) {
           console.log(err);
           return res.status(400).json(err);
         }
+
         res.json(user);
       });
     }).catch(function(err){
@@ -84,16 +99,20 @@ exports.create = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
+    console.log('user server controller me');
+
     res.jsonp(req.user || null);
 };
 
 /**
- * Find user by id
+ * Find user by USERID
  */
-exports.user = function(req, res, next, id) {
-    db.User.find({where : { id: id }}).then(function(user){
+exports.user = function(req, res, next, USERID) {
+    console.log('user server controller user');
+
+    db.User.find({where : { USERID: USERID }}).then(function(user){
       if (!user) {
-        return next(new Error('Failed to load User ' + id));
+        return next(new Error('Failed to load User ' + USERID));
       }
       req.profile = user;
       next();
@@ -106,6 +125,8 @@ exports.user = function(req, res, next, id) {
  * Generic require login routing middleware
  */
 exports.requiresLogin = function(req, res, next) {
+    console.log('user server controller requiresLogin');
+
     if (!req.isAuthenticated()) {
         return res.send(401, 'User is not authorized');
     }
@@ -116,7 +137,7 @@ exports.requiresLogin = function(req, res, next) {
  * User authorizations routing middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-    if (req.profile.id !== req.user.id) {
+    if (req.profile.USERID !== req.user.USERID) {
       return res.send(401, 'User is not authorized');
     }
     next();

@@ -4,12 +4,12 @@ module.exports = {
         name: 'spine',
         password: '',
         username: 'root1',
-        host:'192.168.100.88',
-        //host:'192.168.1.88',
+        //host:'192.168.100.88',
+        host:'192.168.1.88',
         port:3306
     },
     app: {
-        name: 'M*EAN Stack - Development'
+        name: 'Anerve'
     },
     // You will need to get your own client id's before this will work properly
     facebook: {

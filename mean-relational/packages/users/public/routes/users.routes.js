@@ -10,7 +10,7 @@
 
 
   function config($stateProvider){
-
+   // console.log('$stateProvider routes  .user');
       // states for my app
       $stateProvider
       .state('auth', {

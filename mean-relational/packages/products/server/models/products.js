@@ -34,12 +34,12 @@ module.exports = function(sequelize, DataTypes) {
 		timestamps: false,
 		tableName: 'productbrands'
 
-	}
-		/*{
+	},
+		{
 			associate: function(models){
 				product.belongsTo(models.User);
 			}
-		}*/
+		}
 	);
 
 	return product;

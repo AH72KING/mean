@@ -23,8 +23,8 @@ app.use(bodyParser.json());
 
 
         //var baseUrl = 'http://localhost:3000/';
-        var ip = '192.168.100.88';
-        //var ip = '192.168.1.88';
+        //var ip = '192.168.100.88';
+        var ip = '192.168.1.88';
         //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
         var headers = {
@@ -396,9 +396,9 @@ exports.nl_removefromCart = function(req, res) {
             //console.log(body);
             //data = JSON.stringify(body);
             //console.log(data);
-            data = JSON.parse(body);  
+           // data = JSON.parse(body);  
             //console.log(data);
-            return res.jsonp(data);
+            return res.jsonp('');
         });
     });
 
@@ -416,7 +416,6 @@ exports.charge =  function(req, res){
 
    var token = req.body.TokenId; // Using Express
    var amount = req.body.Amount;
-
     // Charge the user's card:
     stripe.charges.create({
       amount: amount,

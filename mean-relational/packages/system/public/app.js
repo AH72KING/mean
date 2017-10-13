@@ -18,11 +18,15 @@ angular.module('mean', [
   'mean.system',
   'mean.products',
   'mean.users'
-]).directive('sidenavPushIn',sidenavPushIn);
+]).directive('sidenavPushIn',sidenavPushIn)
+.config(['$qProvider', function ($qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
+}]);
 
 angular.module('mean.system', []);
 angular.module('mean.products', []);
 angular.module('mean.users',[]);
+
 function sidenavPushIn(){
         return {
             restrict: 'A',

@@ -1,23 +1,33 @@
 <div class="product-detail-container">
 	<div class="product_image">
 		<div class="product-taga" ng-click="ProductDetail()" >
-			<img src="{{UploadUrl}}{{CurrentProductDetail.img_loc}}" alt="">
+			
+			<img src="{{CurrentProductDetailImage}}" alt="">
+			<!--img src="{{UploadUrl}}{{CurrentProductDetail.img_loc}}" alt=""-->
 		</div>
 		<div class="product-thumbnail-container">
 			<div class="thumbnails thumbnail-left">
 				<div class="product-image-thumbnail">
-					<img src="{{UploadUrl}}{{CurrentProductDetail.img1}}" alt="">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img1}}" alt="" 
+					ng-click="showCurrentImage(UploadUrl+CurrentProductDetail.img1,$event)"
+					>
 				</div>
 				<div class="product-image-thumbnail">
-					<img src="{{UploadUrl}}{{CurrentProductDetail.img2}}" alt="">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img2}}" alt="" 
+					ng-click="showCurrentImage(UploadUrl+CurrentProductDetail.img2,$event)"
+					>
 				</div>
 			</div>
 			<div class="thumbnails  thumbnail-right">
 				<div class="product-image-thumbnail">
-					<img src="{{UploadUrl}}{{CurrentProductDetail.img3}}" alt="">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img3}}" alt="" 
+					ng-click="showCurrentImage(UploadUrl+CurrentProductDetail.img3,$event)"
+					>
 				</div>
 				<div class="product-image-thumbnail">
-					<img src="{{UploadUrl}}{{CurrentProductDetail.img4}}" alt="">
+					<img src="{{UploadUrl}}{{CurrentProductDetail.img4}}" alt="" 
+					ng-click="showCurrentImage(UploadUrl+CurrentProductDetail.img4,$event)"
+					>
 				</div>
 			</div>
 		</div>
@@ -46,24 +56,113 @@
 	</div>
 	<div class="tabs-container">
 	  	<div class="tab-actions">
-	      <button ng-click="tabContent='first'">First</button>
-	      <button ng-click="tabContent='second'">Second</button>
+	      <div ng-click="tabContent='detail'"><i class="fa fa-database" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='cost'"><i class="fa fa-usd" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='shipping'"><i class="fa fa-truck" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='options'"><i class="fa fa-list" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='graph'"><i class="fa fa-bar-chart" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='likes'"><i class="fa fa-heart" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='comments'"><i class="fa fa-commenting" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='share'"><i class="fa fa-share-alt" aria-hidden="true"></i></div>
 	  	</div>
 	  	<div class="tab-contents">
-		  	<div class="init-first" ng-init="tabContent='first'"></div>
-			<div class="tabs-content" ng-show="tabContent === 'first'">
+		  	<div class="init-first" ng-init="tabContent='detail'"></div>
+			<div class="tabs-content" ng-show="tabContent === 'detail'">
 				 <div class="product_details">
+				 	<div class="tab-content-head">
+				 		<i class="fa fa-database" aria-hidden="true"></i>
+				 		<h4>Product Details</h4>
+				 	</div>
 					<div class="specs">
 							{{CurrentProductDetail.specs}}
 					</div>
 				</div>
 			</div>
-			<div class="tabs-content" ng-show="tabContent === 'second'">
+			<div class="tabs-content" ng-show="tabContent === 'cost'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-usd" aria-hidden="true"></i>
+				 	<h4>Offers</h4>
+				</div>
 				<div class="price">
 						{{CurrentProductDetail.cost_price}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'shipping'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-truck" aria-hidden="true"></i>
+				 	<h4>Shipping</h4>
+				</div>
+				<div class="shipping">
+						{{CurrentProductDetail.shipping}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'options'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-list" aria-hidden="true"></i>
+				 	<h4>Options</h4>
+				</div>
+				<div class="options">
+						{{CurrentProductDetail.options}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'graph'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-bar-chart" aria-hidden="true"></i>
+				 	<h4>Stats</h4>
+				</div>
+				<div class="graph">
+						{{CurrentProductDetail.graph}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'likes'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-heart" aria-hidden="true"></i>
+				 	<h4>Likes</h4>
+				</div>
+				<div class="likes">
+						{{CurrentProductDetail.likes}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'comments'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-commenting" aria-hidden="true"></i>
+				 	<h4>Comments</h4>
+				</div>
+				<div class="comments">
+						{{CurrentProductDetail.comments}}
+				</div>
+			</div>
+			<div class="tabs-content" ng-show="tabContent === 'share'">
+				<div class="tab-content-head">
+				 	<i class="fa fa-share-alt" aria-hidden="true"></i>
+				 	<h4>Share</h4>
+				</div>
+				<div class="share">
+						{{CurrentProductDetail.share}}
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<script type="text/javascript" charset="utf-8" async defer>
+	
+/*$(function(){
+    $(document).ready(function($) {
+       	$('.vertical-ticker').totemticker({
+            row_height   :    '250px',
+            // next      :    '#ticker-next',
+            // previous  :    '#ticker-previous',
+            stop         :    '#stop',
+            start        :    '#start',
+            mousestop    :    true,
+        });
+           
+    	$(document).on('mouseleave','.vertical-ticker', function(){
+    	   $('#stop').trigger('click');
+    	   $('#start').trigger('click');
+        });
+    });
+});*/
+	
+</script>
