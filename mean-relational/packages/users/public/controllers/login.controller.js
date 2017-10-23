@@ -4,12 +4,13 @@
   angular.module('mean.users')
          .controller('LoginCtrl', LoginCtrl);
 
-      LoginCtrl.$inject = ['$rootScope', '$http', '$location','MeanUser'];
+      LoginCtrl.$inject = ['$rootScope', '$http', '$scope', '$location', 'MeanUser' ,'Session'];
 
-      function LoginCtrl($rootScope, $http, $location,MeanUser){
+      function LoginCtrl($rootScope, $http, $scope, $location, MeanUser, Session){
             //console.log('login.controller .LoginCtrl');
             //declare internal variables
             var vm = this;
+            var baseUrl = 'http://localhost:3000/';
 
             //declare scope variables
             vm.meanuser = MeanUser;
@@ -20,9 +21,48 @@
 
             //declare logical scope methods controller
             function login(){
-              console.log('login.controller .login');
-               vm.meanuser.login(vm.user);
+              //console.log('login.controller .login');
+              $scope.UserLoginInJava(vm.user)
+             // vm.meanuser.login(vm.user);
+                
             }
+            $scope.UserLoginInJava  = function (user) {
+
+              var USERNAME  = user.USERNAME;
+              var PASSWORD  = user.PASSWORD;
+              var url       = 'http://192.168.1.88:8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
+              var postData  = {USERNAME:USERNAME,PASSWORD:PASSWORD};
+              var configObj = { method: 'GET',url: url};
+
+                  $http(configObj)
+                    .then(function onFulfilled(response) {
+                          var dataJson = JSON.parse(JSON.stringify(response.data));
+                          //console.log(dataJson);
+                          if(dataJson !== undefined){
+                            var key = dataJson.key;
+                            //console.log(key);
+                              if(key !== undefined){
+                                 Session.setItem('key', key);
+                                    var url2 = baseUrl+'api/SaveUserKey';
+                                    var postData2  =  {key:key};
+                                    var configObj2 = { method: 'POST',url: url2, data: postData2};
+                                        $http(configObj2)
+                                            .then(function onFulfilled(response2) {
+                                              //console.log(response2);
+                                              vm.meanuser.login(vm.user);
+                                            }).catch( function onRejection(errorResponse2) {
+                                                console.log('Error: ', errorResponse2.status);
+                                                console.log(errorResponse2);
+                                        }); 
+                                    }
+                          }
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      }); 
+
+          };
+
 
       }
 

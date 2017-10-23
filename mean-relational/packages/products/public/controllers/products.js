@@ -30,12 +30,18 @@ import 'rxjs/add/operator/map';*/
                    'Access-Control-Allow-Credentials': 'true'
                 };
 
-        $scope.addShippingButton = true;        
-        $scope.hideShippingAddress = true;        
+        $scope.addPaymentButton = true;
+        $scope.addShippingButton = false;
+        $scope.hideShippingAddress = true;
+        $scope.hidePayment = true;
         $scope.hideMyZoneCart = false; 
         $scope.proceedButton = false;
+        $scope.paymentFormButton = false;
         $scope.paymentButton = false;
         $scope.shippingAddressAdded = false;
+        $scope.showPaymentCompleteMsg = false;
+
+
 
         var cartCreated = false;
         var grp_cartId = null;
@@ -49,7 +55,9 @@ import 'rxjs/add/operator/map';*/
           grp_cartId = Session.getItem('grp_cartId');
         }*/
         $scope.cart = []; // cart Array
-
+        $scope.userFirends = []; // friends Array;
+        var userFirends = [];
+        vm.userFirends = userFirends;
 
 
         $scope.toggleLeft     = buildToggler('left');
@@ -93,7 +101,29 @@ import 'rxjs/add/operator/map';*/
           }
         };
 
+        $scope.showPaymentForm = function() {
+            $scope.addPaymentButton = false;
+            $scope.hidePayment = false;
+            $scope.addShippingButton = false; 
+            $scope.hideMyZoneCart = true;
+            $scope.paymentFormButton = true;
+            $scope.paymentButton = false; 
+        };
+        $scope.submitPaymentForm = function() {
+            $scope.hidePayment = true;
+            $scope.hideShippingAddress = false;
+            $scope.proceedButton = true;
+            $scope.paymentFormButton = false; 
+            
 
+           $scope.paymentInformations={
+              card:this.card,
+              month:this.month,
+              year:this.year,
+              cvc:this.cvc
+            };
+             console.log($scope.paymentInformations);
+        }
      
 
         $scope.showShippingAddressForm = function() {
@@ -112,15 +142,14 @@ import 'rxjs/add/operator/map';*/
               amount:  totalAmountToPay,
               token: handleToken
             });*/
-
-           $scope.addShippingButton = false; 
+            $scope.hidePayment = true;
             $scope.hideShippingAddress = false; 
             $scope.hideMyZoneCart = true;
             $scope.proceedButton = true;
             $scope.paymentButton = false;  
              
         };
-
+        
         $scope.submitShippingAddressForm = function() {  
             $scope.shippingAddressAdded = true;
             $scope.addShippingButton = false;
@@ -128,68 +157,78 @@ import 'rxjs/add/operator/map';*/
             $scope.proceedButton = false;
             $scope.hideMyZoneCart = false;
             $scope.hideShippingAddress = true; 
+            $scope.shippingInformations={
+              first_name:this.first_name,
+              last_name:this.last_name,
+              email:this.email,
+              mobile:this.mobile,
+              street:this.street,
+              city:this.city,
+              postcode:this.postcode,
+              country:this.country
+            };
+             console.log($scope.shippingInformations);
         };
 
         $scope.doPayment = function() {
+          console.log($scope.shippingInformations);
+          var shippingInformations = $scope.shippingInformations;
+          var paymentInformations = $scope.paymentInformations
             var totalAmountToPay = $scope.cartTotalPrice;
                 totalAmountToPay = totalAmountToPay.toFixed(2).toString();
-                totalAmountToPay = parseInt (totalAmountToPay.replace('.',''));
+                totalAmountToPay = parseInt(totalAmountToPay.replace('.',''));
             
-            //var Token = '';
+            var Token = '';
             Stripe.setPublishableKey('pk_test_sZay0UdHi8gZBfIRtvWefcLy');
-            var checkoutHandler = (window).StripeCheckout.configure({
+            /*var checkoutHandler = (window).StripeCheckout.configure({
               key: 'pk_test_sZay0UdHi8gZBfIRtvWefcLy',
               locale: 'auto',
               token: function (token , args){
-                  console.log(token);
-                  console.log(args);
-                  console.log('args');
-                  args.billing_address_apt = '';
-                  args.billing_address_city = 'San Francisco';
-                  args.billing_address_country = 'United States';
-                  args.billing_address_country_code = 'US';
-                  args.billing_address_line1 = '1231 Market St';
-                  args.billing_address_state = 'CA';
-                  args.billing_address_zip = '94103';
-                  args.billing_name = 'Matthew Arkin';
-                  args.shipping_address_apt = '';
-                  args.shipping_address_city = 'San Francisco';
-                  args.shipping_address_country = 'United States';
-                  args.shipping_address_country_code = 'US';
-                  args.shipping_address_line1 = '1231 Market St';
-                  args.shipping_address_state = 'CA';
-                  args.shipping_address_zip = '94103';
-                  args.shipping_name =  'Matthew Arkin';
+                 // args.billing_address_apt = '';
+                  args.billing_address_city = shippingInformations.city;
+                  args.billing_address_country = shippingInformations.country;
+                  //args.billing_address_country_code = 'US';
+                  args.billing_address_line1 = shippingInformations.street;
+                  //args.billing_address_state = 'CA';
+                  args.billing_address_zip = shippingInformations.postcode;
+                  args.billing_name = shippingInformations.first_name+' '+shippingInformations.last_name;
+                  //args.shipping_address_apt = '';
+                  args.shipping_address_city = shippingInformations.city;
+                  args.shipping_address_country = shippingInformations.country;
+                  //args.shipping_address_country_code = 'US';
+                  args.shipping_address_line1 = shippingInformations.street;
+                  //args.shipping_address_state = 'CA';
+                  args.shipping_address_zip = shippingInformations.postcode;
+                  args.shipping_name =  shippingInformations.first_name+' '+shippingInformations.last_name;
                   console.log('args');
                   console.log(args);
                   console.log(token);
 
               }
-            });   
+            });  */ 
 
-           /*Stripe.card.createToken({
-              number: '4242424242424242',
-              exp_month: '12',
-              exp_year: '2018',
-              cvc: '123',
-              name: 'Ahsan Ali khan',
-              address_line1: 'HNO 60 Karam Complex',
-              address_city: 'Taxila',
-              address_country: 'Pakistan',
-              address_line1: 'HNO 60 Karam Complex',
-              address_state: 'Punjab',
-              address_zip: '44000'
-            }, stripeResponseHandler);
-            */
+           Stripe.card.createToken({
+              number: paymentInformations.card,//'4242424242424242',
+              exp_month: paymentInformations.month,//'12',
+              exp_year: paymentInformations.year,//'2018',
+              cvc: paymentInformations.cvc,//'123',
+              name: shippingInformations.first_name+' '+shippingInformations.last_name,
+              address_line1: shippingInformations.street,
+              address_city: shippingInformations.city,
+              address_country: shippingInformations.country,
+              //address_state: 'Punjab',
+              address_zip: shippingInformations.postcode
+            }, stripeResponseHandler2);
+            
 
-            checkoutHandler.open({
+            /*checkoutHandler.open({
               name: 'Anerve Shop',
               description: 'Friends Shopping Platform',
               amount:  totalAmountToPay,
-              shippingAddress: true,
-               billingAddress: true,
+              shippingAddress: false,
+              billingAddress: false,
               token: handleToken
-            });
+            });*/
 
 
 
@@ -228,13 +267,12 @@ import 'rxjs/add/operator/map';*/
             // See your keys here: https://dashboard.stripe.com/account/apikeys*/
            
         };
-       /* function stripeResponseHandler(status, response){
+       function stripeResponseHandler(status, response){
             var totalAmountToPay = $scope.cartTotalPrice;
                 totalAmountToPay = totalAmountToPay.toFixed(2).toString();
                 totalAmountToPay = parseInt (totalAmountToPay.replace('.',''));
                 console.log('stripeResponseHandler');
                 console.log(response);
-                //stripeResponseHandler2(response);
             var checkoutHandler = (window).StripeCheckout.configure({
               key: 'pk_test_sZay0UdHi8gZBfIRtvWefcLy',
               locale: 'auto',
@@ -246,9 +284,9 @@ import 'rxjs/add/operator/map';*/
               amount:  totalAmountToPay,
               token: stripeResponseHandler2
             });
-        }*/
+        }
  
-        function stripeResponseHandler2(token){
+        function stripeResponseHandler2(status, token){
             console.log('stripeResponseHandler2');
             console.log(token);
             var url = baseUrl+'api/charge';
@@ -273,7 +311,18 @@ import 'rxjs/add/operator/map';*/
                   $http(configObj)
                       .then(function onFulfilled(response) {
                         console.log('stripeResponseHandler2onFulfilled');
-                          console.log(response);
+                          var dataJson    = JSON.parse(JSON.stringify(response.data));
+                          var status      = dataJson.status;
+                          //var object      = dataJson.object;
+                          //var seller_message = dataJson.outcome.seller_message;
+                          console.log(dataJson);
+                          if(status === 'succeeded'){
+                              $scope.paymentButton = false;
+                              $scope.hideMyZoneCart = true;
+
+                              $scope.showPaymentCompleteMsg = true;
+
+                          }
                       }).catch( function onRejection(errorResponse) {
                           console.log('Error: ', errorResponse.status);
                           console.log(errorResponse);
@@ -485,6 +534,7 @@ import 'rxjs/add/operator/map';*/
         };
 
         $scope.addObject = function (data) {
+              if(data !== undefined){
                 var counter = 0;
                 var localLoopProductBrandID = 1;
                  angular.forEach(data,function(value){
@@ -503,9 +553,12 @@ import 'rxjs/add/operator/map';*/
                       $scope.arctr.products['col4'].push(value);
                       counter = 0;
                     }
-                    localLoopProductBrandID = value.prod.prodBrandId;         
+                    localLoopProductBrandID = value.prodBrandId;         
                 });
-                $scope.lastProductID = localLoopProductBrandID;     
+                $scope.lastProductID = localLoopProductBrandID;  
+              }else{
+                console.log('Product Public Controller Add Object Undefined Data');
+              } 
         };
 
         $scope.productDropInCart  = function (event , ui) {   
@@ -651,9 +704,6 @@ import 'rxjs/add/operator/map';*/
 
         };
         $scope.nl_removefromCart  = function (cartID, productID) {
-          //console.log('removed from guest cart');
-          //console.log('cartID'+cartID);
-          //console.log('productID'+productID);
             var url = baseUrl+'api/nl_removefromCart';
             var postData = {cartID:cartID,productID:productID};
             var configObj = { method: 'POST',url: url, data: postData, headers: headers};
@@ -664,6 +714,62 @@ import 'rxjs/add/operator/map';*/
                         if(dataJson !== undefined && dataJson.length > 0 ){
                          grp_cartId     = dataJson.grp_cartId;
                         }*/
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
+          
+        };
+        $scope.myfriends  = function () {
+          if(Session.getItem('myfriends')){
+             vm.userFirends = Session.getItem('myfriends');
+          }else{
+            var key =  Session.getItem('key');
+            var url = baseUrl+'api/myfriends';
+            var postData = {key:key};
+            var configObj = { method: 'POST',url: url, data: postData,};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
+            var url = ApiBaseUrl+'myfriends/'+key;
+            var postData = {key:key};
+            var configObj = { method: 'GET',url: url, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        if(dataJson !== undefined ){
+                              angular.forEach(dataJson,function(value){
+                                vm.userFirends.push(value);      
+                            });
+                              Session.setItem('myfriends',vm.userFirends);
+                        }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
+         }
+          
+        };
+        $scope.myfriends();
+
+        $scope.testing  = function () {
+          var key =  Session.getItem('key');
+            var url = ApiBaseUrl+'getAllProdsInLocBySize/US/'+key+'/1/2';
+            var postData = {key:key};
+            var configObj = { method: 'GET',url: url, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        if(dataJson !== undefined ){
+                              angular.forEach(dataJson,function(value){
+                                vm.userFirends.push(value);      
+                            });
+                              Session.setItem('myfriends',vm.userFirends);
+                        }
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                         console.log(errorResponse);

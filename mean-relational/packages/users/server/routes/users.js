@@ -33,6 +33,8 @@ app.route('/api/loggedin')
           res.send(req.isAuthenticated() ? req.user : '0');
       });
 
+app.route('/api/SaveUserKey').post(users.SaveUserKey);
+
 
 // Setting the facebook oauth routes
 app.get('/api/auth/facebook', passport.authenticate('facebook', {

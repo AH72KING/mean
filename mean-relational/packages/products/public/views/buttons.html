@@ -1,9 +1,15 @@
- <div class="add-shipping-address-button-container">
-					<button type="button" class="btn btn-primary" ng-show="proceedButton" ng-click="submitShippingAddressForm()">Proceed</button>
-				</div>
-				<div class="add-shipping-address-button-container">
-					<button type="button" class="btn btn-primary" ng-show="addShippingButton" ng-click="showShippingAddressForm()">Add Shipping Address</button>
-				</div>
-				<div class="payment-button-container">
-					<button type="button" class="btn btn-primary" ng-show="paymentButton" ng-click="doPayment()">Payment</button>
-				</div>
+
+<div class="add-shipping-address-button-container">
+	<button type="button" class="btn btn-primary" ng-show="addPaymentButton" ng-click="showPaymentForm()">Add Payment Details</button>
+	<button type="button" class="btn btn-primary" ng-show="addShippingButton" ng-click="showShippingAddressForm()">Add Shipping Address</button>
+	<!--button type="button" class="btn btn-primary" ng-show="addShippingButton" ng-click="myfriends()">Myfriends</button-->
+	<!--button type="button" class="btn btn-primary" ng-show="addShippingButton" ng-click="testing()">Testing</button-->
+</div>
+<div class="payment-button-container">
+	<button type="button" class="btn btn-primary" ng-show="paymentButton" ng-click="doPayment()">Payment</button>
+</div>
+<div class="payment-messages">
+	<br>
+		<p class="payment-complete-message" ng-show="showPaymentCompleteMsg">Thank You Your Payment is Complete</p>
+	<br>
+</div>

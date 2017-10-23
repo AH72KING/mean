@@ -333,8 +333,18 @@ font-size: 30px;
 .my-zone-side-bar .zone-footer{
     margin-top: 45px;
 }
-.my-zone-side-bar .zone-footer .add-shipping-address-button-container{}
-.my-zone-side-bar .zone-footer .add-shipping-address-button-container button.btn{
+.my-zone-side-bar .add-shipping-address-button-container{}
+.my-zone-side-bar .add-shipping-address-button-container button.btn{
+    background-color: rgb(53, 230, 18);
+    border-color: transparent;
+    width: 100%;
+    max-width: 270px;
+    margin: 0px auto;
+    display: block;
+    padding: 12px 12px;
+}
+.my-zone-side-bar .add-payment-button-container{}
+.my-zone-side-bar .add-payment-button-container button.btn{
     background-color: rgb(53, 230, 18);
     border-color: transparent;
     width: 100%;
@@ -475,7 +485,7 @@ table.form-tbl input[type="text"], table.form-tbl textarea {width: 75%;}
 
 body section.content {
     margin-top: 40px;
-    height: 95vh;
+    /* height: 95vh; */
     overflow: hidden;
 }
 body section.container-fluid {
@@ -830,10 +840,7 @@ font-size: 30px;
 .header-container{
 
 }
-.header-container-inner{
-display: block;
-width: 100%;
-}
+.header-container-inner{display: block;width: 100%;background: #fff;}
 .user-action-button-container{
     position: static!important;
     /* float: none!important; */
@@ -841,4 +848,22 @@ font-size: 30px;
     display: inline-block!important;
     width: initial!important;
     height: initial!important;
+}
+
+ul li.friends-container{
+  display: block;
+  background: #eee;
+  padding: 20px;
+  height: 243px;
+}
+ul li.friends-container .friends-container-inner{
+  
+}
+ul li.friends-container .friends-container-inner .friends-block{
+    display: inline-block;
+    width: 60px;
+    vertical-align: top;
+}
+ul li.friends-container .friends-container-inner .friends-block img{
+  
 }

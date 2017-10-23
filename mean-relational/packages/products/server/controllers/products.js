@@ -5,6 +5,7 @@
  */
 var db = require('../../../../config/sequelize');
 var express = require('express');
+var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
 var cors = require('cors');
@@ -275,7 +276,6 @@ exports.createCart_guest = function(req, res) {
         return res.json(data);
     }else{
 
-        var http = require('http');
         //var url = ApiBaseUrl+'createCart_guest/PK/';
         var body = '';
         var data = [];
@@ -326,14 +326,16 @@ exports.addToCart_guest = function(req, res) {
     var cartID = req.body.cartID;
     var productID = req.body.productID;
 
-    var http = require('http');
+    
     //var url = ApiBaseUrl+'addToCart_guest/'+productID+'/'+cartID+'/';
+    //addToCart_guest_thin
     var body = '';
     var data = [];
     var options = {
         hostname: ip,
         port: '8080',
-        path: ApiBasePath+'addToCart_guest/'+productID+'/'+cartID+'/',
+        //path: ApiBasePath+'addToCart_guest/'+productID+'/'+cartID+'/',
+        path: ApiBasePath+'addToCart_guest_thin/'+productID+'/'+cartID+'/',
         method: 'GET',
         headers: headers
     };
@@ -374,7 +376,6 @@ exports.nl_removefromCart = function(req, res) {
     var productID = req.body.productID;
     console.log(cartID+'__'+productID);
      //return res.jsonp(cartID+'__'+productID);
-    var http = require('http');
     //var url = ApiBaseUrl+'nl_removefromCart/'+cartID+'/'+productID+'/';
     var body = '';
     var data = [];
@@ -394,11 +395,11 @@ exports.nl_removefromCart = function(req, res) {
 
         res2.on('end', function() { 
             //console.log(body);
-            //data = JSON.stringify(body);
+            data = JSON.stringify(body);
             //console.log(data);
-           // data = JSON.parse(body);  
-            //console.log(data);
-            return res.jsonp('');
+            data = JSON.parse(body);  
+            console.log(body);
+            return res.jsonp(body);
         });
     });
 
@@ -451,6 +452,41 @@ exports.charge =  function(req, res){
       });*/
 };
 
+/**
+ * My Friends
+ *
+ * This function will return the friends for currently LoggedIn User.
+ */
+exports.myfriends =  function(req, res){
+    var key = req.body.key;
+    var body = '';
+    var data = [];
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: ApiBasePath+'myfriends/'+key+'/',
+        method: 'GET',
+        headers: headers
+    };
+    req = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+             body += chunk;
+        });
+        res2.on('end', function() { 
+          data = JSON.stringify(body);
+          data = JSON.parse(body);  
+          return res.jsonp(data);
+        });
+    });
+
+    req.on('error', function(e){
+        console.log('problem with request:'+ e.message);
+    });
+
+    req.end();
+
+};
+
 
 /**
  * Get Group Cart Products
@@ -461,7 +497,7 @@ exports.charge =  function(req, res){
 
 
 function convertJson(json){
-     var prod = {};
+     /*var prod = {};
      var main = {};
     //prod.id = json.ProdBrandId;
     prod.name = json.name;
@@ -471,8 +507,9 @@ function convertJson(json){
     prod.dateadded = json.dateadded;
     prod.prodBrandId = json.ProdBrandId;
     main.prod = prod;
-    var jsonString= JSON.stringify(main);
-    return JSON.parse(jsonString);
+    var jsonString= JSON.stringify(main);*/
+   // return JSON.parse(jsonString);
+   return json;
 }
 
 /**

@@ -3,7 +3,9 @@
  * Module dependencies.
  */
 var db = require('../../../../config/sequelize');
- var http = require('http');
+var http = require('http');
+var LocalStorage = require('node-localstorage').LocalStorage,
+   localStorage = new LocalStorage('./scratch');
  //console.log('user server controller');
 /**
  * Auth callback
@@ -143,40 +145,12 @@ exports.hasAuthorization = function(req, res, next) {
     }
     next();
 };
-exports.loggedInJavaToo1 = function(USERID,USERNAME,PASSWORD) {
-var headers = {
-                           'Access-Control-Allow-Origin': '*',
-                           'Content-Type' : 'application/json; charset=UTF-8',
-                           'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-                           'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
-                           'Access-Control-Max-Age': '3600',
-                           'Access-Control-Allow-Credentials': 'true'
-                        };
-                    //var ip = '192.168.100.88';
-                    var ip = '192.168.1.88';
-                    var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
-                    //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
-                   
-                    var body = '';
-                    var data = [];
-                    var options = {
-                            hostname: ip,
-                            port: '8080',
-                            path: ApiBasePath+'loginservice/'+USERNAME+'/'+PASSWORD,
-                            method: 'GET',
-                            headers: headers
-                        };
 
-                        http.request(options,function(res2){
 
-                            res2.on('data', function(chunk) {
-                                 body += chunk;
-                            });
-
-                            res2.on('end', function() { 
-                                data = JSON.parse(body);  
-                                console.log('loginservice');
-                                console.log(data);
-                            });
-                        });
-};
+/**
+ * Save User authorizations key for Java Use
+ */
+exports.SaveUserKey = function(req, res){
+   localStorage.setItem('key',req.body.key);    
+   return res.send(200, 'Key Added To Session '+req.body.key);        
+ };
