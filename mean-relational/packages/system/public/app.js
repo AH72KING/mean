@@ -11,6 +11,7 @@ angular.module('mean', [
   'ngDragDrop',
   'ngMaterial',
   'ngMessages',
+  'ngSanitize',
   //'snap',
   //'pageslide-directive',
 

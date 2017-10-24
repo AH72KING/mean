@@ -156,7 +156,11 @@ exports.show = function(req, res) {
 exports.all = function(req, res) {
 
     //db.product.findAll().then(function(product){
-   db.product.findAll({limit: 12}).then(function(product){
+   db.product.findAll({limit: 12, 
+      where: {
+        status : 'A'
+      }
+    }).then(function(product){
         var productsData = {};
         var col1 = [];
         var col2 = [];
@@ -208,7 +212,7 @@ exports.all = function(req, res) {
                             var $key = row['ProdBrandId'];
                             var $oldRow = productRow[$key]
                            row['qunatity'] = 1 + $oldRow['qunatity'];
-                           row['groupCartProductId'] = row['groupCartProductId']+','+$oldRow['groupCartProductId'];
+                           row['groupCartProductId'] = row['groupCartProductId'];//+','+$oldRow['groupCartProductId'];
 
                            productRow[$key] = row;
 
@@ -347,7 +351,9 @@ exports.addToCart_guest = function(req, res) {
         });
 
         res2.on('end', function() { 
-            data = JSON.parse(body);  
+            console.log(body);
+            data = JSON.stringify(body);
+            data = JSON.parse(data);  
             return res.jsonp(data);
         });
     });
@@ -394,12 +400,12 @@ exports.nl_removefromCart = function(req, res) {
         });
 
         res2.on('end', function() { 
-            //console.log(body);
+           // console.log(body);
             data = JSON.stringify(body);
-            //console.log(data);
-            data = JSON.parse(body);  
-            console.log(body);
-            return res.jsonp(body);
+           // console.log(data);
+            data = JSON.parse(data);  
+            //console.log(body);
+            return res.jsonp(data);
         });
     });
 
@@ -487,7 +493,70 @@ exports.myfriends =  function(req, res){
 
 };
 
+exports.getProductBuyingUsers = function(req, res){
+    var productId = req.body.productId;
+    var grpCartData = {};
+    var Query = 'SELECT DISTINCT max(a.grp_cartId) as grp_cartId , u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2 ';
+    Query += 'FROM groupcart a ';
+    Query += 'INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId ';
+    Query += 'INNER JOIN users u on u.USERID = b.crt_addedby_user ';
+    Query += 'where b.crt_item = '+productId+' AND a.STATUS IN ("I","A") ';
+    Query += 'GROUP BY (u.USERID) ';
+    Query += 'ORDER BY a.grp_cartId DESC';
+    grpCartData['Query'] = Query;
+    var TotalCartPrice = 0 ;
+            db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
+                grpCartData['grpCartDataResponse']= grpCartDataResponse[0];
+                return res.jsonp(grpCartData);
+            });
 
+};
+
+exports.getUserDetail = function(req, res){
+    var USERID     = req.body.USERID;
+    var grp_cartId = req.body.grp_cartId;
+
+    var Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2 ';
+    Query += ',b.groupCartProductId, b.crt_item ';
+    Query += 'FROM groupcart a ';
+    Query += 'INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId ';
+    Query += 'INNER JOIN productbrands p on b.crt_item = p.ProdBrandId ';
+    Query += 'INNER JOIN users u on u.USERID = b.crt_addedby_user ';
+    Query += 'where b.crt_addedby_user = '+USERID+' AND a.grp_cartId = '+grp_cartId+' AND a.STATUS IN ("I","A") ';
+    Query += 'ORDER BY a.grp_cartId DESC';
+
+            db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
+                return res.jsonp(grpCartDataResponse[0][0]);
+            });
+
+};
+exports.getUserProductDetails = function(req, res){
+    var USERID     = req.body.USERID;
+    var grp_cartId = req.body.grp_cartId;
+
+    var Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, ';
+    Query += 'p.short_name, p.brand_name, p.brand_logo';
+    Query += ',b.groupCartProductId, b.crt_item ';
+    Query += 'FROM groupcart a ';
+    Query += 'INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId ';
+    Query += 'INNER JOIN productbrands p on b.crt_item = p.ProdBrandId ';
+    Query += 'INNER JOIN users u on u.USERID = b.crt_addedby_user ';
+    Query += 'where b.crt_addedby_user = '+USERID+' AND a.grp_cartId = '+grp_cartId+' AND a.STATUS IN ("I","A") ';
+    Query += 'ORDER BY a.grp_cartId DESC';
+
+            db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
+                return res.jsonp(grpCartDataResponse[0]);
+            });
+
+};
+/*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
+FROM groupcart a 
+INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId 
+INNER JOIN users u on u.USERID = b.crt_addedby_user 
+where b.crt_addedby_user = 84  
+AND a.STATUS IN ("I","A")  
+AND a.grp_cartId = 877
+ORDER BY a.grp_cartId DESC*/
 /**
  * Get Group Cart Products
  */
@@ -505,7 +574,7 @@ function convertJson(json){
     prod.specs = json.specs;
     prod.img_loc = json.img_loc;
     prod.dateadded = json.dateadded;
-    prod.prodBrandId = json.ProdBrandId;
+    prod.ProdBrandId = json.ProdBrandId;
     main.prod = prod;
     var jsonString= JSON.stringify(main);*/
    // return JSON.parse(jsonString);

@@ -33,6 +33,8 @@ app.route('/api/products/:productId')
 // Note: the products.product function will be called everytime then it will call the next function.
 app.param('productId', products.product);
 
-
+app.route('/api/getUserDetail').post(products.getUserDetail);
+app.route('/api/getUserProductDetails').post(products.getUserProductDetails);
+app.route('/api/getProductBuyingUsers').post(products.getProductBuyingUsers);
 
 };

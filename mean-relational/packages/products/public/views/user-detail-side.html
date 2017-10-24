@@ -1,0 +1,32 @@
+<div class="user-detail-container">
+	<div class="user_image">
+		<div class="user-taga" ng-click="ProductDetail()" >
+			<img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt="">
+		</div>
+	</div>
+	<div class="cost-price">
+		<div class="price-detail">
+			<span class="price">{{CurrentUserBuyerDetail.cost_price}}</span>
+			<span class="price-currency">{{CurrentUserBuyerDetail.currency}}</span>
+		</div>
+	</div>
+	<div class="tabs-container">
+	  	<div class="tab-actions">
+	      <div ng-click="tabContent='products'"><i class="fa fa-list" aria-hidden="true"></i></div>
+	  	</div>
+	  	<div class="tab-contents">
+		  	<div class="init-first" ng-init="tabContent='products'"></div>
+			<div class="tabs-content" ng-show="tabContent === 'products'">
+				 <div class="product_details">
+				 	<div class="tab-content-head">
+				 		<i class="fa fa-list" aria-hidden="true"></i>
+				 		<h4>Product Details</h4>
+				 	</div>
+					<div class="list" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail">
+						<div class="">{{buyerProduct.name}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

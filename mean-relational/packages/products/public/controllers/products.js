@@ -8,9 +8,9 @@ import 'rxjs/add/operator/map';*/
       .controller('productsController',productsController);
       
       //,'$log'
-      productsController.$inject = ['$stateParams', '$location', 'Global', 'products','$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil'];
+      productsController.$inject = ['$stateParams', '$location', 'Global', 'products', '$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$sce'];
 
-  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil){
+  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil,$sce){
         var vm = this;
         var baseUrl = 'http://localhost:3000/';
         //var ip = '192.168.100.88';
@@ -63,9 +63,11 @@ import 'rxjs/add/operator/map';*/
         $scope.toggleLeft     = buildToggler('left');
         $scope.toggleRight    = buildToggler('right');
         $scope.ProductDetail  = buildToggler('ProductDetail');
+        $scope.UserDetail     = buildToggler('UserDetail');
         $scope.lockLeft = false;
         $scope.lockRight = false;
         $scope.lockProductDetail = false;
+        $scope.lockUserDetail = false;
 
         $scope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
@@ -75,6 +77,9 @@ import 'rxjs/add/operator/map';*/
         };
         $scope.isProductDetailOpen = function() {
           return $mdSidenav('ProductDetail').isOpen();
+        };
+        $scope.isUserDetailOpen = function() {
+          return $mdSidenav('UserDetail').isOpen();
         };
 
         /**
@@ -92,6 +97,11 @@ import 'rxjs/add/operator/map';*/
 
           return debounceFn;
         }
+
+        $scope.toTrustedHTML = function (html) {
+          return $sce.trustAsHtml(html);
+        };
+        
 
         $scope.hideMe = function() {
           if(vm.products !== undefined){
@@ -359,13 +369,22 @@ import 'rxjs/add/operator/map';*/
                           console.log(errorResponse);
                   }); 
         }
-        $scope.showProductDetail = function(productID) {   
+        $scope.showProductDetail = function(productID) {
+            console.log('showProductDetail');
+            console.log(productID);   
               if(angular.isNumber(productID)){
                 $scope.CurrentProductDetail = $scope.CurrentProduct(productID);
-
                 $scope.isProductDetailOpen();
               }
         };
+        $scope.showUserCart = function(grp_cartId, USERID){
+          
+              if(angular.isNumber(grp_cartId) && angular.isNumber(USERID) ){
+                console.log(grp_cartId +' cart belong to user id '+ USERID);
+                $scope.CurrentUserBuyerDetail = $scope.CurrentUserBuyer(grp_cartId,USERID);
+                $scope.isUserDetailOpen();
+              }
+        }
           
         $scope.showCurrentImage  = function(imageSrc,$event) {   
           console.log(imageSrc);
@@ -466,22 +485,73 @@ import 'rxjs/add/operator/map';*/
             products.get({
                 productId: $stateParams.productId
               }, function(product) {
-                console.log(product);
                 vm.product = product;
             });
         }
-        $scope.CurrentProduct = function(productId) {
+        $scope.CurrentUserBuyer  = function(grp_cartId, USERID) {
+                    var url = baseUrl+'api/getUserDetail';
+                    var postData = {
+                      grp_cartId:grp_cartId,
+                      USERID:USERID
+                    };
+                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              console.log('getUserDetail');
+                              console.log(newData);
+                              $scope.CurrentUserBuyerDetail = newData;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });
+                    url = baseUrl+'api/getUserProductDetails';
+                    configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              console.log('getUserProductDetails');
+                              console.log(newData);
+                              $scope.CurrentUserBuyerProductsDetail = newData;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });  
+               
+        };
+       $scope.CurrentProduct = function(productId) {
             products.get({
                 productId: productId
               }, function(product) {
                 $scope.CurrentProductDetail = product;
                 if(product !== undefined){
-                  console.log(product);
                   $scope.CurrentProductDetailImage = $scope.UploadUrl+product.img_loc;
+                  var url = baseUrl+'api/getProductBuyingUsers';
+                  var postData = {
+                    productId:productId
+                  };
+
+                  var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+
+                    $http(configObj)
+                        .then(function onFulfilled(response) {
+                            var newData = JSON.stringify(response.data);
+                            newData = JSON.parse(newData);
+                            product.buyingUser = newData.grpCartDataResponse;
+                            $scope.CurrentProductDetail = product;
+                        }).catch( function onRejection(errorResponse) {
+                            console.log('Error: ', errorResponse.status);
+                            console.log(errorResponse);
+                    }); 
+
+
                 }
                 return product;
             });
         };
+
 
        function getList(){
            $scope.startTimeout();
@@ -508,7 +578,9 @@ import 'rxjs/add/operator/map';*/
                 var body = '';
                 var data = '';
                 //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/'+lastProductID+'/'+nextProducts;
-                var url = ApiBaseUrl+'getAllProdsInLocDefault_mini/PK/'+lastProductID+'/'+nextProducts;
+                //var url = ApiBaseUrl+'getAllProdsInLocDefault_mini/PK/'+lastProductID+'/'+nextProducts;
+                var url = ApiBaseUrl+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
+
 
                 //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/1/1';
                 
@@ -521,7 +593,7 @@ import 'rxjs/add/operator/map';*/
                         data = JSON.parse(newData);
 
                           if(data.length < 2){
-                            console.log(data);
+                            //console.log(data);
                             $scope.stopTimeout();
                           }
 
@@ -538,6 +610,8 @@ import 'rxjs/add/operator/map';*/
                 var counter = 0;
                 var localLoopProductBrandID = 1;
                  angular.forEach(data,function(value){
+                    value.ProdBrandId = value.prodBrandId;
+                    //removing conflicts of case Product Brand ID
                     counter++;
                     
                     if(counter === 1){
@@ -553,7 +627,7 @@ import 'rxjs/add/operator/map';*/
                       $scope.arctr.products['col4'].push(value);
                       counter = 0;
                     }
-                    localLoopProductBrandID = value.prodBrandId;         
+                    localLoopProductBrandID = value.ProdBrandId;         
                 });
                 $scope.lastProductID = localLoopProductBrandID;  
               }else{
@@ -563,24 +637,24 @@ import 'rxjs/add/operator/map';*/
 
         $scope.productDropInCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
-            var prodBrandId = CurrentProduct.attr('data-product-id');
-            //var prodBrandId = CurrentProduct.attr('data-product-grp-cart-id');
-            if(prodBrandId !== undefined){
+            var ProdBrandId = CurrentProduct.attr('data-product-id');
+            //var ProdBrandId = CurrentProduct.attr('data-product-grp-cart-id');
+            if(ProdBrandId !== undefined){
               if(!cartCreated){
                 if(isGuest){  
-                  $scope.createCart_guest(prodBrandId);
+                  $scope.createCart_guest(ProdBrandId);
                 }
               }else{
                 if(isGuest){  
-                  $scope.addToCart_guest(grp_cartId,prodBrandId);
+                  $scope.addToCart_guest(grp_cartId,ProdBrandId);
                }
               }
             }
         };
         $scope.productDropOutFromCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
-            //var prodBrandId = CurrentProduct.attr('data-product-id'); 
-            var prodBrandId   = CurrentProduct.attr('data-product-grp-cart-id');
+            //var ProdBrandId = CurrentProduct.attr('data-product-id'); 
+            var ProdBrandId   = CurrentProduct.attr('data-product-grp-cart-id');
             var ProductIndex  = CurrentProduct.attr('data-index');
             var ProductArrayType  = CurrentProduct.attr('data-type');
             if(ProductArrayType !== undefined && ProductArrayType === 'grpcart_products'){
@@ -601,8 +675,8 @@ import 'rxjs/add/operator/map';*/
             }
             
               ui.draggable.remove();
-            if(prodBrandId !== undefined && grp_cartId !== undefined){
-              $scope.nl_removefromCart(grp_cartId,prodBrandId);
+            if(ProdBrandId !== undefined && grp_cartId !== undefined){
+              $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
 
@@ -630,7 +704,7 @@ import 'rxjs/add/operator/map';*/
        $scope.cartTotalProducts   = $scope.cartTotalProductsF();*/
     
     
-        $scope.createCart_guest  = function (prodBrandId) {
+        $scope.createCart_guest  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart_guest';
            //var url = ApiBaseUrl+'createCart_guest/PK/';
            var configObj = { method: 'GET',url: url, headers: headers};
@@ -659,9 +733,9 @@ import 'rxjs/add/operator/map';*/
                           var currency       = dataJson.currency;*/
                           Session.setItem('grp_cartId', grp_cartId);
                           console.log('grp_cartId:'+grp_cartId);
-                          console.log('prodBrandId:'+prodBrandId);
+                          console.log('ProdBrandId:'+ProdBrandId);
                           if(grp_cartId !== undefined){
-                            $scope.addToCart_guest(grp_cartId, prodBrandId);
+                            $scope.addToCart_guest(grp_cartId, ProdBrandId);
                           }
                         }
 

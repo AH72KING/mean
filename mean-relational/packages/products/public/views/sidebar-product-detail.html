@@ -1,4 +1,4 @@
-	<md-sidenav sidenav-push-in class="product-detail-side-bar md-sidenav-right md-whiteframe-z2" md-component-id="ProductDetail" "><!--md-is-locked-open="isProductDetailOpen()"-->
+	<md-sidenav sidenav-push-in class="product-detail-side-bar md-sidenav-right md-whiteframe-z2" md-component-id="ProductDetail"><!--md-is-locked-open="isProductDetailOpen()"-->
 		<div class="row product-row-container">
 			<div class="col col-md-12">
 				<div class="product-header clearfix">
@@ -10,6 +10,23 @@
 					<div ng-include="'products/views/product-detail-side.html'"></div>
 				</div>
 				<div class="product-footer">
+					
+				</div>			
+			</div>
+		</div>
+	</md-sidenav>
+	<md-sidenav sidenav-push-in class="user-detail-side-bar md-sidenav-right md-whiteframe-z2" md-component-id="UserDetail">
+		<div class="row user-row-container">
+			<div class="col col-md-12">
+				<div class="user-header clearfix">
+					<div class="user-head">
+						<strong>{{CurrentUserBuyerDetail.GIVNAME}}</strong><span>({{CurrentUserBuyerDetail.SURNAME}})</span>
+					</div>
+				</div>		
+				<div class="user-body">
+					<div ng-include="'products/views/user-detail-side.html'"></div>
+				</div>
+				<div class="user-footer">
 					
 				</div>			
 			</div>

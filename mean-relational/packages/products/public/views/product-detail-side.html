@@ -46,13 +46,15 @@
 			buy now
 		</div>
 	</div>
-	<div class="product-owners">
+	<div class="product-owners" data-ng-if="CurrentProductDetail.buyingUser">
 		<p>People who owns this product</p>
-		<!--ul>
-			<li>
-				<img src="images/owner1.jgp" alt="owners">
+		<ul>
+			<li data-ng-repeat="users in CurrentProductDetail.buyingUser">
+				<div ng-click="showUserCart(users.grp_cartId,users.USERID); UserDetail()">
+					<img src="{{UploadUrl}}{{users.img_loc}}" alt="owners"/>
+				</div>
 			</li>
-		</ul-->
+		</ul>
 	</div>
 	<div class="tabs-container">
 	  	<div class="tab-actions">
@@ -73,8 +75,7 @@
 				 		<i class="fa fa-database" aria-hidden="true"></i>
 				 		<h4>Product Details</h4>
 				 	</div>
-					<div class="specs">
-							{{CurrentProductDetail.specs}}
+					<div class="specs" ng-bind-html="toTrustedHTML(CurrentProductDetail.specs)">
 					</div>
 				</div>
 			</div>
@@ -149,7 +150,7 @@
 	
 $(function(){
    $(document).ready(function($) {
-       /*	$('.vertical-ticker').totemticker({
+      /* $('.vertical-ticker').totemticker({
             row_height   :    '250px',
             // next      :    '#ticker-next',
             // previous  :    '#ticker-previous',

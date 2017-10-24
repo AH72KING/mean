@@ -50,6 +50,9 @@ angular
         $scope.isProductDetailOpen = function() {
           return $mdSidenav('ProductDetail').isOpen();
         }
+        $scope.isUserDetailOpen = function() {
+          return $mdSidenav('UserDetail').isOpen();
+        };
 
 
         /**
