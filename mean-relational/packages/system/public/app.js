@@ -24,23 +24,18 @@ angular.module('mean', [
 .directive('mAppLoading',mAppLoading)
 .config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);
-}]).controller('AnerveCtrl', AnerveCtrl);
+}]);
 
-       AnerveCtrl.$inject = [];
-
-  function AnerveCtrl() {
-      var vm = this;
-      setTimeout(
-            function asyncBootstrap() {
-                angular.bootstrap( document, [ "mean" ] );
-            },
-            ( 2 * 1000 )
-        );
-  }
 window.ip = '192.168.1.88';
 //window.ip = '192.168.100.88';  
 
-
+    setTimeout(
+      function asyncBootstrap() {
+        angular.bootstrap( document, [ 'mean.products' ] );
+        console.log('asyncBootstrap');
+      },
+      ( 500000 )
+    );
 
 angular.module('mean.system', []);
 angular.module('mean.products', []);

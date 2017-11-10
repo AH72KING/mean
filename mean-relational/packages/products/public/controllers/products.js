@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';*/
 
   function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil,$sce){
         var vm = this;
+
         var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
        //var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
