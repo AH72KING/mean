@@ -42,12 +42,18 @@ app.get('/api/auth/facebook', passport.authenticate('facebook', {
     failureRedirect: '/signin'
 }), users.signin);
 
-app.get('/api/auth/facebook/callback', passport.authenticate('facebook', {
-    failureRedirect: '/signin'
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: '/signup'
 }), users.authCallback);
+app.get('/api/auth/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: '/signup'
+}), users.authCallback);
+
+
 
 // Setting the twitter oauth routes
 app.get('/api/auth/twitter', passport.authenticate('twitter', {
+    scope:['include_email=true'],
     failureRedirect: '/signin'
 }), users.signin);
 

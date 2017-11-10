@@ -970,13 +970,15 @@ font-size: 30px;
 .user-detail-side-bar .user-body .user-detail-container{}
 .user-detail-side-bar .user-body .user-detail-container .user_image{
     max-height: 50vh;
-    height: 330px;
+    height: 90px;
 }
 .user-detail-side-bar .user-body .user-detail-container .user_image .user-taga{
     position: absolute;
     width: 100%;
 }
-.user-detail-side-bar .user-body .user-detail-container .user_image .user-taga img{}
+.user-detail-side-bar .user-body .user-detail-container .user_image .user-taga img{
+    max-width: 100px;
+}
 
 .user-detail-side-bar .user-thumbnail-container{
     display: block;
@@ -1053,7 +1055,9 @@ font-size: 30px;
 }
 
 
-.user-detail-side-bar .tabs-container{}
+.user-detail-side-bar .tabs-container{
+    display: inline-block;
+}
 .user-detail-side-bar .tabs-container .tab-actions{
     text-align: center;
 }
@@ -1190,8 +1194,48 @@ font-size: 30px;
     display: block;
     padding: 12px 12px;
 }
-.user-row-container{}
+.user-row-container{
 
+}
+.user-detail-container .buyer-products{
+display: inline-block;
+/* max-width: 250px; */
+border: 5px solid #777;
+position: relative;
+}
+.user-detail-container .buyer-products:hover .product-detail{
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  border: 4px solid #fff;
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.50);
+}
+.user-detail-container .buyer-products .product-detail{
+    transition: 1s all;
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.1);
+    color: #fff;
+    border: 0px solid #fff;
+    padding: 0px;
+    font-size: 0px;
+}
+.user-detail-container .buyer-products .product-images{}
+.user-detail-container .buyer-products .product-name{
+
+}
+.user-detail-container .buyer-products .product-image{
+    max-width: 200px;
+    margin: 0 auto;
+}
+.user-detail-container .buyer-products .product-image img{
+  width: 200px;
+}
+.user-detail-container .buyer-products .product-price{
+
+}
 
 .header-container{
 
@@ -1226,4 +1270,22 @@ ul li.friends-container .friends-container-inner .friends-block{
 }
 ul li.friends-container .friends-container-inner .friends-block img{
   
+}
+.social-login-buttons-container{
+    padding: 10px 0px;
+}
+.social-login-buttons-container .social-login-button{
+  color: #fff;
+}
+.social-login-buttons-container .social-login-button:hover{
+  color: #000;
+}
+.facebook-color{    
+  background: #4267b2;
+}
+.google-color{
+  background: #db4437;
+}
+.twitter-color{   
+  background: #1DA1F2;
 }

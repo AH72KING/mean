@@ -43,13 +43,13 @@ angular
         
         $scope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
-        }
+        };
         $scope.isRightOpen = function() {
           return $mdSidenav('right').isOpen();
-        }
+        };
         $scope.isProductDetailOpen = function() {
           return $mdSidenav('ProductDetail').isOpen();
-        }
+        };
         $scope.isUserDetailOpen = function() {
           return $mdSidenav('UserDetail').isOpen();
         };
@@ -64,7 +64,7 @@ angular
             $mdSidenav(navID)
               .toggle()
               .then(function() {
-                $log.debug("toggle " + navID + " is done");
+                $log.debug('toggle ' + navID + ' is done');
               });
           }, 300);
 

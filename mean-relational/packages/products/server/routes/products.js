@@ -13,9 +13,9 @@ module.exports = function(app) {
 app.route('/api/charge').post(products.charge);
 app.route('/api/products').get(products.all);
 
-app.get('/api/createCart_guest', products.createCart_guest);
+app.get('/api/createCart', products.createCart);
 
-app.route('/api/addToCart_guest').post(products.addToCart_guest);
+app.route('/api/addToCart').post(products.addToCart);
 
 app.route('/api/nl_removefromCart').post(products.nl_removefromCart);
 app.route('/api/myfriends').post(products.myfriends);

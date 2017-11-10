@@ -5,7 +5,6 @@
 
 //var crypto = require('crypto');
 var bcrypt = require('bcrypt');
- var http = require('http');
 module.exports = function(sequelize, DataTypes) {
 	var User = sequelize.define('User',
 		{
@@ -89,18 +88,13 @@ module.exports = function(sequelize, DataTypes) {
 						return '';
 					}
 					return bcrypt.hashSync(PASSWORD, salt); //crypto.pbkdf2Sync(PASSWORD, salt, 10000, 64, 'sha1').toString('base64');
-				},
-				loggedInJavaToo: function(USERID,USERNAME,PASSWORD){
-					console.log('loggedInJavaToo');
-					User.loggedInJavaToo1(USERID,USERNAME,PASSWORD);
-					
 				}
 			},
-			tableName: 'users'
-			//,
-			/*associate: function(models) {
-				User.hasMany(models.product);
-			}*/
+			tableName: 'users',
+			associate: function(models) {
+				//User.hasMany(models.product);
+				User.hasOne(models.Grpcart, {foreignKey: 'owner_userId', targetKey: 'USERID'});
+			}
 		}		
 	);
 

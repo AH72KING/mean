@@ -10,7 +10,7 @@
   config.$inject = ['$stateProvider','$httpProvider'];
 
 
-  function config($stateProvider,$httpProvider){
+  function config($stateProvider){//,$httpProvider){
 
       // states for my app
       $stateProvider

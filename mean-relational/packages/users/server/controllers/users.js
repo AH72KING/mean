@@ -7,6 +7,23 @@ var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
  //console.log('user server controller');
+ //
+
+        //var baseUrl = 'http://localhost:3000/';
+        var ip = db.sequelize.config.host;
+        //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
+        var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
+        var headers = {
+                   'Access-Control-Allow-Origin': '*',
+                   'Content-Type' : 'application/json; charset=UTF-8',
+                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
+                   'Access-Control-Max-Age': '3600',
+                   'Access-Control-Allow-Credentials': 'true'
+                };
+
+
+
 /**
  * Auth callback
  */
@@ -28,21 +45,48 @@ exports.signin = function(req, res) {
 
 
 exports.login = function(req, res) {
-   // console.log('user server controller login');
-    //console.log(req);
-    //console.log(req.body.EMAIL);
-   // console.log(req.get('referer'));
-    //return ;
+    localStorage.removeItem('grp_cartId');
+    var grp_cartId = null;
+    var current_total = 0;
+    var currency = 'USD';
+    if(req.user){
+      var user_id = req.user.USERID;
+      db.Grpcart.find({where : { owner_userId: user_id }}).then(function(groupcart){
+
+        if(!groupcart){
+
+          console.log('Failed to Get Group Cart ID for user  ' + user_id);
+        }else{
+
+          currency      = groupcart.currency; 
+          grp_cartId    = groupcart.grp_cartId;
+          current_total = groupcart.current_total;
+          
+          localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
+          localStorage.setItem('current_total_'+grp_cartId,current_total);   
+          localStorage.setItem('currency_'+grp_cartId,currency);  
+          //UserLoginInJava(req.user);
+
+        }
+      }).catch(function(err){
+          console.log('error');
+          console.log(err);
+      });
+    }
     res.json({
         user: req.user,
         redirect: req.get('referer')
     });
 };
 
+
+
+
 /**
  * Show sign up form
  */
 exports.signup = function(req, res) {
+     localStorage.removeItem('grp_cartId');
     console.log('user server controller signup');
     res.render('users/signup', {
         title: 'Sign up',
@@ -53,9 +97,60 @@ exports.signup = function(req, res) {
  * Logout
  */
 exports.signout = function(req, res) {
-    console.log('Logout: { USERID: ' + req.user.USERID + ', USERNAME: ' + req.user.USERNAME + '}');
-    req.logout();
-    res.redirect('/');
+   localStorage.removeItem('grp_cartId');
+
+
+    var url   = '';
+    var body  = '';
+    var data  = [];
+    var key   = '';
+    var user_id = 0;
+
+    if (req.user) {
+          user_id = req.user.USERID;
+          key = localStorage.getItem('key_'+user_id); 
+          url = ApiBasePath+'logout/'+key+'/';
+          console.log(key);
+          console.log(user_id);
+          console.log(url);
+
+      var options = {
+          hostname: ip,
+          port: '8080',
+          path: url,
+          method: 'GET',
+          headers: headers
+      };
+
+      var req3 = http.request(options,function(res2){
+
+          res2.on('data', function(chunk) {
+               body += chunk;
+          });
+
+          res2.on('end', function() { 
+              console.log(body);
+              
+              console.log('Logout: { USERID: ' + user_id +'}');
+              req.logout();
+              res.redirect('/');
+          });
+      });
+      
+      req3.on('error', function(e){
+        console.log('problem with request:'+ e.message);
+      });
+
+      req3.end();
+
+    }else{
+          console.log('already logout from java server now logging out from mean');
+          console.log('Logout: { USERID: ' + req.user.USERID + '}');
+          req.logout();
+          res.redirect('/');
+    }
+
+    
 };
 
 /**
@@ -74,23 +169,36 @@ exports.create = function(req, res) {
     console.log('create server controller user.js ');
    // console.log(req.body);
     var user = db.User.build(req.body);
+    var login = db.Login.build(req.body);
     console.log('create server controller user.js db.User.build');
     //console.log(user);
 
     user.provider = 'local';
     user.salt = user.makeSalt();
     user.hashedPassword = user.encryptPassword(req.body.PASSWORD, user.salt);
-    console.log('New User (local) : { USERID: ' + user.USERID + ' USERNAME: ' + user.USERNAME + ' }');
 
-    user.save().then(function(){
-      req.logIn(user, function(err){
-        console.log(err);
-        if(err) {
+    login.role = 'U';
+    login.username = user.USERNAME;
+    login.password = user.hashedPassword;
+
+    user.save().then(function(user){
+      console.log('New User (local) : { USERID: ' + user.USERID + ' USERNAME: ' + user.USERNAME + ' }');
+
+      login.userId = user.USERID;
+
+      login.save().then(function(){
+        req.logIn(user, function(err){
           console.log(err);
-          return res.status(400).json(err);
-        }
+          if(err) {
+            console.log(err);
+            return res.status(400).json(err);
+          }
 
-        res.json(user);
+          res.json(user);
+        });
+      }).catch(function(err){
+          console.log(err);
+          res.status(400).json(err);
       });
     }).catch(function(err){
         console.log(err);
@@ -151,6 +259,19 @@ exports.hasAuthorization = function(req, res, next) {
  * Save User authorizations key for Java Use
  */
 exports.SaveUserKey = function(req, res){
-   localStorage.setItem('key',req.body.key);    
-   return res.send(200, 'Key Added To Session '+req.body.key);        
+  var user_id = req.body.UserID;
+  var key = req.body.key;
+  console.log(key);
+  console.log(user_id);
+  if (user_id) {
+        console.log('logged in user runs ');
+        console.log(user_id);
+        localStorage.setItem('key_'+user_id,key); 
+    } else {
+        //not logged in
+        console.log('not logged in user runs why ');
+        localStorage.setItem('key',key);
+    }
+      
+   return res.send(200, 'Key Added To Session '+key);        
  };

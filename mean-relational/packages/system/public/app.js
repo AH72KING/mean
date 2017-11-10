@@ -12,6 +12,7 @@ angular.module('mean', [
   'ngMaterial',
   'ngMessages',
   'ngSanitize',
+  'ngAnimate',
   //'snap',
   //'pageslide-directive',
 
@@ -20,13 +21,61 @@ angular.module('mean', [
   'mean.products',
   'mean.users'
 ]).directive('sidenavPushIn',sidenavPushIn)
+.directive('mAppLoading',mAppLoading)
 .config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);
-}]);
+}]).controller('AnerveCtrl', AnerveCtrl);
+
+       AnerveCtrl.$inject = [];
+
+  function AnerveCtrl() {
+      var vm = this;
+      setTimeout(
+            function asyncBootstrap() {
+                angular.bootstrap( document, [ "mean" ] );
+            },
+            ( 2 * 1000 )
+        );
+  }
+window.ip = '192.168.1.88';
+//window.ip = '192.168.100.88';  
+
+
 
 angular.module('mean.system', []);
 angular.module('mean.products', []);
 angular.module('mean.users',[]);
+
+
+function mAppLoading($animate){
+
+                // Return the directive configuration.
+                return({
+                    link: link,
+                    restrict: "C"
+                });
+                // I bind the JavaScript events to the scope.
+                function link( scope, element, attributes ) {
+                    // Due to the way AngularJS prevents animation during the bootstrap
+                    // of the application, we can't animate the top-level container; but,
+                    // since we added "ngAnimateChildren", we can animated the inner
+                    // container during this phase.
+                    // --
+                    // NOTE: Am using .eq(1) so that we don't animate the Style block.
+                    $animate.leave( element.children().eq( 1 ) ).then(
+                        function cleanupAfterAnimation() {
+                            // Remove the root directive element.
+                            element.remove();
+                            // Clear the closed-over variable references.
+                            scope = element = attributes = null;
+                        }
+                    );
+                }
+
+}
+
+
+
 
 function sidenavPushIn(){
         return {

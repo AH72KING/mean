@@ -4,12 +4,6 @@
 			<img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt="">
 		</div>
 	</div>
-	<div class="cost-price">
-		<div class="price-detail">
-			<span class="price">{{CurrentUserBuyerDetail.cost_price}}</span>
-			<span class="price-currency">{{CurrentUserBuyerDetail.currency}}</span>
-		</div>
-	</div>
 	<div class="tabs-container">
 	  	<div class="tab-actions">
 	      <div ng-click="tabContent='products'"><i class="fa fa-list" aria-hidden="true"></i></div>
@@ -22,8 +16,21 @@
 				 		<i class="fa fa-list" aria-hidden="true"></i>
 				 		<h4>Product Details</h4>
 				 	</div>
-					<div class="list" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail">
-						<div class="">{{buyerProduct.name}}</div>
+					<div class="list buyer-products" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail">
+						<div class="product-detail">
+							<div class="product-name">
+								Name: {{buyerProduct.name}}
+							</div>
+								<br>
+							<div class="product-price">
+								Price: {{buyerProduct.cost_price}}
+							</div>
+						</div>
+						<div class="product-images">
+							<div class="product-image">
+								<img src="{{UploadUrl}}{{buyerProduct.img_loc}}" alt="">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
