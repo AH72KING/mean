@@ -2,13 +2,13 @@
 	<li class="friends-container product_item">
 		<div class="friends-container-inner">
 			<div class="friends-block" ng-repeat="friends in arctr.userFirends">
-				<div ng-click="showUserCart(users.grp_cartId,users.USERID); UserDetail()">
+				<div ng-click="showFriendCart(friends.userid); UserDetail()">
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
 				</div>
 			</div>	
 		</div>
 	</li>
-	<li class="product_item" ng-repeat="product in arctr.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}" >
+	<li class="product_item" ng-repeat="product in arctr.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}" >
 		<!--ng-click="showProductDetail($event)"-->
 			<div ng-include="'products/views/product-detail.html'"></div>
 	</li>

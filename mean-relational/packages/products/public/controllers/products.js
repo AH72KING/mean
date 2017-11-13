@@ -385,6 +385,15 @@ import 'rxjs/add/operator/map';*/
                 $scope.isUserDetailOpen();
               }
         };
+        $scope.showFriendCart = function(USERID){
+          		console.log(USERID);
+          		console.log('showFriendCart');
+              if(angular.isNumber(USERID) ){
+                console.log(' cart belong to user id '+ USERID);
+                $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);
+                $scope.isUserDetailOpen();
+              }
+        };
           
         $scope.showCurrentImage  = function(imageSrc,$event) {   
           console.log(imageSrc);
@@ -521,6 +530,39 @@ import 'rxjs/add/operator/map';*/
                       });  
                
         };
+        $scope.GetFriendCart  = function(USERID) {
+                    var url = baseUrl+'api/getUserDetail';
+                    var postData = {
+                      USERID:USERID
+                    };
+                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              console.log('getUserDetail');
+                              console.log(newData);
+                              $scope.CurrentUserBuyerDetail = newData;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });
+                    url = baseUrl+'api/getUserProductDetails';
+                    configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              console.log('getUserProductDetails');
+                              console.log(newData);
+                              $scope.CurrentUserBuyerProductsDetail = newData;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });  
+               
+        };
+        
        $scope.CurrentProduct = function(productId) {
             products.get({
                 productId: productId
@@ -804,10 +846,11 @@ import 'rxjs/add/operator/map';*/
           
         };
         $scope.myfriends  = function () {
-          if(Session.getItem('myfriends')){
+          /*if(Session.getItem('myfriends')){
              vm.userFirends = Session.getItem('myfriends');
-          }else{
-            var key =  Session.getItem('key');
+          }else{*/
+          	var UserID 	=  Session.getItem('UserID');
+            var key 	=  Session.getItem('key_'+UserID);
             var url = baseUrl+'api/myfriends';
             var postData = {key:key};
             var configObj = { method: 'POST',url: url, data: postData,};
@@ -826,6 +869,8 @@ import 'rxjs/add/operator/map';*/
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         if(dataJson !== undefined ){
                               angular.forEach(dataJson,function(value){
+                              	 // check if avatar val null , then get default avatar
+                                value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
                                 vm.userFirends.push(value);      
                             });
                               Session.setItem('myfriends',vm.userFirends);
@@ -834,7 +879,7 @@ import 'rxjs/add/operator/map';*/
                         console.log('Error: ', errorResponse.status);
                         console.log(errorResponse);
                 }); 
-         }
+        // }
           
         };
         $scope.myfriends();
@@ -859,6 +904,12 @@ import 'rxjs/add/operator/map';*/
                 }); 
           
         };
+        $scope.getDefaultAvatar = function(url){
+          if(url == null)
+            url = '/images/default-avatar.png';
+          return url;
+       };
 
       }
+
 })();

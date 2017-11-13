@@ -1,5 +1,5 @@
 'use strict';
-angular.module('mean', [
+var mean = angular.module('mean', [
   /* angular modules */
   'ngCookies',
   'ngResource',
@@ -20,34 +20,54 @@ angular.module('mean', [
   'mean.system',
   'mean.products',
   'mean.users'
-]).directive('sidenavPushIn',sidenavPushIn)
-.directive('mAppLoading',mAppLoading)
-.config(['$qProvider', function ($qProvider) {
+]).directive('sidenavPushIn',sidenavPushIn);
+
+//mean.directive('mAppLoading',mAppLoading);
+//mean.directive('myFrame',myFrame);
+mean.config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);
 }]);
 
 window.ip = '192.168.1.88';
 //window.ip = '192.168.100.88';  
 
-    setTimeout(
+   /* setTimeout(
       function asyncBootstrap() {
-        angular.bootstrap( document, [ 'mean.products' ] );
+        angular.bootstrap( document, [ 'mean' ] );
         console.log('asyncBootstrap');
       },
-      ( 500000 )
-    );
+      ( 5000 )
+    );*/
 
 angular.module('mean.system', []);
 angular.module('mean.products', []);
 angular.module('mean.users',[]);
 
+function myFrame(){
+    return {
+        restrict: 'E',
+        templateUrl:"system/views/frame.html",
+        controller:function($scope){
+          $scope.hidden=false;
+          $scope.close=function(){
+            $scope.hidden=true;
+            
+          }
+        },
+        transclude:false
+
+
+    }
+
+}
 
 function mAppLoading($animate){
 
                 // Return the directive configuration.
                 return({
                     link: link,
-                    restrict: "C"
+                    transclude:false,
+                    restrict: "E"
                 });
                 // I bind the JavaScript events to the scope.
                 function link( scope, element, attributes ) {

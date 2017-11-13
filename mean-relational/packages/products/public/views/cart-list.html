@@ -6,7 +6,7 @@
 				                                    </div>
 				                                    <div class="cart-items-thumbnail">
 				                                    	<ul class="product_item_thumbnail">
-				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
+				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
 											                	<div class="product_image">
 														            <a data-ng-href="/products/{{product.ProdBrandId}}">
 														                <img src="{{UploadUrl}}{{product.img_loc}}" alt="">
@@ -15,7 +15,7 @@
 														        </div>
 														    </li>
 														    <!--ng-if="$index < 3" -->	
-				                                    		<li ng-repeat="items in arctr.products['grpcart_products'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-product-grp-cart-id="{{items.groupCartProductId}}" data-type="grpcart_products">
+				                                    		<li ng-repeat="items in arctr.products['grpcart_products'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-product-grp-cart-id="{{items.groupCartProductId}}" data-type="grpcart_products">
 				                                    			<a data-ng-href="/products/{{items.ProdBrandId}}">
 													                <img src="{{UploadUrl}}{{items.img_loc}}" alt="">
 													            </a>
@@ -37,7 +37,7 @@
 			                                            </a>
 			                                        </div>
 			                                    </li>
-											    <li class="product_item" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
+											    <li class="product_item" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
 													<div class="product_image">
 										                <a data-ng-href="/products/{{product.ProdBrandId}}">
 										                	<img src="{{UploadUrl}}{{product.img_loc}}" alt="">

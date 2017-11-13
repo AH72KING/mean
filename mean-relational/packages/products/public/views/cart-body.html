@@ -1,5 +1,5 @@
 <ul class="my-zone-cart-items" ng-hide="hideMyZoneCart">
-		            <li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart">
+		            <li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart">
 						<div class="product_image">
 							<a data-ng-href="/products/{{product.ProdBrandId}}">
 								<img src="{{UploadUrl}}{{product.img_loc}}" alt="">
@@ -21,7 +21,7 @@
 						</div>
 					</li>
 					<!--ng-if="$index < 3" -->	
-		           <li class="product_item" ng-repeat="items in arctr.products.products_cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:true}"  data-product-id="{{items.ProdBrandId}}"  data-product-grp-cart-id="{{items.groupCartProductId}}" data-index="{{$index}}" data-type="grpcart_products">
+		           <li class="product_item" ng-repeat="items in arctr.products.products_cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}"  data-product-id="{{items.ProdBrandId}}"  data-product-grp-cart-id="{{items.groupCartProductId}}" data-index="{{$index}}" data-type="grpcart_products">
 
 		           		<div class="product_image">
 							<a data-ng-href="/products/{{items.ProdBrandId}}">
