@@ -722,12 +722,12 @@ import 'rxjs/add/operator/map';*/
               $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
-        $scope.friendDropInCart  = function (event , ui) {   
+        $scope.friendDropInCart  = function (event , ui) {
             var CurrentFriend = ui.draggable;
             var friendId = CurrentProduct.attr('data-friend-id');
             console.log('friendId = '+friendId);
         };
-        $scope.friendDropOutFromCart  = function (event , ui) {   
+        $scope.friendDropOutFromCart  = function (event , ui) {
   			var CurrentFriend = ui.draggable;
             var friendId = CurrentProduct.attr('data-friend-id');
             console.log('friendId = '+friendId);
@@ -739,7 +739,7 @@ import 'rxjs/add/operator/map';*/
             if(CurrentArrayType !== undefined && CurrentArrayType === 'friendsCart'){
               $scope.friendsCart.splice(FriendIndex, 1);
             }
-            
+
              ui.draggable.remove();
             if(friendId !== undefined && grp_cartId !== undefined){
             	console.log('please call user remove from cart function here');
@@ -848,33 +848,32 @@ import 'rxjs/add/operator/map';*/
         };
         $scope.myfriends  = function () {
           	var UserID 	=  Session.getItem('UserID');
-	        if(UserID !== null && UserID !== undefined){
-		        if(Session.getItem('myfriends_'+UserID)){
-		             vm.userFirends = Session.getItem('myfriends_'+UserID);
-		        }else{
-		            var key =  Session.getItem('key_'+UserID);
-		            var url = ApiBaseUrl+'myfriends/'+key;
-		            var configObj = { method: 'GET',url: url, headers: headers};
-		                $http(configObj)
-		                    .then(function onFulfilled(response) {
-		                        var dataJson = JSON.parse(JSON.stringify(response.data));
-		                        if(dataJson !== undefined ){
-		                              angular.forEach(dataJson,function(value){
-		                              	 // check if avatar val null , then get default avatar
-		                                value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
-		                                vm.userFirends.push(value);      
-		                            });
-		                            Session.setItem('myfriends_'+UserID,vm.userFirends);
-		                        }
-		                    }).catch( function onRejection(errorResponse) {
-		                        console.log('Error: ', errorResponse.status);
-		                        console.log(errorResponse);
-		                }); 
-		        }
-		    }else{
-		    	console.log('User is not Logged In So Here we get All Users');
-		    	 /*$scope.getAllUsers();*/
-		    }
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'myfriends/'+key;
+            } else {
+              var url = baseUrl+'api/getAllUsers';
+            }
+                //postData = {key:key};
+              var  configObj = { method: 'GET',url: url, headers: headers};
+                  $http(configObj)
+                      .then(function onFulfilled(response) {
+                          var dataJson = JSON.parse(JSON.stringify(response.data));
+                          console.log('data json : '+dataJson);
+                          if(dataJson !== undefined ){
+                                angular.forEach(dataJson,function(value){
+                                  if(value['USERID'])
+                                      value['userid'    ]  = value['USERID'];
+                                   // check if avatar val null , then get default avatar
+                                  value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
+                                  vm.userFirends.push(value);
+                              });
+                                Session.setItem('myfriends',vm.userFirends);
+                          }
+                      }).catch( function onRejection(errorResponse) {
+                          console.log('Error: ', errorResponse.status);
+                          console.log(errorResponse);
+                  });
           
         };
         $scope.myfriends();

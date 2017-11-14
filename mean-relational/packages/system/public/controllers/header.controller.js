@@ -4,9 +4,9 @@ angular
     .module('mean.system')
     .controller('HeaderController',HeaderController);
 
-    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log'];
+    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session'];
 
-    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log){
+    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session){
         var vm = this;
         vm.global = Global;
         vm.menu = [{
@@ -22,6 +22,7 @@ angular
 
         function logout(){
           $http.get('/api/logout').then(function() {
+            Session.removeItem('UserID');
               vm.global = {
                 user: false,
                 authenticated: false
