@@ -761,7 +761,51 @@ import 'rxjs/add/operator/map';*/
              // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
+
+        // drop in cart
+        $scope.dropInCart = function(event, ui){
+            var draggableElement = ui.draggable;
+            var prodId = draggableElement.attr('data-product-id');
+            var friendId = draggableElement.attr('data-friend-id');
+            if(typeof prodId != 'undefined' && prodId != null)
+              $scope.addProdToCart(draggableElement);
+            else if(typeof friendId != 'undefined' && friendId != null)
+              $scope.addUserToCart(draggableElement);
+            draggableElement.remove();
+        }
     
+        // add prod to cart
+        $scope.addProdToCart = function(prod){
+          var prodId = prod.attr('data-product-id');
+          var img = prod.find('.product_image').find('img').attr('src');
+          console.log('Prod id :'+prodId);
+          console.log('Img  :'+img);
+          $scope.cart.push({
+            'userid':prodId,
+            'img_loc':img
+          })
+          if(!cartCreated){
+            if(isGuest){  
+              $scope.createCart(prodId);
+            }
+          }else{
+            if(isGuest){  
+              $scope.addToCart(grp_cartId,prodId);
+           }
+          }
+      
+           
+        } // add user to cart
+        $scope.addUserToCart = function(user){
+          var userId = user.attr('data-friend-id');
+          var img = user.find('img').attr('src');
+          $scope.friendsCart.push({
+            'userid':userId,
+            'img_loc':img
+          })
+        }
+
+
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
            //var url = ApiBaseUrl+'createCart/PK/';
