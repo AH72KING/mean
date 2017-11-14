@@ -724,12 +724,12 @@ import 'rxjs/add/operator/map';*/
         };
         $scope.friendDropInCart  = function (event , ui) {
             var CurrentFriend = ui.draggable;
-            var friendId = CurrentProduct.attr('data-friend-id');
+            var friendId = CurrentFriend.attr('data-friend-id');
             console.log('friendId = '+friendId);
         };
         $scope.friendDropOutFromCart  = function (event , ui) {
   			var CurrentFriend = ui.draggable;
-            var friendId = CurrentProduct.attr('data-friend-id');
+            var friendId = CurrentFriend.attr('data-friend-id');
             console.log('friendId = '+friendId);
             var FriendIndex  = CurrentFriend.attr('data-index');
             var CurrentArrayType  = CurrentFriend.attr('data-type');

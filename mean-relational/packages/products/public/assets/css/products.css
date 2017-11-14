@@ -3,9 +3,9 @@
   display: block;
 }
 
-.my_drop_box{     
-  min-height: 200px;
-    background-color: #aedcea!important;
+.my_drop_box{
+  min-height: 241px;
+  background-color: #aedcea!important;
 }
 .my-zone-detail {
     background: transparent!important;
@@ -44,9 +44,11 @@
     margin: 0 auto;
     display: inline-block;
     vertical-align: top;
+    min-height: 60px;
 }
 .my_cart_box .cart-items-thumbnail ul.product_item_thumbnail{
   max-width: 152px;
+  min-height: 50px;
 }
 .my_cart_box .cart-items-thumbnail ul.product_item_thumbnail li{
     display: inline-block;
@@ -1299,4 +1301,7 @@ z-index: 999999;
 }
 .twitter-color{   
   background: #1DA1F2;
+}
+body .friends-in-cart-container{
+	min-height: 60px;
 }

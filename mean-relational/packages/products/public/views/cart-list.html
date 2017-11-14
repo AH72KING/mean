@@ -1,10 +1,10 @@
 <ul id="cart-list" class="products vertical-ticker unstyled product_list list cartCol Col" style="height:95vh;" >
 						        		<!--ul class="user-cart-wrap vertical-ticker" style="overflow: hidden;"></ul-->
-						                    	<li class="col-lg-12 drop-zone my_drop_box my_cart_box text-center" data-insertInline="true" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}">
+						                    	<li class="col-lg-12 drop-zone my_drop_box my_cart_box text-center">
 											    	<div class="cart-price">
-				                                        <strong class="total-price" ng-model='cartTotalPrice'>${{cartTotalPrice | number : 2 }}</strong><!--span>95</span-->
+				                                        <strong class="total-price" ng-model='cartTotalPrice'>${{cartTotalPrice | number : 2 }}</strong>
 				                                    </div>
-				                                    <div class="cart-items-thumbnail">
+				                                    <div class="cart-items-thumbnail drop-zone my_drop_box" data-insertInline="true" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}">
 				                                    	<ul class="product_item_thumbnail">
 				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
 											                	<div class="product_image">
@@ -22,7 +22,6 @@
 				                                    		</li>
 				                                    	</ul>
 				                                    </div>
-
 				                                    <div class="product-in_cart-count" ng-show="((arctr.products['grpcart_products']).length + (cart).length) > 3">
 				                                    	<div class="counter">
 				                                    		<span class="add-icon">+</span>
@@ -32,30 +31,29 @@
 					                                    </div>
 				                                    </div>
 			                                        <input type="hidden" class="zone-type" value="my_zone">
+			                                        <div class="friends-in-cart-container drop-zone my_drop_box text-center" data-insertInline="true" data-drop="true" ng-model='friendsCart' jqyoui-droppable="{multiple:true, onDrop:'friendDropInCart()', onOut:'friendDropOutFromCart()'}">
+					                                    <div class="friends-container product_item">
+															<div class="friends-container-inner">
+																<div class="friends-block" ng-repeat="friends in friendsCart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-type="friendsCart">
+																	<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
+																		<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
+																	</div>
+																</div>	
+
+																<div class="friends-block" ng-repeat="friends in arctr.products['friendsInCart'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-index="{{$index}}" data-type="grpcart_friends">
+						                                    		<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
+																		<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
+																	</div>
+					                                    		</div>
+															</div>
+														</div>
+													</div>
 			                                        <div class="my-zone-detail">
 			                                            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="toggleRight()" data-original-title="1">
 			                                            	Checkout >>
 			                                            </a>
 			                                        </div>
 			                                    </li>
-			                                    <li class="col-lg-12 drop-zone my_drop_box my_cart_box text-center" data-insertInline="true" data-drop="true" ng-model='friendsCart' jqyoui-droppable="{multiple:true, onDrop:'friendDropInCart()', onOut:'friendDropOutFromCart()'}">
-													<div class="friend-items-thumbnail">
-				                                    	<div class="friends-container product_item">
-															<ul class="friends-container-inner">
-																<div class="friends-block" ng-repeat="friends in friendsCart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-type="friendsCart">
-																	<div ng-click="showFriendCart(friends.userid); UserDetail()">
-																		<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
-																	</div>
-																</div>	
-																<div class="friends-block" ng-repeat="friends in arctr.products['friendsInCart'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-index="{{$index}}" data-type="grpcart_friends">
-					                                    			<div ng-click="showFriendCart(friends.userid); UserDetail()">
-																		<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
-																	</div>
-				                                    			</div>
-															</ul>
-														</div>
-				                                    </div>
-												</li>
 											    <li class="product_item" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
 													<div class="product_image">
 										                <a data-ng-href="/products/{{product.ProdBrandId}}">
