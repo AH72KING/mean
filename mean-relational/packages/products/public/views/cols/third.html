@@ -1,14 +1,14 @@
 <ul class="products vertical-ticker unstyled product_list list thirdCol Col">
 	<div class="friends-container product_item">
 		<div class="friends-container-inner">
-			<div class="friends-block" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep', revert: 'invalid', helper: 'clone'}" data-friend-id="{{friends.userid}}" ng-model="arctr.userFirends">
+			<div class="friends-block drag-to-cart" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: false, revert: 'invalid'}" data-friend-id="{{friends.userid}}" ng-model="arctr.userFirends">
 				<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
 				</div>
 			</div>	
 		</div>
 	</div>
-	<div class="product_item" ng-repeat="product in arctr.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}" >
+	<div class="product_item drag-to-cart" ng-repeat="product in arctr.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}" >
 		<!--ng-click="showProductDetail($event)"-->
 			<div ng-include="'products/views/product-detail.html'"></div>
 	</div>

@@ -1305,3 +1305,10 @@ z-index: 999999;
 body .friends-in-cart-container{
 	min-height: 60px;
 }
+.drop-zone .friends-block{
+  float: left;
+    width: auto;
+}
+.drop-zone .friends-block img{    width: 40px;
+    height: 40px;
+    float: left;}
