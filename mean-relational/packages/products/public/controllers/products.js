@@ -55,6 +55,7 @@ import 'rxjs/add/operator/map';*/
           grp_cartId = Session.getItem('grp_cartId');
         }*/
         $scope.cart = []; // cart Array
+        $scope.friendsCart = []; // friends in cart Array
         $scope.userFirends = []; // friends Array;
         var userFirends = [];
         vm.userFirends = userFirends;
@@ -721,30 +722,30 @@ import 'rxjs/add/operator/map';*/
               $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
-
-/*        $scope.cartTotalPriceF = function () {   
-            var itemsAddInCart = $scope.cart;
-            var itemsInCart    = vm.products.products[6].grpcart_products;
-            var itemsInCartPrice = 0;
-
-            for (var i = 0; i < itemsInCart.length - 1; i++) {
-              itemsInCartPrice = itemsInCartPrice + itemsInCart[i].cost_price;
-            }
-           for (var i = 0; i < itemsAddInCart.length - 1; i++) {
-              itemsInCartPrice = itemsInCartPrice + itemsAddInCart[i].prod.cost_price;
-            }
-            console.log(itemsInCartPrice);
+        $scope.friendDropInCart  = function (event , ui) {   
+            var CurrentFriend = ui.draggable;
+            var friendId = CurrentProduct.attr('data-friend-id');
+            console.log('friendId = '+friendId);
         };
-
-        $scope.cartTotalProductsF = function () {   
-            var itemsAddInCart = $scope.cart;
-            var itemsInCart    = vm.products.products[6].grpcart_products;
-            var TotalItemsInCart    = itemsInCart.length+itemsAddInCart.length ;
-            console.log(TotalItemsInCart);
+        $scope.friendDropOutFromCart  = function (event , ui) {   
+  			var CurrentFriend = ui.draggable;
+            var friendId = CurrentProduct.attr('data-friend-id');
+            console.log('friendId = '+friendId);
+            var FriendIndex  = CurrentFriend.attr('data-index');
+            var CurrentArrayType  = CurrentFriend.attr('data-type');
+            if(CurrentArrayType !== undefined && CurrentArrayType === 'grpcart_friends'){
+              vm.products.friendsInCart.splice(FriendIndex, 1);
+            }
+            if(CurrentArrayType !== undefined && CurrentArrayType === 'friendsCart'){
+              $scope.friendsCart.splice(FriendIndex, 1);
+            }
+            
+             ui.draggable.remove();
+            if(friendId !== undefined && grp_cartId !== undefined){
+            	console.log('please call user remove from cart function here');
+             // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
+            }
         };
-         $scope.cartTotalPrice    = $scope.cartTotalPriceF();
-       $scope.cartTotalProducts   = $scope.cartTotalProductsF();*/
-    
     
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
@@ -846,40 +847,34 @@ import 'rxjs/add/operator/map';*/
           
         };
         $scope.myfriends  = function () {
-          /*if(Session.getItem('myfriends')){
-             vm.userFirends = Session.getItem('myfriends');
-          }else{*/
           	var UserID 	=  Session.getItem('UserID');
-            var key 	=  Session.getItem('key_'+UserID);
-            var url = baseUrl+'api/myfriends';
-            var postData = {key:key};
-            var configObj = { method: 'POST',url: url, data: postData,};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        console.log(response);
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-            url = ApiBaseUrl+'myfriends/'+key;
-            //postData = {key:key};
-            configObj = { method: 'GET',url: url, headers: headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        var dataJson = JSON.parse(JSON.stringify(response.data));
-                        if(dataJson !== undefined ){
-                              angular.forEach(dataJson,function(value){
-                              	 // check if avatar val null , then get default avatar
-                                value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
-                                vm.userFirends.push(value);      
-                            });
-                              Session.setItem('myfriends',vm.userFirends);
-                        }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-        // }
+	        if(UserID !== null && UserID !== undefined){
+		        if(Session.getItem('myfriends_'+UserID)){
+		             vm.userFirends = Session.getItem('myfriends_'+UserID);
+		        }else{
+		            var key =  Session.getItem('key_'+UserID);
+		            var url = ApiBaseUrl+'myfriends/'+key;
+		            var configObj = { method: 'GET',url: url, headers: headers};
+		                $http(configObj)
+		                    .then(function onFulfilled(response) {
+		                        var dataJson = JSON.parse(JSON.stringify(response.data));
+		                        if(dataJson !== undefined ){
+		                              angular.forEach(dataJson,function(value){
+		                              	 // check if avatar val null , then get default avatar
+		                                value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
+		                                vm.userFirends.push(value);      
+		                            });
+		                            Session.setItem('myfriends_'+UserID,vm.userFirends);
+		                        }
+		                    }).catch( function onRejection(errorResponse) {
+		                        console.log('Error: ', errorResponse.status);
+		                        console.log(errorResponse);
+		                }); 
+		        }
+		    }else{
+		    	console.log('User is not Logged In So Here we get All Users');
+		    	 /*$scope.getAllUsers();*/
+		    }
           
         };
         $scope.myfriends();

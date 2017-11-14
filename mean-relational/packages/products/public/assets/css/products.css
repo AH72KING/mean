@@ -1263,13 +1263,24 @@ height: 243px;
 ul li.friends-container .friends-container-inner{
   
 }
-ul li.friends-container .friends-container-inner .friends-block{
+li.friends-container .friends-container-inner .friends-block{
     display: inline-block;
     width: 60px;
     vertical-align: top;
 }
+body .friends-block{
+    display: block;
+    max-width: 60px;
+   	width: 60px;
+}
+body .friends-block img{
+    display: block;
+    max-width: 60px;
+   	width: 60px;
+}
 ul li.friends-container .friends-container-inner .friends-block img{
   
+z-index: 999999;
 }
 .social-login-buttons-container{
     padding: 10px 0px;
