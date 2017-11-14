@@ -4,7 +4,7 @@
 											    	<div class="cart-price">
 				                                        <strong class="total-price" ng-model='cartTotalPrice'>${{cartTotalPrice | number : 2 }}</strong>
 				                                    </div>
-				                                    <div class="cart-items-thumbnail drop-zone my_drop_box" data-insertInline="true" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}">
+				                                    <div class="cart-items-thumbnail drop-zone my_drop_box" data-insertInline="true" data-drop="true" ng-model='cart' jqyoui-droppable="{multiple:true, accept:'.product_item', onDrop:'productDropInCart()', onOut:'productDropOutFromCart()'}">
 				                                    	<ul class="product_item_thumbnail">
 				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
 											                	<div class="product_image">
@@ -31,7 +31,7 @@
 					                                    </div>
 				                                    </div>
 			                                        <input type="hidden" class="zone-type" value="my_zone">
-			                                        <div class="friends-in-cart-container drop-zone my_drop_box text-center" data-insertInline="true" data-drop="true" ng-model='friendsCart' jqyoui-droppable="{multiple:true, onDrop:'friendDropInCart()', onOut:'friendDropOutFromCart()'}">
+			                                        <div class="friends-in-cart-container drop-zone my_drop_box text-center" data-insertInline="true" data-drop="true" ng-model='friendsCart' jqyoui-droppable="{multiple:true, accept:'.friends-block', onDrop:'friendDropInCart()', onOut:'friendDropOutFromCart()'}">
 					                                    <div class="friends-container product_item">
 															<div class="friends-container-inner">
 																<div class="friends-block" ng-repeat="friends in friendsCart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-type="friendsCart">

@@ -1305,3 +1305,15 @@ z-index: 999999;
 body .friends-in-cart-container{
 	min-height: 60px;
 }
+body .friends-in-cart-container .friends-container{
+
+}
+body .friends-in-cart-container .friends-block{
+	display: inline-block;
+}
+body .friends-in-cart-container .friends-block div{
+	
+}
+body .friends-in-cart-container .friends-block div img{
+	
+}

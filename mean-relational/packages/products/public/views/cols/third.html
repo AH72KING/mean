@@ -1,7 +1,7 @@
 <ul class="products vertical-ticker unstyled product_list list thirdCol Col">
 	<div class="friends-container product_item">
 		<div class="friends-container-inner">
-			<div class="friends-block" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep', revert: 'invalid', helper: 'clone'}" data-friend-id="{{friends.userid}}" ng-model="arctr.userFirends">
+			<div class="friends-block" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep', revert: 'invalid', helper: 'clone'}"  data-friend-id="{{friends.userid}}" ng-model="arctr.userFirends">
 				<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
 				</div>

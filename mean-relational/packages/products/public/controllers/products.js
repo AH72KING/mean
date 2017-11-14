@@ -681,7 +681,6 @@ import 'rxjs/add/operator/map';*/
         $scope.productDropInCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
             var ProdBrandId = CurrentProduct.attr('data-product-id');
-            //var ProdBrandId = CurrentProduct.attr('data-product-grp-cart-id');
             if(ProdBrandId !== undefined){
               if(!cartCreated){
                 if(isGuest){  
@@ -693,6 +692,17 @@ import 'rxjs/add/operator/map';*/
                }
               }
             }
+
+            /*var friendId = CurrentProduct.attr('data-friend-id');
+            var ProductIndex  = CurrentProduct.attr('data-index');
+            if(friendId !== undefined){
+            	console.log(ui.draggable);
+            	var DataJson = CurrentProduct.attr('data-json');
+            	console.log(DataJson);
+	            $scope.friendsCart.push(ui.draggable);
+	            $scope.cart.splice(ProductIndex, 1);
+	            ui.draggable.remove();
+	        }*/
         };
         $scope.productDropOutFromCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
@@ -726,6 +736,11 @@ import 'rxjs/add/operator/map';*/
             var CurrentFriend = ui.draggable;
             var friendId = CurrentFriend.attr('data-friend-id');
             console.log('friendId = '+friendId);
+             /*var ProdBrandId = CurrentFriend.attr('data-product-id');
+            if(ProdBrandId !== undefined){
+	            $scope.cart.push(ui.draggable);
+	            ui.draggable.remove();
+	        }*/
         };
         $scope.friendDropOutFromCart  = function (event , ui) {
   			var CurrentFriend = ui.draggable;
