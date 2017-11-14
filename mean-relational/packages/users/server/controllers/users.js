@@ -99,7 +99,6 @@ exports.signup = function(req, res) {
 exports.signout = function(req, res) {
    localStorage.removeItem('grp_cartId');
 
-
     var url   = '';
     var body  = '';
     var data  = [];
@@ -274,4 +273,14 @@ exports.SaveUserKey = function(req, res){
     }
       
    return res.send(200, 'Key Added To Session '+key);        
+ };
+
+ // get all users
+ exports.AllUsers = function(req, res){
+    console.log('Testing..');
+
+      //db.product.findAll().then(function(product){
+    db.User.findAll().then(function(users){
+          return res.jsonp(users);
+   });
  };

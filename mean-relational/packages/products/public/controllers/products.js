@@ -845,41 +845,34 @@ import 'rxjs/add/operator/map';*/
                 }); 
           
         };
-        $scope.myfriends  = function () {
-          /*if(Session.getItem('myfriends')){
-             vm.userFirends = Session.getItem('myfriends');
-          }else{*/
+        $scope.myfriends  = function () { 
           	var UserID 	=  Session.getItem('UserID');
-            var key 	=  Session.getItem('key_'+UserID);
-            var url = baseUrl+'api/myfriends';
-            var postData = {key:key};
-            var configObj = { method: 'POST',url: url, data: postData,};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        console.log(response);
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-            url = ApiBaseUrl+'myfriends/'+key;
-            //postData = {key:key};
-            configObj = { method: 'GET',url: url, headers: headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        var dataJson = JSON.parse(JSON.stringify(response.data));
-                        if(dataJson !== undefined ){
-                              angular.forEach(dataJson,function(value){
-                              	 // check if avatar val null , then get default avatar
-                                value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
-                                vm.userFirends.push(value);      
-                            });
-                              Session.setItem('myfriends',vm.userFirends);
-                        }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-        // }
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'myfriends/'+key;
+            } else {
+              var url = baseUrl+'api/getAllUsers';
+            }
+                //postData = {key:key};
+              var  configObj = { method: 'GET',url: url, headers: headers};
+                  $http(configObj)
+                      .then(function onFulfilled(response) {
+                          var dataJson = JSON.parse(JSON.stringify(response.data));
+                          console.log('data json : '+dataJson); 
+                          if(dataJson !== undefined ){
+                                angular.forEach(dataJson,function(value){
+                                  if(value['USERID'])
+                                      value['userid'    ]  = value['USERID'];
+                                   // check if avatar val null , then get default avatar
+                                  value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
+                                  vm.userFirends.push(value);      
+                              });
+                                Session.setItem('myfriends',vm.userFirends);
+                          }
+                      }).catch( function onRejection(errorResponse) {
+                          console.log('Error: ', errorResponse.status);
+                          console.log(errorResponse);
+                  }); 
           
         };
         $scope.myfriends();

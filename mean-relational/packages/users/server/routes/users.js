@@ -34,7 +34,8 @@ app.route('/api/loggedin')
       });
 
 app.route('/api/SaveUserKey').post(users.SaveUserKey);
-
+// all users
+app.route('/api/getAllUsers').get(users.AllUsers);
 
 // Setting the facebook oauth routes
 app.get('/api/auth/facebook', passport.authenticate('facebook', {

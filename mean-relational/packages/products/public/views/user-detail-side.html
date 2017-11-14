@@ -1,7 +1,8 @@
 <div class="user-detail-container">
 	<div class="user_image">
 		<div class="user-taga" ng-click="ProductDetail()" >
-			<img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt="">
+			<!-- <img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt=""> -->
+			<img src="{{UploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
 		</div>
 	</div>
 	<div class="tabs-container">

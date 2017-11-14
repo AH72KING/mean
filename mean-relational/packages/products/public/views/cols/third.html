@@ -2,7 +2,7 @@
 	<li class="friends-container product_item">
 		<div class="friends-container-inner">
 			<div class="friends-block" ng-repeat="friends in arctr.userFirends">
-				<div ng-click="showFriendCart(friends.userid); UserDetail()">
+				<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
 				</div>
 			</div>	
