@@ -201,12 +201,17 @@ body > .container > header nav a:hover {
     font-size: 1.8em;
     line-height: 1.5;
 }
-.notify .usr_img img { 
+.usr-img {
+    padding: 5px 10px;
+}
+.notify .usr-img img { 
     width: 40px;
     height: 40px;
     border-radius: 100%;
     float: left;
 }
+.notify .icon{float:left;width:25%;}
+.notify .msg{float:left;width:75%;}
 @media screen and (max-width: 55em) {
     .container > header h1,
     .container > header nav {

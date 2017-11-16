@@ -88,8 +88,12 @@
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
                             <span>Notifications</span> <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu" style="height:100%">
-                            <li class="usr_img col-md-12"><img src="{{defaultAvatar}}" /> Friend Request <br> <a class="btn btn-primary btn-xs">Accept</a></li>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                            <li class="usr-img col-md-12" ng-repeat="request in requests track by $index">
+                              <div class="icon" title="{{request.givname+' '+request.surname}}"><img src="{{UploadUrl+getDefaultAvatar(request.imgloc)}}" /></div>
+                              <div class="msg"> Friend Request <a class="btn btn-primary btn-xs" ng-click="acceptRequest(request.userId,$index)">Accept</a></div>
+                            </li>
+                            <li class="usr-img col-md-12" ng-show = "!requests.length">No More Requests</li>
                         </ul>
                     </li>
                     <li class="dropdown" dropdown on-toggle="toggled(open)">

@@ -4,10 +4,12 @@ angular
     .module('mean.system')
     .controller('HeaderController',HeaderController);
 
-    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session'];
+    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope'];
 
-    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session){
+    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope){
         /*$scope.UploadUrl = 'http://localhost:3000/products/assets/';*/
+        $rootScope.UploadUrl            = UploadUrl;   
+
         $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
@@ -57,7 +59,28 @@ angular
           return $mdSidenav('UserDetail').isOpen();
         };
 
-
+         $scope.getDefaultAvatar = function(url){
+          if(url == null)
+            url = '/images/default-avatar.png';
+          return url;
+       };
+        // get friend request
+        $scope.friendRequests = function(){
+          var UserID  =  Session.getItem('UserID');
+          if(typeof UserID != 'undefined' && UserID != null){
+            var key   =  Session.getItem('key_'+UserID);
+            var url = ApiBaseUrl+'myInvites/'+key;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    var dataJson    = JSON.parse(JSON.stringify(response.data));
+                    console.log(JSON.stringify(response.data));
+                    $scope.requests = dataJson;
+                }).catch( function onRejection(errorResponse) {
+                }); 
+          }
+        }
+        $scope.friendRequests();
         /**
          * Build handler to open/close a SideNav; when animation finishes
          * report completion in console
@@ -73,45 +96,23 @@ angular
 
           return debounceFn;
         }
-        /*$scope.toggleLeft = buildDelayedToggler('left');
-        $scope.toggleRight = buildToggler('right');
-        $scope.isOpenRight = function(){
-            return $mdSidenav('right').isOpen();
-        };
-            function debounce(func, wait, context) {
-              var timer;
 
-              return function debounced() {
-                var context = $scope,
-                    args = Array.prototype.slice.call(arguments);
-                $timeout.cancel(timer);
-                timer = $timeout(function() {
-                  timer = undefined;
-                  func.apply(context, args);
-                }, wait || 10);
-              };
-            }
-            function buildDelayedToggler(navID) {
-              return debounce(function() {
-                // Component lookup should always be available since we are not using `ng-if`
-                $mdSidenav(navID)
-                  .toggle()
-                  .then(function () {
-                    $log.debug("toggle " + navID + " is done");
-                  });
-              }, 200);
-            }
-
-            function buildToggler(navID) {
-              return function() {
-                // Component lookup should always be available since we are not using `ng-if`
-                $mdSidenav(navID)
-                  .toggle()
-                  .then(function () {
-                    $log.debug("toggle " + navID + " is done");
-                  });
-              };
-            }*/
+        // accept friend request
+        $scope.acceptRequest = function(userId, index){
+          var currentUId  =  Session.getItem('UserID');
+          if(typeof currentUId != 'undefined' && currentUId != null){
+            var key   =  Session.getItem('key_'+currentUId);
+            var url = ApiBaseUrl+'acceptInvitation/'+key+'/'+userId;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    var dataJson    = JSON.parse(JSON.stringify(response.data));
+                    $scope.requests.slice(index, 1);
+                    console.log('Response is : '+JSON.stringify(response.data));
+                }).catch( function onRejection(errorResponse) {
+                }); 
+          }
+        }
 
     }
 })();

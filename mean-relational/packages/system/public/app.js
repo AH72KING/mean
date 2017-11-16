@@ -31,7 +31,17 @@ mean.config(['$qProvider', function ($qProvider) {
 
 //window.ip = '192.168.1.88';
 window.ip = '192.168.100.88';  
-
+var baseUrl = 'http://localhost:3000/';
+var ApiBaseUrl = 'http://'+window.ip+':8080/Anerve/anerveWs/AnerveService/';
+var UploadUrl = baseUrl+'products/assets/';
+ var headers = {
+                   'Access-Control-Allow-Origin': '*',
+                   'Content-Type' : 'application/json; charset=UTF-8',
+                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
+                   'Access-Control-Max-Age': '3600',
+                   'Access-Control-Allow-Credentials': 'true'
+                };
    /* setTimeout(
       function asyncBootstrap() {
         angular.bootstrap( document, [ 'mean' ] );

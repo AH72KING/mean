@@ -13,22 +13,22 @@ import 'rxjs/add/operator/map';*/
   function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil,$sce){
         var vm = this;
 
-        var baseUrl = 'http://localhost:3000/';
+       // var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
        //var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
-        var UploadUrl = 'http://localhost:3000/products/assets/';
-        var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
-        var headers = {
+       // var UploadUrl = 'http://localhost:3000/products/assets/';
+       // var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
+       /* var headers = {
                    'Access-Control-Allow-Origin': '*',
                    'Content-Type' : 'application/json; charset=UTF-8',
                    'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
                    'Access-Control-Max-Age': '3600',
                    'Access-Control-Allow-Credentials': 'true'
-                };
+                };*/
 
-        $scope.cartTotalPrice        = 0;
-        $scope.UploadUrl            = UploadUrl;   
+        $scope.cartTotalPrice        = 0;/*
+        $scope.UploadUrl            = UploadUrl;   */
 
         $scope.addPaymentButton     = true;
         $scope.addShippingButton    = false;
@@ -1026,7 +1026,7 @@ import 'rxjs/add/operator/map';*/
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
-                        $scope.CurrentUserBuyerDetail.action = '02';
+                        $scope.CurrentUserBuyerDetail.action = '01';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
