@@ -46,6 +46,14 @@ import 'rxjs/add/operator/map';*/
         var cartCreated = false;
         var grp_cartId = null;
         var isGuest = true; 
+        if(Session.getItem('UserID') !== undefined && Session.getItem('UserID') !== null){
+        	isGuest = false; 
+        }
+        
+
+
+
+
 
         $scope.CurrentProductDetail  = '';
         $scope.CurrentProductDetailImage  = '';
@@ -728,7 +736,8 @@ import 'rxjs/add/operator/map';*/
             var draggableElement = ui.draggable;
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');    
-            if(typeof prodId != 'undefined' && prodId != null){console.log(prodId);
+            if(typeof prodId != 'undefined' && prodId != null){
+              console.log(prodId);
               $scope.addProdToCart(draggableElement);
             }
             else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
@@ -758,13 +767,11 @@ import 'rxjs/add/operator/map';*/
             'img_loc':img
           })
           if(!cartCreated){
-            if(isGuest){  
-              $scope.createCart(prodId);
-            }
+	          	console.log('no cart created '+ Session.setItem('grp_cartId'));
+	            $scope.createCart(prodId);
           }else{
-            if(isGuest){  
-              $scope.addToCart(grp_cartId,prodId);
-           }
+          		console.log('yes cart created already '+ Session.setItem('grp_cartId')+' === '+grp_cartId); 
+              	$scope.addToCart(grp_cartId,prodId);
           }
       
            
@@ -810,7 +817,7 @@ import 'rxjs/add/operator/map';*/
              console.log('User id : '+userId);
               $scope.removeUserFromCartAjax(grp_cartId,userId);
             }
-        }
+        };
 
         
 
@@ -819,6 +826,7 @@ import 'rxjs/add/operator/map';*/
             var friendId = CurrentFriend.attr('data-friend-id');
             console.log('friendId = '+friendId);
         };
+
         $scope.friendDropOutFromCart  = function (event , ui) {
         var CurrentFriend = ui.draggable;
             var friendId = CurrentFriend.attr('data-friend-id');
@@ -838,9 +846,9 @@ import 'rxjs/add/operator/map';*/
              // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
+
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
-           //var url = ApiBaseUrl+'createCart/PK/';
            var configObj = { method: 'GET',url: url, headers: headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {

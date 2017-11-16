@@ -3779,8 +3779,11 @@ div.m-app-loading {
                 margin: 0px 0px 0px 0px ;
             }
 
-            .product_item{min-height: 249px;border: 1px solid #dedede;
-    box-shadow: 1px 2px 5px 1px #dedede;}
+            .product_item{
+    min-height: 249px;
+    /* border: 1px solid #dedede; */
+    box-shadow: 1px 2px 5px 1px #dedede;
+    }
             .pad_0_5{    padding: 0px 5px 0px 5px;}
 
             .list.buyer-products .product-image img{height:180px;}
