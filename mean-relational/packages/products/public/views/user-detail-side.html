@@ -48,19 +48,20 @@
 			</div>
 			<!-- cart comments -->
 			<div class="tabs-content" ng-show="tabContent === 'comments'">
-				 <div class="product_details">
-				 	<div class="tab-content-head">
-				 		<i class="fa fa-list" aria-hidden="true"></i>
-				 		<h4>Comments</h4>
+				 <div class="product_details col-md-12">
+				 	<div class="tab-content-head col-md-12">
+				 		<i class="fa fa-comments-o" aria-hidden="true"></i>
+				 		<h4>User Comments</h4>
 				 	</div>
-					<div class="list buyer-products" data-ng-repeat="comment in cartComments">
+					<div class="list buyer-products col-md-12" data-ng-repeat="comment in cartComments">
 						<div class="product-detail">
 							<div class="product-name">
 							</div>
 						</div>
 					</div>
-					<div class="">
-						<input type="text" model="user_comment" name="user_comment" />
+					<div class="col-md-12">
+						<input type="text" placeholder="Write Message" ng-model="data.comment" class="form-control" name="comment" />
+						<a class="btn btn-primary btn-sm" ng-click="addCommentToCart()">Submit</a>
 					</div>
 				</div>
 			</div>

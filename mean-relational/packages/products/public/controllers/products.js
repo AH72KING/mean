@@ -29,7 +29,6 @@ import 'rxjs/add/operator/map';*/
 
         $scope.cartTotalPrice        = 0;/*
         $scope.UploadUrl            = UploadUrl;   */
-
         $scope.addPaymentButton     = true;
         $scope.addShippingButton    = false;
         $scope.hideShippingAddress  = true;
@@ -46,14 +45,6 @@ import 'rxjs/add/operator/map';*/
         var cartCreated = false;
         var grp_cartId = null;
         var isGuest = true; 
-        if(Session.getItem('UserID') !== undefined && Session.getItem('UserID') !== null){
-        	isGuest = false; 
-        }
-        
-
-
-
-
 
         $scope.CurrentProductDetail  = '';
         $scope.CurrentProductDetailImage  = '';
@@ -67,7 +58,6 @@ import 'rxjs/add/operator/map';*/
         $scope.userFirends = []; // friends Array;
         var userFirends = [];
         vm.userFirends = userFirends;
-
 
         $scope.toggleLeft     = buildToggler('left');
         $scope.toggleRight    = buildToggler('right');
@@ -383,6 +373,7 @@ import 'rxjs/add/operator/map';*/
             console.log(productID);   
               if(angular.isNumber(productID)){
                 $scope.CurrentProductDetail = $scope.CurrentProduct(productID);
+                $scope.groupCartId = grp_cartId;
                 $scope.isProductDetailOpen();
               }
         };
@@ -737,8 +728,8 @@ import 'rxjs/add/operator/map';*/
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');    
             if(typeof prodId != 'undefined' && prodId != null){
-              console.log(prodId);
-              $scope.addProdToCart(draggableElement);
+              var img = draggableElement.find('.product_image').find('img').attr('src');
+              $scope.addorCreateCart(prodId, img);
             }
             else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
               $scope.addUserToCart(draggableElement);
@@ -756,26 +747,27 @@ import 'rxjs/add/operator/map';*/
               $scope.removeUserFromCart(draggableElement);
             draggableElement.remove();
         }
-        // add prod to cart
-        $scope.addProdToCart = function(prod){
-          var prodId = prod.attr('data-product-id');
-          var img = prod.find('.product_image').find('img').attr('src');
-          console.log('Prod id :'+prodId);
-          console.log('Img  :'+img);
+
+        $scope.addToCartBtn = function(prodId, img){
+          $scope.addorCreateCart(prodId, img);
+        }
+
+        $scope.addorCreateCart = function(prodId, img){
           $scope.cart.push({
             'userid':prodId,
             'img_loc':img
           })
           if(!cartCreated){
-	          	console.log('no cart created '+ Session.setItem('grp_cartId'));
-	            $scope.createCart(prodId);
+            if(isGuest){  
+              $scope.createCart(prodId);
+            }
           }else{
-          		console.log('yes cart created already '+ Session.setItem('grp_cartId')+' === '+grp_cartId); 
-              	$scope.addToCart(grp_cartId,prodId);
+            if(isGuest){  
+              $scope.addToCart(grp_cartId,prodId);
+           }
           }
-      
-           
-        } // add user to cart
+        }
+         // add user to cart
         $scope.addUserToCart = function(user){ 
           var userId = user.attr('data-friend-id');
           var img = user.find('img').attr('src');
@@ -817,7 +809,7 @@ import 'rxjs/add/operator/map';*/
              console.log('User id : '+userId);
               $scope.removeUserFromCartAjax(grp_cartId,userId);
             }
-        };
+        }
 
         
 
@@ -826,7 +818,6 @@ import 'rxjs/add/operator/map';*/
             var friendId = CurrentFriend.attr('data-friend-id');
             console.log('friendId = '+friendId);
         };
-
         $scope.friendDropOutFromCart  = function (event , ui) {
         var CurrentFriend = ui.draggable;
             var friendId = CurrentFriend.attr('data-friend-id');
@@ -846,9 +837,9 @@ import 'rxjs/add/operator/map';*/
              // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
-
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
+           //var url = ApiBaseUrl+'createCart/PK/';
            var configObj = { method: 'GET',url: url, headers: headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -1057,6 +1048,25 @@ import 'rxjs/add/operator/map';*/
                         console.log('Error: ', errorResponse.status);
                 }); 
             } 
+        }
+
+        // add comment to cart
+        $scope.data = {};
+        $scope.addCommentToCart = function(){
+          var comment = $scope.data.comment;
+          if(typeof UserID != 'undefined' && UserID != null){
+              var key   =  Session.getItem('key_'+UserID);
+              var url = ApiBaseUrl+'unfollowUser';
+              var postData = {key:key, query_userId:userid};
+              var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+              $http(configObj)
+                  .then(function onFulfilled(response) {
+                      var dataJson = JSON.parse(JSON.stringify(response.data));
+                      $scope.CurrentUserBuyerDetail.action = '03';
+                  }).catch( function onRejection(errorResponse) {
+                      console.log('Error: ', errorResponse.status);
+              }); 
+          } 
         }
 
         $scope.getDefaultAvatar = function(url){
