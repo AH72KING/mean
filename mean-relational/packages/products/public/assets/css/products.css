@@ -1061,12 +1061,15 @@ font-size: 30px;
     display: inline-block;
 }
 .user-detail-side-bar .tabs-container .tab-actions{
-    text-align: center;
+    text-align: left;margin: 5px 0px;
+    background-color: gray;
 }
 .user-detail-side-bar .tabs-container .tab-actions div{
     display: inline-block;
     font-size: 30px;
-    padding: 20px;
+    /*padding: 20px;*/
+        padding: 0 10px;
+    background-color: #cabfbf;
 }
 .user-detail-side-bar .tabs-container .tab-actions div i{}
 
@@ -1273,7 +1276,7 @@ li.friends-container .friends-container-inner .friends-block{
 body .friends-block{
     display: block;
     max-width: 60px;
-   	width: 60px;
+   	width: 60px;float: left;
 }
 body .friends-block img{
     display: block;
@@ -1312,3 +1315,22 @@ body .friends-in-cart-container{
 .drop-zone .friends-block img{    width: 40px;
     height: 40px;
     float: left;}
+
+.users-in_cart-count{    position: absolute;
+    right: 20px;
+    top: 10px;}
+.specs p{
+  text-align: left;
+}
+.specs p span {
+  float: left;
+    width: 100%;
+}
+.specs p span strong{
+      float: left;
+      width: 50%;
+}
+.product-body .tab-contents {
+  float: left;
+    width: 100%;
+}

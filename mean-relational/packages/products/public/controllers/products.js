@@ -681,6 +681,7 @@ import 'rxjs/add/operator/map';*/
         $scope.productDropInCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
             var ProdBrandId = CurrentProduct.attr('data-product-id');
+            //var ProdBrandId = CurrentProduct.attr('data-product-grp-cart-id');
             if(ProdBrandId !== undefined){
               if(!cartCreated){
                 if(isGuest){  
@@ -692,17 +693,6 @@ import 'rxjs/add/operator/map';*/
                }
               }
             }
-
-            /*var friendId = CurrentProduct.attr('data-friend-id');
-            var ProductIndex  = CurrentProduct.attr('data-index');
-            if(friendId !== undefined){
-            	console.log(ui.draggable);
-            	var DataJson = CurrentProduct.attr('data-json');
-            	console.log(DataJson);
-	            $scope.friendsCart.push(ui.draggable);
-	            $scope.cart.splice(ProductIndex, 1);
-	            ui.draggable.remove();
-	        }*/
         };
         $scope.productDropOutFromCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
@@ -732,48 +722,31 @@ import 'rxjs/add/operator/map';*/
               $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
-        $scope.friendDropInCart  = function (event , ui) {
-            var CurrentFriend = ui.draggable;
-            var friendId = CurrentFriend.attr('data-friend-id');
-            console.log('friendId = '+friendId);
-             /*var ProdBrandId = CurrentFriend.attr('data-product-id');
-            if(ProdBrandId !== undefined){
-	            $scope.cart.push(ui.draggable);
-	            ui.draggable.remove();
-	        }*/
-        };
-        $scope.friendDropOutFromCart  = function (event , ui) {
-  			var CurrentFriend = ui.draggable;
-            var friendId = CurrentFriend.attr('data-friend-id');
-            console.log('friendId = '+friendId);
-            var FriendIndex  = CurrentFriend.attr('data-index');
-            var CurrentArrayType  = CurrentFriend.attr('data-type');
-            if(CurrentArrayType !== undefined && CurrentArrayType === 'grpcart_friends'){
-              vm.products.friendsInCart.splice(FriendIndex, 1);
-            }
-            if(CurrentArrayType !== undefined && CurrentArrayType === 'friendsCart'){
-              $scope.friendsCart.splice(FriendIndex, 1);
-            }
-
-             ui.draggable.remove();
-            if(friendId !== undefined && grp_cartId !== undefined){
-            	console.log('please call user remove from cart function here');
-             // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
-            }
-        };
 
         // drop in cart
-        $scope.dropInCart = function(event, ui){
+        $scope.dropInCart = function(event, ui){ 
             var draggableElement = ui.draggable;
+            var prodId = draggableElement.attr('data-product-id');
+            var friendId = draggableElement.attr('data-friend-id');    
+            if(typeof prodId != 'undefined' && prodId != null){console.log(prodId);
+              $scope.addProdToCart(draggableElement);
+            }
+            else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
+              $scope.addUserToCart(draggableElement);
+            }
+
+        }
+        // drop out from cart
+        $scope.dropOutFromCart = function(event, ui){
+           var draggableElement = ui.draggable;
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');
             if(typeof prodId != 'undefined' && prodId != null)
-              $scope.addProdToCart(draggableElement);
+              $scope.removeProdFromCart(draggableElement);
             else if(typeof friendId != 'undefined' && friendId != null)
-              $scope.addUserToCart(draggableElement);
+              $scope.removeUserFromCart(draggableElement);
             draggableElement.remove();
         }
-    
         // add prod to cart
         $scope.addProdToCart = function(prod){
           var prodId = prod.attr('data-product-id');
@@ -796,16 +769,75 @@ import 'rxjs/add/operator/map';*/
       
            
         } // add user to cart
-        $scope.addUserToCart = function(user){
+        $scope.addUserToCart = function(user){ 
           var userId = user.attr('data-friend-id');
           var img = user.find('img').attr('src');
           $scope.friendsCart.push({
             'userid':userId,
             'img_loc':img
           })
+          $scope.addUserToCartAjax(grp_cartId, userId);
         }
 
+        // remove prod from cart
+        $scope.removeProdFromCart = function(prod){
+            //var ProdBrandId = CurrentProduct.attr('data-product-id'); 
+            var ProdBrandId   = prod.attr('data-product-grp-cart-id');
+            var ProductIndex  = prod.attr('data-index');
+            var ProductArrayType  = prod.attr('data-type');
+            if(ProductArrayType !== undefined && ProductArrayType === 'grpcart_products'){
+              vm.products.grpcart_products.splice(ProductIndex, 1);
+            }
+            if(ProductArrayType !== undefined && ProductArrayType === 'cart'){
+              $scope.cart.splice(ProductIndex, 1);
+            }
+            
+              prod.remove();
+            if(ProdBrandId !== undefined && grp_cartId !== undefined){
+              $scope.nl_removefromCart(grp_cartId,ProdBrandId);
+            }
+        }
 
+        // remove user from cart 
+        $scope.removeUserFromCart = function(user){
+             var userId   = user.attr('data-friend-id');
+            var userIndex  = user.attr('data-index');
+            var userArrayType  = user.attr('data-type');
+            if(userArrayType !== undefined && userArrayType === 'grpcart_products'){
+              vm.products.friendsCart.splice(userIndex, 1);
+            }
+            if(userId !== undefined && grp_cartId !== undefined){
+             console.log('User id : '+userId);
+              $scope.removeUserFromCartAjax(grp_cartId,userId);
+            }
+        }
+
+        
+
+        $scope.friendDropInCart  = function (event , ui) {
+            var CurrentFriend = ui.draggable;
+            var friendId = CurrentFriend.attr('data-friend-id');
+            console.log('friendId = '+friendId);
+        };
+        $scope.friendDropOutFromCart  = function (event , ui) {
+        var CurrentFriend = ui.draggable;
+            var friendId = CurrentFriend.attr('data-friend-id');
+            console.log('friendId = '+friendId);
+            var FriendIndex  = CurrentFriend.attr('data-index');
+            var CurrentArrayType  = CurrentFriend.attr('data-type');
+            if(CurrentArrayType !== undefined && CurrentArrayType === 'grpcart_friends'){
+              vm.products.friendsInCart.splice(FriendIndex, 1);
+            }
+            if(CurrentArrayType !== undefined && CurrentArrayType === 'friendsCart'){
+              $scope.friendsCart.splice(FriendIndex, 1);
+            }
+
+             ui.draggable.remove();
+            if(friendId !== undefined && grp_cartId !== undefined){
+              console.log('please call user remove from cart function here');
+             // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
+            }
+        };
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
            //var url = ApiBaseUrl+'createCart/PK/';
@@ -883,6 +915,30 @@ import 'rxjs/add/operator/map';*/
                 }); 
 
         };
+
+        // add user to cart
+        $scope.addUserToCartAjax = function(cartId, userId){ 
+          var url = baseUrl+'api/addUserToCart';
+          var postData = {cartID:cartId,userId:userId};
+          var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+
+        $scope.removeUserFromCartAjax= function(cartId,userId){
+          var url = baseUrl+'api/removeUserFromCart';
+          var postData = {cartID:cartId,userId:userId};
+          var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+
         $scope.nl_removefromCart  = function (cartID, productID) {
             var url = baseUrl+'api/nl_removefromCart';
             var postData = {cartID:cartID,productID:productID};
@@ -892,7 +948,7 @@ import 'rxjs/add/operator/map';*/
                         var dataJson = JSON.parse(JSON.stringify(response.data));
 
                         if(dataJson !== undefined){
-
+ 
                           grp_cartId            = dataJson.grpcartX.grp_cartId;
                           $scope.cartItemCount  = dataJson.grpcartX.count;
                           $scope.cartTotalPrice = dataJson.grpcartX.current_total;
@@ -907,12 +963,11 @@ import 'rxjs/add/operator/map';*/
         };
         $scope.myfriends  = function () {
           	var UserID 	=  Session.getItem('UserID');
-            if(typeof UserID != 'undefined' && UserID != null){
+           /* if(typeof UserID != 'undefined' && UserID != null){
                 var key   =  Session.getItem('key_'+UserID);
                 var url = ApiBaseUrl+'myfriends/'+key;
-            } else {
+            } else */
               var url = baseUrl+'api/getAllUsers';
-            }
                 //postData = {key:key};
               var  configObj = { method: 'GET',url: url, headers: headers};
                   $http(configObj)
@@ -921,11 +976,13 @@ import 'rxjs/add/operator/map';*/
                           console.log('data json : '+dataJson);
                           if(dataJson !== undefined ){
                                 angular.forEach(dataJson,function(value){
-                                  if(value['USERID'])
-                                      value['userid'    ]  = value['USERID'];
-                                   // check if avatar val null , then get default avatar
-                                  value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
-                                  vm.userFirends.push(value);
+                                  if(value['USERID'] != UserID){if(value['USERID'])
+                                     value['userid']  = value['USERID'];
+                                     // check if avatar val null , then get default avatar
+                                    value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
+                                    vm.userFirends.push(value);
+                                  }
+                                  
                               });
                                 Session.setItem('myfriends',vm.userFirends);
                           }
@@ -957,6 +1014,43 @@ import 'rxjs/add/operator/map';*/
                 }); 
           
         };
+
+        // send friend request
+        $scope.sendFriendRequest = function(userid){
+            var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'followUser';
+                var postData = {key:key, query_userId:userid};
+                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        $scope.CurrentUserBuyerDetail.action = '02';
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+        }
+
+        // unfollow user
+        $scope.unFollow = function(userid){
+            var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'unfollowUser';
+                var postData = {key:key, query_userId:userid};
+                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        $scope.CurrentUserBuyerDetail.action = '03';
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+        }
+
         $scope.getDefaultAvatar = function(url){
           if(url == null)
             url = '/images/default-avatar.png';

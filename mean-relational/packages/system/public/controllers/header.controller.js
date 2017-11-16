@@ -7,6 +7,8 @@ angular
     HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session'];
 
     function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session){
+        /*$scope.UploadUrl = 'http://localhost:3000/products/assets/';*/
+        $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
         vm.menu = [{

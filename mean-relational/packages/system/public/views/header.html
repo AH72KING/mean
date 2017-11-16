@@ -84,7 +84,14 @@
                       <li><a ui-sref='auth.login'>Log In</a></li>
                   </ul>
                   <ul class="navbar-nav nav" data-ng-show="hdctr.global.authenticated">
-
+                    <li class="dropdown notify" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span>Notifications</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="height:100%">
+                            <li class="usr_img col-md-12"><img src="{{defaultAvatar}}" /> Friend Request <br> <a class="btn btn-primary btn-xs">Accept</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
                             <span>{{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}</span> <b class="caret"></b>

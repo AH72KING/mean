@@ -6,8 +6,8 @@
 				                                    </div>
 				                                    <div class="cart-items-thumbnail drop-zone my_drop_box" >
 				                                    	<ul class="product_item_thumbnail">
-				                                    		<li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
-											                	<div class="product_image">
+				                                    		<li ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart" >
+											                	<div class="">
 														            <a data-ng-href="/products/{{product.ProdBrandId}}">
 														                <img src="{{product.img_loc}}" alt="">
 
@@ -32,8 +32,8 @@
 				                                    </div>
 			                                        <input type="hidden" class="zone-type" value="my_zone">
 			                                        <div class="friends-in-cart-container drop-zone my_drop_box text-center" >
-					                                    <div class="friends-container product_item">
-															<div class="friends-container-inner">
+					                                    <div class="friends-container">
+															<div class="friends-container-inner" style="width:70%;margin:0 auto;height: 40px;overflow: hidden;">
 																<div class="friends-block" ng-repeat="friends in friendsCart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-type="friendsCart">
 																	<div ng-click="showFriendCart(friends.userid); UserDetail()">
 																		<img src="{{friends.img_loc}}" alt=""/>
@@ -42,10 +42,19 @@
 
 																<div class="friends-block" ng-repeat="friends in arctr.products['friendsInCart'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-index="{{$index}}" data-type="grpcart_friends">
 						                                    		<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
-																		<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
+																		<img src="{{UploadUrl}}{{ getDefaultAvatar(friends.img_loc)}}" alt=""/>
 																	</div>
 					                                    		</div>
 															</div>
+															
+				                                    		<div class="users-in_cart-count" ng-show="((arctr.products['friendsInCart']).length + (friendsCart).length) > 4">
+						                                    	<div class="counter">
+						                                    		<span class="add-icon">+</span>
+							                                    	<span class="total-count">
+							                                    		{{cartUserCount = ((arctr.products['friendsInCart']).length + (friendsCart).length) - 4}}
+							                                    	</span>
+							                                    </div>
+						                                    </div>
 														</div>
 													</div>
 			                                        <div class="my-zone-detail">
