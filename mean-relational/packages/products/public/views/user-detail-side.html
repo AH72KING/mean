@@ -1,13 +1,24 @@
 <div class="user-detail-container">
-	<div class="user_image">
-		<div class="user-taga" ng-click="ProductDetail()" >
+	<div class="user_image" style="height:auto">
+		<div class="user-taga" ng-click="ProductDetail()"  style="position: relative;">
 			<!-- <img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt=""> -->
 			<img src="{{UploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
+			<!-- add friend button -->
+			<div class="">
+			<a class="btn btn-primary btn-sm" ng-click="sendFriendRequest(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == null" model="add_friend">
+			<i class="fa fa-plus"></i>Add Friend</a>
+			<a class="btn btn-warning btn-sm" ng-show="CurrentUserBuyerDetail.action == 03" model="add_friend">
+			<i class="fa fa-exclamation"></i> {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME+' unfollowed you' }}</a>
+			<a class="btn btn-info btn-sm" ng-click="unFollow(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == 02" model="add_friend">
+			<i class="fa fa-plus"></i>UnFollow {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME }}</a>
+			<a class="btn btn-danger btn-sm" ng-show="CurrentUserBuyerDetail.action == 01" model="add_friend">Friend Request Send</a>
+			</div>
 		</div>
 	</div>
-	<div class="tabs-container">
+	<div class="tabs-container" style="float: left;width: 100%;">
 	  	<div class="tab-actions">
 	      <div ng-click="tabContent='products'"><i class="fa fa-list" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='comments'"><i class="fa fa-comments-o" aria-hidden="true"></i></div>
 	  	</div>
 	  	<div class="tab-contents">
 		  	<div class="init-first" ng-init="tabContent='products'"></div>
@@ -32,6 +43,24 @@
 								<img src="{{UploadUrl}}{{buyerProduct.img_loc}}" alt="">
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+			<!-- cart comments -->
+			<div class="tabs-content" ng-show="tabContent === 'comments'">
+				 <div class="product_details">
+				 	<div class="tab-content-head">
+				 		<i class="fa fa-list" aria-hidden="true"></i>
+				 		<h4>Comments</h4>
+				 	</div>
+					<div class="list buyer-products" data-ng-repeat="comment in cartComments">
+						<div class="product-detail">
+							<div class="product-name">
+							</div>
+						</div>
+					</div>
+					<div class="">
+						<input type="text" model="user_comment" name="user_comment" />
 					</div>
 				</div>
 			</div>
