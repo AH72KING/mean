@@ -155,6 +155,7 @@ exports.show = function(req, res) {
  * List of products
  */
 exports.all = function(req, res) {
+    var productsData = {};
     var grp_cartId = 0;
     var user_id = 0;
     if (req.user) {
@@ -172,7 +173,6 @@ exports.all = function(req, res) {
         status : 'A'
       }
     }).then(function(product){
-        var productsData = {};
         var col1 = [];
         var col2 = [];
         var col3 = [];
@@ -216,11 +216,6 @@ exports.all = function(req, res) {
             productsData['user'] = user; 
             productsData['user_id'] = user.USERID;
             console.log(user.Grpcart);
-            //productsData['grp_cartId'] = user.Grpcart.user_id;
-            //productsData['grp_cartId'] = user.Grpcart.user_id;
-            
-            //grp_cartId = user.Grpcart.user_id;
-
           }
 
 
@@ -698,19 +693,22 @@ exports.getProductBuyingUsers = function(req, res){
 };
 
 exports.getUserDetail = function(req, res){
+  if (req.user) {
+    var current_user_id = req.user.USERID;
     var USERID     = req.body.USERID;
     var grp_cartId = null;
     if(req.body.grp_cartId != null && req.body.grp_cartId != undefined){
 	    grp_cartId = req.body.grp_cartId;
-	}
+	  }
 
     var Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2, uf.action ';
-    Query += 'FROM users u LEFT JOIN user_followers uf ON uf.follow_userid = u.USERID ';
+    Query += 'FROM users u LEFT JOIN user_followers uf ON uf.follow_userid = u.USERID AND uf.my_userid = '+current_user_id+' ';
     Query += 'WHERE u.USERID = '+USERID+'  ';
 
-            db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
-                return res.jsonp(grpCartDataResponse[0][0]);
-            });
+    db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
+        return res.jsonp(grpCartDataResponse[0][0]);
+    });
+  }
 
 };
 exports.getUserProductDetails = function(req, res){
