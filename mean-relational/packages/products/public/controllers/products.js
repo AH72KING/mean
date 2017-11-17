@@ -776,10 +776,17 @@ import 'rxjs/add/operator/map';*/
         $scope.addUserToCart = function(user){ 
           var userId = user.attr('data-friend-id');
           var img = user.find('img').attr('src');
+          var Online = user.find('img').parent().hasClass('online');
+          console.log('Online: '+Online);
+          //if(list.indexOf(createItem.artNr) !== -1) {
+          console.log($scope.friendsCart);
           $scope.friendsCart.push({
             'userid':userId,
-            'img_loc':img
+            'img_loc':img,
+            'online':Online
           })
+          console.log($scope.friendsCart);
+          
           $scope.addUserToCartAjax(grp_cartId, userId);
         }
 
@@ -978,6 +985,7 @@ import 'rxjs/add/operator/map';*/
                       .then(function onFulfilled(response) {
                           var dataJson = JSON.parse(JSON.stringify(response.data));
                           console.log('data json : '+dataJson);
+                          console.log(dataJson);
                           if(dataJson !== undefined ){
                                 angular.forEach(dataJson,function(value){
                                   if(value['USERID'] != UserID){if(value['USERID'])

@@ -650,7 +650,7 @@ exports.myfriends =  function(req, res){
     var options = {
         hostname: ip,
         port: '8080',
-        path: ApiBasePath+'myfriends/'+key+'/',
+        path: ApiBasePath+'myfriends_mini/'+key+'/',
         method: 'GET',
         headers: headers
     };

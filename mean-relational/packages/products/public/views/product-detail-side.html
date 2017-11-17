@@ -51,7 +51,7 @@
 		<ul>
 			<li data-ng-repeat="users in CurrentProductDetail.buyingUser">
 				<div ng-click="showUserCart(users.grp_cartId,users.USERID); UserDetail()">
-					<img src="{{UploadUrl}}{{users.img_loc}}" alt="owners"/>
+					<img class="user-image" src="{{UploadUrl}}{{users.img_loc}}" alt="owners"/>
 				</div>
 			</li>
 		</ul>

@@ -46,11 +46,13 @@ var socialPass = encryptPassword(SocialPassword);
 
 //Serialize sessions
 passport.serializeUser(function(user, done) {
-    console.log(user);
+    //console.log(user);
+  console.log('serializeUser');
   done(null, user.USERID);
 });
 
 passport.deserializeUser(function(USERID, done) {
+    console.log('deserializeUser');
     db.User.find({where: {USERID: USERID}})
     .then(function(user){
         if(!user) return done('error');
@@ -73,6 +75,11 @@ passport.use(new LocalStrategy({
       } else if (!user.authenticate(PASSWORD)) {
         done(null, false, { message: 'Invalid PASSWORD'});
       } else {
+        db.Login.update({
+            online: 1
+        }, {
+            where: {userId: user.USERID}
+        }); 
         winston.info('Login (local) : { USERID: ' + user.USERID + ', USERNAME: ' + user.USERNAME + ' }');
         done(null, user);
       }
@@ -113,6 +120,11 @@ passport.use(new TwitterStrategy({
                             role: 'U'
                         }).then(function(l){   
                             UserLoginInJava(u); 
+                                db.Login.update({
+                                    online: 1
+                                }, {
+                                  where: {userId: l.userId}
+                                });
                             winston.info('New User (twitter) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
                             winston.info('New Login (twitter) : { id: ' + l.userId + ', username: ' + l.username + ' }');
                             done(null, u);
@@ -127,6 +139,11 @@ passport.use(new TwitterStrategy({
                   where: {EMAIL: email}
                 });
                 UserLoginInJava(user); 
+                db.Login.update({
+                    online: 1
+                }, {
+                    where: {userId: user.USERID}
+                }); 
                 winston.info('Login (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
                 done(null, user);
             }
@@ -182,7 +199,12 @@ passport.use(new FacebookStrategy({
                             password:socialPass,
                             role: 'U'
                         }).then(function(l){ 
-                            UserLoginInJava(u);   
+                            UserLoginInJava(u); 
+                                db.Login.update({
+                                    online: 1
+                                }, {
+                                  where: {userId: l.userId}
+                                });  
                             winston.info('New User (facebook) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
                             winston.info('New Login (facebook) : { id: ' + l.userId + ', username: ' + l.username + ' }');
                             done(null, u);
@@ -197,7 +219,12 @@ passport.use(new FacebookStrategy({
                 }, {
                   where: {EMAIL: email}
                 });
-                UserLoginInJava(user); 
+                UserLoginInJava(user);
+                    db.Login.update({
+                         online: 1
+                    }, {
+                        where: {userId: user.USERID}
+                    }); 
                 winston.info('Login (facebook) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
                 done(null, user);
             }
@@ -259,7 +286,12 @@ passport.use(new GoogleStrategy({
                                 password:socialPass,
                                 role: 'U'
                             }).then(function(l){
-                                UserLoginInJava(u);    
+                                UserLoginInJava(u);  
+                                db.Login.update({
+                                    online: 1
+                                }, {
+                                  where: {userId: l.userId}
+                                });    
                                 winston.info('New User (Google) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
                                 winston.info('New Login (Google) : { id: ' + l.userId + ', username: ' + l.username + ' }');
                                 done(null, u);
@@ -275,6 +307,11 @@ passport.use(new GoogleStrategy({
                       where: {EMAIL: email}
                     });
                     UserLoginInJava(user); 
+                    db.Login.update({
+                       online: 1
+                    }, {
+                     where: {userId: user.USERID}
+                    }); 
                     winston.info('Login (Google) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
                     done(null, user);
                 }

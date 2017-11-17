@@ -2,7 +2,7 @@
 	<div class="friends-container product_item">
 		<div class="friends-container-inner">
 			<div class="friends-block drag-to-cart" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: false,  placeholder:'keep', revert: 'invalid'}" data-friend-id="{{friends.userid}}" ng-model="arctr.userFirends">
-				<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()">
+				<div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()" class="user-image" ng-class="{'online': friends.online == 1}">
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
 				</div>
 			</div>	

@@ -22,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
 			token: DataTypes.TEXT,
 			userId: DataTypes.INTEGER(11),
 			token_expiry: 	DataTypes.DATE,	
+			online: DataTypes.INTEGER(2)
 		},
 		{
 			tableName: 'logins'
