@@ -503,7 +503,7 @@ body, html {
 
 
 .product-detail-side-bar{
-
+      position: fixed;
 }
 .product-detail-side-bar > .row{
     
@@ -1330,7 +1330,8 @@ body .friends-in-cart-container{
       float: left;
       width: 50%;
 }
-.product-body .tab-contents {
+.product-body, .user-body .tab-contents {
   float: left;
     width: 100%;
 }
+.user-body .tab-contents{background: none!important;}
