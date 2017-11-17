@@ -26,6 +26,8 @@ import 'rxjs/add/operator/map';*/
                    'Access-Control-Max-Age': '3600',
                    'Access-Control-Allow-Credentials': 'true'
                 };*/
+        // bind functions
+
 
         $scope.cartTotalPrice        = 0;/*
         $scope.UploadUrl            = UploadUrl;   */
@@ -467,11 +469,6 @@ import 'rxjs/add/operator/map';*/
             }
         }
 
-		$scope.logintow = function () {
-		    console.log("User logged in with membership no: " + $scope.membershipNo +
-		    "\n and password: ");
-		  }
-
         function update() {
             var product = vm.product;
             if (!product.updated) {
@@ -535,7 +532,7 @@ import 'rxjs/add/operator/map';*/
                       });  
                
         };
-        $scope.GetFriendCart  = function(USERID) {
+        $scope.GetFriendCart1  = function(USERID) {
                     var url = baseUrl+'api/getUserDetail';
                     var postData = {
                       USERID:USERID
@@ -568,6 +565,43 @@ import 'rxjs/add/operator/map';*/
                
         };
         
+        // getUserCartDetail
+        $scope.GetFriendCart  = function(USERID) {
+                    var url = baseUrl+'api/getUserCartDetail';
+                    var postData = {
+                      USERID:USERID
+                    };
+                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              $scope.CurrentUserBuyerDetail = newData.cartOwner;
+                              $scope.CurrentUserBuyerProductsDetail = newData.cartProducts;
+                              $scope.cartUsers = newData.cartUsers;
+                              $scope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
+                              $scope.userCartId = newData.cartId;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });
+               
+        };
+        
+        // check in cart users
+        $scope.checkInCartUsers = function(crtUsrs){
+          var UserID  =  Session.getItem('UserID');
+          var isMember = false;
+          angular.forEach(crtUsrs,function(value, key){
+            if(value['USERID'] == UserID){
+              console.log(UserID);
+              isMember = true;
+            }
+          });
+          return isMember;
+        }
+
+
        $scope.CurrentProduct = function(productId) {
             products.get({
                 productId: productId
@@ -1074,6 +1108,42 @@ import 'rxjs/add/operator/map';*/
           } 
         }
 
+        // join cart
+        $scope.joinCart = function(cartId){
+          var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'joinCart/'+key+'/'+cartId;
+                var configObj = { method: 'GET',url: url, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        $scope.isCartMember = true;
+                        console.log(dataJson);
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+
+        }
+        // leave cart
+        $scope.leaveCart = function(cartId){
+          var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'leaveCart/'+key+'/'+cartId;
+                var configObj = { method: 'GET',url: url, headers: headers};
+                $scope.isCartMember = false;
+                $http(configObj)
+                    .then(function onFulfilled(response) {/*
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        console.log(dataJson);*/
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+
+        }
         $scope.getDefaultAvatar = function(url){
           if(url == null)
             url = '/images/default-avatar.png';

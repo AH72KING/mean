@@ -37,5 +37,8 @@ app.param('productId', products.product);
 app.route('/api/getUserDetail').post(products.getUserDetail);
 app.route('/api/getUserProductDetails').post(products.getUserProductDetails);
 app.route('/api/getProductBuyingUsers').post(products.getProductBuyingUsers);
+//get user cart detail
+
+app.route('/api/getUserCartDetail').post(products.getUserCartDetail);
 
 };

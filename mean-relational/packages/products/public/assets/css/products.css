@@ -874,8 +874,8 @@ color: #fff;
 }
 .user-detail-side-bar .user-header .user-head{
   display: block;
-  width: 100%;
-  float: none;
+  /*width: 100%;*/
+  /*float: none;*/
   padding: 10px 15px 20px;
   font-size: 30px;
 }
@@ -1074,8 +1074,8 @@ font-size: 30px;
 .user-detail-side-bar .tabs-container .tab-actions div i{}
 
 .user-detail-side-bar .tabs-container .tab-contents{
-    padding: 10px;
-    margin: 10px;
+    /*padding: 10px;
+    margin: 10px;*/
     background: #b7b7b7;
 }
 .user-detail-side-bar .tabs-container .tab-contents .init-first{}
@@ -1335,3 +1335,6 @@ body .friends-in-cart-container{
     width: 100%;
 }
 .user-body .tab-contents{background: none!important;}
+.crt_usrs img{height: 70px;
+    width: 70px;
+    border-radius: 100%;}
