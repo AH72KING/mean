@@ -476,6 +476,11 @@ import 'rxjs/add/operator/map';*/
             }
         }
 
+		$scope.logintow = function () {
+		    console.log("User logged in with membership no: " + $scope.membershipNo +
+		    "\n and password: ");
+		  }
+
         function update() {
             var product = vm.product;
             if (!product.updated) {
