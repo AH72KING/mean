@@ -131,11 +131,8 @@ exports.signout = function(req, res) {
               console.log(body);
               
               console.log('Logout: { USERID: ' + user_id +'}');
-               db.Login.update({
-                  online: 0
-                }, {
-                 where: {userId: user_id}
-                });
+               db.Login.update({online:0},{where:{userId:user_id}});
+               db.User.update({online:0},{where:{USERID:user_id}});
               req.logout();
               res.redirect('/');
           });
@@ -178,12 +175,14 @@ exports.create = function(req, res) {
     //console.log(user);
 
     user.provider = 'local';
+    user.online = 1;
     user.salt = user.makeSalt();
     user.hashedPassword = user.encryptPassword(req.body.PASSWORD, user.salt);
 
     login.role = 'U';
     login.username = user.USERNAME;
     login.password = user.hashedPassword;
+    login.online = 1;
 
     user.save().then(function(user){
       console.log('New User (local) : { USERID: ' + user.USERID + ' USERNAME: ' + user.USERNAME + ' }');
