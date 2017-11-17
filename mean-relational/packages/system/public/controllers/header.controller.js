@@ -98,7 +98,7 @@ angular
         }
 
         // accept friend request
-        $scope.acceptRequest = function(userId, index){
+        $scope.acceptRequest = function(userId, index=null){
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);

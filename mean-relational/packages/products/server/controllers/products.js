@@ -701,8 +701,8 @@ exports.getUserDetail = function(req, res){
 	    grp_cartId = req.body.grp_cartId;
 	  }
 
-    var Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2, uf.action ';
-    Query += 'FROM users u LEFT JOIN user_followers uf ON uf.follow_userid = u.USERID AND uf.my_userid = '+current_user_id+' ';
+    var Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2, uf.action, uf.my_userid ';
+    Query += 'FROM users u LEFT JOIN user_followers uf ON ((uf.follow_userid = u.USERID AND uf.`my_userid` = '+current_user_id+') OR (uf.my_userid = u.USERID AND uf.`follow_userid` = '+current_user_id+')) ';
     Query += 'WHERE u.USERID = '+USERID+'  ';
 
     db.sequelize.query(Query,{raw: false}).then(grpCartDataResponse => {
@@ -738,8 +738,50 @@ exports.getUserProductDetails = function(req, res){
 
 };
 
+// get user cart details
+exports.getUserCartDetail = function(req, res){
+  var data = {};
+    if (req.user) {
+      var current_user_id = req.user.USERID;
+      var USERID     = req.body.USERID;
+      // first get Cart Id,
+      var Query = "SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = "+USERID+" AND gu.userRole = 'O' ORDER BY gu.`groupCartuserId` DESC LIMIT 1";
+      console.log('Query is '+Query);
+      db.sequelize.query(Query,{raw: false}).then(result => {
+        if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
+            var userCartId = result[0][0]['grp_cartId'];
+            data['cartId'] = userCartId;
+            // get cart owner
+            Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2, uf.action, uf.my_userid ';
+              Query += 'FROM users u LEFT JOIN user_followers uf ON ((uf.follow_userid = u.USERID AND uf.`my_userid` = '+current_user_id+') OR (uf.my_userid = u.USERID AND uf.`follow_userid` = '+current_user_id+')) ';
+              Query += 'WHERE u.USERID = '+USERID;
 
+              db.sequelize.query(Query,{raw: false}).then(cartOwner => {
+                  data['cartOwner'] = cartOwner[0][0];
+              });
 
+            //get cart users
+            Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc FROM users u '+
+            'INNER JOIN group_cart_users gu ON gu.userid = u.USERID WHERE gu.userRole = "m" AND gu.grp_cartId = '+userCartId+' AND gu.action = 1 GROUP BY u.USERID';
+
+            db.sequelize.query(Query,{raw: false}).then(cartUsers => {
+                  data['cartUsers'] = cartUsers[0];
+              });
+
+            // get cartProducts
+            Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
+            'p.short_name, p.brand_name, p.brand_logo '+
+            'FROM productbrands p INNER JOIN group_cart_products gp ON p.ProdBrandId = gp.crt_item '+
+            'WHERE gp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
+
+            db.sequelize.query(Query,{raw: false}).then(cartProducts => {
+                  data['cartProducts'] = cartProducts[0];
+                  return res.jsonp(data);
+              });
+        }
+      });
+    }
+}
 
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 

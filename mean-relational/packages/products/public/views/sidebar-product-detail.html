@@ -19,8 +19,12 @@
 		<div class="row user-row-container">
 			<div class="col col-md-12">
 				<div class="user-header clearfix">
-					<div class="user-head">
+					<div class="user-head col-md-6">
 						<strong>{{CurrentUserBuyerDetail.GIVNAME}}</strong><span>({{CurrentUserBuyerDetail.SURNAME}})</span>
+					</div>
+					<div class="col-md-6 text-right user-head">
+						<a class="btn btn-default btn-lg btn-default" ng-click="joinCart(userCartId)" ng-if="!isCartMember">Join Cart</a>
+						<a class="btn btn-default btn-lg btn-danger" ng-click="leaveCart(userCartId)" ng-if="isCartMember">Leave Cart</a>
 					</div>
 				</div>		
 				<div class="user-body">

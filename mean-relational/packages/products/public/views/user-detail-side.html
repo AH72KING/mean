@@ -8,18 +8,19 @@
 			<!-- add friend button -->
 			<div class="">
 			<a class="btn btn-primary btn-sm" ng-click="sendFriendRequest(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == null" model="add_friend">
-			<i class="fa fa-plus"></i>Add Friend</a>
+			<i class="fa fa-plus"></i> Add Friend</a>
 			<a class="btn btn-warning btn-sm" ng-show="CurrentUserBuyerDetail.action == 03" model="add_friend">
 			<i class="fa fa-exclamation"></i> {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME+' unfollowed you' }}</a>
 			<a class="btn btn-info btn-sm" ng-click="unFollow(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == 02" model="add_friend">
-			<i class="fa fa-plus"></i>UnFollow {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME }}</a>
-			<a class="btn btn-info btn-sm" ng-show="CurrentUserBuyerDetail.action == 01" model="add_friend">Friend Request Send</a>
+			<i class="fa fa-minus"></i> UnFollow {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME }}</a>
+			<a class="label label-info label-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid!=CurrentUserBuyerDetail.USERID" model="add_friend">Friend Request Send</a><a class="btn btn-info btn-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid==CurrentUserBuyerDetail.USERID"  ng-click="acceptRequest(CurrentUserBuyerDetail.USERID, null)  model="add_friend"><i class="fa fa-check"></i> Accept Request</a>
 			</div>
 		</div>
 	</div>
 	<div class="tabs-container" style="float: left;width: 100%;">
 	  	<div class="tab-actions">
 	      <div ng-click="tabContent='products'"><i class="fa fa-list" aria-hidden="true"></i></div>
+	      <div ng-click="tabContent='crt_usrs'"><i class="fa fa-users" aria-hidden="true"></i></div>
 	      <div ng-click="tabContent='comments'"><i class="fa fa-comments-o" aria-hidden="true"></i></div>
 	  	</div>
 	  	<div class="tab-contents">
@@ -46,6 +47,18 @@
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+			<!-- cart users -->
+			<div class="tabs-content" ng-show="tabContent === 'crt_usrs'">
+				 <div class="product_details col-md-12">
+				 	<div class="tab-content-head col-md-12">
+				 		<i class="fa fa-comments-o" aria-hidden="true"></i>
+				 		<h4>Cart Users</h4>
+				 	</div>
+					<div class="usr-img list crt_usrs col-md-12" ng-repeat="user in cartUsers track by $index">
+                      <div class="icon" title="{{user.GIVNAME+' '+user.SURNAME}}"><img src="{{UploadUrl+getDefaultAvatar(user.img_loc)}}" /></div>
+                    </div>
 				</div>
 			</div>
 			<!-- cart comments -->
