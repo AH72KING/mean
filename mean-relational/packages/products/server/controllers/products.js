@@ -793,6 +793,19 @@ exports.getUserCartDetail = function(req, res){
     }
 }
 
+// add comment to cart
+exports.addCommentToCart = function(req, res){
+   if (req.user) {
+    var comment = req.body.comment;
+    var Query = "INSERT INTO group_cart_chats(grp_cartId, byUser, chattime, chat_text) VALUES "+
+     "('"+comment.grp_cartId+"','"+comment.byUser+"','"+comment.chattime+"','"+comment.chat_text+"')";
+
+    db.sequelize.query(Query,{raw: false}).then(response => {
+          return res.jsonp(response);
+      });
+  }
+}
+
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 
 INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId 

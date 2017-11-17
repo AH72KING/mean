@@ -1105,15 +1105,35 @@ import 'rxjs/add/operator/map';*/
           var UserID  =  Session.getItem('UserID');
           if(typeof UserID != 'undefined' && UserID != null){
               var key   =  Session.getItem('key_'+UserID);
-              var url = ApiBaseUrl+'addCommentToCart'+'/'+key+'/'+cartId+'/'+comment;
-              var configObj = { method: 'GET',url: url, headers: headers};
+              var givename  =  Session.getItem('givename');
+              var surname  =  Session.getItem('surname');
+              var img_loc  =  Session.getItem('img_loc');
+              var newComment = {
+                'GIVNAME' : givename,
+                'SURNAME' : surname,
+                'img_loc' : img_loc,
+                'chat_text' : comment,
+                'chattime' : new Date().toLocaleString()
+              };
+              $scope.cartComments.push(newComment);
+              var postData = {
+                'comment' :{
+                'grp_cartId' : cartId,
+                'byUser'  : UserID,
+                'chattime' : '2017-11-17 15:36:55',
+                'chat_text': comment
+              }
+              } ;
+              // insert into
+              var url = baseUrl+'api/addCommentToCart';
+              var configObj = { method: 'POST',url: url, data: postData, headers: headers};
               $http(configObj)
-                  .then(function onFulfilled(response) {
-                      var dataJson = JSON.parse(JSON.stringify(response.data));
-                      console.log(dataJson);
-                  }).catch( function onRejection(errorResponse) {
-                      console.log('Error: ', errorResponse.status);
-              }); 
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
           } 
         }
 

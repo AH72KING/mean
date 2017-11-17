@@ -43,10 +43,16 @@
                           if(dataJson !== undefined){
                             var key = dataJson.key;
                             var UserID = dataJson.usr.userid;
+                            var img_loc = dataJson.usr.img_loc;
+                            var givname = dataJson.usr.givname;
+                            var surname = dataJson.usr.surname;
                             //console.log(key);
                               if(key !== undefined){
                                  Session.setItem('key_'+UserID, key);
                                  Session.setItem('UserID', UserID);
+                                 Session.setItem('img_loc', img_loc);
+                                 Session.setItem('givname', givname);
+                                 Session.setItem('surname', surname);
                                     var url2 = baseUrl+'api/SaveUserKey';
                                     var postData2  =  {
                                       key:key,

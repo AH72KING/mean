@@ -40,5 +40,6 @@ app.route('/api/getProductBuyingUsers').post(products.getProductBuyingUsers);
 //get user cart detail
 
 app.route('/api/getUserCartDetail').post(products.getUserCartDetail);
+app.route('/api/addCommentToCart').post(products.addCommentToCart);
 
 };
