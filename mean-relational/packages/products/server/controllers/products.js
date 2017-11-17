@@ -768,6 +768,14 @@ exports.getUserCartDetail = function(req, res){
                   data['cartUsers'] = cartUsers[0];
               });
 
+            // get cart comments 
+            Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.img_loc, c.chat_text, c.chattime FROM group_cart_chats c '+
+            'INNER JOIN users u ON u.USERID = c.byUser WHERE c.grp_cartId = '+userCartId+
+            ' AND c.action = 1 ORDER BY c.chattime ASC';
+
+            db.sequelize.query(Query,{raw: false}).then(cartComments => {
+                  data['cartComments'] = cartComments[0];
+              });
             // get cartProducts
             Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
             'p.short_name, p.brand_name, p.brand_logo '+
@@ -778,6 +786,8 @@ exports.getUserCartDetail = function(req, res){
                   data['cartProducts'] = cartProducts[0];
                   return res.jsonp(data);
               });
+
+
         }
       });
     }

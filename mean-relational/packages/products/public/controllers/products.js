@@ -581,6 +581,7 @@ import 'rxjs/add/operator/map';*/
                               $scope.cartUsers = newData.cartUsers;
                               $scope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
                               $scope.userCartId = newData.cartId;
+                              $scope.cartComments = newData.cartComments;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -1099,17 +1100,17 @@ import 'rxjs/add/operator/map';*/
 
         // add comment to cart
         $scope.data = {};
-        $scope.addCommentToCart = function(){
+        $scope.addCommentToCart = function(cartId){
           var comment = $scope.data.comment;
+          var UserID  =  Session.getItem('UserID');
           if(typeof UserID != 'undefined' && UserID != null){
               var key   =  Session.getItem('key_'+UserID);
-              var url = ApiBaseUrl+'unfollowUser';
-              var postData = {key:key, query_userId:userid};
-              var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+              var url = ApiBaseUrl+'addCommentToCart'+'/'+key+'/'+cartId+'/'+comment;
+              var configObj = { method: 'GET',url: url, headers: headers};
               $http(configObj)
                   .then(function onFulfilled(response) {
                       var dataJson = JSON.parse(JSON.stringify(response.data));
-                      $scope.CurrentUserBuyerDetail.action = '03';
+                      console.log(dataJson);
                   }).catch( function onRejection(errorResponse) {
                       console.log('Error: ', errorResponse.status);
               }); 
