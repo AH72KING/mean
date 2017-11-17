@@ -1,8 +1,10 @@
 <div class="user-detail-container">
 	<div class="user_image" style="height:auto">
-		<div class="user-taga" ng-click="ProductDetail()"  style="position: relative;">
+		<div class="user-taga" style="position: relative;">
 			<!-- <img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt=""> -->
-			<img src="{{UploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
+			<div class="user-image"  ng-class="{'online': CurrentUserBuyerDetail.online == 1}">
+				<img src="{{UploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
+			</div>
 			<!-- add friend button -->
 			<div class="">
 			<a class="btn btn-primary btn-sm" ng-click="sendFriendRequest(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == null" model="add_friend">

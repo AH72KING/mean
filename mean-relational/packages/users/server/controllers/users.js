@@ -131,6 +131,11 @@ exports.signout = function(req, res) {
               console.log(body);
               
               console.log('Logout: { USERID: ' + user_id +'}');
+               db.Login.update({
+                  online: 0
+                }, {
+                 where: {userId: user_id}
+                });
               req.logout();
               res.redirect('/');
           });
