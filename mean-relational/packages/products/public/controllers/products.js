@@ -823,6 +823,8 @@ import 'rxjs/add/operator/map';*/
           console.log($scope.friendsCart);
           
           $scope.addUserToCartAjax(grp_cartId, userId);
+          var usrIndex = user.attr('data-index');
+          vm.userFirends[usrIndex]['followId'] = userId;
         }
 
         // remove prod from cart
@@ -1023,12 +1025,9 @@ import 'rxjs/add/operator/map';*/
                           console.log(dataJson);
                           if(dataJson !== undefined ){
                                 angular.forEach(dataJson,function(value){
-                                  if(value['USERID'] != UserID){if(value['USERID'])
-                                     value['userid']  = value['USERID'];
                                      // check if avatar val null , then get default avatar
                                     value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
                                     vm.userFirends.push(value);
-                                  }
                                   
                               });
                                 Session.setItem('myfriends',vm.userFirends);
