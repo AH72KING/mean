@@ -295,7 +295,7 @@ exports.SaveUserKey = function(req, res){
       if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
           userCartId = result[0][0]['grp_cartId'];
       }
-      Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
+      Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.online, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
       ' LEFT JOIN group_cart_users gu ON gu.userid = u.`USERID`'+
       ' AND gu.grp_cartId = '+userCartId+' AND gu.action = 2 WHERE u.USERID != '+USERID; 
       
