@@ -13,6 +13,7 @@ angular
         $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
+        $scope.userImg = Session.getItem('img_loc');
         vm.menu = [{
             'title': 'products',
             'link': 'products'
