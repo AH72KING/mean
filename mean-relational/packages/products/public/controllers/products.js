@@ -771,8 +771,7 @@ import 'rxjs/add/operator/map';*/
               var img = draggableElement.find('.product_image').find('img').attr('src');
               $scope.addorCreateCart(prodId, img);
             }
-            else if(typeof friendId != 'undefined' && friendId != null){
-              console.log(friendId);
+            else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
               $scope.addUserToCart(draggableElement);
             }
 
@@ -824,11 +823,12 @@ import 'rxjs/add/operator/map';*/
             })
             console.log($scope.friendsCart);
             $scope.addUserToCartAjax(grp_cartId, userId);
+              var usrIndex = user.attr('data-index');
+              vm.userFirends[usrIndex]['followId'] = userId;
           }else{
             console.log('User '+userId+' Already in cart');
           }
-          
-        }
+        };
 
         // remove prod from cart
         $scope.removeProdFromCart = function(prod){
@@ -847,7 +847,7 @@ import 'rxjs/add/operator/map';*/
             if(ProdBrandId !== undefined && grp_cartId !== undefined){
               $scope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
-        }
+        };
 
         // remove user from cart 
         $scope.removeUserFromCart = function(user){
@@ -861,7 +861,7 @@ import 'rxjs/add/operator/map';*/
              console.log('User id : '+userId);
               $scope.removeUserFromCartAjax(grp_cartId,userId);
             }
-        }
+        };
 
         
 
@@ -977,7 +977,7 @@ import 'rxjs/add/operator/map';*/
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
-        }
+        };
 
         $scope.removeUserFromCartAjax= function(cartId,userId){
           var url = baseUrl+'api/removeUserFromCart';
@@ -988,7 +988,7 @@ import 'rxjs/add/operator/map';*/
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
-        }
+        };
 
         $scope.nl_removefromCart  = function (cartID, productID) {
             var url = baseUrl+'api/nl_removefromCart';
@@ -1185,14 +1185,6 @@ import 'rxjs/add/operator/map';*/
             url = '/images/default-avatar.png';
           return url;
        };
-       function userExistsInCart(userID) {
-            for (var i = 0, len = $scope.friendsCart.length; i < len; i++) {
-                if ($scope.friendsCart[i].userid === userID)
-                    return true;
-            }
-
-            return false;
-        }
 
       }
 

@@ -1338,3 +1338,13 @@ body .friends-in-cart-container{
 .crt_usrs img{height: 60px;
     width: 60px;
     border-radius: 100%;}
+.crt-usr-icon{
+    position: absolute;
+    color: white;
+    background-color: #c70000;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    top: 0px;
+    text-align: center;
+}

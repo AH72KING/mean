@@ -281,10 +281,27 @@ exports.SaveUserKey = function(req, res){
 
  // get all users
  exports.AllUsers = function(req, res){
-    console.log('Testing..');
-
+    if (req.user) {
+         var USERID = req.user.USERID;
       //db.product.findAll().then(function(product){
-    db.User.findAll().then(function(users){
+   /* db.User.findAll().then(function(users){
           return res.jsonp(users);
-   });
+   });*/
+    // get current user cart id
+   
+    var Query = "SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = "+USERID+" AND gu.userRole = 'O' ORDER BY gu.`groupCartuserId` DESC LIMIT 1";
+   var userCartId = 0;
+   db.sequelize.query(Query,{raw: false}).then(result => {
+      if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
+          userCartId = result[0][0]['grp_cartId'];
+      }
+      Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
+      ' LEFT JOIN group_cart_users gu ON gu.userid = u.`USERID`'+
+      ' AND gu.grp_cartId = '+userCartId+' AND gu.action = 2 WHERE u.USERID != '+USERID; 
+      
+      db.sequelize.query(Query,{raw: false}).then(users => {
+          return res.jsonp(users[0]);
+      });
+    });
+  }
  };
