@@ -1185,6 +1185,14 @@ import 'rxjs/add/operator/map';*/
             url = '/images/default-avatar.png';
           return url;
        };
+       function userExistsInCart(userID) {
+            for (var i = 0, len = $scope.friendsCart.length; i < len; i++) {
+                if ($scope.friendsCart[i].userid === userID)
+                    return true;
+            }
+
+            return false;
+        }
 
       }
 
