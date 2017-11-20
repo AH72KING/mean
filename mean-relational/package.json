@@ -3,10 +3,10 @@
   "description": "M*EAN - A Modern Stack: MySQL, ExpressJS, AngularJS, NodeJS. (BONUS: Passport User Support).",
   "version": "0.0.1",
   "private": true,
-  "author": "Julio Seña",
+  "author": "Ahsan Khan",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jcsena/mean-relational.git"
+    "url": "https://github.com/Creativetech-Solutions/mean-stack-app.git"
   },
   "engines": {
     "node": "4.1.1",

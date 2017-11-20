@@ -771,7 +771,8 @@ import 'rxjs/add/operator/map';*/
               var img = draggableElement.find('.product_image').find('img').attr('src');
               $scope.addorCreateCart(prodId, img);
             }
-            else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
+            else if(typeof friendId != 'undefined' && friendId != null){
+              console.log(friendId);
               $scope.addUserToCart(draggableElement);
             }
 
@@ -815,14 +816,18 @@ import 'rxjs/add/operator/map';*/
           console.log('Online: '+Online);
           //if(list.indexOf(createItem.artNr) !== -1) {
           console.log($scope.friendsCart);
-          $scope.friendsCart.push({
-            'userid':userId,
-            'img_loc':img,
-            'online':Online
-          })
-          console.log($scope.friendsCart);
+          if (!userExistsInCart(userId)) {
+            $scope.friendsCart.push({
+              'userid':userId,
+              'img_loc':img,
+              'online':Online
+            })
+            console.log($scope.friendsCart);
+            $scope.addUserToCartAjax(grp_cartId, userId);
+          }else{
+            console.log('User '+userId+' Already in cart');
+          }
           
-          $scope.addUserToCartAjax(grp_cartId, userId);
         }
 
         // remove prod from cart
@@ -1180,6 +1185,14 @@ import 'rxjs/add/operator/map';*/
             url = '/images/default-avatar.png';
           return url;
        };
+       function userExistsInCart(userID) {
+            for (var i = 0, len = $scope.friendsCart.length; i < len; i++) {
+                if ($scope.friendsCart[i].userid === userID)
+                    return true;
+            }
+
+            return false;
+        }
 
       }
 

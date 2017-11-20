@@ -98,7 +98,7 @@ angular
         }
 
         // accept friend request
-        $scope.acceptRequest = function(userId, index=null){
+        $rootScope.acceptRequest = function(userId, index=null){
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);
@@ -108,11 +108,14 @@ angular
                 .then(function onFulfilled(response) {
                     var dataJson    = JSON.parse(JSON.stringify(response.data));
                     $scope.requests.slice(index, 1);
+                    if(index === null){
+                       CurrentUserBuyerDetail.action = '02';
+                    }
                     console.log('Response is : '+JSON.stringify(response.data));
                 }).catch( function onRejection(errorResponse) {
                 }); 
           }
-        }
+        };
 
     }
 })();

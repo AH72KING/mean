@@ -13,7 +13,7 @@
 			<i class="fa fa-exclamation"></i> {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME+' unfollowed you' }}</a>
 			<a class="btn btn-info btn-sm" ng-click="unFollow(CurrentUserBuyerDetail.USERID)" ng-show="CurrentUserBuyerDetail.action == 02" model="add_friend">
 			<i class="fa fa-minus"></i> UnFollow {{ CurrentUserBuyerDetail.GIVNAME+' '+CurrentUserBuyerDetail.SURNAME }}</a>
-			<a class="label label-info label-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid!=CurrentUserBuyerDetail.USERID" model="add_friend">Friend Request Send</a><a class="btn btn-info btn-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid==CurrentUserBuyerDetail.USERID"  ng-click="acceptRequest(CurrentUserBuyerDetail.USERID, null)  model="add_friend"><i class="fa fa-check"></i> Accept Request</a>
+			<a class="label label-info label-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid!=CurrentUserBuyerDetail.USERID" model="add_friend">Friend Request Send</a><a class="btn btn-info btn-sm" ng-show="CurrentUserBuyerDetail.action == 01 && CurrentUserBuyerDetail.my_userid==CurrentUserBuyerDetail.USERID"  ng-click="$root.acceptRequest(CurrentUserBuyerDetail.USERID, null)"  model="add_friend"><i class="fa fa-check"></i> Accept Request</a>
 			</div>
 		</div>
 	</div>
