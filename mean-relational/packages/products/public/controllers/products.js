@@ -1114,6 +1114,8 @@ import 'rxjs/add/operator/map';*/
                 'chat_text' : comment,
                 'chattime' : new Date().toLocaleString()
               };
+              if(typeof $scope.cartComments == 'undefined')
+                $scope.cartComments = {};
               $scope.cartComments.push(newComment);
               var postData = {
                 'comment' :{
