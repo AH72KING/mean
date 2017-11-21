@@ -760,7 +760,7 @@ exports.getUserCartDetail = function(req, res){
                   data['cartOwner'] = cartOwner[0][0];
                 //get cart users
                 Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc FROM users u '+
-                'INNER JOIN group_cart_users gu ON gu.userid = u.USERID WHERE gu.userRole = "m" AND gu.grp_cartId = '+userCartId+' AND gu.action = 1 GROUP BY u.USERID';
+                'INNER JOIN group_cart_users gu ON gu.userid = u.USERID WHERE gu.userRole = "m" AND gu.grp_cartId = '+userCartId+' AND gu.action = 2 GROUP BY u.USERID';
 
                 db.sequelize.query(Query,{raw: false}).then(cartUsers => {
                       data['cartUsers'] = cartUsers[0];
@@ -773,10 +773,10 @@ exports.getUserCartDetail = function(req, res){
                           data['cartComments'] = cartComments[0];
                         // get cartProducts
                         Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
-                        'p.short_name, p.brand_name, p.brand_logo '+
+                        'p.short_name, p.brand_name, p.brand_logo, gp.groupCartProductId '+
                         'FROM productbrands p INNER JOIN group_cart_products gp ON p.ProdBrandId = gp.crt_item '+
-                        'WHERE gp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
-
+                        'INNER JOIN grpcart_products gcp ON gp.groupCartProductId = gcp.groupCartProductId '+
+                        'WHERE gcp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
                         db.sequelize.query(Query,{raw: false}).then(cartProducts => {
                               data['cartProducts'] = cartProducts[0];
                               return res.jsonp(data);

@@ -93,7 +93,6 @@ angular
             $http(configObj)
                 .then(function onFulfilled(response) {
                     var dataJson    = JSON.parse(JSON.stringify(response.data));
-                    console.log(JSON.stringify(response.data));
                     $scope.requests = dataJson;
                 }).catch( function onRejection(errorResponse) {
                 }); 
@@ -130,16 +129,15 @@ angular
                     if(index === null){
                        CurrentUserBuyerDetail.action = '02';
                     }
-                    console.log('Response is : '+JSON.stringify(response.data));
                 }).catch( function onRejection(errorResponse) {
                 }); 
           }
         };
 
-         var socket = io.connect('http://localhost:3000');
+       /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);
             socket.emit('news', { my: 'just testing socket' });
-          });
+          });*/
     }
 })();
