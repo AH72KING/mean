@@ -1,0 +1,12 @@
+<section class="all-user-list" ng-init="usctr.find()">
+	<ul class="users-list unstyled">
+		<li ng-repeat="user in usctr.users">
+			<div title="{{user.GIVNAME+' '+user.SURNAME}}" class="user-image" ng-class="{'online': user.online == 1}">
+				<a data-ng-href="/users/{{user.USERID}}">
+					<img src="{{UploadUrl}}{{user.img_loc}}" alt=""/>
+				</a>
+			</div>
+		</li>
+	</ul>
+	<h1 data-ng-hide="!usctr.users || usctr.users.length">No users yet. <br> Why don't you <a href="/users/create">Create One</a>?</h1>
+</section>
