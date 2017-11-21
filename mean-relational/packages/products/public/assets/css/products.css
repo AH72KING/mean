@@ -1348,3 +1348,16 @@ body .friends-in-cart-container{
     top: 0px;
     text-align: center;
 }
+.crt-usr-img:hover:before{
+    content: "\f00d";
+    font-family: FontAwesome;
+    position: absolute;
+    height: 60px;
+    background-color: rgba(0, 0, 0, .6);
+    width: 60px;
+    border-radius: 100%;
+    text-align: center;
+    color: white;
+    padding: 16px;
+    cursor:pointer;
+}

@@ -849,6 +849,14 @@ import 'rxjs/add/operator/map';*/
             }
         };
 
+        // remove prod button click
+        $scope.removeProdBtn = function(prodId, index){
+          if(prodId !== undefined && grp_cartId !== undefined){
+              $scope.nl_removefromCart(grp_cartId,prodId);
+              $scope.CurrentUserBuyerProductsDetail.splice(index, 1);
+            }
+        }
+
         // remove user from cart 
         $scope.removeUserFromCart = function(user){
              var userId   = user.attr('data-friend-id');
@@ -863,32 +871,12 @@ import 'rxjs/add/operator/map';*/
             }
         };
 
-        
+        // remove user icon in side cart window
+        $scope.removeCartUsr = function(usrId, index){
+          $scope.removeUserFromCartAjax(grp_cartId,usrId);
+          $scope.cartUsers.splice(index, 1);
+        }
 
-        $scope.friendDropInCart  = function (event , ui) {
-            var CurrentFriend = ui.draggable;
-            var friendId = CurrentFriend.attr('data-friend-id');
-            console.log('friendId = '+friendId);
-        };
-        $scope.friendDropOutFromCart  = function (event , ui) {
-        var CurrentFriend = ui.draggable;
-            var friendId = CurrentFriend.attr('data-friend-id');
-            console.log('friendId = '+friendId);
-            var FriendIndex  = CurrentFriend.attr('data-index');
-            var CurrentArrayType  = CurrentFriend.attr('data-type');
-            if(CurrentArrayType !== undefined && CurrentArrayType === 'grpcart_friends'){
-              vm.products.friendsInCart.splice(FriendIndex, 1);
-            }
-            if(CurrentArrayType !== undefined && CurrentArrayType === 'friendsCart'){
-              $scope.friendsCart.splice(FriendIndex, 1);
-            }
-
-             ui.draggable.remove();
-            if(friendId !== undefined && grp_cartId !== undefined){
-              console.log('please call user remove from cart function here');
-             // $scope.nl_removefromCart(grp_cartId,ProdBrandId);
-            }
-        };
         $scope.createCart  = function (ProdBrandId) {
            var url = baseUrl+'api/createCart';
            //var url = ApiBaseUrl+'createCart/PK/';
@@ -1014,10 +1002,6 @@ import 'rxjs/add/operator/map';*/
         };
         $scope.myfriends  = function () {
           	var UserID 	=  Session.getItem('UserID');
-           /* if(typeof UserID != 'undefined' && UserID != null){
-                var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'myfriends/'+key;
-            } else */
               var url = baseUrl+'api/getAllUsers';
                 //postData = {key:key};
               var  configObj = { method: 'GET',url: url, headers: headers};
