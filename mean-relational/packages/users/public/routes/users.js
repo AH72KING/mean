@@ -26,13 +26,13 @@
           controllerAs: 'usctr'
         })
         .state('edit user', {
-            url: '/users/:userId/edit',
+            url: '/users/:USERID/edit',
             templateUrl: 'users/views/edit.html',
             controller: 'usersController',
             controllerAs: 'usctr'
         })
         .state('view user', {
-            url:'/users/:userId',
+            url:'/users/:USERID',
             templateUrl: 'users/views/view.html',
             controller: 'usersController',
             controllerAs: 'usctr'

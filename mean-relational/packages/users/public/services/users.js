@@ -10,8 +10,8 @@
 
       function users($resource){
 
-        return $resource('api/users/:userId', {
-            userId: '@id'
+        return $resource('api/users/:USERID', {
+            USERID: '@USERID'
         }, {
             update:{method: 'PUT'}
         });

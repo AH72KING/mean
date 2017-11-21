@@ -1,17 +1,47 @@
-<section  ng-init="usctr.findOne()">
-<div class="users-view">
-	<form  ng-submit="usctr.update()">
-	  <div class="form-group">
-	    <label for="title">Title</label>
-	    <input type="text"  class="form-control" id="title" placeholder="title" ng-model="usctr.user.title">
-	  </div>
-	  <div class="form-group">
-	    <label for="content">Content</label>
-	    <textarea name="content" placeholder="content" id="description" ng-model="usctr.user.content" class="form-control" rows="10"></textarea>
-	  </div>
-	  <button type="submit" class="btn btn-default">Submit</button>
-	</form>
-</div>
-
-
+<section class="user-edit-section"  ng-init="usctr.findOne()">
+	<div class="container users-view">
+		<form ng-submit="usctr.update()">
+		  <div class="form-group">
+		    <label for="GIVNAME">GIVNAME</label>
+		    <input type="text"  class="form-control" id="GIVNAME" placeholder="GIVNAME" ng-model="usctr.user.GIVNAME">
+		  </div>
+		  <div class="form-group">
+		    <label for="SURNAME">SURNAME</label>
+		     <input type="text"  class="form-control" id="SURNAME" placeholder="SURNAME" ng-model="usctr.user.SURNAME">
+		  </div>
+		  <div class="form-group">
+		    <label for="USERNAME">USERNAME</label>
+		     <input type="text"  class="form-control" id="USERNAME" placeholder="USERNAME" ng-model="usctr.user.USERNAME">
+		  </div>
+		  <div class="form-group">
+		    <label for="GENDER">GENDER</label>
+		    <select id="GENDER" name="GENDER" ng-model="usctr.user.GENDER">
+		    	<option value="male">MALE</option>
+		    	<option value="female">FEMALE</option>
+		    </select>
+		  </div>
+		  <div class="form-group">
+		    <label for="EMAIL">EMAIL</label>
+		     <input type="text"  class="form-control" id="EMAIL" placeholder="EMAIL" ng-model="usctr.user.EMAIL">
+		  </div>
+		  <div class="form-group">
+		    <label for="COUNTRY">COUNTRY</label>
+		     <input type="text"  class="form-control" id="COUNTRY" placeholder="COUNTRY" ng-model="usctr.user.COUNTRY">
+		  </div>
+		  <div class="form-group">
+		    <label for="About">About</label>
+		    <textarea name="About" placeholder="About" id="About" ng-model="usctr.user.About" class="form-control" rows="10"></textarea>
+		  </div>
+		  <div class="form-group">
+		  	<label for="img_loc">Profile Image</label>
+		  	<div title="{{usctr.user.GIVNAME+' '+usctr.user.SURNAME}}" class="user-image" ng-class="{'online': usctr.user.online == 1}">
+		        <a data-ng-href="/users/{{usctr.user.USERID}}">
+		            <img src="{{UploadUrl}}{{usctr.user.img_loc}}" alt=""/>
+		        </a>
+		    </div>
+		    <input type="file" name="img_loc" placeholder="img_loc" id="img_loc" ng-model="usctr.user.img_loc" class="form-control" />
+		  </div>
+		  <button type="submit" class="btn btn-default submit">Submit</button>
+		</form>
+	</div>
 </section>

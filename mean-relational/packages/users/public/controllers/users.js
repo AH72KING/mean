@@ -67,7 +67,7 @@
             user.updated.push(new Date().getTime());
 
             user.$update(function() {
-                $location.path('users/' + user.id);
+                $location.path('users/' + user.USERID);
             });
         }
 
@@ -79,7 +79,7 @@
 
         function findOne() {
             users.get({
-                userId: $stateParams.userId
+                USERID: $stateParams.USERID
               }, function(user) {
                 vm.user = user;
             });

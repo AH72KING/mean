@@ -159,7 +159,6 @@ exports.signout = function(req, res) {
  */
 exports.session = function(req, res) {
     console.log('user server controller session');
-
     res.redirect('/');
 };
 
@@ -214,7 +213,6 @@ exports.create = function(req, res) {
  */
 exports.me = function(req, res) {
     console.log('user server controller me');
-
     res.jsonp(req.user || null);
 };
 
@@ -313,7 +311,9 @@ exports.SaveUserKey = function(req, res){
 exports.show = function(req, res) {
     // Sending down the user that was just preloaded by the users.user function
     // and saves user on the req object.
-    return res.jsonp(req.user);
+    //console.log(req.profile);
+    //req.profile prev return was req.user
+    return res.jsonp(req.profile);
 };
 
 /**
@@ -325,8 +325,13 @@ exports.update = function(req, res) {
     var user = req.user;
 
     user.updateAttributes({
-        title: req.body.title,
-        content: req.body.content
+        GIVNAME:  req.body.GIVNAME,
+        SURNAME:  req.body.SURNAME,
+        USERNAME: req.body.USERNAME,
+        GENDER:   req.body.GENDER,
+        EMAIL:    req.body.EMAIL,
+        COUNTRY:  req.body.COUNTRY,
+        About:    req.body.About
     }).then(function(a){
         return res.jsonp(a);
     }).catch(function(err){

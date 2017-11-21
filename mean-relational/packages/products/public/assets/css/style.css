@@ -1,5 +1,6 @@
 .container {
     background-image: none!important;
+    margin-top: 30px;
 }
 
 .page-parent {
@@ -4418,3 +4419,36 @@ div.m-app-loading p {
 .all-user-list ul.users-list li div img{
     width: 100%;
 }
+
+.single-user-section{
+    display:block;
+    padding: 20px;
+    margin: 0 auto;
+}
+.single-user-section .single-user-update{}
+.single-user-section .single-user-name{}
+.single-user-section .single-user-actions{}
+.single-user-section .single-user-actions .edit-btn{}
+.single-user-section .single-user-actions .delete-btn{}
+.single-user-section .users-detail{
+    max-width: 500px;
+}
+.single-user-section .users-detail .detail-block{
+        padding: 10px 0px;
+}
+.single-user-section .users-detail .detail-block label{
+        display: inline-block;
+    vertical-align: top;
+    min-width: 120px;
+}
+.single-user-section .users-detail .detail-block p{
+    display: inline-block;
+    vertical-align: top;
+}
+.user-edit-section{}
+.user-edit-section .users-view{}
+.user-edit-section form{}
+.user-edit-section form .form-group{}
+.user-edit-section form .form-group label{}
+.user-edit-section form .form-group input{}
+.user-edit-section form .form-group select{}

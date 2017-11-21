@@ -19,8 +19,10 @@ app.get('/api/users/me', users.me);
 app.route('/api/users')
     .get(users.all)//.post(users.requiresLogin, users.create);
 
-app.route('/api/users/:userId')
-    .get(users.show);
+app.route('/api/users/:USERID')
+    .get(users.show)
+    .put(users.update)
+    .delete(users.destroy);
 
 // Setting up the users api
 app.post('/api/register', users.create);
@@ -80,6 +82,6 @@ app.get('/api/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/signin'
 }), users.authCallback);
 
-// Finish with setting up the userId param
-app.param('userId', users.user);
+// Finish with setting up the USERID param
+app.param('USERID', users.user);
 };
