@@ -24,7 +24,7 @@ angular
                       logout();
                     }
                 }).catch( function onRejection(errorResponse) {
-                }); 
+                });
           }
         }
         $scope.validateKey();
