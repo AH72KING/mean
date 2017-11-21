@@ -1110,8 +1110,8 @@ import 'rxjs/add/operator/map';*/
           var UserID  =  Session.getItem('UserID');
           if(typeof UserID != 'undefined' && UserID != null){
               var key   =  Session.getItem('key_'+UserID);
-              var givename  =  Session.getItem('givename');
-              var surname  =  Session.getItem('surname');
+              var givename  =  Session.getItem('GIVNAME');
+              var surname  =  Session.getItem('SURNAME');
               var img_loc  =  Session.getItem('img_loc');
               var newComment = {
                 'GIVNAME' : givename,

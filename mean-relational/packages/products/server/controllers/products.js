@@ -758,6 +758,7 @@ exports.getUserCartDetail = function(req, res){
 
               db.sequelize.query(Query,{raw: false}).then(cartOwner => {
                   data['cartOwner'] = cartOwner[0][0];
+            
               });
 
             //get cart users
@@ -784,7 +785,6 @@ exports.getUserCartDetail = function(req, res){
 
             db.sequelize.query(Query,{raw: false}).then(cartProducts => {
                   data['cartProducts'] = cartProducts[0];
-                  return res.jsonp(data);
               });
 
 
@@ -803,6 +803,33 @@ exports.addCommentToCart = function(req, res){
     db.sequelize.query(Query,{raw: false}).then(response => {
           return res.jsonp(response);
       });
+  }
+}
+
+// validate current user key
+exports.validateKey = function(req, res){
+  if (req.user) {
+    var key = req.body.key;
+    var body = '';
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: ApiBasePath+'checkKey/'+key,
+        method: 'GET',
+        headers: headers
+    };
+    req = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+             body += chunk;
+        });
+        res2.on('end', function() { 
+          var data = JSON.parse(body);  
+          return res.jsonp(data);
+        });
+    });
+
+
+    req.end();
   }
 }
 

@@ -9,7 +9,8 @@ angular
     function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope){
         /*$scope.UploadUrl = 'http://localhost:3000/products/assets/';*/
         $rootScope.UploadUrl            = UploadUrl;   
-
+        //check key if expire, then logout user
+        $scope.validateKey();
         $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
@@ -118,5 +119,23 @@ angular
           }
         };
 
+
+        // validate key
+        $scope.validateKey= function(){
+          var currentUId  =  Session.getItem('UserID');
+          if(typeof currentUId != 'undefined' && currentUId != null){
+            var key   =  Session.getItem('key_'+currentUId);
+            var url = baseUrl+'api/validateKey';
+            var postData = {'key':key};
+            var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    if(response.data != true){
+                      logout();
+                    }
+                }).catch( function onRejection(errorResponse) {
+                }); 
+          }
+        }
     }
 })();
