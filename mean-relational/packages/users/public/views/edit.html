@@ -1,0 +1,17 @@
+<section  ng-init="usctr.findOne()">
+<div class="users-view">
+	<form  ng-submit="usctr.update()">
+	  <div class="form-group">
+	    <label for="title">Title</label>
+	    <input type="text"  class="form-control" id="title" placeholder="title" ng-model="usctr.user.title">
+	  </div>
+	  <div class="form-group">
+	    <label for="content">Content</label>
+	    <textarea name="content" placeholder="content" id="description" ng-model="usctr.user.content" class="form-control" rows="10"></textarea>
+	  </div>
+	  <button type="submit" class="btn btn-default">Submit</button>
+	</form>
+</div>
+
+
+</section>
