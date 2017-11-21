@@ -4396,3 +4396,25 @@ div.m-app-loading p {
 .log-usr-img img {    height: 30px;
     width: 30px;
     border-radius: 100px;}
+
+
+
+.all-user-list{
+
+}
+.all-user-list ul.users-list{
+    margin: 0 auto;
+    padding: 20px;
+    list-style-type: none;
+}
+.all-user-list ul.users-list li{
+        display: inline-block;
+    /* float: left; */
+    max-width: 150px;
+}
+.all-user-list ul.users-list li div{
+    
+}
+.all-user-list ul.users-list li div img{
+    width: 100%;
+}

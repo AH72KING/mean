@@ -16,6 +16,11 @@ app.get('/signin', users.signin);
 app.get('/signup', users.signup);
 app.get('/signout', users.signout);
 app.get('/api/users/me', users.me);
+app.route('/api/users')
+    .get(users.all)//.post(users.requiresLogin, users.create);
+
+app.route('/api/users/:userId')
+    .get(users.show);
 
 // Setting up the users api
 app.post('/api/register', users.create);

@@ -305,3 +305,68 @@ exports.SaveUserKey = function(req, res){
     });
   }
  };
+
+
+ /**
+ * Show an user
+ */
+exports.show = function(req, res) {
+    // Sending down the user that was just preloaded by the users.user function
+    // and saves user on the req object.
+    return res.jsonp(req.user);
+};
+
+/**
+ * Update a user
+ */
+exports.update = function(req, res) {
+
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+
+    user.updateAttributes({
+        title: req.body.title,
+        content: req.body.content
+    }).then(function(a){
+        return res.jsonp(a);
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
+
+
+/**
+ * Delete an user
+ */
+exports.destroy = function(req, res) {
+
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+
+    user.destroy().then(function(){
+        return res.jsonp(user);
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
+
+
+/**
+ * List of users
+ */
+exports.all = function(req, res) {
+    db.User.findAll().then(function(users){
+        return res.jsonp(users);
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
