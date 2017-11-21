@@ -11,7 +11,7 @@ angular
         $rootScope.UploadUrl            = UploadUrl;   
         //check key if expire, then logout user
         // validate key
-        $scope.validateKey = function(){
+        $scope.validateKey= function(){
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);
@@ -24,9 +24,9 @@ angular
                       logout();
                     }
                 }).catch( function onRejection(errorResponse) {
-                }); 
+                });
           }
-        };
+        }
         $scope.validateKey();
         $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
         var vm = this;
@@ -136,5 +136,10 @@ angular
           }
         };
 
+         var socket = io.connect('http://localhost:3000');
+          socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('news', { my: 'just testing socket' });
+          });
     }
 })();

@@ -753,39 +753,38 @@ exports.getUserCartDetail = function(req, res){
             data['cartId'] = userCartId;
             // get cart owner
             Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc, u.img_loc1, u.img_loc2, uf.action, uf.my_userid ';
-              Query += 'FROM users u LEFT JOIN user_followers uf ON ((uf.follow_userid = u.USERID AND uf.`my_userid` = '+current_user_id+') OR (uf.my_userid = u.USERID AND uf.`follow_userid` = '+current_user_id+')) ';
-              Query += 'WHERE u.USERID = '+USERID;
+            Query += 'FROM users u LEFT JOIN user_followers uf ON ((uf.follow_userid = u.USERID AND uf.`my_userid` = '+current_user_id+') OR (uf.my_userid = u.USERID AND uf.`follow_userid` = '+current_user_id+')) ';
+            Query += 'WHERE u.USERID = '+USERID;
 
               db.sequelize.query(Query,{raw: false}).then(cartOwner => {
                   data['cartOwner'] = cartOwner[0][0];
-            
-              });
+                //get cart users
+                Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc FROM users u '+
+                'INNER JOIN group_cart_users gu ON gu.userid = u.USERID WHERE gu.userRole = "m" AND gu.grp_cartId = '+userCartId+' AND gu.action = 1 GROUP BY u.USERID';
 
-            //get cart users
-            Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.user_img, u.img_loc FROM users u '+
-            'INNER JOIN group_cart_users gu ON gu.userid = u.USERID WHERE gu.userRole = "m" AND gu.grp_cartId = '+userCartId+' AND gu.action = 1 GROUP BY u.USERID';
+                db.sequelize.query(Query,{raw: false}).then(cartUsers => {
+                      data['cartUsers'] = cartUsers[0];
+                    // get cart comments 
+                    Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.img_loc, c.chat_text, c.chattime FROM group_cart_chats c '+
+                    'INNER JOIN users u ON u.USERID = c.byUser WHERE c.grp_cartId = '+userCartId+
+                    ' AND c.action = 1 ORDER BY c.chattime ASC';
 
-            db.sequelize.query(Query,{raw: false}).then(cartUsers => {
-                  data['cartUsers'] = cartUsers[0];
-              });
+                    db.sequelize.query(Query,{raw: false}).then(cartComments => {
+                          data['cartComments'] = cartComments[0];
+                        // get cartProducts
+                        Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
+                        'p.short_name, p.brand_name, p.brand_logo '+
+                        'FROM productbrands p INNER JOIN group_cart_products gp ON p.ProdBrandId = gp.crt_item '+
+                        'WHERE gp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
 
-            // get cart comments 
-            Query = 'SELECT u.USERID, u.GIVNAME, u.SURNAME, u.img_loc, c.chat_text, c.chattime FROM group_cart_chats c '+
-            'INNER JOIN users u ON u.USERID = c.byUser WHERE c.grp_cartId = '+userCartId+
-            ' AND c.action = 1 ORDER BY c.chattime ASC';
+                        db.sequelize.query(Query,{raw: false}).then(cartProducts => {
+                              data['cartProducts'] = cartProducts[0];
+                              return res.jsonp(data);
+                          }); // cartproducts
+                      }); // cartcomments
+                  }); // cartusers
+              }); //cartowners
 
-            db.sequelize.query(Query,{raw: false}).then(cartComments => {
-                  data['cartComments'] = cartComments[0];
-              });
-            // get cartProducts
-            Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
-            'p.short_name, p.brand_name, p.brand_logo '+
-            'FROM productbrands p INNER JOIN group_cart_products gp ON p.ProdBrandId = gp.crt_item '+
-            'WHERE gp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
-
-            db.sequelize.query(Query,{raw: false}).then(cartProducts => {
-                  data['cartProducts'] = cartProducts[0];
-              });
 
 
         }
