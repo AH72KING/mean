@@ -779,6 +779,7 @@ import 'rxjs/add/operator/map';*/
         // drop out from cart
         $scope.dropOutFromCart = function(event, ui){
            var draggableElement = ui.draggable;
+           console.log(draggableElement);
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');
             if(typeof prodId != 'undefined' && prodId != null)
@@ -1164,6 +1165,36 @@ import 'rxjs/add/operator/map';*/
             } 
 
         }
+        // on product drag start
+        $scope.onProdDragStart = function(event, ui){
+          var dragElement = ui.helper;
+          dragElement.css({'min-height':'50px','width':'70px','height': '70px'});
+          dragElement.find('img').css({'height':'50px','width':'50px'});
+        }
+
+        // drop prod on user
+        $scope.dropOnUser = function(event, ui){
+          var dragElement = ui.draggable;
+          var usrId = this.friends.userid;
+          var prodId = dragElement.attr('data-product-id');
+          $scope.suggestProdToUsr(usrId, prodId);
+        }
+
+        // suggest prod to usr
+        $scope.suggestProdToUsr = function(usrId, prodId){
+          var postData = {'usrId':usrId, 'prodId':prodId};
+          var url = baseUrl+'api/suggestProd';
+          var configObj = { method: 'GET',url: url, data:postData, headers: headers};
+          $scope.isCartMember = false;
+          $http(configObj)
+              .then(function onFulfilled(response) {/*
+                  var dataJson = JSON.parse(JSON.stringify(response.data));
+                  console.log(dataJson);*/
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+
         $scope.getDefaultAvatar = function(url){
           if(url == null)
             url = '/images/default-avatar.png';
