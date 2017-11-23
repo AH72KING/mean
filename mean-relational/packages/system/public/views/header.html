@@ -101,7 +101,7 @@
                             <span class="log-usr-img"> <img src="{{ UploadUrl+getDefaultAvatar(hdctr.global.user.img_loc) }}"/>   {{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}</span> <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" ng-click="hdctr.userDetail()">Profile</a></li>
+                            <li><a data-ng-href="/users/{{hdctr.global.user.USERID}}">Profile</a></li>
                             <li><a href="#" ng-click="hdctr.logout()">Log Out</a></li>
                         </ul>
                     </li>

@@ -70,6 +70,7 @@
                 $location.path('users/' + user.USERID);
             });
         }
+        
 
         function find() {
             users.query(function(users) {

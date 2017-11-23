@@ -4376,7 +4376,7 @@ div.m-app-loading p {
     position: relative;
 }
 .user-image.online img{
-    
+    width: 100%;
 }
 
 .user-image.online::before{

@@ -323,7 +323,7 @@ exports.update = function(req, res) {
 
     // create a new variable to hold the user that was placed on the req object.
     var user = req.user;
-
+    console.log(req.body);
     user.updateAttributes({
         GIVNAME:  req.body.GIVNAME,
         SURNAME:  req.body.SURNAME,
