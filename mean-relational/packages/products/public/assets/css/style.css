@@ -4394,7 +4394,7 @@ div.m-app-loading p {
 .user-image.online::after{
     content: "";
 }
-.log-usr-img img {    height: 30px;
+.small-avatar img {    height: 30px;
     width: 30px;
     border-radius: 100px;}
 

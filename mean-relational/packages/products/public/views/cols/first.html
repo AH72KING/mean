@@ -1,5 +1,5 @@
 <ul class="products vertical-ticker unstyled product_list list firstCol Col">
-	<li class="product_item drag-to-cart" ng-repeat="product in arctr.products['col1']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col1']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
+	<li class="product_item drag-to-cart" ng-repeat="product in arctr.products['col1']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col1']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep', onStart:'onProdDragStart()'}" data-product-id="{{product.ProdBrandId}}">
 		<!--ng-click="showProductDetail($event)"-->
 		<div ng-include="'products/views/product-detail.html'"></div>
 	</li>

@@ -32,7 +32,7 @@
 				 		<h4>Product Details</h4>
 				 	</div>
 					<div class="list buyer-products" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail track by $index">
-						<div class="product-detail">
+						<div class="product-detail" ng-class="{true:'suggested-prod'}[buyerProduct.action == 3]">
 							<div class="product-name">
 								Name: {{buyerProduct.name}}
 							</div>
@@ -41,7 +41,15 @@
 								Price: {{buyerProduct.cost_price}}
 							</div>
 
-							<span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
+							<span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID && buyerProduct.action != 3" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
+							<div ng-if="buyerProduct.action == 3"  class="" style="position: absolute;left:0;bottom:0;width: 100%">
+								<span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ UploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
+								</span>
+								<span style="position: absolute;right:0;bottom:0;cursor: pointer">
+								<i class="fa fa-check btn btn-success" title="Accept"></i>
+								<i class="fa fa-times btn btn-danger" title="Reject"></i>
+								</span>
+							</div>
 						</div>
 						<div class="product-images">
 							<div class="product-image">
