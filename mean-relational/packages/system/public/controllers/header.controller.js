@@ -35,9 +35,12 @@ angular
         vm.menu = [{
             'title': 'products',
             'link': 'products'
-        }, {
+        }, /*{
             'title': 'Create New product',
             'link': 'create-product'
+        },*/ {
+            'title': 'users',
+            'link': 'users'
         }];
 
         vm.isCollapsed = false;

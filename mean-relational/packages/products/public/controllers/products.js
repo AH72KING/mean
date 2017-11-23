@@ -1184,12 +1184,10 @@ import 'rxjs/add/operator/map';*/
         $scope.suggestProdToUsr = function(usrId, prodId){
           var postData = {'usrId':usrId, 'prodId':prodId};
           var url = baseUrl+'api/suggestProd';
-          var configObj = { method: 'GET',url: url, data:postData, headers: headers};
-          $scope.isCartMember = false;
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          // $scope.isCartMember = false;
           $http(configObj)
-              .then(function onFulfilled(response) {/*
-                  var dataJson = JSON.parse(JSON.stringify(response.data));
-                  console.log(dataJson);*/
+              .then(function onFulfilled(response) {
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 

@@ -21,7 +21,7 @@
         vm.update = update;
         vm.find = find;
         vm.findOne = findOne;
-
+        $scope.imgloc = '';
         $scope.$watch('lastUserID', function() {
             //alert('hey, lastUserID has changed!');
         });
@@ -61,17 +61,21 @@
 
         function update() {
             var user = vm.user;
+            user.img_loc1 = $scope.imgloc;
+            console.log(user);
             if (!user.updated) {
                 user.updated = [];
             }
+            console.log(user);
             user.updated.push(new Date().getTime());
-
+            user.img_loc1 = $scope.imgloc;
             user.$update(function() {
                 $location.path('users/' + user.USERID);
             });
         }
-        
-
+        $scope.uploadFile = function(element) {
+            $scope.imgloc = element;
+        }
         function find() {
             users.query(function(users) {
                  vm.users = users;

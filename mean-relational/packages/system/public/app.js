@@ -1,5 +1,5 @@
 'use strict';
-var mean = angular.module('mean', [
+var angularModuel = angular.module('mean', [
   /* angular modules */
   'ngCookies',
   'ngResource',
@@ -20,7 +20,29 @@ var mean = angular.module('mean', [
   'mean.system',
   'mean.products',
   'mean.users'
-]).directive('sidenavPushIn',sidenavPushIn);
+]);
+var mean = angularModuel.directive('sidenavPushIn',sidenavPushIn);
+
+
+
+angularModuel.directive('validFile',[function() {
+  return {
+    require : 'ngModel',
+    scope : {format: '@', upload : '&upload'},
+    link : function(scope, el, attrs, ngModel) {
+      // change event is fired when file is selected
+      el.bind('change', function(event) {
+        console.log(event.target.files[0]);
+        scope.upload({file:event.target.files[0]});
+        scope.$apply(function() {
+          ngModel.$setViewValue(el.val());
+          ngModel.$render();
+        });
+      })
+    }
+  }
+}]);
+
 
 //mean.directive('mAppLoading',mAppLoading);
 //mean.directive('myFrame',myFrame);

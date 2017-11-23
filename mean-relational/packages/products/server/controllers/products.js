@@ -773,9 +773,10 @@ exports.getUserCartDetail = function(req, res){
                           data['cartComments'] = cartComments[0];
                         // get cartProducts
                         Query = 'SELECT p.ProdBrandId, p.name, p.cost_price, p.currency, p.specs, p.location, p.img_loc, p.img1, '+
-                        'p.short_name, p.brand_name, p.brand_logo, gp.groupCartProductId '+
+                        'p.short_name, p.brand_name, p.brand_logo, gp.groupCartProductId, gp.action, gp.crt_addedby_user, u.GIVNAME, u.SURNAME, u.img_loc as imgloc '+
                         'FROM productbrands p INNER JOIN group_cart_products gp ON p.ProdBrandId = gp.crt_item '+
                         'INNER JOIN grpcart_products gcp ON gp.groupCartProductId = gcp.groupCartProductId '+
+                        'LEFT JOIN users u ON gp.crt_addedby_user = u.USERID AND gp.action = 3 '+
                         'WHERE gcp.grp_cartId = '+userCartId+' GROUP BY p.ProdBrandId';
                         db.sequelize.query(Query,{raw: false}).then(cartProducts => {
                               data['cartProducts'] = cartProducts[0];
@@ -831,6 +832,58 @@ exports.validateKey = function(req, res){
     req.end();
   }
 }
+
+// suggest prod to user 
+exports.suggestProd = function(req, res){
+  if(req.user){
+    var usrId = req.body.usrId;
+    var productID = req.body.prodId;
+    var Query = 'SELECT gcp.grp_cartId FROM group_cart_products gcp '+
+    'WHERE gcp.crt_addedby_user = '+usrId+' AND gcp.action = 1 ORDER BY gcp.groupCartProductId DESC';
+      db.sequelize.query(Query,{raw: false}).then(cartId => {
+        console.log('Test is ');
+          if(typeof cartId[0][0] != 'undefined'){
+            if(typeof cartId[0][0]['grp_cartId'] != 'undefined'){
+              var cartID = cartId[0][0]['grp_cartId'];
+              var current_user_id = req.user.USERID;
+              var key = localStorage.getItem('key_'+current_user_id); 
+              var url = ApiBasePath+'addToCart_thin/'+key+'/'+productID+'/'+cartID+'/';
+                //addToCart_guest_thin
+                var body = '';
+                var data = [];
+                var options = {
+                    hostname: ip,
+                    port: '8080',
+                    path: url,
+                    method: 'GET',
+                    headers: headers
+                };
+
+                req = http.request(options,function(res2){
+
+                    res2.on('data', function(chunk) {
+                         body += chunk;
+                    });
+
+                    res2.on('end', function() { 
+                        console.log(body);
+                       // data = JSON.stringify(body);
+                        data = JSON.parse(body);  
+                        return res.jsonp(data);
+                    });
+                });
+
+                req.on('error', function(e){
+                    console.log('problem with request:'+ e.message);
+                });
+
+                req.end();
+            }
+          }
+        }); // cartproducts
+  }
+}
+
 
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 
