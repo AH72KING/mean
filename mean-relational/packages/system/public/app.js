@@ -50,9 +50,8 @@ mean.config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-
-//window.ip = '192.168.1.88';
-window.ip = '192.168.100.88';  
+//window.ip = '192.168.100.88';
+window.ip = '192.168.1.88';
 var baseUrl = 'http://localhost:3000/';
 var ApiBaseUrl = 'http://'+window.ip+':8080/Anerve/anerveWs/AnerveService/';
 var UploadUrl = baseUrl+'products/assets/';

@@ -1168,7 +1168,13 @@ import 'rxjs/add/operator/map';*/
         // on product drag start
         $scope.onProdDragStart = function(event, ui){
           var dragElement = ui.helper;
-          dragElement.css({'min-height':'50px','width':'70px','height': '70px'});
+          console.log(event);
+          var x = event.pageX;
+          var y = event.pageY; 
+          console.log(x+','+y);
+          dragElement.css("top",(x-35)+'px');
+          dragElement.css("left",(y-35)+'px');
+          dragElement.css({'min-height':'50px','width':'70px','height': '60px'});
           dragElement.find('img').css({'height':'50px','width':'50px'});
         }
 

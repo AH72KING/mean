@@ -23,8 +23,8 @@ const bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-//var ip = '192.168.1.88';
-var ip = '192.168.100.88';
+//var ip = '192.168.100.88';
+var ip = '192.168.1.88';
 var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
 var headers = {
     'Access-Control-Allow-Origin': '*',
