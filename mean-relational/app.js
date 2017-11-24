@@ -114,7 +114,7 @@ function createApp(){
 }
 var io = require('socket.io').listen(app);
 
-// socket.io
+// socket.io  //localhost:35729
 var socket = io.listen(app);
 
 socket.on('connection', function(client){

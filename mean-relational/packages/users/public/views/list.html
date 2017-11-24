@@ -1,8 +1,17 @@
 <section class="all-user-list" ng-init="usctr.find()">
+	<div class="user-dropdown">
+		<select ng-change="getUsers(users_type)" ng-model="users_type" class="form-control">
+			<option value="A" selected="selected">All Users</option>
+			<option value="F">My Friends</option>
+			<option value="M">My Mates</option>
+			<option value="P">My Pals</option>
+		</select>
+	</div>
 	<div class="container">
 		<ul class="users-list unstyled">
 			<li ng-repeat="user in usctr.users">
-				<div title="{{user.GIVNAME+' '+user.SURNAME}}" class="user-image" ng-class="{'online': user.online == 1}">
+			<!-- ng-class="{'online': user.online == 1}" -->
+				<div title="{{user.GIVNAME+' '+user.SURNAME}}" class="user-image" >
 					<a data-ng-href="/users/{{user.USERID}}">
 						<img src="{{UploadUrl}}{{user.img_loc}}" alt=""/>
 					</a>

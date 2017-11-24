@@ -332,8 +332,18 @@ exports.update = function(req, res) {
         COUNTRY:  req.body.COUNTRY,
         About:    req.body.About,
     };
-    if(typeof req.file != 'undefined')
+    if(typeof req.file != 'undefined'){
       newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+      // delete previous image
+      var fs = require('fs');
+      fs.unlink('packages/products/public/assets/'+req.body.img_loc, function(err){
+          if(err) {
+            console.log('unlink error');
+            console.log(err);
+          } else
+          console.log('file deleted successfully');
+     });  
+    }
 
     user.updateAttributes(newuser).then(function(a){
         // return res.jsonp(a);

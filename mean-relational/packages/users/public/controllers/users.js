@@ -90,6 +90,86 @@
             });
         }
 
+       // get all users
+        $scope.getUsers = function(usertype){
+            console.log(usertype);
+            switch(usertype){
+                case 'A': 
+                    find(); break;
+                case 'F':
+                    getFriends(); break;
+                case 'M':
+                    getMates(); break;
+                case 'P':
+                    getPals(); break;
+                
+            }
+        }
+
+        // get user friends
+        function getFriends(){
+            var UserID  =  Session.getItem('UserID');
+            var key =  Session.getItem('key_'+UserID);
+            var url = ApiBaseUrl+'myfriends/'+key;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                        angular.forEach(response.data,function(value, key){
+                            response.data[key]['GIVNAME'] = value['givname'];
+                            response.data[key]['SURNAME'] = value['surname'];
+                        });
+                    }
+                    console.log(vm.users);
+                    vm.users = response.data;
+                    console.log(vm.users);
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse.status);
+            }); 
+        }
+        // get user mates
+        function getMates(){
+            var UserID  =  Session.getItem('UserID');
+            var key =  Session.getItem('key_'+UserID);
+            var url = ApiBaseUrl+'myMates/'+key;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                        angular.forEach(response.data,function(value, key){
+                            response.data[key]['GIVNAME'] = value['givname'];
+                            response.data[key]['SURNAME'] = value['surname'];
+                        });
+                    }
+                    console.log(vm.users);
+                    vm.users = response.data;
+                    console.log(vm.users);
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse.status);
+            }); 
+        }
+
+        // get user pals
+        function getPals(){
+            var UserID  =  Session.getItem('UserID');
+            var key =  Session.getItem('key_'+UserID);
+            var url = ApiBaseUrl+'myPals/'+key;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                        angular.forEach(response.data,function(value, key){
+                            response.data[key]['GIVNAME'] = value['givname'];
+                            response.data[key]['SURNAME'] = value['surname'];
+                        });
+                    }
+                    console.log(vm.users);
+                    vm.users = response.data;
+                    console.log(vm.users);
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse.status);
+            }); 
+        }
       }
 
 })();
