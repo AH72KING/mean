@@ -486,7 +486,7 @@ ul.product_list {
     /* background: #fff; */
     /* border: 1px solid #ccc; */
     padding: 10px;
-    position: relative;
+    position: r;
     border-radius: 3px;
     list-style-type: none;
     max-height: 250px;
@@ -4356,6 +4356,8 @@ div.m-app-loading p {
 }
 
 .product_item {
+    /* top: initial!important; */
+    /* bottom: 0px!important; */
     min-height: 249px;
     border: 1px solid #dedede;
     box-shadow: 1px 2px 5px 1px #dedede;
@@ -4377,6 +4379,7 @@ div.m-app-loading p {
 }
 .user-image.online img{
     
+width: 100%;
 }
 
 .user-image.online::before{
