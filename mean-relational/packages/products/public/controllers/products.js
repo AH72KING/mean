@@ -1168,8 +1168,20 @@ import 'rxjs/add/operator/map';*/
         // on product drag start
         $scope.onProdDragStart = function(event, ui){
           var dragElement = ui.helper;
-          dragElement.css({'min-height':'50px','width':'70px','height': '70px'});
+          var relX = (event.pageX-35)+'px';
+          var relY = (event.pageY-35)+'px';
+          console.log(event);
+          dragElement.css({'min-height':'50px','width':'70px','height': '70px','position':'absolute'});
           dragElement.find('img').css({'height':'50px','width':'50px'});
+        }
+
+        // on prod drag
+        $scope.onProdDrag = function(event, ui){
+          var dragElement = ui.helper;
+          var relX = (event.pageX)+'px';
+          var relY = (event.pageY)+'px';
+          console.log(relY+','+relX);
+          dragElement.css({'top':'0!important', 'left':'0!important'});
         }
 
         // drop prod on user
@@ -1192,6 +1204,20 @@ import 'rxjs/add/operator/map';*/
                   console.log('Error: ', errorResponse.status);
           }); 
         }
+
+        // accept product
+        $scope.acceptProdInCart = function(prodId){
+          var postData = {'cartId':grp_cartId, 'prodId':prodId};
+          var url = baseUrl+'api/acceptProdInCart';
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          // $scope.isCartMember = false;
+          $http(configObj)
+              .then(function onFulfilled(response) {
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+
 
         $scope.getDefaultAvatar = function(url){
           if(url == null)

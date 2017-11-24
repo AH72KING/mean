@@ -323,18 +323,21 @@ exports.update = function(req, res) {
 
     // create a new variable to hold the user that was placed on the req object.
     var user = req.user;
-    console.log('New image');
-    console.log(req.body); return false;
-    user.updateAttributes({
+    var newuser = {
         GIVNAME:  req.body.GIVNAME,
         SURNAME:  req.body.SURNAME,
         USERNAME: req.body.USERNAME,
         GENDER:   req.body.GENDER,
         EMAIL:    req.body.EMAIL,
         COUNTRY:  req.body.COUNTRY,
-        About:    req.body.About
-    }).then(function(a){
-        return res.jsonp(a);
+        About:    req.body.About,
+    };
+    if(typeof req.file != 'undefined')
+      newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+
+    user.updateAttributes(newuser).then(function(a){
+        // return res.jsonp(a);
+        res.redirect('/users/'+req.body.USERID+'/edit');
     }).catch(function(err){
         return res.render('error', {
             error: err,
@@ -376,3 +379,10 @@ exports.all = function(req, res) {
         });
     });
 };
+
+exports.updateuser = function(req, res){
+  // req.file is the `avatar` file
+  console.log(req.file);
+  console.log('post data');
+  console.log(req.body);
+}

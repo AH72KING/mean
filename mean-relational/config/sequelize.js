@@ -7,8 +7,8 @@ var _         = require('lodash');
 var config    = require('./config');
 var winston   = require('./winston');
 var db        = {};
-var ip = '192.168.100.88';
-//var ip = '192.168.1.88';
+//var ip = '192.168.100.88';
+var ip = '192.168.1.88';
 
 
 var models = module.exports = {

@@ -12,6 +12,7 @@ var express     = require('express');
 
 const app = express();
 app.use(express.static("public"));
+//split upload endpoint out
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -111,18 +112,13 @@ function createApp(){
 
   });
 }
-/*var http = require('http');
-var io = require('socket.io');
-
-server = http.createServer(function(req, res){
-});
-server.listen(3000);
+var io = require('socket.io').listen(app);
 
 // socket.io
-var socket = io.listen(server);
+var socket = io.listen(app);
 
 socket.on('connection', function(client){
   client.on('news', function(msg){
       socket.broadcast(msg);
   })
-});*/
+});

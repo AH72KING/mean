@@ -25,7 +25,7 @@ var mean = angularModuel.directive('sidenavPushIn',sidenavPushIn);
 
 
 
-angularModuel.directive('validFile',[function() {
+/*angularModuel.directive('validFile',[function() {
   return {
     require : 'ngModel',
     scope : {format: '@', upload : '&upload'},
@@ -41,7 +41,7 @@ angularModuel.directive('validFile',[function() {
       })
     }
   }
-}]);
+}]);*/
 
 
 //mean.directive('mAppLoading',mAppLoading);
@@ -51,8 +51,8 @@ mean.config(['$qProvider', function ($qProvider) {
 }]);
 
 
-//window.ip = '192.168.1.88';
-window.ip = '192.168.100.88';  
+window.ip = '192.168.1.88';
+//window.ip = '192.168.100.88';  
 var baseUrl = 'http://localhost:3000/';
 var ApiBaseUrl = 'http://'+window.ip+':8080/Anerve/anerveWs/AnerveService/';
 var UploadUrl = baseUrl+'products/assets/';

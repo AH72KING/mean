@@ -11,6 +11,18 @@ module.exports = function(app) {
 // User Routes
 var users = require('../controllers/users');
 
+var multer  = require('multer');
+var avatarStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'packages/products/public/assets/anerve/usr_images/')   
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)      
+    }
+})
+var avatarhanlder = multer({ storage: avatarStorage }).single('imgloc');
+
+app.post('/api/updateuser', avatarhanlder, users.update);
 // User Routes
 app.get('/signin', users.signin);
 app.get('/signup', users.signup);

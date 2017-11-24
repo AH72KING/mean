@@ -884,6 +884,54 @@ exports.suggestProd = function(req, res){
   }
 }
 
+// accept product suggested by users
+exports.acceptProdInCart = function(req, res){
+  if(req.user){
+    var prodId = req.body.prodId;
+    var cartId = req.body.cartId;
+    var current_user_id = req.user.USERID;
+    var key = localStorage.getItem('key_'+current_user_id); 
+    var url = ApiBasePath+'acceptToCartProd_thin/'+key+'/'+prodId+'/'+cartId+'/';
+    console.log('url is : '+url);
+      //addToCart_guest_thin
+      var body = '';
+      var data = [];
+      var options = {
+          hostname: ip,
+          port: '8080',
+          path: url,
+          method: 'GET',
+          headers: headers
+      };
+
+      req = http.request(options,function(res2){
+
+          res2.on('data', function(chunk) {
+               body += chunk;
+          });
+
+          res2.on('end', function() { 
+              console.log(body);
+             // data = JSON.stringify(body);
+              data = JSON.parse(body);  
+              return res.jsonp(data);
+          });
+      });
+
+      req.on('error', function(e){
+          console.log('problem with request:'+ e.message);
+      });
+
+      req.end();
+  }
+}
+
+exports.updateuser = function(req, res){
+  console.log('req : '+req.file);
+  console.log('req files : '+req.files);
+  console.log('req file : '+req.body.file);
+  console.log('req body: '+req.body.files);
+}
 
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 

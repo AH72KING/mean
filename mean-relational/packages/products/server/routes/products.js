@@ -43,5 +43,6 @@ app.route('/api/getUserCartDetail').post(products.getUserCartDetail);
 app.route('/api/addCommentToCart').post(products.addCommentToCart);
 app.route('/api/validateKey').post(products.validateKey);
 app.route('/api/suggestProd').post(products.suggestProd);
+app.route('/api/acceptProdInCart').post(products.acceptProdInCart);
 
 };
