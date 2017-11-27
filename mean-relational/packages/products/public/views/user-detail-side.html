@@ -46,7 +46,7 @@
 								<span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ UploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
 								</span>
 								<span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID" style="position: absolute;right:0;bottom:0;cursor: pointer">
-								<i class="fa fa-check btn btn-success" ng-click="acceptProdInCart(buyerProduct.ProdBrandId)" title="Accept"></i>
+								<i class="fa fa-check btn btn-success" ng-click="acceptProdInCart(buyerProduct.groupCartProductId)" title="Accept"></i>
 								<i class="fa fa-times btn btn-danger" title="Reject"></i>
 								</span>
 							</div>

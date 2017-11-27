@@ -110,7 +110,7 @@
         }
 
        // get all users
-        $scope.getUsers = function(usertype){
+        $scope.getUsers = function(usertype){$.notify("Hello World")
             var type = usertype.value;
             switch(type){
                 case 'A': 
