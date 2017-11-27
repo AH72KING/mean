@@ -36,3 +36,19 @@
   right:12px;
   width:200px;
 }
+.users-list .user-detail{
+  position: absolute;
+  background-color: rgba(0, 0, 0, .6);
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  display: none;font-size: 14px;padding:5px;
+}
+.users-list .detail {color:white;}
+.users-list .usr-btns{
+  position: absolute;
+  left: 0;
+  bottom: 0;width: 100%;
+}
+.users-list li:hover .user-detail{ display: block }

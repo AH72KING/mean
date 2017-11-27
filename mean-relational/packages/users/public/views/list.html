@@ -1,23 +1,32 @@
 <section class="all-user-list" ng-init="usctr.find()">
 	<div class="user-dropdown">
-		<select ng-change="getUsers(users_type)" ng-model="users_type" class="form-control">
-			<option value="A" selected="selected">All Users</option>
-			<option value="F">My Friends</option>
-			<option value="M">My Mates</option>
-			<option value="P">My Pals</option>
-		</select>
+		<select ng-change="getUsers(users_type)" ng-init="users_type = userTypes[0]" ng-model="users_type" class="form-control"
+        ng-options="type.text for type in userTypes">
+</select>
 	</div>
 	<div class="container">
 		<ul class="users-list unstyled">
 			<li ng-repeat="user in usctr.users">
 			<!-- ng-class="{'online': user.online == 1}" -->
-				<div title="{{user.GIVNAME+' '+user.SURNAME}}" class="user-image" >
-					<a data-ng-href="/users/{{user.USERID}}">
+				<div ng-class="{'online': user.online == 1}" title="{{user.givname+' '+user.surname}}" class="user-image" >
+					<a class="users-img" data-ng-href="/users/{{user.userId}}">
 						<img src="{{UploadUrl}}{{user.img_loc}}" alt=""/>
+						<div class="user-detail">
+							<div class="detail">
+								<span>{{user.givname+' '+user.surname}} </span><br>
+								<span>Gender : {{user.gender}}</span><br>
+								<span>Country : {{user.country}}</span>
+							</div>
+							<div class="usr-btns">
+								<a ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-danger">Follow</a>
+								<a ng-click="unFollow(user.userId)" ng-if="user.is_my_friend == 'Y'" class="btn-xs btn btn-danger">UnFollow</a>
+								<a ng-click="showFriendCart(user.userId); UserDetail()" class="pull-right" title="View Cart"><i style="color:white" class="fa fa-shopping-cart btn"></i></a>
+							</div>
+						</div>
 					</a>
 				</div>
 			</li>
 		</ul>
-		<h1 data-ng-hide="!usctr.users || usctr.users.length">No users yet. <br> Why don't you <a href="/users/create">Create One</a>?</h1>
+		<h1 data-ng-hide="!usctr.users || usctr.users.length">No {{users_type.text}} yet. <br> Why don't you <a href="/users/create">Create One</a>?</h1>
 	</div>
 </section>

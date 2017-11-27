@@ -388,8 +388,6 @@ import 'rxjs/add/operator/map';*/
               }
         };
         $scope.showFriendCart = function(USERID){
-          		console.log(USERID);
-          		console.log('showFriendCart');
               if(angular.isNumber(USERID) ){
                 console.log(' cart belong to user id '+ USERID);
                 $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);

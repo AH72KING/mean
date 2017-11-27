@@ -4413,8 +4413,10 @@ width: 100%;
 }
 .all-user-list ul.users-list li{
         display: inline-block;
-    /* float: left; */
-    max-width: 150px;
+        position: relative;
+        float: left;
+    width: 180px;
+    height: 180px;
 }
 .all-user-list ul.users-list li div{
     

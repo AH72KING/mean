@@ -137,6 +137,23 @@ angular
           }
         };
 
+        // unfollow user
+        $scope.unFollow = function(userid){
+            var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'unfollowUser';
+                var postData = {key:key, query_userId:userid};
+                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        $scope.CurrentUserBuyerDetail.action = '03';
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+        }
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);

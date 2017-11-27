@@ -14,7 +14,7 @@
         $scope.timeInMs = 0;
         vm.global = Global;
         vm.lastUserID = 1;
-
+        //vm.usertypes = ['A','F','M','P'];
         //declare and use methods
         vm.create = create;
         vm.remove = remove;
@@ -22,6 +22,12 @@
         vm.find = find;
         vm.findOne = findOne;
         $scope.imgloc = '';
+        $scope.userTypes = [
+            {'value':'A','text':'All Users'},
+            {'value':'F','text':'Friends'},
+            {'value':'M','text':'Mates'},
+            {'value':'P','text':'Pals'}
+        ];
         $scope.$watch('lastUserID', function() {
             //alert('hey, lastUserID has changed!');
         });
@@ -62,11 +68,9 @@
         function update() {
             var user = vm.user;
             user.img_loc1 = $scope.imgloc;
-            console.log(user);
             if (!user.updated) {
                 user.updated = [];
             }
-            console.log(user);
             user.updated.push(new Date().getTime());
             user.img_loc1 = $scope.imgloc;
             user.$update(function() {
@@ -77,9 +81,24 @@
             $scope.imgloc = element;
         }
         function find() {
-            users.query(function(users) {
-                 vm.users = users;
-            });
+            var UserID  =  Session.getItem('UserID');
+            var key =  Session.getItem('key_'+UserID);
+            var url = ApiBaseUrl+'allSiteUsers/'+key;
+            var configObj = { method: 'GET',url: url, headers: headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                        angular.forEach(response.data,function(value, key){
+                            if(typeof value['userid'] != 'undefined')
+                                response.data[key]['userId'] = value['userid'];
+                            if(typeof value['imgloc'] != 'undefined')
+                                response.data[key]['img_loc'] = value['imgloc'];
+                        });
+                    }
+                    vm.users = response.data;
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse.status);
+            }); 
          }
 
         function findOne() {
@@ -92,8 +111,8 @@
 
        // get all users
         $scope.getUsers = function(usertype){
-            console.log(usertype);
-            switch(usertype){
+            var type = usertype.value;
+            switch(type){
                 case 'A': 
                     find(); break;
                 case 'F':
@@ -105,7 +124,12 @@
                 
             }
         }
-
+        // get user friends
+        function getAllUsers(){
+            users.query(function(users) {
+                 vm.users = users;
+            });
+        }
         // get user friends
         function getFriends(){
             var UserID  =  Session.getItem('UserID');
@@ -148,7 +172,6 @@
                     console.log('Error: ', errorResponse.status);
             }); 
         }
-
         // get user pals
         function getPals(){
             var UserID  =  Session.getItem('UserID');
