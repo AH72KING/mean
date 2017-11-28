@@ -110,7 +110,7 @@
         }
 
        // get all users
-        $scope.getUsers = function(usertype){$.notify("Hello World")
+        $scope.getUsers = function(usertype){
             var type = usertype.value;
             switch(type){
                 case 'A': 
@@ -143,10 +143,10 @@
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];
                         });
+                        vm.users = response.data;
+                    } else {
+                        $.notify("No Friends Found", "error");
                     }
-                    console.log(vm.users);
-                    vm.users = response.data;
-                    console.log(vm.users);
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
             }); 
@@ -164,10 +164,10 @@
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];
                         });
+                        vm.users = response.data;
+                    } else {
+                        $.notify("No Mates Found", "error");
                     }
-                    console.log(vm.users);
-                    vm.users = response.data;
-                    console.log(vm.users);
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
             }); 
@@ -185,10 +185,10 @@
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];
                         });
+                        vm.users = response.data;
+                    } else {
+                        $.notify("No Pals Found", "error");
                     }
-                    console.log(vm.users);
-                    vm.users = response.data;
-                    console.log(vm.users);
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
             }); 
