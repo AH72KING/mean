@@ -85,17 +85,24 @@
             var key =  Session.getItem('key_'+UserID);
             var url = ApiBaseUrl+'allSiteUsers/'+key;
             var configObj = { method: 'GET',url: url, headers: headers};
+            var tempArray = [];
             $http(configObj)
                 .then(function onFulfilled(response) {
+                    closeNoti();
                     if(typeof response.data != 'undefined' && response.data.length > 1){
                         angular.forEach(response.data,function(value, key){
                             if(typeof value['userid'] != 'undefined')
                                 response.data[key]['userId'] = value['userid'];
                             if(typeof value['imgloc'] != 'undefined')
                                 response.data[key]['img_loc'] = value['imgloc'];
+                            if(value['userId'] != UserID)
+                                tempArray.push(response.data[key]);
                         });
+                        vm.users = tempArray;
+                        tempArray = [];
+                    } else {
+                        notify('No Users Found');
                     }
-                    vm.users = response.data;
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
             }); 
@@ -111,6 +118,7 @@
 
        // get all users
         $scope.getUsers = function(usertype){
+            notify('Processing Request. Please Wait','info');
             var type = usertype.value;
             switch(type){
                 case 'A': 
@@ -138,6 +146,7 @@
             var configObj = { method: 'GET',url: url, headers: headers};
             $http(configObj)
                 .then(function onFulfilled(response) {
+                    closeNoti();
                     if(typeof response.data != 'undefined' && response.data.length > 1){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
@@ -145,7 +154,7 @@
                         });
                         vm.users = response.data;
                     } else {
-                        $.notify("No Friends Found", "error");
+                        notify("No Friends Found");
                     }
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
@@ -159,6 +168,7 @@
             var configObj = { method: 'GET',url: url, headers: headers};
             $http(configObj)
                 .then(function onFulfilled(response) {
+                    closeNoti();
                     if(typeof response.data != 'undefined' && response.data.length > 1){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
@@ -166,7 +176,7 @@
                         });
                         vm.users = response.data;
                     } else {
-                        $.notify("No Mates Found", "error");
+                        notify("No Mates Found");
                     }
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
@@ -180,6 +190,7 @@
             var configObj = { method: 'GET',url: url, headers: headers};
             $http(configObj)
                 .then(function onFulfilled(response) {
+                    closeNoti();
                     if(typeof response.data != 'undefined' && response.data.length > 1){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
@@ -187,7 +198,7 @@
                         });
                         vm.users = response.data;
                     } else {
-                        $.notify("No Pals Found", "error");
+                        notify("No Pals Found");
                     }
                 }).catch( function onRejection(errorResponse) {
                     console.log('Error: ', errorResponse.status);
