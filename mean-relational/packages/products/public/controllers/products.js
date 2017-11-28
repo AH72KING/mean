@@ -640,6 +640,7 @@ import 'rxjs/add/operator/map';*/
         $scope.startCount = 0;  
         $scope.startTimeout = function () {  
             $scope.startCount = $scope.startCount + 1;  
+            
             $scope.getProducts();
             vm.mytimeout = $timeout($scope.startTimeout, 30000);  
         };
@@ -768,9 +769,11 @@ import 'rxjs/add/operator/map';*/
             if(typeof prodId != 'undefined' && prodId != null){
               var img = draggableElement.find('.product_image').find('img').attr('src');
               $scope.addorCreateCart(prodId, img);
+              notify('Adding Product To Cart...','info');
             }
             else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
               $scope.addUserToCart(draggableElement);
+              notify('Adding User To Cart...','info');
             }
 
         }
@@ -780,10 +783,14 @@ import 'rxjs/add/operator/map';*/
            console.log(draggableElement);
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');
-            if(typeof prodId != 'undefined' && prodId != null)
+            if(typeof prodId != 'undefined' && prodId != null){
               $scope.removeProdFromCart(draggableElement);
-            else if(typeof friendId != 'undefined' && friendId != null)
+              notify('Removing Product From Cart...','info');
+            }
+            else if(typeof friendId != 'undefined' && friendId != null){
               $scope.removeUserFromCart(draggableElement);
+              notify('Removing User From Cart...','info');
+            }
             draggableElement.remove();
         }
 
@@ -924,6 +931,8 @@ import 'rxjs/add/operator/map';*/
            var configObj = { method: 'POST',url: url, data: postData, headers: headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
+                        closeNoti();
+                        notify('Product Added To Cart','success');
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         if(dataJson !== undefined){
 
@@ -961,6 +970,8 @@ import 'rxjs/add/operator/map';*/
           var configObj = { method: 'POST',url: url, data: postData, headers: headers};
           $http(configObj)
               .then(function onFulfilled(response) {
+                closeNoti();
+                notify('User Added To Cart','success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -972,6 +983,8 @@ import 'rxjs/add/operator/map';*/
           var configObj = { method: 'POST',url: url, data: postData, headers: headers};
           $http(configObj)
               .then(function onFulfilled(response) {
+                closeNoti();
+                notify('User Removed From Cart','success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -983,6 +996,8 @@ import 'rxjs/add/operator/map';*/
             var configObj = { method: 'POST',url: url, data: postData, headers: headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
+                      closeNoti();
+                      notify('Product Removed From Cart','success');
                         var dataJson = JSON.parse(JSON.stringify(response.data));
 
                         if(dataJson !== undefined){
@@ -1134,8 +1149,11 @@ import 'rxjs/add/operator/map';*/
                 var key   =  Session.getItem('key_'+UserID);
                 var url = ApiBaseUrl+'joinCart/'+key+'/'+cartId;
                 var configObj = { method: 'GET',url: url, headers: headers};
+                notify('Joining Cart ...','info');
                 $http(configObj)
                     .then(function onFulfilled(response) {
+                        closeNoti();
+                        notify('Cart Successfully Joined','success');
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         $scope.isCartMember = true;
                         console.log(dataJson);
@@ -1153,8 +1171,11 @@ import 'rxjs/add/operator/map';*/
                 var url = ApiBaseUrl+'leaveCart/'+key+'/'+cartId;
                 var configObj = { method: 'GET',url: url, headers: headers};
                 $scope.isCartMember = false;
+                notify('Leaving Cart ...','info');
                 $http(configObj)
-                    .then(function onFulfilled(response) {/*
+                    .then(function onFulfilled(response) {
+                        closeNoti();
+                        notify('Cart Successfully Leaved','success');/*
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         console.log(dataJson);*/
                     }).catch( function onRejection(errorResponse) {
@@ -1191,6 +1212,7 @@ import 'rxjs/add/operator/map';*/
           var usrId = this.friends.userid;
           var prodId = dragElement.attr('data-product-id');
           $scope.suggestProdToUsr(usrId, prodId);
+          notify('Suggesting Product ...','info');
         }
 
         // suggest prod to usr
@@ -1201,6 +1223,8 @@ import 'rxjs/add/operator/map';*/
           // $scope.isCartMember = false;
           $http(configObj)
               .then(function onFulfilled(response) {
+                closeNoti();
+                notify('Product Suggested To Cart','success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -1208,12 +1232,15 @@ import 'rxjs/add/operator/map';*/
 
         // accept product
         $scope.acceptProdInCart = function(prodId){
+          notify('Accepting Product ...','info');
           var postData = {'cartId':grp_cartId, 'prodId':prodId};
           var url = baseUrl+'api/acceptProdInCart';
           var configObj = { method: 'POST',url: url, data:postData, headers: headers};
           // $scope.isCartMember = false;
           $http(configObj)
               .then(function onFulfilled(response) {
+                closeNoti();
+                notify('Product Accepted','success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 

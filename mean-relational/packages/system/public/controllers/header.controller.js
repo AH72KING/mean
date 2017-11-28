@@ -81,9 +81,18 @@ angular
           return $mdSidenav('UserDetail').isOpen();
         };
 
-         $scope.getDefaultAvatar = function(url){
+         $rootScope.getDefaultAvatar = function(url){
           if(url == null)
-            url = '/images/default-avatar.png';
+            url = '/images/default-avatar.png'; 
+          else {
+            var link = UploadUrl+url;
+            var http = new XMLHttpRequest();
+            http.open('HEAD', link, false);
+            http.send();
+            if(http.status==404){
+              url = '/images/default-avatar.png'; 
+            }
+          }
           return url;
        };
         // get friend request
@@ -132,6 +141,7 @@ angular
                     if(index === null){
                        CurrentUserBuyerDetail.action = '02';
                     }
+                    notify('Friend Request has been Accepted Successfully');
                 }).catch( function onRejection(errorResponse) {
                 }); 
           }
@@ -149,6 +159,25 @@ angular
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         $scope.CurrentUserBuyerDetail.action = '03';
+                        notify('User Unfollowed Successfully');
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                }); 
+            } 
+        }
+
+          // send friend request
+        $scope.sendFriendRequest = function(userid){
+            var UserID  =  Session.getItem('UserID');
+            if(typeof UserID != 'undefined' && UserID != null){
+                var key   =  Session.getItem('key_'+UserID);
+                var url = ApiBaseUrl+'followUser';
+                var postData = {key:key, query_userId:userid};
+                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        $scope.CurrentUserBuyerDetail.action = '01';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -168,42 +197,6 @@ angular
           }); 
         }
         getAisles();
-
-        // notification
-        function notify(){
-          $('html').notify('Message',
-          {
-            // whether to hide the notification on click
-            clickToHide: true,
-            // whether to auto-hide the notification
-            autoHide: true,
-            // if autoHide, hide after milliseconds
-            autoHideDelay: 5000,
-            // show the arrow pointing at the element
-            arrowShow: true,
-            // arrow size in pixels
-            arrowSize: 5,
-            // position defines the notification position though uses the defaults below
-            position: '...',
-            // default positions
-            elementPosition: 'bottom left',
-            globalPosition: 'top right',
-            // default style
-            style: 'bootstrap',
-            // default class (string or [string])
-            className: 'error',
-            // show animation
-            showAnimation: 'slideDown',
-            // show animation duration
-            showDuration: 400,
-            // hide animation
-            hideAnimation: 'slideUp',
-            // hide animation duration
-            hideDuration: 200,
-            // padding between element and notification
-            gap: 2
-          })
-        }
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);
