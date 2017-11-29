@@ -11,7 +11,15 @@ angular
         $rootScope.UploadUrl            = UploadUrl;   
         //check key if expire, then logout user
         // validate key
-        $scope.validateKey= function(){
+
+        function syncStorages(){
+            console.log('lenth is '+localStorage.length);
+            for (var i = 0; i < localStorage.length; i++){
+                console.log(localStorage.key(i));
+            }
+        }
+        //syncStorages();
+        $scope.validateKey1 = function(){
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);
@@ -26,6 +34,20 @@ angular
                 }).catch( function onRejection(errorResponse) {
                 });
           }
+        }
+        $scope.validateKey= function(){
+          var url = baseUrl+'api/validateKey';
+          var configObj = { method: 'POST',url: url, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  if(response.data == false){
+                    logout();
+                  } else if(response.data != false && response.data != true) {
+                    Session.setItem('UserID',response.data.userId);
+                    Session.setItem('key_'+response.data.userId, response.data.key);
+                  }
+              }).catch( function onRejection(errorResponse) {
+              });
         }
         $scope.validateKey();
         $scope.defaultAvatar = 'http://localhost:3000/products/assets/images/default-avatar.png';
@@ -89,7 +111,7 @@ angular
             var http = new XMLHttpRequest();
             http.open('HEAD', link, false);
             http.send();
-            if(http.status==404){
+            if(http.status==404){localStorage.clear();
               url = '/images/default-avatar.png'; 
             }
           }
@@ -97,20 +119,27 @@ angular
        };
         // get friend request
         $scope.friendRequests = function(){
+          if(typeof Session.getItem('UserID') != 'undefined'){
           var UserID  =  Session.getItem('UserID');
-          if(typeof UserID != 'undefined' && UserID != null){
-            var key   =  Session.getItem('key_'+UserID);
-            var url = ApiBaseUrl+'myInvites/'+key;
-            var configObj = { method: 'GET',url: url, headers: headers};
-            $http(configObj)
-                .then(function onFulfilled(response) {
-                    var dataJson    = JSON.parse(JSON.stringify(response.data));
-                    $scope.requests = dataJson;
-                }).catch( function onRejection(errorResponse) {
-                }); 
+            if(UserID != null){
+              var key   =  Session.getItem('key_'+UserID);
+              var url = ApiBaseUrl+'myInvites/'+key;
+              var configObj = { method: 'GET',url: url, headers: headers};
+              $http(configObj)
+                  .then(function onFulfilled(response) {
+                      var dataJson    = JSON.parse(JSON.stringify(response.data));
+                      $scope.requests = dataJson;
+                  }).catch( function onRejection(errorResponse) {
+                  }); 
+            }
           }
         }
-        $scope.friendRequests();
+        try {
+          $scope.friendRequests();
+        }
+        catch(e){
+          console.log(e);
+        }
         /**
          * Build handler to open/close a SideNav; when animation finishes
          * report completion in console
@@ -197,6 +226,7 @@ angular
           }); 
         }
         getAisles();
+
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);

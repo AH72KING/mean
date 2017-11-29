@@ -4412,11 +4412,13 @@ width: 100%;
     list-style-type: none;
 }
 .all-user-list ul.users-list li{
-        display: inline-block;
-        position: relative;
-        float: left;
+    display: inline-block;
+    position: relative;
+    float: left;
     width: 180px;
     height: 180px;
+    border: 1px solid #f1f0f0;
+    padding: 12px;
 }
 .all-user-list ul.users-list li div{
     

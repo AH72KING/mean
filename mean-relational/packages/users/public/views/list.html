@@ -10,7 +10,7 @@
 			<!-- ng-class="{'online': user.online == 1}" -->
 				<div ng-class="{'online': user.online == 1}" title="{{user.givname+' '+user.surname}}" class="user-image" >
 					<a class="users-img" data-ng-href="/users/{{user.userId}}">
-						<img src="{{UploadUrl}}{{user.img_loc}}" alt=""/>
+						<img src="{{UploadUrl+$root.getDefaultAvatar(user.img_loc)}}" alt=""/>
 						<div class="user-detail">
 							<div class="detail">
 								<span>{{user.givname+' '+user.surname}} </span><br>
@@ -18,7 +18,7 @@
 								<span>Country : {{user.country}}</span>
 							</div>
 							<div class="usr-btns">
-								<a ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-danger">Follow</a>
+								<a ng-click="sendFriendRequest(user.userId)" ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-success">Follow</a>
 								<a ng-click="unFollow(user.userId)" ng-if="user.is_my_friend == 'Y'" class="btn-xs btn btn-danger">UnFollow</a>
 								<a ng-click="showFriendCart(user.userId); UserDetail()" class="pull-right" title="View Cart"><i style="color:white" class="fa fa-shopping-cart btn"></i></a>
 							</div>

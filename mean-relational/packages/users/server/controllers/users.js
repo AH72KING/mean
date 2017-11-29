@@ -29,7 +29,35 @@ var LocalStorage = require('node-localstorage').LocalStorage,
  */
 exports.authCallback = function(req, res) {
     console.log('user server controller authCallback');
-    res.redirect('/');
+
+    var USERNAME  = req.user.USERNAME;
+    var body = '';
+    var data = [];
+    var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          var userId = req.user.USERID;
+          req.session.UserID = userId;
+          req.session['key_'+userId] = dataJson.key;
+          console.log(req.session); 
+          res.redirect('/');
+        });
+    });
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
 };
 
 /**
@@ -396,3 +424,4 @@ exports.updateuser = function(req, res){
   console.log('post data');
   console.log(req.body);
 }
+
