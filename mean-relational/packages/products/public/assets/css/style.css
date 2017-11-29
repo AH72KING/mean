@@ -4376,7 +4376,17 @@ div.m-app-loading p {
 
 .user-image.online{
     position: relative;
+    max-width: 200px;
 }
+form .form-group.img-upload{
+    max-width: 150px;
+    margin: 10px 0px;
+}
+form .user-image.online img{
+    max-width: 150px;
+    margin: 10px auto;
+}
+
 .user-image.online img{
     
 width: 100%;

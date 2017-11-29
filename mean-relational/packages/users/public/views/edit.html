@@ -34,7 +34,7 @@
 		    <label for="About">About</label>
 		    <textarea name="About" placeholder="About" id="About" ng-model="usctr.user.About" class="form-control" rows="10"></textarea>
 		  </div>
-		  <div class="form-group">
+		  <div class="form-group img-upload">
 		  	<label for="img_loc">Profile Image</label>
 		  	<div title="{{usctr.user.GIVNAME+' '+usctr.user.SURNAME}}" class="user-image" ng-class="{'online': usctr.user.online == 1}">
 		        <a data-ng-href="/users/{{usctr.user.USERID}}">

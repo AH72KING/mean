@@ -54,10 +54,11 @@ angular
         var vm = this;
         vm.global = Global;
         $scope.userImg = Session.getItem('img_loc');
-        vm.menu = [{
+        vm.menu = [
+        /*{
             'title': 'products',
             'link': 'products'
-        }, /*{
+        }, {
             'title': 'Create New product',
             'link': 'create-product'
         },*/ {
