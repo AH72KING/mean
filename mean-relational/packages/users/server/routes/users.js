@@ -96,4 +96,8 @@ app.get('/api/auth/google/callback', passport.authenticate('google', {
 
 // Finish with setting up the USERID param
 app.param('USERID', users.user);
+app.route('/api/timeline').post(users.timeline);
+app.route('/api/likeTweet').post(users.likeTweet);
+app.route('/api/dislikeTweet').post(users.dislikeTweet);
+app.route('/api/delTweet').post(users.delTweet);
 };

@@ -11,30 +11,13 @@ angular
         $rootScope.UploadUrl            = UploadUrl;   
         //check key if expire, then logout user
         // validate key
-
-        function syncStorages(){
-            console.log('lenth is '+localStorage.length);
-            for (var i = 0; i < localStorage.length; i++){
-                console.log(localStorage.key(i));
-            }
-        }
-        //syncStorages();
-        $scope.validateKey1 = function(){
-          var currentUId  =  Session.getItem('UserID');
-          if(typeof currentUId != 'undefined' && currentUId != null){
-            var key   =  Session.getItem('key_'+currentUId);
-            var url = baseUrl+'api/validateKey';
-            var postData = {'key':key};
-            var configObj = { method: 'POST',url: url, data: postData, headers: headers};
-            $http(configObj)
-                .then(function onFulfilled(response) {
-                    if(response.data != true){
-                      logout();
-                    }
-                }).catch( function onRejection(errorResponse) {
-                });
-          }
-        }
+        $scope.socialApps = [
+          { 'name':'Twitter', 'key':'twitter'},
+          { 'name':'Tumblr', 'key':'tumblr'},
+          { 'name':'Facebook', 'key':'facebook'},
+          { 'name':'Google', 'key':'google'},
+        ];
+        $scope.provider = '';
         $scope.validateKey= function(){
           var url = baseUrl+'api/validateKey';
           var configObj = { method: 'POST',url: url, headers: headers};
@@ -45,6 +28,7 @@ angular
                   } else if(response.data != false && response.data != true) {
                     Session.setItem('UserID',response.data.userId);
                     Session.setItem('key_'+response.data.userId, response.data.key);
+                    $scope.provider = response.data.provider;
                   }
               }).catch( function onRejection(errorResponse) {
               });

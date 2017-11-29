@@ -19,6 +19,22 @@ const bodyParser = require('body-parser');
 
 app.use(express.static('public'));
 
+var Twitter = require('twitter');
+ 
+var client = new Twitter({
+  consumer_key: '',
+  consumer_secret: '',
+  access_token_key: '',
+  access_token_secret: ''
+});
+ 
+var params = {screen_name: 'nodejs'};
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+    console.log(tweets);
+  }
+});
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -309,7 +325,6 @@ exports.all = function(req, res) {
         });
     });
 };
-
 
 exports.createCart = function(req, res) {
     var RequestUser = req.user;
@@ -807,10 +822,10 @@ exports.addCommentToCart = function(req, res){
 }
 
 // validate current user key
-exports.validateKey = function(req, res){ console.log('validating ... ');
+exports.validateKey = function(req, res){ 
   if (req.user) { 
     var usrId = req.user.USERID;
-    console.log(req.session['key_'+usrId]);
+    var provider = req.user.provider;
     if(typeof req.session['key_'+usrId] != 'undefined'){
       var key = req.session['key_'+usrId];
       var body = '';
@@ -826,9 +841,9 @@ exports.validateKey = function(req, res){ console.log('validating ... ');
                body += chunk;
           });
           res2.on('end', function() { 
-            var data = JSON.parse(body);  
+            var data = JSON.parse(body); 
             if(data == true){
-              data = { 'key':key, 'userId':usrId };
+              data = { 'key':key, 'userId':usrId, 'provider':provider};
             } else 
               data = false;
             return res.jsonp(data);
@@ -934,12 +949,10 @@ exports.acceptProdInCart = function(req, res){
   }
 }
 
-exports.updateuser = function(req, res){
-  console.log('req : '+req.file);
-  console.log('req files : '+req.files);
-  console.log('req file : '+req.body.file);
-  console.log('req body: '+req.body.files);
-}
+
+
+
+
 
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 

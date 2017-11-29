@@ -6,6 +6,13 @@ var db = require('../../../../config/sequelize');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
+ var Twitter = require('twitter');
+ var client = new Twitter({
+      consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
+      consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
+      access_token_key: '833656102969540608-4iguTMksSNJghnbRHbAuwOqEDkJk9hV',
+      access_token_secret: '87u9Znxj0HLT0dYu2Rr9YasWbuArRhwzLnQirZYpYyCgc'
+    });
  //console.log('user server controller');
  //
 
@@ -425,3 +432,39 @@ exports.updateuser = function(req, res){
   console.log(req.body);
 }
 
+
+// get user timeline
+exports.timeline = function(req, res){
+  var usrId = req.user.twitterUserId;
+  console.log('username is '+usrId);
+    if(usrId != null){
+      var params = {count:4};
+      client.get('statuses/user_timeline', params, function(error, tweets, response) {
+          return res.jsonp(tweets);
+      });
+    }
+}
+// like tweet
+exports.likeTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('favorites/create', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+}
+// dislike tweet
+exports.dislikeTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('favorites/destroy', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+}
+// delete tweet
+exports.delTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('statuses/destroy', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+}
