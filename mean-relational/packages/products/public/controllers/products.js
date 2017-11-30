@@ -8,9 +8,9 @@ import 'rxjs/add/operator/map';*/
       .controller('productsController',productsController);
       
       //,'$log'
-      productsController.$inject = ['$stateParams', '$location', 'Global', 'products', '$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$sce'];
+      productsController.$inject = ['$stateParams', '$location', 'Global', 'products', '$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$sce', '$rootScope'];
 
-  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil,$sce){
+  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $sce, $rootScope ){
         var vm = this;
 
        // var baseUrl = 'http://localhost:3000/';
@@ -640,8 +640,12 @@ import 'rxjs/add/operator/map';*/
         $scope.startCount = 0;  
         $scope.startTimeout = function () {  
             $scope.startCount = $scope.startCount + 1;  
-            
-            $scope.getProducts();
+            var aisleId = $scope.aisleId;
+            if(aisleId !== undefined && aisleId !== null){
+                $rootScope.getAisleProducts(aisleId)
+            }else{
+                $rootScope.getProducts();
+            }
             vm.mytimeout = $timeout($scope.startTimeout, 30000);  
         };
 
@@ -650,7 +654,7 @@ import 'rxjs/add/operator/map';*/
             console.log('Timer Stopped No More Products');  
         };
 
-        $scope.getProducts = function () {
+        $rootScope.getProducts = function () {
                 var lastProductID = $scope.lastProductID;
                 if(lastProductID === undefined){
                     lastProductID = vm.lastProductID;
@@ -661,6 +665,48 @@ import 'rxjs/add/operator/map';*/
                 //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/'+lastProductID+'/'+nextProducts;
                 //var url = ApiBaseUrl+'getAllProdsInLocDefault_mini/PK/'+lastProductID+'/'+nextProducts;
                 var url = ApiBaseUrl+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
+
+
+                //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/1/1';
+                
+               
+                var configObj = { method: 'GET',url: url, headers: headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        body = response.data;
+                        var newData = JSON.stringify(body);
+                        data = JSON.parse(newData);
+
+                          if(data.length < 2){
+                            //console.log(data);
+                            $scope.stopTimeout();
+                          }
+
+                          $scope.addObject(data);
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                }); 
+        };
+        $rootScope.getAisleProducts = function (aisle,lastAisleProductID = null) {
+                var lastAisleProductID = lastAisleProductID;
+                if(lastAisleProductID === undefined){
+                    lastAisleProductID = vm.lastAisleProductID;
+                }
+                if(lastAisleProductID == null){
+                  lastAisleProductID = 0;
+                }
+
+                var nextProducts = 3;
+                var aisleId = aisle.aisleId;
+
+                if(aisleId !== undefined && aisleId !== null){
+                  $scope.aisleId = aisleId;
+                }
+                var body = '';
+                var data = '';
+                var url = ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastAisleProductID+'/'+nextProducts+'/'+aisleId;
 
 
                 //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/1/1';

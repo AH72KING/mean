@@ -88,7 +88,7 @@ angular
           return $mdSidenav('UserDetail').isOpen();
         };
 
-         $rootScope.getDefaultAvatar = function(url){
+        $rootScope.getDefaultAvatar = function(url){
           if(url == null)
             url = '/images/default-avatar.png'; 
           else {

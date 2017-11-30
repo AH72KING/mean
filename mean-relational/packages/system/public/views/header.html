@@ -64,7 +64,9 @@
                           </div>
                       </li>
                       <li style="float:left;width:30px">
-                          <a style="padding-left: 8px;height: 50px;" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+                          <a style="padding-left: 8px;height: 50px;" class="search-icon">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                          </a>
                           <div class="search-field">
                               <input type="text" class="form-control" />
                               <i class="fa fa-search" aria-hidden="true"></i>
@@ -78,10 +80,12 @@
                         </a>
                         <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
                           <li class="col-md-12">
-                            <a data-index="/all-products" href="/all-products" ui-sref="/all-products" >All</a>
+                            <a href="/all-products">All</a>
                           </li>
                           <li class="col-md-12" ng-repeat="aisle in aisles track by $index">
-                            <a data-index="{{$index}}" href="aisle.aisle_name" ui-sref="aisle.aisle_name">{{ aisle.aisle_name }}</a>
+                            <a data-index="{{aisle.aisle_name}}" href="{{aisle.aisle_name}}" ng-click="$root.getAisleProducts(aisle)" ui-sref="{{aisle.aisle_name}}">
+                              {{ aisle.aisle_name }}
+                            </a>
                           </li>
                         </ul>
                     </li>
@@ -92,7 +96,7 @@
               </div>
               <div class="right pull-right user-action-button-container">
 
-                  <ul class="navbar-nav nav">
+                  <!--ul class="navbar-nav nav">
                     <li class="dropdown notify" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
                             <span>Aisles</span> <b class="caret"></b>
@@ -103,7 +107,7 @@
                           </li>
                         </ul>
                     </li>
-                  </ul>
+                  </ul-->
                   <ul  class="navbar-nav nav" data-ng-hide="hdctr.global.authenticated">
                       <li><a ui-sref='auth.register'>Join</a></li>
                       <li class="divider-vertical"></li>
