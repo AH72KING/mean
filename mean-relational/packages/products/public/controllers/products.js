@@ -1307,6 +1307,87 @@ import 'rxjs/add/operator/map';*/
             return false;
         }
 
+        // get twitter timeline
+        function timeline(){
+          var url = baseUrl+'api/timeline';
+          var configObj = { method: 'POST',url: url, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  vm.twitterPosts = response.data;
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+        timeline();
+
+        // like tweet
+        $scope.likeTweet = function(index){
+          var tweetId = vm.twitterPosts[index]['id_str'];
+          var postData = {'id':tweetId};
+          var url = baseUrl+'api/likeTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                if(response.status == 200){
+                 if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                  var code = response.data.errors[0].code;
+                  if(code == 139) 
+                    notify(response.data.errors[0].message);
+                  } else {
+                    notify('Liked Successfully','success');
+                    vm.twitterPosts[index]['favorite_count'] += 1;
+                  }
+                }
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          });
+        }
+        // dislike tweet if like
+        $scope.dislikeTweet = function(index){
+          var tweetId = vm.twitterPosts[index]['id_str'];
+          var postData = {'id':tweetId};
+          var url = baseUrl+'api/dislikeTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                if(response.status == 200){
+                  if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                    var code = response.data.errors[0].code;
+                    if(code == 144) 
+                      notify(response.data.errors[0].message);
+                  } else {
+                    notify('UnLiked Successfully','success');
+                    vm.twitterPosts[index]['favorite_count'] -= 1;
+                  }
+                }
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          });
+        }
+        // delete tweet
+        $scope.deleteTweet = function(index){
+          var tweetId = vm.twitterPosts[index]['id_str'];
+          var postData = {'id':tweetId};
+          var url = baseUrl+'api/delTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                if(response.status == 200){
+                  if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                    var code = response.data.errors[0].code;
+                    //if(code == 144) 
+                      notify(response.data.errors[0].message);
+                  } else {
+                    notify('Tweet has been Deleted Successfully','success');
+                    vm.twitterPosts.splice(index, 1);
+                  }
+                }
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          });
+        }
+
+        // reply to tweet
       }
 
 })();

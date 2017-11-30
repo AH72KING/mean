@@ -12,7 +12,6 @@ var db = require('./sequelize');
 var winston = require('./winston');
 var SocialPassword = 'social';
 
-
 var express = require('express');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
@@ -97,14 +96,15 @@ passport.use(new TwitterStrategy({
         includeEmail:true,
     },
     function(token, tokenSecret, profile, done) {
-        console.log('TwitterStrategy');
+        console.log('TwitterStrategy'); console.log(profile.id);
         console.log(profile);
         var provider  = 'twitter';
         db.User.find({where: {twitterUserId: profile.id}}).then(function(user){
             if(!user){
+                console.log(profile.id);
                 db.User.create({
                     twitterUserId: profile.id,
-                    GIVENAME: profile.displayName,
+                    GIVNAME: profile.displayName,
                     USERNAME: profile.username,
                     provider: provider
                 }).then(function(u){
@@ -115,8 +115,8 @@ passport.use(new TwitterStrategy({
                             username: profile.username,
                             password:socialPass,
                             role: 'U'
-                        }).then(function(l){   
-                            UserLoginInJava(u); 
+                        }).then(function(l){
+                           // UserLoginInJava(u);
                                 db.Login.update({online:1},{where:{userId:l.userId}});
                                 db.User.update({online:1},{where:{USERID:l.userId}}); 
                             winston.info('New User (twitter) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
@@ -130,9 +130,9 @@ passport.use(new TwitterStrategy({
                     provider: provider,
                     twitterUserId: profile.id
                 }, {
-                  where: {EMAIL: email}
+                  where: {twitterUserId: profile.id}
                 });
-                UserLoginInJava(user); 
+               // UserLoginInJava(user);
                 db.Login.update({online:1},{where:{userId:user.USERID}}); 
                 db.User.update({online:1},{where:{USERID:user.USERID}}); 
                 winston.info('Login (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
@@ -320,12 +320,11 @@ function UserLoginInJava(user) {
              body += chunk;
         });
         res2.on('end', function() { 
-          console.log('abc');
-          console.log(body);
+            console.log("url is ");
+            console.log(url);
            var dataJson = JSON.parse(body);
             if(dataJson !== undefined){
                 var key = dataJson.key;
-                console.log(dataJson);
                 var UserID = dataJson.usr.userid;
                 if(key !== undefined){
                   console.log('setting Local Key');

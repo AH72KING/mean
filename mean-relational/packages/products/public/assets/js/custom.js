@@ -54,3 +54,4 @@ function notify(text='No Message', className='error', globalPos='top center', de
 function closeNoti() {
   $('.notifyjs-wrapper').trigger('notify-hide');
 }
+

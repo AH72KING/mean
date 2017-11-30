@@ -114,6 +114,16 @@
                       <li><a ui-sref='auth.login'>Log In</a></li>
                   </ul>
                   <ul class="navbar-nav nav" data-ng-show="hdctr.global.authenticated">
+                     <li class="dropdown notify" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span>Social</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                            <li class="col-md-12" ng-repeat="app in socialApps track by $index">
+                              <strong>{{app.name}}</strong> <small ng-if="provider == app.key">(Logged In)</small>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="dropdown notify" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
                             <span>Notifications</span> <b class="caret"></b>

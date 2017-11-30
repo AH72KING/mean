@@ -82,6 +82,7 @@
         }
         function find() {
             var UserID  =  Session.getItem('UserID');
+            console.log(UserID);
             var key =  Session.getItem('key_'+UserID);
             var url = ApiBaseUrl+'allSiteUsers/'+key;
             var configObj = { method: 'GET',url: url, headers: headers};

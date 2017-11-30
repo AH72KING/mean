@@ -1361,3 +1361,9 @@ body .friends-in-cart-container{
     padding: 16px;
     cursor:pointer;
 }
+.post {position: relative;}
+.tweet {background-color: #3B94D9;}
+.post .head{color: white;font-weight: bold;padding: 10px 10px;}
+.post .body{padding: 5px 10px;}
+.post .options {position: absolute;bottom: 5px;left: 5px;display: none}
+.post:hover .options{display: block}

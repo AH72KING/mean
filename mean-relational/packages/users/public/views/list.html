@@ -18,7 +18,7 @@
 								<span>Country : {{user.country}}</span>
 							</div>
 							<div class="usr-btns">
-								<a ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-danger">Follow</a>
+								<a ng-click="sendFriendRequest(user.userId)" ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-success">Follow</a>
 								<a ng-click="unFollow(user.userId)" ng-if="user.is_my_friend == 'Y'" class="btn-xs btn btn-danger">UnFollow</a>
 								<a ng-click="showFriendCart(user.userId); UserDetail()" class="pull-right" title="View Cart"><i style="color:white" class="fa fa-shopping-cart btn"></i></a>
 							</div>

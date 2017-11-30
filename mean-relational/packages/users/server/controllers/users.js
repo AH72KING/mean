@@ -6,6 +6,13 @@ var db = require('../../../../config/sequelize');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
+ var Twitter = require('twitter');
+ var client = new Twitter({
+      consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
+      consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
+      access_token_key: '833656102969540608-4iguTMksSNJghnbRHbAuwOqEDkJk9hV',
+      access_token_secret: '87u9Znxj0HLT0dYu2Rr9YasWbuArRhwzLnQirZYpYyCgc'
+    });
  //console.log('user server controller');
  //
 
@@ -29,7 +36,35 @@ var LocalStorage = require('node-localstorage').LocalStorage,
  */
 exports.authCallback = function(req, res) {
     console.log('user server controller authCallback');
-    res.redirect('/');
+
+    var USERNAME  = req.user.USERNAME;
+    var body = '';
+    var data = [];
+    var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          var userId = req.user.USERID;
+          req.session.UserID = userId;
+          req.session['key_'+userId] = dataJson.key;
+          console.log(req.session); 
+          res.redirect('/');
+        });
+    });
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
 };
 
 /**
@@ -395,4 +430,41 @@ exports.updateuser = function(req, res){
   console.log(req.file);
   console.log('post data');
   console.log(req.body);
+}
+
+
+// get user timeline
+exports.timeline = function(req, res){
+  var usrId = req.user.twitterUserId;
+  console.log('username is '+usrId);
+    if(usrId != null){
+      var params = {count:4};
+      client.get('statuses/user_timeline', params, function(error, tweets, response) {
+          return res.jsonp(tweets);
+      });
+    }
+}
+// like tweet
+exports.likeTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('favorites/create', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+}
+// dislike tweet
+exports.dislikeTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('favorites/destroy', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+}
+// delete tweet
+exports.delTweet = function(req, res){
+  var tweetId = req.body.id;
+  var params = {id:tweetId};
+  client.post('statuses/destroy', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
 }
