@@ -104,8 +104,8 @@ passport.use(new TwitterStrategy({
             if(!user){
                 db.User.create({
                     twitterUserId: profile.id,
-                    name: profile.displayName,
-                    username: profile.username,
+                    GIVENAME: profile.displayName,
+                    USERNAME: profile.username,
                     provider: provider
                 }).then(function(u){
                     if(u.USERID){
@@ -307,7 +307,7 @@ function UserLoginInJava(user) {
     var USERNAME  = user.USERNAME;
     var body = '';
     var data = [];
-    var url = ApiBasePath+'getUserKey/'+USERNAME;
+    var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
     var options = {
         hostname: ip,
         port: '8080',
@@ -321,9 +321,11 @@ function UserLoginInJava(user) {
         });
         res2.on('end', function() { 
           console.log('abc');
+          console.log(body);
            var dataJson = JSON.parse(body);
             if(dataJson !== undefined){
                 var key = dataJson.key;
+                console.log(dataJson);
                 var UserID = dataJson.usr.userid;
                 if(key !== undefined){
                   console.log('setting Local Key');

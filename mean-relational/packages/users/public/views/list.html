@@ -10,7 +10,7 @@
 			<!-- ng-class="{'online': user.online == 1}" -->
 				<div ng-class="{'online': user.online == 1}" title="{{user.givname+' '+user.surname}}" class="user-image" >
 					<a class="users-img" data-ng-href="/users/{{user.userId}}">
-						<img src="{{UploadUrl}}{{user.img_loc}}" alt=""/>
+						<img src="{{UploadUrl+$root.getDefaultAvatar(user.img_loc)}}" alt=""/>
 						<div class="user-detail">
 							<div class="detail">
 								<span>{{user.givname+' '+user.surname}} </span><br>
