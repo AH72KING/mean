@@ -22,6 +22,8 @@ const bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+var expSession = require('express-session');
 var ip = '192.168.1.88';
 //var ip = '192.168.100.88';
 var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
@@ -98,13 +100,19 @@ passport.use(new TwitterStrategy({
     function(token, tokenSecret, profile, done) {
         console.log('TwitterStrategy'); console.log(profile.id); 
         console.log(profile); 
+        localStorage.setItem('tw_token', token);
+        localStorage.setItem('tw_secret', tokenSecret);
         var provider  = 'twitter';
         db.User.find({where: {twitterUserId: profile.id}}).then(function(user){
+            console.log(profile.id); 
+            var fullname = profile.displayName.split(" ");
+            var fname = fullname[0];
+            var lname = fullname[1];
             if(!user){ 
-                console.log(profile.id); 
                 db.User.create({
                     twitterUserId: profile.id,
-                    GIVNAME: profile.displayName,
+                    GIVNAME: fname,
+                    SURNAME : lname,
                     USERNAME: profile.username,
                     provider: provider
                 }).then(function(u){ 
@@ -128,6 +136,8 @@ passport.use(new TwitterStrategy({
             } else { 
                 db.User.update({
                     provider: provider,
+                    GIVNAME: fname,
+                    SURNAME : lname,
                     twitterUserId: profile.id
                 }, {
                   where: {twitterUserId: profile.id}

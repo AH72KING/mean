@@ -68,6 +68,20 @@
             <a title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
         </div>
     </li>
+    <li class="product_item post" ng-repeat="post in arctr.tumblrPosts track by $index">
+        <div class="tweet head">Tweet</div>
+        <div class="body">
+            <span ng-if="post.type == 'text'">{{ post.body }}</span>
+            <img ng-if="post.type == 'photo'" src="{{ post.photos[0].original_size.url }}" />
+            <video ng-if="post.type == 'video'" style="width:100%" controls>
+                <source src="{{ post.video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="options">
+            <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
+        </div>
+    </li>
     <li class="product_item drag-to-cart" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
         <div class="product_image">
             <a data-ng-href="/products/{{product.ProdBrandId}}">

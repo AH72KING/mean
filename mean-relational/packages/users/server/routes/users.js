@@ -100,4 +100,6 @@ app.route('/api/timeline').post(users.timeline);
 app.route('/api/likeTweet').post(users.likeTweet);
 app.route('/api/dislikeTweet').post(users.dislikeTweet);
 app.route('/api/delTweet').post(users.delTweet);
+app.route('/api/tumblrPosts').post(users.tumblrPosts);
+app.route('/api/delTumblrPost').post(users.delTumblrPost);
 };

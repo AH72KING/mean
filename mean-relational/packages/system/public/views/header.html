@@ -116,7 +116,11 @@
                         </a>
                         <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
                             <li class="col-md-12" ng-repeat="app in socialApps track by $index">
-                              <strong>{{app.name}}</strong> <small ng-if="provider == app.key">(Logged In)</small>
+                              <strong>{{app.name}}</strong> 
+                              <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label> 
+                              <span class="pull-right">
+                                <a ng-if="provider != app.key" class="btn btn-xs btn-success" >Connect</a>
+                              </span>
                             </li>
                         </ul>
                     </li>

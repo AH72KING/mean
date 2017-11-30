@@ -7,12 +7,21 @@ var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
  var Twitter = require('twitter');
+//var expSession = require('express-session');
  var client = new Twitter({
       consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
       consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
-      access_token_key: '833656102969540608-4iguTMksSNJghnbRHbAuwOqEDkJk9hV',
-      access_token_secret: '87u9Znxj0HLT0dYu2Rr9YasWbuArRhwzLnQirZYpYyCgc'
+      access_token_key: localStorage.getItem('tw_token'),
+      access_token_secret: localStorage.getItem('tw_secret')
     });
+
+var tumblr = require('tumblr.js');
+var tmblr_client = tumblr.createClient({
+  consumer_key: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
+  consumer_secret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
+  token: 'VLBVxrX66RmXOXs9iwezY0hEdR20TKqpcRyZPhUDsa9avlfHDh',
+  token_secret: 'foO9OMAwT60nHSQZc71cqmmeryIutk26xj8shb5wsq0R4lglOA'
+});
  //console.log('user server controller');
  //
 
@@ -438,7 +447,7 @@ exports.timeline = function(req, res){
   var usrId = req.user.twitterUserId;
   console.log('username is '+usrId);
     if(usrId != null){
-      var params = {count:4};
+      var params = {count:4, id:usrId};
       client.get('statuses/user_timeline', params, function(error, tweets, response) {
           return res.jsonp(tweets);
       });
@@ -466,5 +475,27 @@ exports.delTweet = function(req, res){
   var params = {id:tweetId};
   client.post('statuses/destroy', params, function(error, tweet, response) {
       return res.jsonp(tweet);
+  });
+}
+
+// tumblr apis
+
+exports.tumblrPosts = function(req, res){
+  var data = ""
+  tmblr_client.userInfo(function(err, data) {
+  if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+    var blogName = data.user.blogs[0].name;
+    tmblr_client.blogPosts(blogName, {limit:4}, function(err, resp) {
+      return res.jsonp(resp.posts); // use them for something
+    });    
+  }
+});
+}
+// Delete a given post
+exports.delTumblrPost = function(req, res){
+  var blogName = req.body.blogName;
+  var postId = req.body.postId;
+  tmblr_client.deletePost(blogName, postId, function(err, resp) {
+    return res.jsonp(resp.posts);
   });
 }

@@ -1341,7 +1341,34 @@ import 'rxjs/add/operator/map';*/
           });
         }
 
-        // reply to tweet
+        // tumblr methods
+
+        function tumblrPosts(){
+          var url = baseUrl+'api/tumblrPosts';
+          var configObj = { method: 'POST',url: url, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  vm.tumblrPosts = response.data;
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+        tumblrPosts();
+
+        // delete tumblr post
+        $scope.delTumblrPost = function(index){
+          var blogName = vm.tumblrPosts[index].blog_name;
+          var postId = vm.tumblrPosts[index].id;
+          var postData = {postId:postId, blogName:blogName}
+          var url = baseUrl+'api/delTumblrPost';
+          var configObj = { method: 'POST',url: url, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  notify('Post Deleted','success');
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
       }
 
 })();
