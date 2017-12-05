@@ -29,6 +29,7 @@ packages/bundle
 test/coverage/
 migrations/
 files/
+scratch/
 
 *.local
 
