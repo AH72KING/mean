@@ -4,8 +4,8 @@ module.exports = {
         name: 'spine',
         password: '',
         username: 'root1',
-        //host:'192.168.100.88',
-        host:'192.168.1.88',
+        host:'192.168.100.88',
+        //host:'192.168.1.88',
         port:3306
     },
     app: {
@@ -53,5 +53,11 @@ module.exports = {
         clientID: '972158488032-4ovojau9eipa5voof0aaoh1qv0v0k0tt.apps.googleusercontent.com',
         clientSecret: 'C2zw8rtG4jDBM0LDQrlauGyr',
         callbackURL: 'http://localhost:3000/api/auth/google/callback'
+    },
+    tumblr: {
+        realm: 'http://localhost:3000/',
+        clientID: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
+        clientSecret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
+        callbackURL: 'http://127.0.0.1:3000/api/auth/tumblr/callback'
     }
 };

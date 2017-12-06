@@ -94,6 +94,15 @@ app.get('/api/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/signin'
 }), users.authCallback);
 
+// setting tumblr
+app.get('/api/auth/tumblr', passport.authenticate('tumblr', {
+    failureRedirect: '/signin'
+}), users.signin);
+
+app.get('/api/auth/tumblr/callback', passport.authenticate('tumblr', {
+    failureRedirect: '/signin'
+}), function(req, res) {res.redirect('/');});
+
 // Finish with setting up the USERID param
 app.param('USERID', users.user);
 app.route('/api/timeline').post(users.timeline);
@@ -102,4 +111,5 @@ app.route('/api/dislikeTweet').post(users.dislikeTweet);
 app.route('/api/delTweet').post(users.delTweet);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
+
 };

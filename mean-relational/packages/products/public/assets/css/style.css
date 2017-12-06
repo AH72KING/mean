@@ -3509,6 +3509,7 @@ strong.total-price {
 .tumblr {
     border: 1px solid #35465c;
     box-shadow: 0px 3px 0px 0 #35465c!important;
+    background-color: #35465c;
 }
 
 .pinterest {

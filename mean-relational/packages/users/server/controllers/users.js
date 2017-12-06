@@ -19,8 +19,8 @@ var tumblr = require('tumblr.js');
 var tmblr_client = tumblr.createClient({
   consumer_key: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
   consumer_secret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
-  token: 'VLBVxrX66RmXOXs9iwezY0hEdR20TKqpcRyZPhUDsa9avlfHDh',
-  token_secret: 'foO9OMAwT60nHSQZc71cqmmeryIutk26xj8shb5wsq0R4lglOA'
+  token: localStorage.getItem('tb_token'),
+  token_secret: localStorage.getItem('tb_secret')
 });
  //console.log('user server controller');
  //
@@ -75,6 +75,11 @@ exports.authCallback = function(req, res) {
     });
     req2.end();
 };
+
+exports.tumblrCallback = function(req, res){
+  console.log('test'); return false;
+  res.redirect('/');
+}
 
 /**
  * Show login form

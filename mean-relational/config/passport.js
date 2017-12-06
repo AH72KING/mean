@@ -5,6 +5,7 @@ var bcrypt      = require('bcrypt');
 var LocalStrategy = require('passport-local').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TumblrStrategy = require('passport-tumblr').Strategy;
 //var GoogleStrategy = require('passport-google').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var config = require('./config');
@@ -22,8 +23,8 @@ const bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-var ip = '192.168.1.88';
-//var ip = '192.168.100.88';
+//var ip = '192.168.1.88';
+var ip = '192.168.100.88';
 var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
 var headers = {
     'Access-Control-Allow-Origin': '*',
@@ -151,6 +152,25 @@ passport.use(new TwitterStrategy({
             done(err, null);
         });
     }
+));
+
+passport.use(new TumblrStrategy({
+    consumerKey: config.tumblr.clientID,
+    consumerSecret: config.tumblr.clientSecret,
+    callbackURL: config.tumblr.callbackURL
+  },
+  function(token, tokenSecret, profile, done) {
+    console.log('Tumblr Strategy');
+    console.log(profile);
+    localStorage.setItem('tb_token', token);
+    localStorage.setItem('tb_secret', tokenSecret);
+    db.User.find({where: {USERID: 399}}).then(function(user){
+        winston.info('New User (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+        done(null, user);
+    }).catch(function(err){
+        done(err, null);
+    });
+  }
 ));
 
 

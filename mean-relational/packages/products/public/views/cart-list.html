@@ -69,7 +69,7 @@
         </div>
     </li>
     <li class="product_item post" ng-repeat="post in arctr.tumblrPosts track by $index">
-        <div class="tweet head">Tweet</div>
+        <div class="tumblr head">Tumblr</div>
         <div class="body">
             <span ng-if="post.type == 'text'">{{ post.body }}</span>
             <img ng-if="post.type == 'photo'" src="{{ post.photos[0].original_size.url }}" />

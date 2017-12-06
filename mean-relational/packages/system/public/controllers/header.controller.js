@@ -12,10 +12,10 @@ angular
         //check key if expire, then logout user
         // validate key
         $scope.socialApps = [
-          { 'name':'Twitter', 'key':'twitter'},
-          { 'name':'Tumblr', 'key':'tumblr'},
-          { 'name':'Facebook', 'key':'facebook'},
-          { 'name':'Google', 'key':'google'},
+          { 'name':'Twitter', 'key':'twitter', 'href':''},
+          { 'name':'Tumblr', 'key':'tumblr', 'href':'/api/auth/tumblr'},
+          { 'name':'Facebook', 'key':'facebook', 'href':''},
+          { 'name':'Google', 'key':'google', 'href':''},
         ];
         $scope.provider = '';
         $scope.validateKey= function(){
