@@ -25,7 +25,6 @@ var passport        = require('./config/passport');
 var winston         = require('./config/winston');
 var port = process.env.PORT || config.port;
 
-var cors = require('cors');
 var allowCrossDomain = function(req, res, next) {
     if ('OPTIONS' === req.method) {
       res.header('Access-Control-Allow-Origin', '*');
@@ -37,7 +36,6 @@ var allowCrossDomain = function(req, res, next) {
       next();
     }
 };
-app.use(cors());
 app.use(allowCrossDomain);
 // Add headers
 app.use(function (req, res, next) {

@@ -8,7 +8,6 @@ var express = require('express');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
-var cors = require('cors');
 var app = express();
 
 const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
@@ -54,7 +53,6 @@ app.use(bodyParser.json());
                    'Access-Control-Allow-Credentials': 'true'
                 };
  
-    app.use(cors());
  
     app.all('/*', function(req, res, next) {
       res.header('Access-Control-Allow-Origin', '*');
