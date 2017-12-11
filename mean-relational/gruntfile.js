@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
         var paths = {
         js: ['!bower_components/**',  'packages/**/*.js' , 'packages/**/**/*.js', '!packages/**/assets/**'],
-        jsPublic:['packages/*/public/*.js','packages/*/public/**/*.js'],
+        jsPublic:['packages/public/*.js','packages/public/**/*.js'],
         jsPublicAnnotate:['packages/*/public/*annotated.js','packages/*/public/**/*.annotated.js'],
         jade: ['app/views/**'],
         html:['packages/views/**'],
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         assets: grunt.file.readJSON('config/assets.json'),
-        clean: ['bower_components/build', 'packages/bundle','packages/**/public/**/*annotated.js'],
+        clean: ['bower_components/build', 'packages/bundle','packages/public/**/*annotated.js'],
         watch: {
             jade: {
                 files: paths.jade,

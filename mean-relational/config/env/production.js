@@ -4,14 +4,14 @@ module.exports = {
         name: 'spine',
         password: '',
         username: 'root1',
-        host:'192.168.100.88',
-        //host:'192.168.1.88',
+        //host:'192.168.100.88',
+        host:'192.168.1.88',
         port:3306
     },
     app: {
         name: 'Anerve'
     },
-// You will need to get your own client id's before this will work properly
+    // You will need to get your own client id's before this will work properly
     /*facebook: {
         clientID: '824770854361592',
         clientSecret: '8599cce8d0533a0ef57ab6c68c395e9c',

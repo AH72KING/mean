@@ -7,9 +7,8 @@ var _         = require('lodash');
 var config    = require('./config');
 var winston   = require('./winston');
 var db        = {};
-var ip = '192.168.100.88';
-//var ip = '192.168.1.88';
-
+var ip = config.db.host;
+ 
 
 var models = module.exports = {
   Sequelize: Sequelize,
@@ -40,7 +39,7 @@ function init(callback){
 
 
     config.getDirectories(config.root + '/packages').forEach(function(pack){
-      var pt = config.root + '/packages/' + pack + '/server/models';
+      var pt = config.root + '/packages/server/models';
         if(fs.existsSync(pt)){
               readdirSync(pt);
         }

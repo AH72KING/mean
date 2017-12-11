@@ -1,0 +1,173 @@
+
+    <!--my-frame>
+        <span>My Frame content</span>
+    </my-frame-->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function () {
+  var trigger = $('.hamburger'),
+      overlay = $('.overlay'),
+     isClosed = false;
+
+    trigger.click(function () {
+      hamburger_cross();      
+    });
+
+    function hamburger_cross() {
+
+      if (isClosed == true) {          
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {   
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
+  }
+  
+  $('[data-toggle="offcanvas"]').click(function () {
+        $('#wrapper').toggleClass('toggled');
+  });  
+});
+
+</script>
+  <div class="sidenavdemoBasicUsage header-container"> <!--layout="column"--> 
+
+  <section layout="row" flex="">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="isLeftOpen()">
+
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+        <md-button ng-click="close()" class="md-primary" hide-gt-md="">
+          Close Sidenav Left
+        </md-button>
+      </md-toolbar>
+      <md-content layout-padding="" class="side-bar-left-content">
+        <div class="side-bar-cart">
+          <div class="side-bar-cart-price">
+              <div class="cart-price">
+                  <strong class="total-price" ng-model='cartTotalPrice'>${{$root.cartTotalPrice | number : 2 }}</strong>
+              </div>
+          </div>
+          <div class="side-bar-menu">
+              <ul class="navbar-nav nav">
+                  <li class="menu-item" ng-repeat="item in $root.SideBarLeftMenuItems" ng-click="$root.showMenuChilds(item)">
+                    <i class="fa fa-plus" ng-show="!item.active"></i>
+                    <i class="fa fa-minus" ng-show="item.active"></i>
+                    <span >{{item.name}}</span>
+                    <ul class="sub-navbar submenu">
+                      <li ng-repeat="subItem in item.subItems" ng-show="item.active">  
+                        <span class="submenu-item">{{subItem.name}}</span>
+                      </li>
+                    </ul>
+                  </li>
+              </ul>
+          </div>
+        </div>
+      </md-content>
+
+    </md-sidenav>
+  <div ng-controller="HeaderController as hdctr" class="header-container-inner" ng-cloak ><!--layout="column"-->
+        <div class="inner"> 
+              <div class="logo pull-left">
+                  <ul class="nav navbar-nav navbar-right navbar-menu" style="float:left;margin-left:0px;">
+                      <li>
+                          <div>
+                            <md-button ng-click="toggleLeft()" class="md-primary">
+                                <i class="fa fa-bars" aria-hidden="true"></i>
+                            </md-button>
+                          </div>
+                      </li>
+                      <li style="float:left;width:30px">
+                          <a style="padding-left: 8px;height: 50px;" class="search-icon">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                          </a>
+                          <div class="search-field">
+                              <input type="text" class="form-control" />
+                              <i class="fa fa-search" aria-hidden="true"></i>
+                          </div>
+                      </li>
+                  </ul>
+                  <ul class="navbar-nav nav" ng-show="hdctr.global.authenticated">
+                    <li class="dropdown notify" dropdown on-toggle="toggled(open)" ng-show="hdctr.global.user" >
+                        <a ui-sref="/all-products" class="dropdown-toggle" dropdown-toggle>
+                          <span>Products</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                          <li class="col-md-12">
+                            <a href="/all-products">All</a>
+                          </li>
+                          <li class="col-md-12" ng-repeat="aisle in aisles track by $index">
+                            <a data-index="{{aisle.aisle_name}}" href="{{aisle.aisle_name}}" ng-click="$root.selectAisleID(aisle)" ui-sref="{{aisle.aisle_name}}">
+                              {{ aisle.aisle_name }}
+                            </a>
+                          </li>
+                        </ul>
+                    </li>
+                    <li data-ng-repeat="item in hdctr.menu" ng-show="hdctr.global.user" >
+                        <a ui-sref="{{item.link}}">{{item.title}}</a>
+                    </li>
+                  </ul>
+              </div>
+              <div class="right pull-right user-action-button-container">
+
+                  <!--ul class="navbar-nav nav">
+                    <li class="dropdown notify" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span>Aisles</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                          <li class="col-md-12" ng-repeat="aisle in aisles track by $index">
+                            <a data-index="{{$index}}" >{{ aisle.aisle_name }}</a>
+                          </li>
+                        </ul>
+                    </li>
+                  </ul-->
+                  <ul  class="navbar-nav nav" data-ng-hide="hdctr.global.authenticated">
+                      <li><a ui-sref='auth.register'>Join</a></li>
+                      <li class="divider-vertical"></li>
+                      <li><a ui-sref='auth.login'>Log In</a></li>
+                  </ul>
+                  <ul class="navbar-nav nav" data-ng-show="hdctr.global.authenticated">
+                     <li class="dropdown notify" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span>Social</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                            <li class="col-md-12" ng-repeat="app in socialApps track by $index">
+                              <strong>{{app.name}}</strong> 
+                              <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label> 
+                              <span class="pull-right">
+                                <a ng-if="provider != app.key" href="localhost:3000/api/auth/tumblr" class="btn btn-xs btn-success" >Connect</a>
+                              </span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown notify" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span>Notifications</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
+                            <li class="usr-img col-md-12" ng-repeat="request in requests track by $index">
+                              <div class="icon" title="{{request.givname+' '+request.surname}}"><img src="{{UploadUrl+getDefaultAvatar(request.imgloc)}}" /></div>
+                              <div class="msg"> Friend Request <a class="btn btn-primary btn-xs" ng-click="acceptRequest(request.userId,$index)">Accept</a></div>
+                            </li>
+                            <li class="usr-img col-md-12" ng-show = "!requests.length">No More Requests</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" dropdown on-toggle="toggled(open)">
+                        <a href="#" class="dropdown-toggle" dropdown-toggle>
+                            <span class="log-usr-img small-avatar"> <img src="{{ UploadUrl+getDefaultAvatar(hdctr.global.user.img_loc) }}"/>   {{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}</span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ baseUrl+'users/'+hdctr.global.user.USERID}}" ng-click="hdctr.userDetail()">Profile</a></li>
+                            <li><a href="#" ng-click="hdctr.logout()">Log Out</a></li>
+                        </ul>
+                    </li>
+                  </ul>
+              </div>
+          </div>
+      </div>

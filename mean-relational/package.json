@@ -72,6 +72,7 @@
     "passport-google": "latest",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "1.0.0",
+    "passport-tumblr": "^0.1.2",
     "passport-twitter": "1.0.2",
     "proxyquire": "^1.6.0",
     "reflect-metadata": "^0.1.2",

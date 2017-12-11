@@ -1,0 +1,50 @@
+<br><br>
+	<a id="stop"></a>
+	<a id="start"></a>
+	<md-content class="md-sidenav-push-in-target md-sidenav-flex-unset" flex="" layout-padding="">
+		<div layout="column" layout-fill="" layout-align="top center">
+			<section class="product-flow-container" ng-init="arctr.find()">
+				<div class="">
+			        <div id="myproducts" class="product_grid">
+			        	<div class="col-sm-12 ui-widget-content">
+			        		<div class="row">
+			        			<div class="col-sm-7 five-three">
+			        				<div class="row">
+			          					<div class="col-sm-4 pad_0_5">
+			          						<div ng-include="'public/views/products/cart-list.html'"></div>
+										</div>
+							        	<div class="col-sm-4 pad_0_5">
+											<div ng-include="'public/views/products/cols/first.html'"></div>
+										</div>
+										<div class="col-sm-4 pad_0_5">
+											<div ng-include="'public/views/products/cols/second.html'"></div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5 five-two">
+							        <div class="row">
+							          	<div class="col-sm-6 pad_0_5">
+											<div ng-include="'public/views/products/cols/third.html'"></div>
+										</div>
+										<div class="col-sm-6 pad_0_5">
+											<div ng-include="'public/views/products/cols/fourth.html'"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="product-id">{{arctr.products[arctr.products.length -1].ProdBrandId}}</div>
+					</div>
+				</div>
+				<h1 data-ng-hide="!arctr.products['col1'] || arctr.products['col1'].length">No products yet. 
+					<br> Why don't you 
+					<a href="/products/create">Create One</a>?
+				</h1>
+			</section>
+		</div>
+		<div flex=""></div>
+	</md-content>
+	<div ng-include="'public/views/products/sidebar-right.html'"></div>
+	<div ng-include="'public/views/products/sidebar-product-detail.html'"></div>
+</section>
+</div>

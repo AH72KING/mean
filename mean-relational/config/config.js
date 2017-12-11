@@ -85,14 +85,14 @@ module.exports.getCSSAssets = function() {
 
 module.exports.getJavaScriptAssetsGlobals = function() {
     var ext = process.env.NODE_ENV === 'production' ? 'min.js' : 'js';
-      var output = this.getGlobbedFiles([ './packages/**/public/**/*.'+ext], ['./packages','/public']);
-
+      var output = this.getGlobbedFiles([ './packages/public/**/*.'+ext], ['./packages/','/public']);
       return _.sortBy(output, function(n) { return n.split('/').length;});
 
 };
 
 module.exports.getCSSAssetsGlobals = function(){
-  var output = this.getGlobbedFiles(['./packages/**/public/**/*.css'],['./packages','/public']);
+  var output = this.getGlobbedFiles(['./packages/public/**/*.css'],['./packages/','/public']);
+  console.log(output);
   return output;
 };
 

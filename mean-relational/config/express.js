@@ -47,7 +47,8 @@ module.exports = function(app, passport,db) {
 
     //setting static packages public folder
     config.getDirectories(config.root + '/packages').forEach(function(pack){
-        app.use('/' + pack, express.static(config.root + '/packages/' + pack + '/public'));
+       app.use('/' + pack, express.static(config.root + '/packages/public'));
+      //app.use('/', express.static(config.root + '/packages/public'));
     });
 
     //Setting static bower_components folder
@@ -88,7 +89,9 @@ module.exports = function(app, passport,db) {
 
 
    //inject app and db to app.js all packages
-   config.getGlobbedFiles('./packages/*/app.js').forEach(function (routePath) {
+   config.getGlobbedFiles('./packages/app.js').forEach(function (routePath) {
+    console.log('getGlobbedFiles ./packages/app.js');
+     console.log(path.resolve(routePath));
       require(path.resolve(routePath))(app,db);
     });
 
@@ -98,7 +101,10 @@ module.exports = function(app, passport,db) {
     ]));
 
     // inject app to all routes packages
-    config.getGlobbedFiles('./packages/**/server/routes/*.js').forEach(function (routePath) {
+    config.getGlobbedFiles('./packages/server/routes/*.js').forEach(function (routePath) {
+      console.log('getGlobbedFiles ./packages/server/routes.js');
+          console.log(path.resolve(routePath));
         require(path.resolve(routePath))(app);
+        console.log('read');
     });
 };

@@ -1,0 +1,82 @@
+
+    <div class="loadingScreen" ng-show="!$root.isLoaded">
+      <div>Loading...</div>
+    </div>
+    <div class="container ng-hide" ng-show="$root.isLoaded" >
+       Page Content
+    </div>
+    <div class="main">
+        <div class="product_grid">
+            <ul class="product_list list">
+            </ul>
+        </div>
+    </div>
+    <div class="temp"></div>
+    <style type="text/css">
+
+        
+        .tooltip {
+            display: inline;
+            z-index:1;
+            opacity:1;
+        }
+        .bg_animate {
+            background-color: #e74c3c!important;
+            animation: bg-color 10s infinite!important;
+            -webkit-animation: bg-color 10s infinite!important;
+        }
+        @-webkit-keyframes bg-color {
+            0% { background-color: #e74c3c; }
+            20% { background-color: #f1c40f; }
+            40% { background-color: #1abc9c; }
+            60% { background-color: #3498db; }
+            80% { background-color: #9b59b6; }
+            100% { background-color: #e74c3c; }
+        }
+        @keyframes bg-color {
+            0% { background-color: #e74c3c; }
+            20% { background-color: #f1c40f; }
+            40% { background-color: #1abc9c; }
+            60% { background-color: #3498db; }
+            80% { background-color: #9b59b6; }
+            100% { background-color: #e74c3c; }
+        }
+
+        @media(min-width:600px){.productWrapper{width:100%;}}
+
+    </style>
+
+<div class="container productWrapper" id="products-wrapper" style="height: 870px;overflow: hidden;">
+
+    <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 wrapper-right">
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 dropableCol" id="ticker-wrapper">
+            <ul class="vertical-ticker firstCol Col">
+                <ul class="user-cart-wrap vertical-ticker"></ul>
+            </ul>
+            <div class="dropWrapper hidden"><div> Drop Here</div> </div>
+            <div class="item-list-btn hidden"><span class="back-to-list" data-toggle="tooltip" title="Click to show back the product list" data-placement="bottom" ><i class="fa fa-th back-to-list" aria-hidden="true"></i> Products</span></div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 dropableCol" id="tickerTwo">
+            <ul class="secondCol Col vertical-ticker">
+                <ul class="user-cart-wrap vertical-ticker"></ul>
+            </ul>
+            <div class="dropWrapper hidden"><div>Drop Here</div></div>
+            <div class="item-list-btn hidden"><span class="back-to-list" data-toggle="tooltip" title="Click to show back the product list" data-placement="bottom" ><i class="fa fa-th back-to-list" aria-hidden="true"></i> Products</span></div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 dropableCol" id="tickerThree">
+            <ul class="vertical-ticker thirdCol Col">
+                <ul class="user-cart-wrap vertical-ticker"></ul>
+            </ul>
+            <div class="dropWrapper hidden"> <div>Drop Here </div></div>
+            <div class="item-list-btn hidden"><span class="back-to-list" data-toggle="tooltip" title="Click to show back the product list" data-placement="bottom" ><i class="fa fa-th back-to-list" aria-hidden="true"></i> Products</span></div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12" id="tickerFour">
+            <ul class="vertical-ticker fourthCol Col">
+                <ul class="user-cart-wrap vertical-ticker"></ul>
+            </ul>
+        </div>
+<!--        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="tickerFour"><ul class="vertical-ticker fourthCol"></ul></div>-->
+    </div>
+</div>
+
+<div class="modal product-modal" role="dialog" id="cartProductModal"></div>

@@ -2,7 +2,7 @@
     // JSHint Default Configuration File (as on JSHint website)
     // See http://jshint.com/docs/ for more details
 
-    "maxerr"        : 50,       // {int} Maximum error before stopping
+    "maxerr"        : 150,       // {int} Maximum error before stopping
     "esversion"     : 6,
     // Enforcing
     "bitwise"       : false,    // true: Prohibit bitwise operators (&, |, ^, etc.)
@@ -21,20 +21,20 @@
     "nonbsp"        : true,     // true: Prohibit "non-breaking whitespace" characters.
     "nonew"         : true,    // true: Prohibit use of constructors for side-effects (without assignment)
     "plusplus"      : false,    // true: Prohibit use of `++` & `--`
-    "quotmark"      : "single",    // Quotation mark consistency:
+    "quotmark"      : false,    // Quotation mark consistency:
                                 //   false    : do nothing (default)
                                 //   true     : ensure whatever is used is consistent
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
-    "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : true,     // Unused variables:
+    "undef"         : false,     // true: Require all non-global variables to be declared (prevents global leaks)
+    "unused"        : false,     // Unused variables:
                                 //   true     : all variables, last function parameter
                                 //   "vars"   : all variables only
                                 //   "strict" : all variables, all function parameters
     "strict"        : true,     // true: Requires all functions run in ES5 Strict Mode
-    "maxparams"     : 30,    // {int} Max number of formal params allowed per function
-    "maxdepth"      : 5,    // {int} Max depth of nested blocks (within functions)
-    "maxstatements" : 40,    // {int} Max number statements per function
+    "maxparams"     : 50,    // {int} Max number of formal params allowed per function
+    "maxdepth"      : 9,    // {int} Max depth of nested blocks (within functions)
+    "maxstatements" : 140,    // {int} Max number statements per function
     "maxcomplexity" : 12,    // {int} Max cyclomatic complexity per function
     "maxlen"        : false,    // {int} Max number of characters per line
     "varstmt"       : false,    // true: Disallow any var statements. Only `let` and `const` are allowed.
