@@ -28,7 +28,8 @@ module.exports = function(sequelize, DataTypes) {
 			cnt_yells: DataTypes.TEXT,
 			position: DataTypes.TEXT,
 			rank: DataTypes.TEXT,
-			prev_rank: DataTypes.TEXT
+			prev_rank: DataTypes.TEXT,
+			aisleId:DataTypes.INTEGER
 		},
 		{
 		timestamps: false,

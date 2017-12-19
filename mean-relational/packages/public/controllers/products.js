@@ -505,7 +505,7 @@ import 'rxjs/add/operator/map';*/
         $scope.startTimeout = function () {  
             $scope.startCount = $scope.startCount + 1;  
             $rootScope.getProducts();
-            vm.mytimeout = $timeout($scope.startTimeout, 10000);  
+            vm.mytimeout = $timeout($scope.startTimeout, 100000);  
         };
 
         $scope.stopTimeout = function () {  
@@ -519,6 +519,13 @@ import 'rxjs/add/operator/map';*/
             $scope.AislesSelectedID    = aisle.aisleId;
             $scope.AislesSelectedName  = aisle.aisle_name;
             $scope.AislesSelectedDesc  = aisle.aisle_description;
+            
+           $rootScope.emptyAllProductCols();
+            if($scope.NoMoreProductToFetch){
+              $scope.startTimeout();
+            }
+        };
+        $rootScope.emptyAllProductCols = function () {
             $scope.lastProductID = 0;
             $scope.arctr.products['col1'] = [];
             $scope.arctr.products['col2'] = [];
@@ -527,10 +534,15 @@ import 'rxjs/add/operator/map';*/
             if($scope.NoMoreProductToFetch){
               $scope.startTimeout();
             }
+
+        };
+        $rootScope.getAllProducts = function () {
+            $rootScope.emptyAllProductCols();
+            $scope.AislesIsSelected = false;
         };
         $rootScope.getProducts = function () {
                 var lastProductID = $scope.lastProductID;
-                var nextProducts = 3;
+                var nextProducts = 4;
                 var body = '';
                 var data = '';
                 if(lastProductID === undefined){
