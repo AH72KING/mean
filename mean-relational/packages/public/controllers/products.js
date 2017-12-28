@@ -1301,7 +1301,43 @@ import 'rxjs/add/operator/map';*/
           }); 
         };
 
+         function getAisles(){
+          $scope.aisles = {};
+          var url = ApiBaseUrl+'getAisles';
+          var configObj = { method: 'GET',url: url, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                if(typeof response.data != 'undefined'){
+                  $scope.aisles = response.data;
+                }
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+        getAisles();
 
+        // get prod by aisle
+        $scope.getProdByAisle = function(index){
+          if(index != "")
+            var id = $scope.aisles[index].aisleId;
+          else id = "";
+          var url = baseUrl+'api/getAisleProd';
+          var postData = {'id':id};
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          notify('Loading Products...','info');
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  for(var i = 1; i <= 4; i++){
+                    $scope.arctr.products['col'+i] = response.data['col'+i];
+                  }
+                closeNoti();
+                if(index != "") var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                else var $msg = "All Products Loaded";
+                  notify($msg,'success');
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
       }
 
 })();

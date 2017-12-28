@@ -146,13 +146,13 @@ angular
           if(url == null)
             url = '/images/default-avatar.png'; 
           else {
-            var link = UploadUrl+url;
+           /* var link = UploadUrl+url;
             var http = new XMLHttpRequest();
             http.open('HEAD', link, false);
             http.send();
             if(http.status==404){localStorage.clear();
               url = '/images/default-avatar.png'; 
-            }
+            }*/
           }
           return url;
        };
@@ -256,20 +256,7 @@ angular
                 }); 
             } 
         };
-        function getAisles(){
-          $scope.aisles = {};
-          var url = ApiBaseUrl+'getAisles';
-          var configObj = { method: 'GET',url: url, headers: headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                if(typeof response.data != 'undefined'){
-                  $scope.aisles = response.data;
-                }
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
-          }); 
-        }
-        getAisles();
+       
 
        /*  var socket = io.connect();
           socket.on('news', function (data) {

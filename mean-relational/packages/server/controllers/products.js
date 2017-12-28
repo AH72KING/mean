@@ -223,6 +223,7 @@ exports.all = function(req, res) {
         productsData['col3'] = col3;
         productsData['col4'] = col4;
 
+
        db.User.find({where: {USERID: user_id}, include: [db.Grpcart]}).then(function(user){
           if(!user){
 
@@ -230,7 +231,7 @@ exports.all = function(req, res) {
             productsData['Failed to Get Group Cart ID for user'] = user_id;
           }else{
 
-             //console.log(user);
+            //console.log(user);
             productsData['user'] = user; 
             productsData['user_id'] = user.USERID;
             console.log(user.Grpcart);
@@ -274,6 +275,7 @@ exports.all = function(req, res) {
             db.sequelize.query(Query,{raw: false}).then(grpcart_products => {
                 var productRow = {};
                 //productsData['productRow']= typeof productRow;
+
                 var TotalCartPrice = 0;
                    grpcart_products[0].forEach(function(row) {
                          
@@ -951,7 +953,50 @@ exports.acceptProdInCart = function(req, res){
   }
 };
 
+exports.getAisleProd = function(req, res){
+    //db.product.findAll().then(function(product){
+   var productsData = {};
+   var $id = req.body.id;
+   var $where = {};
+   if($id != "") $where.aisleId = $id;
+   db.product.findAll({limit: 12, 
+      where: $where
+    }).then(function(product){
+        var col1 = [];
+        var col2 = [];
+        var col3 = [];
+        var col4 = [];
+        var counter = 0;
+           for(var i = 0, len = product.length; i < len; i++) {
+              counter++;
+              if(counter === 1){
+               var col1Json = convertJson(product[i]);
+                col1.push(col1Json);
+              }
+              if(counter === 2){
+                var col2Json = convertJson(product[i]);
+                col2.push(col2Json);
+              }
+              if(counter === 3){
+                var col3Json = convertJson(product[i]);
+                col3.push(col3Json);
+              }
+              if(counter === 4){
+               var col4Json = convertJson(product[i]);
+                col4.push(col4Json);
+                counter = 0;
+              }
+                
+            }
 
+        productsData['col1'] = col1;
+        productsData['col2'] = col2;
+        productsData['col3'] = col3;
+        productsData['col4'] = col4;
+
+        return res.jsonp(productsData);
+      });
+}
 
 
 

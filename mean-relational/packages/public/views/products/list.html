@@ -9,14 +9,12 @@
 			          <div class="col-md-12">
 			            <h4>Selector-Based Filter</h4>
 				            <div class="btn-group" opt-kind ok-key="filter" >
-				              <button type='button' class='btn btn-default' ok-sel="*">Show All</button>
-				              <button type='button' class='btn btn-default' ok-sel=".aisles-1">aisles 1</button>
-				              <button type='button' class='btn btn-default' ok-sel=".aisles-2">aisles 2</button>
-				              <button type='button' class='btn btn-default' ok-sel=".aisles-3">aisles 3</button>
+				              <button type='button' class='btn btn-default' ng-click="getProdByAisle('')">Show All</button>
+				              <button type='button' ng-click="getProdByAisle($index)" class='btn btn-default' data-index="{{$index}}" ng-repeat="aisle in aisles track by $index">{{aisle.aisle_name}}</button>
 				            </div>
 			          </div>
 			        </div>
-			        <div class="row">
+			        <!-- <div class="row">
 			          <ul isotope-container ng-cloak class="ng-cloak">
 			            <li ng-repeat="product in arctr.products['col1']" ng-model="arctr.products['col1']" data-product-id="{{product.ProdBrandId}}" isotope-item class="aisles-{{product.aisleId}}" >
 			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
@@ -31,7 +29,7 @@
 			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
 			            </li>
 			          </ul>
-			        </div>
+			        </div> -->
 			        <div id="myproducts" class="product_grid">
 			        	<div class="col-sm-12 ui-widget-content">
 			        		<div class="row">
