@@ -22,6 +22,10 @@ var tmblr_client = tumblr.createClient({
   token: localStorage.getItem('tb_token'),
   token_secret: localStorage.getItem('tb_secret')
 });
+
+var FB = require('fb');
+FB.options({version: 'v2.8', appId: '824770854361592', appSecret: '8599cce8d0533a0ef57ab6c68c395e9c'});
+FB.setAccessToken(localStorage.getItem('fb_token'));
  //console.log('user server controller');
  //
 
@@ -510,3 +514,19 @@ exports.delTumblrPost = function(req, res){
     return res.jsonp(resp.posts);
   });
 };
+
+
+exports.fbposts = function(req,res){
+
+  var usrId = req.user.facebookUserId;
+  console.log('fb userid is '+usrId);
+    if(usrId != null){
+      FB.api("/me/posts", function (response) {
+      /*if(!response || response.error) {
+       console.log(!response ? 'error occurred' : response.error);
+       return;
+      }*/
+      return res.jsonp(response);
+    });
+    }
+}

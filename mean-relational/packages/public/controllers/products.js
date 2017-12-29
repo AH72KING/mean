@@ -1338,6 +1338,18 @@ import 'rxjs/add/operator/map';*/
                   console.log('Error: ', errorResponse.status);
           }); 
         }
+
+        // get facebook post
+        function fbposts(){
+          var url = baseUrl+'api/fbposts';
+          var configObj = { method: 'POST',url: url, data:{}, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+        fbposts();
       }
 
 })();
