@@ -1317,14 +1317,14 @@ import 'rxjs/add/operator/map';*/
         getAisles();
 
         // get prod by aisle
-        $scope.getProdByAisle = function(index){
+        $rootScope.getProdByAisle = function(index){
           if(index != "")
             var id = $scope.aisles[index].aisleId;
           else id = "";
           var url = baseUrl+'api/getAisleProd';
           var postData = {'id':id};
           var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-          notify('Loading Products...','info');
+         // notify('Loading Products...','info');
           $http(configObj)
               .then(function onFulfilled(response) {
                   for(var i = 1; i <= 4; i++){
