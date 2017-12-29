@@ -100,8 +100,8 @@ app.get('/api/auth/tumblr', passport.authenticate('tumblr', {
 }), users.signin);
 
 app.get('/api/auth/tumblr/callback', passport.authenticate('tumblr', {
-    failureRedirect: '/signin'
-}), function(req, res) {res.redirect('/');});
+    failureRedirect: '/all-products'
+}), function(req, res) {res.redirect('/all-products');});
 
 // Finish with setting up the USERID param
 app.param('USERID', users.user);
@@ -111,5 +111,6 @@ app.route('/api/dislikeTweet').post(users.dislikeTweet);
 app.route('/api/delTweet').post(users.delTweet);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
+app.route('/api/fbposts').post(users.fbposts);
 
 };

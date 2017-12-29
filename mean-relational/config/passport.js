@@ -85,6 +85,26 @@ passport.use(new LocalStrategy({
   }
 ));
 
+passport.use(new TumblrStrategy({
+    consumerKey: config.tumblr.clientID,
+    consumerSecret: config.tumblr.clientSecret,
+    callbackURL: config.tumblr.callbackURL
+  },
+  function(token, tokenSecret, profile, done) {
+    console.log('Tumblr Strategy');
+    console.log(profile);
+    localStorage.setItem('tb_token', token);
+    localStorage.setItem('tb_secret', tokenSecret);
+    db.User.find({where: {USERID: 399}}).then(function(user){
+        winston.info('New User (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+        done(null, user);
+    }).catch(function(err){
+        done(err, null);
+    });
+  }
+));
+
+
 //    Use twitter strategy
 passport.use(new TwitterStrategy({
         consumerKey: config.twitter.clientID,
@@ -153,26 +173,6 @@ passport.use(new TwitterStrategy({
     }
 ));
 
-passport.use(new TumblrStrategy({
-    consumerKey: config.tumblr.clientID,
-    consumerSecret: config.tumblr.clientSecret,
-    callbackURL: config.tumblr.callbackURL
-  },
-  function(token, tokenSecret, profile, done) {
-    console.log('Tumblr Strategy');
-    console.log(profile);
-    localStorage.setItem('tb_token', token);
-    localStorage.setItem('tb_secret', tokenSecret);
-    db.User.find({where: {USERID: 399}}).then(function(user){
-        winston.info('New User (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
-        done(null, user);
-    }).catch(function(err){
-        done(err, null);
-    });
-  }
-));
-
-
 // Use facebook strategy
 passport.use(new FacebookStrategy({
         clientID: config.facebook.clientID,
@@ -182,6 +182,7 @@ passport.use(new FacebookStrategy({
     },
     function(accessToken, refreshToken, profile, done) {
 
+        localStorage.setItem('fb_token', accessToken);
         console.log('FacebookStrategy');
         console.log(profile);
 
@@ -217,7 +218,7 @@ passport.use(new FacebookStrategy({
                             password:socialPass,
                             role: 'U'
                         }).then(function(l){ 
-                            UserLoginInJava(u); 
+                            //UserLoginInJava(u); 
                                 db.Login.update({online:1},{where:{userId:l.userId}});
                                 db.User.update({online:1},{where:{USERID:l.userId}});   
                             winston.info('New User (facebook) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
@@ -234,7 +235,7 @@ passport.use(new FacebookStrategy({
                 }, {
                   where: {EMAIL: email}
                 });
-                UserLoginInJava(user);
+                //UserLoginInJava(user);
                     db.Login.update({online:1},{where:{userId:user.USERID}}); 
                     db.User.update({online:1},{where:{USERID:user.USERID}}); 
                 winston.info('Login (facebook) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
