@@ -18,11 +18,11 @@
   function configState($stateProvider,$urlRouterProvider){
 
           // For unmatched routes:
-      $urlRouterProvider.otherwise('/');
+      $urlRouterProvider.otherwise('/');/*
       $urlRouterProvider.when('/api/auth/twitter', '/api/auth/twitter');
       $urlRouterProvider.when('/api/auth/tumblr', '/api/auth/tumblr');
       $urlRouterProvider.when('/api/auth/facebook', '/api/auth/facebook');
-      $urlRouterProvider.when('/api/auth/google', '/api/auth/google');
+      $urlRouterProvider.when('/api/auth/google', '/api/auth/google');*/
       // states for my app
       $stateProvider
           .state('home', {
