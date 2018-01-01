@@ -27,10 +27,10 @@ angular
         //check key if expire, then logout user
         // validate key
         $scope.socialApps = [
-          { 'name':'Twitter', 'key':'twitter', 'href':''},
-          { 'name':'Tumblr', 'key':'tumblr', 'href':'/api/auth/tumblr'},
-          { 'name':'Facebook', 'key':'facebook', 'href':''},
-          { 'name':'Google', 'key':'google', 'href':''},
+          { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter'},
+          { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr'},
+          { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook'},
+          { 'name':'Google',  'key':'google',  'href':'/api/auth/google'},
         ];
          $rootScope.SideBarLeftMenuItems = [
             {

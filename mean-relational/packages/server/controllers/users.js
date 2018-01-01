@@ -26,6 +26,18 @@ var tmblr_client = tumblr.createClient({
 var FB = require('fb');
 FB.options({version: 'v2.8', appId: '824770854361592', appSecret: '8599cce8d0533a0ef57ab6c68c395e9c'});
 FB.setAccessToken(localStorage.getItem('fb_token'));
+
+var google = require('googleapis');
+var plus = google.plus('v1');
+var OAuth2 = google.auth.OAuth2;
+var oauth2Client = new OAuth2(
+  '972158488032-4ovojau9eipa5voof0aaoh1qv0v0k0tt.apps.googleusercontent.com',
+  'C2zw8rtG4jDBM0LDQrlauGyr',
+  'http://localhost:3000/api/auth/google/callback'
+);
+
+
+
  //console.log('user server controller');
  //
 
@@ -41,7 +53,6 @@ FB.setAccessToken(localStorage.getItem('fb_token'));
                    'Access-Control-Max-Age': '3600',
                    'Access-Control-Allow-Credentials': 'true'
                 };
-
 
 
 /**
@@ -530,3 +541,12 @@ exports.fbposts = function(req,res){
     });
     }
 }
+
+/*exports.googlePosts = function(req, res){
+  plus.people.get({
+  userId: 'me',
+  auth: oauth2Client
+  }, function (err, response) {
+    return res.jsonp(response);
+  });
+}*/

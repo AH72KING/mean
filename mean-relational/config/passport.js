@@ -299,7 +299,7 @@ passport.use(new GoogleStrategy({
                                 password:socialPass,
                                 role: 'U'
                             }).then(function(l){
-                                UserLoginInJava(u);  
+                               // UserLoginInJava(u);  
                                 db.Login.update({online:1},{where:{userId:l.userId}});    
                                 db.User.update({online:1},{where:{USERID:l.userId}});    
                                 winston.info('New User (Google) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
@@ -316,7 +316,7 @@ passport.use(new GoogleStrategy({
                     }, {
                       where: {EMAIL: email}
                     });
-                    UserLoginInJava(user); 
+                  //  UserLoginInJava(user); 
                     db.Login.update({online:1},{where:{userId:user.USERID}});
                     db.User.update({online:1},{where:{USERID:user.USERID}}); 
                     winston.info('Login (Google) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');

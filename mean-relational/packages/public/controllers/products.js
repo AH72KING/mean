@@ -3,9 +3,16 @@
 import 'rxjs/RX';
 import 'rxjs/add/operator/map';*/
 (function(){
-    angular
-      .module('Anerve')
-      .controller('productsController',productsController);
+   var $anerveModule =  angular
+      .module('Anerve');
+      $anerveModule.
+      filter('htmlToPlaintext', function() {
+          return function(text) {
+            return angular.element(text).text();
+          }
+        }
+      );
+      $anerveModule.controller('productsController',productsController);
       
       //,'$log'
       productsController.$inject = ['$stateParams', '$location', 'Global', 'products', '$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$sce', '$rootScope'];
@@ -1317,23 +1324,30 @@ import 'rxjs/add/operator/map';*/
         getAisles();
 
         // get prod by aisle
-        $scope.getProdByAisle = function(index){
-          if(index != "")
+        $scope.getProdByAisle = function(index, event){
+          $('.aisle-types').find('button').prop('disabled', false);
+          $(event.currentTarget).prop('disabled', true);
+          if(index == "" && index != 0)
+            id = "";
+          else 
             var id = $scope.aisles[index].aisleId;
-          else id = "";
           var url = baseUrl+'api/getAisleProd';
           var postData = {'id':id};
           var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-          notify('Loading Products...','info');
           $http(configObj)
               .then(function onFulfilled(response) {
-                  for(var i = 1; i <= 4; i++){
-                    $scope.arctr.products['col'+i] = response.data['col'+i];
-                  }
+                for(var i = 1; i <= 4; i++){
+                  $scope.arctr.products['col'+i] = response.data['col'+i];
+                }
                 closeNoti();
-                if(index != "") var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
-                else var $msg = "All Products Loaded";
-                  notify($msg,'success');
+                if(index == "" && index != 0) {
+                  console.log('index is '+ index);
+                  //$(event.currentTarget).prop('disable',true);
+                  var $msg = "All Products Loaded";
+                }
+                else 
+                  var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                notify($msg,'success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -1350,6 +1364,19 @@ import 'rxjs/add/operator/map';*/
           }); 
         }
         fbposts();
+
+        /*// get googleplus post
+        function gplus(){
+          var url = baseUrl+'api/gplus';
+          var configObj = { method: 'POST',url: url, data:{}, headers: headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
+       gplus();*/
+
       }
 
 })();
