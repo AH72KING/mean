@@ -4360,8 +4360,12 @@ div.m-app-loading p {
     /* top: initial!important; */
     /* bottom: 0px!important; */
     min-height: 249px;
-    border: 1px solid #dedede;
-    box-shadow: 1px 2px 5px 1px #dedede;
+   /* border: 1px solid #dedede;*/
+   /* box-shadow: 1px 2px 5px 1px #dedede;*/
+}
+#cart-list .product_item, .friends-container.product_item{
+   border: 1px solid #dedede;
+   box-shadow: 1px 2px 5px 1px #dedede;
 }
 
 .pad_0_5 {

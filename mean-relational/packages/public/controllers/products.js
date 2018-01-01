@@ -1324,30 +1324,26 @@ import 'rxjs/add/operator/map';*/
         getAisles();
 
         // get prod by aisle
-        $scope.getProdByAisle = function(index, event){
-          $('.aisle-types').find('button').prop('disabled', false);
-          $(event.currentTarget).prop('disabled', true);
-          if(index == "" && index != 0)
-            id = "";
-          else 
+        $rootScope.getProdByAisle = function(index){
+          if(index !== undefined && index !== 'undefined' && index !== ''){
             var id = $scope.aisles[index].aisleId;
+          }else{
+            id = "";
+          }
+
           var url = baseUrl+'api/getAisleProd';
           var postData = {'id':id};
           var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+         // notify('Loading Products...','info');
           $http(configObj)
               .then(function onFulfilled(response) {
-                for(var i = 1; i <= 4; i++){
-                  $scope.arctr.products['col'+i] = response.data['col'+i];
-                }
+                  for(var i = 1; i <= 4; i++){
+                    $scope.arctr.products['col'+i] = response.data['col'+i];
+                  }
                 closeNoti();
-                if(index == "" && index != 0) {
-                  console.log('index is '+ index);
-                  //$(event.currentTarget).prop('disable',true);
-                  var $msg = "All Products Loaded";
-                }
-                else 
-                  var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
-                notify($msg,'success');
+                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                else var $msg = "All Products Loaded";
+                  notify($msg,'success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 

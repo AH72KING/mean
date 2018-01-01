@@ -507,7 +507,8 @@ exports.delTweet = function(req, res){
 exports.tumblrPosts = function(req, res){
 
   tmblr_client.userInfo(function(err, data) {
-    if(data !== undefined && data !== '' && data !== null) {
+
+   if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;
         tmblr_client.blogPosts(blogName, {limit:4}, function(err, resp) {

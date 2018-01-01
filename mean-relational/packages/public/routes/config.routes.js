@@ -25,8 +25,15 @@
       $urlRouterProvider.when('/api/auth/google', '/api/auth/google');
       // states for my app
       $stateProvider
-        .state('home', {
+          .state('home', {
           url: '/',
+          templateUrl: '/public/views/products/list.html',
+          controller: 'productsController',
+          controllerAs: 'arctr'
+        });
+       /* .state('home', {
+          //url: '/',
+          url: '/all-products',
           templateUrl: '/public/views/index.html',
           controller:'IndexController',
           controllerAs:'idctr',
@@ -35,7 +42,7 @@
                   return MeanUser.checkLoggedin();
               }
            }
-        });
+        });*/
   }
 
   function configLoaction($locationProvider){

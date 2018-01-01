@@ -2,15 +2,15 @@
 	<a id="stop"></a>
 	<a id="start"></a>             
 	<md-content class="md-sidenav-push-in-target md-sidenav-flex-unset" flex="" layout-padding="">
-		<div layout="column" layout-fill="" layout-align="top center">
+		<!--div layout="column" layout-fill="" layout-align="top center"-->
+		<div>
 			<section class="product-flow-container" ng-init="arctr.find()">
 				<div class="">
 					<div class="row">
 			          <div class="col-md-12">
-			            <h4>Selector-Based Filter</h4>
-				            <div class="btn-group aisle-types" opt-kind ok-key="filter" >
-				              <button type='button' class='btn btn-default' ng-click="getProdByAisle('',$event)">Show All</button>
-				              <button type='button' ng-click="getProdByAisle($index,$event)" class="btn btn-default" data-index="{{$index}}" ng-repeat="aisle in aisles track by $index">{{aisle.aisle_name}}</button>
+				            <div class="btn-group" opt-kind ok-key="filter" >
+				              <button type='button' class='btn btn-default' ng-click="getProdByAisle('')">Show All</button>
+				              <button type='button' ng-click="getProdByAisle($index)" class='btn btn-default' data-index="{{$index}}" ng-repeat="aisle in aisles track by $index">{{aisle.aisle_name}}</button>
 				            </div>
 			          </div>
 			        </div>

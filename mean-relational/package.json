@@ -54,6 +54,7 @@
     "express": "^4.16.2",
     "express-mysql-session": "^0.4.1",
     "express-session": "^1.15.6",
+    "fb": "^2.0.0",
     "flag-icon-css": "^2.8.0",
     "forever": "latest",
     "glob": "^5.0.14",

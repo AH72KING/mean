@@ -90,8 +90,6 @@ module.exports = function(app, passport,db) {
 
    //inject app and db to app.js all packages
    config.getGlobbedFiles('./packages/app.js').forEach(function (routePath) {
-    console.log('getGlobbedFiles ./packages/app.js');
-     console.log(path.resolve(routePath));
       require(path.resolve(routePath))(app,db);
     });
 
@@ -102,9 +100,6 @@ module.exports = function(app, passport,db) {
 
     // inject app to all routes packages
     config.getGlobbedFiles('./packages/server/routes/*.js').forEach(function (routePath) {
-      console.log('getGlobbedFiles ./packages/server/routes.js');
-          console.log(path.resolve(routePath));
         require(path.resolve(routePath))(app);
-        console.log('read');
     });
 };

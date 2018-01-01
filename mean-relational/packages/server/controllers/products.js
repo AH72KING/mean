@@ -5,7 +5,6 @@
  */
 
 var db = require('../../../config/sequelize');
-console.log('herer');
 var express = require('express');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
@@ -14,7 +13,6 @@ var app = express();
 
 const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
 const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
-console.log(keyPublishable);
 
 const stripe = require('stripe')(keySecret);
 const bodyParser = require('body-parser');
@@ -44,8 +42,6 @@ app.use(bodyParser.json());
 
         //var baseUrl = 'http://localhost:3000/';
         var ip = db.sequelize.config.host;
-        console.log('db.ip');
-        console.log(db.sequelize.config.host);
         //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
         var headers = {
@@ -86,7 +82,6 @@ app.use(bodyParser.json());
  * Its purpose is to preload the product on the req object then call the next function.
  */
 exports.product = function(req, res, next, id) {
-    console.log('ProdBrandId => '+ id);
     db.product.find({ where: {ProdBrandId: id}}).then(function(product){
         if(!product) {
             return next(new Error('Failed to load product ' + id));
@@ -234,7 +229,6 @@ exports.all = function(req, res) {
             //console.log(user);
             productsData['user'] = user; 
             productsData['user_id'] = user.USERID;
-            console.log(user.Grpcart);
           }
 
 
@@ -318,7 +312,6 @@ exports.all = function(req, res) {
             return res.jsonp(productsData);
         }
       }).catch(function(err){
-            console.log('error');
             console.log(err);
       });
     }).catch(function(err){

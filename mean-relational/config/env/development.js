@@ -57,6 +57,6 @@ module.exports = {
     tumblr: {
         clientID: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
         clientSecret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
-        callbackURL: 'http://127.0.0.1:3000/api/auth/tumblr/callback'
+        callbackURL: 'http://localhost:3000/api/auth/tumblr/callback'
     }
 };

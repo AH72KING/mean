@@ -143,9 +143,10 @@ angular
         };
 
         $rootScope.getDefaultAvatar = function(url){
-          if(url == null)
+          if(url == null){
             url = '/images/default-avatar.png'; 
-          else {
+          }else {
+            url = '/images/default-avatar.png'; 
            /* var link = UploadUrl+url;
             var http = new XMLHttpRequest();
             http.open('HEAD', link, false);
