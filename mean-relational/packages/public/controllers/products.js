@@ -1308,6 +1308,7 @@ import 'rxjs/add/operator/map';*/
           $http(configObj)
               .then(function onFulfilled(response) {
                 if(typeof response.data != 'undefined'){
+                  console.log(response.data);
                   $scope.aisles = response.data;
                 }
               }).catch( function onRejection(errorResponse) {
@@ -1318,9 +1319,12 @@ import 'rxjs/add/operator/map';*/
 
         // get prod by aisle
         $rootScope.getProdByAisle = function(index){
-          if(index != "")
+          if(index !== undefined && index !== 'undefined' && index !== ''){
             var id = $scope.aisles[index].aisleId;
-          else id = "";
+          }else{
+            id = "";
+          }
+
           var url = baseUrl+'api/getAisleProd';
           var postData = {'id':id};
           var configObj = { method: 'POST',url: url, data:postData, headers: headers};
@@ -1331,7 +1335,7 @@ import 'rxjs/add/operator/map';*/
                     $scope.arctr.products['col'+i] = response.data['col'+i];
                   }
                 closeNoti();
-                if(index != "") var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
                 else var $msg = "All Products Loaded";
                   notify($msg,'success');
               }).catch( function onRejection(errorResponse) {

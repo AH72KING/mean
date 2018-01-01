@@ -92,7 +92,6 @@ module.exports.getJavaScriptAssetsGlobals = function() {
 
 module.exports.getCSSAssetsGlobals = function(){
   var output = this.getGlobbedFiles(['./packages/public/**/*.css'],['./packages/','/public']);
-  console.log(output);
   return output;
 };
 

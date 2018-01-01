@@ -45,13 +45,10 @@ var socialPass = encryptPassword(SocialPassword);
 
 //Serialize sessions
 passport.serializeUser(function(user, done) {
-    //console.log(user);
-  console.log('serializeUser');
   done(null, user.USERID);
 });
 
 passport.deserializeUser(function(USERID, done) {
-    console.log('deserializeUser');
     db.User.find({where: {USERID: USERID}})
     .then(function(user){
         if(!user) return done('error');
@@ -91,8 +88,6 @@ passport.use(new TumblrStrategy({
     callbackURL: config.tumblr.callbackURL
   },
   function(token, tokenSecret, profile, done) {
-    console.log('Tumblr Strategy');
-    console.log(profile);
     localStorage.setItem('tb_token', token);
     localStorage.setItem('tb_secret', tokenSecret);
     db.User.find({where: {USERID: 399}}).then(function(user){
@@ -116,13 +111,10 @@ passport.use(new TwitterStrategy({
         includeEmail:true,
     },
     function(token, tokenSecret, profile, done) {
-        console.log('TwitterStrategy'); console.log(profile.id); 
-        console.log(profile); 
         localStorage.setItem('tw_token', token);
         localStorage.setItem('tw_secret', tokenSecret);
         var provider  = 'twitter';
         db.User.find({where: {twitterUserId: profile.id}}).then(function(user){
-            console.log(profile.id); 
             var fullname = profile.displayName.split(" ");
             var fname = fullname[0];
             var lname = fullname[1];
@@ -183,8 +175,6 @@ passport.use(new FacebookStrategy({
     function(accessToken, refreshToken, profile, done) {
 
         localStorage.setItem('fb_token', accessToken);
-        console.log('FacebookStrategy');
-        console.log(profile);
 
         var FacebookID      = profile.id;
        // var username        = profile.username;
@@ -260,8 +250,6 @@ passport.use(new GoogleStrategy({
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
-            console.log('GoogleStrategy');
-            console.log(profile);
         var GoogleID      = profile.id;
        // var username        = profile.username;
         var displayName     = profile.displayName;
@@ -274,10 +262,6 @@ passport.use(new GoogleStrategy({
         var provider        = profile.provider;
 
             db.User.find({where : {EMAIL: email}}).then(function(user){
-                        console.log('u for user');
-                //use where as facebookUserId for a good reason
-                console.log('user for user');
-                console.log(user);
                 if(!user){
                     db.User.create({
                         GIVNAME: givenName,
@@ -288,8 +272,6 @@ passport.use(new GoogleStrategy({
                         provider: provider,
                         openID: GoogleID
                     }).then(function(u){
-                        console.log('u for user');
-                        console.log(u);
                         if(u.USERID){
                             db.Login.create({
                                 userId: u.USERID,
@@ -348,16 +330,11 @@ function UserLoginInJava(user) {
              body += chunk;
         });
         res2.on('end', function() { 
-            console.log("url is ");
-            console.log(url); 
            var dataJson = JSON.parse(body);
             if(dataJson !== undefined){
                 var key = dataJson.key;
                 var UserID = dataJson.usr.userid;
                 if(key !== undefined){
-                  console.log('setting Local Key');
-                  console.log(key);
-                  console.log(UserID);
                       localStorage.setItem('key_'+UserID, key);
                       localStorage.setItem('UserID', UserID);
                 }
