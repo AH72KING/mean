@@ -1,7 +1,4 @@
 'use strict';
-/*import {Observable} from 'rxjs/observable';
-import 'rxjs/RX';
-import 'rxjs/add/operator/map';*/
 (function(){
    var $anerveModule =  angular
       .module('Anerve');
@@ -13,85 +10,38 @@ import 'rxjs/add/operator/map';*/
         }
       );
       $anerveModule.controller('productsController',productsController);
-      
-      //,'$log'
       productsController.$inject = ['$stateParams', '$location', 'Global', 'products', '$state', '$scope', '$timeout', '$http', 'Session', '$mdSidenav', '$mdUtil','$sce', '$rootScope'];
-
-  function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $sce, $rootScope ){
-        var vm = this;
-        $rootScope.isLoaded = false;
-
-        var baseUrl = 'http://localhost:3000/';
-        var ip = window.ip;
-       //var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
-       var UploadUrl = 'http://localhost:3000/assets/';
-       var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
-       var headers = {
-                   'Access-Control-Allow-Origin': '*',
-                   'Content-Type' : 'application/json; charset=UTF-8',
-                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
-                   'Access-Control-Max-Age': '3600',
-                   'Access-Control-Allow-Credentials': 'true'
-                };
+      function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $sce, $rootScope ){
+      var vm = this;
         // bind functions
 
+        $rootScope.addPaymentButton     = true;
+        $rootScope.addShippingButton    = false;
+        $rootScope.hideShippingAddress  = true;
+        $rootScope.hidePayment          = true;
+        $rootScope.hideMyZoneCart       = false; 
+        $rootScope.proceedButton        = false;
+        $rootScope.paymentFormButton    = false;
+        $rootScope.paymentButton        = false;
+        $rootScope.shippingAddressAdded = false;
+        $rootScope.showPaymentCompleteMsg = false;
 
-        $rootScope.cartTotalPrice        = 0;/*
-        $scope.UploadUrl            = UploadUrl;   */
-        $scope.addPaymentButton     = true;
-        $scope.addShippingButton    = false;
-        $scope.hideShippingAddress  = true;
-        $scope.hidePayment          = true;
-        $scope.hideMyZoneCart       = false; 
-        $scope.proceedButton        = false;
-        $scope.paymentFormButton    = false;
-        $scope.paymentButton        = false;
-        $scope.shippingAddressAdded = false;
-        $scope.showPaymentCompleteMsg = false;
-
-
-
-        $scope.AislesIsSelected = false;
+        $rootScope.AislesIsSelected = false;
 
         var cartCreated = false;
         var grp_cartId = null;
         var isGuest = true; 
 
-        $scope.CurrentProductDetail  = '';
-        $scope.CurrentProductDetailImage  = '';
+        $rootScope.CurrentProductDetail  = '';
+        $rootScope.CurrentProductDetailImage  = '';
 
-        /*if(Session.getItem('grp_cartId') != undefined){
-          cartCreated = true ;
-          grp_cartId = Session.getItem('grp_cartId');
-        }*/
-        $scope.cart = []; // cart Array
-        $scope.friendsCart = []; // friends in cart Array
-        $scope.userFirends = []; // friends Array;
+        $rootScope.cart = []; // cart Array
+        $rootScope.friendsCart = []; // friends in cart Array
+        $rootScope.userFirends = []; // friends Array;
         var userFirends = [];
-        vm.userFirends = userFirends;
+        $rootScope.userFirends = userFirends;
 
-        $scope.toggleLeft     = buildToggler('left');
-        $scope.toggleRight    = buildToggler('right');
-        $scope.ProductDetail  = buildToggler('ProductDetail');
-        $scope.UserDetail     = buildToggler('UserDetail');
-        $scope.lockLeft = false;
-        $scope.lockRight = false;
-        $scope.lockProductDetail = false;
-        $scope.lockUserDetail = false;
 
-        $scope.isLeftOpen = function() {
-          return $mdSidenav('left').isOpen();
-        };
-        $scope.isRightOpen = function() {
-          return $mdSidenav('right').isOpen();
-        };
-        $scope.isProductDetailOpen = function() {
-          return $mdSidenav('ProductDetail').isOpen();
-        };
-        $scope.isUserDetailOpen = function() {
-          return $mdSidenav('UserDetail').isOpen();
-        };
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -109,61 +59,61 @@ import 'rxjs/add/operator/map';*/
           return debounceFn;
         }
 
-        $scope.toTrustedHTML = function (html) {
+        $rootScope.toTrustedHTML = function (html) {
           return $sce.trustAsHtml(html);
         };
         
 
-        $scope.hideMe = function() {
-          if(vm.products !== undefined){
-            return vm.products.length > 0;
+        $rootScope.hideMe = function() {
+          if($rootScope.products !== undefined){
+            return $rootScope.products.length > 0;
           }else{
             return false;
           }
         };
 
-        $scope.showPaymentForm = function() {
-            $scope.addPaymentButton = false;
-            $scope.hidePayment = false;
-            $scope.addShippingButton = false; 
-            $scope.hideMyZoneCart = true;
-            $scope.paymentFormButton = true;
-            $scope.paymentButton = false; 
+        $rootScope.showPaymentForm = function() {
+            $rootScope.addPaymentButton = false;
+            $rootScope.hidePayment = false;
+            $rootScope.addShippingButton = false; 
+            $rootScope.hideMyZoneCart = true;
+            $rootScope.paymentFormButton = true;
+            $rootScope.paymentButton = false; 
         };
-        $scope.submitPaymentForm = function() {
-            $scope.hidePayment = true;
-            $scope.hideShippingAddress = false;
-            $scope.proceedButton = true;
-            $scope.paymentFormButton = false; 
+        $rootScope.submitPaymentForm = function() {
+            $rootScope.hidePayment = true;
+            $rootScope.hideShippingAddress = false;
+            $rootScope.proceedButton = true;
+            $rootScope.paymentFormButton = false; 
             
 
-           $scope.paymentInformations={
+           $rootScope.paymentInformations={
               card:this.card,
               month:this.month,
               year:this.year,
               cvc:this.cvc
             };
-             console.log($scope.paymentInformations);
+             console.log($rootScope.paymentInformations);
         };
      
 
-        $scope.showShippingAddressForm = function() {
-            $scope.hidePayment = true;
-            $scope.hideShippingAddress = false; 
-            $scope.hideMyZoneCart = true;
-            $scope.proceedButton = true;
-            $scope.paymentButton = false;  
+        $rootScope.showShippingAddressForm = function() {
+            $rootScope.hidePayment = true;
+            $rootScope.hideShippingAddress = false; 
+            $rootScope.hideMyZoneCart = true;
+            $rootScope.proceedButton = true;
+            $rootScope.paymentButton = false;  
              
         };
         
-        $scope.submitShippingAddressForm = function() {  
-            $scope.shippingAddressAdded = true;
-            $scope.addShippingButton = false;
-            $scope.paymentButton = true;
-            $scope.proceedButton = false;
-            $scope.hideMyZoneCart = false;
-            $scope.hideShippingAddress = true; 
-            $scope.shippingInformations={
+        $rootScope.submitShippingAddressForm = function() {  
+            $rootScope.shippingAddressAdded = true;
+            $rootScope.addShippingButton = false;
+            $rootScope.paymentButton = true;
+            $rootScope.proceedButton = false;
+            $rootScope.hideMyZoneCart = false;
+            $rootScope.hideShippingAddress = true; 
+            $rootScope.shippingInformations={
               first_name:this.first_name,
               last_name:this.last_name,
               email:this.email,
@@ -173,13 +123,13 @@ import 'rxjs/add/operator/map';*/
               postcode:this.postcode,
               country:this.country
             };
-             console.log($scope.shippingInformations);
+             console.log($rootScope.shippingInformations);
         };
 
-        $scope.doPayment = function() {
-          console.log($scope.shippingInformations);
-          var shippingInformations  = $scope.shippingInformations;
-          var paymentInformations   = $scope.paymentInformations;
+        $rootScope.doPayment = function() {
+          console.log($rootScope.shippingInformations);
+          var shippingInformations  = $rootScope.shippingInformations;
+          var paymentInformations   = $rootScope.paymentInformations;
             var totalAmountToPay    = $rootScope.cartTotalPrice;
                 totalAmountToPay    = totalAmountToPay.toFixed(2).toString();
                 totalAmountToPay    = parseInt(totalAmountToPay.replace('.',''));
@@ -203,7 +153,7 @@ import 'rxjs/add/operator/map';*/
         function stripeResponseHandler2(status, token){
             console.log('stripeResponseHandler2');
             console.log(token);
-            var url = baseUrl+'api/charge';
+            var url = $rootScope.baseUrl+'api/charge';
 
              var totalAmountToPay = $rootScope.cartTotalPrice;
                 totalAmountToPay = totalAmountToPay.toFixed(2).toString();
@@ -221,7 +171,7 @@ import 'rxjs/add/operator/map';*/
               Amount:Amount,
               CardID:CardID
             };
-             var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+             var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                   $http(configObj)
                       .then(function onFulfilled(response) {
                         console.log('stripeResponseHandler2onFulfilled');
@@ -231,10 +181,10 @@ import 'rxjs/add/operator/map';*/
                           //var seller_message = dataJson.outcome.seller_message;
                           console.log(dataJson);
                           if(status === 'succeeded'){
-                              $scope.paymentButton = false;
-                              $scope.hideMyZoneCart = true;
+                              $rootScope.paymentButton = false;
+                              $rootScope.hideMyZoneCart = true;
 
-                              $scope.showPaymentCompleteMsg = true;
+                              $rootScope.showPaymentCompleteMsg = true;
 
                           }
                       }).catch( function onRejection(errorResponse) {
@@ -243,56 +193,48 @@ import 'rxjs/add/operator/map';*/
                   }); 
         }
         
-        $scope.showProductDetail = function(productID) {
+        $rootScope.showProductDetail = function(productID) {
             console.log('showProductDetail');
             console.log(productID);   
               if(angular.isNumber(productID)){
-                $scope.CurrentProductDetail = $scope.CurrentProduct(productID);
-                $scope.groupCartId = grp_cartId;
-                $scope.isProductDetailOpen();
+                $rootScope.CurrentProductDetail = $rootScope.CurrentProduct(productID);
+                $rootScope.groupCartId = grp_cartId;
+                $rootScope.isProductDetailOpen();
               }
         };
-        $scope.showUserCart = function(grp_cartId, USERID){
+        $rootScope.showUserCart = function(grp_cartId, USERID){
           
               if(angular.isNumber(grp_cartId) && angular.isNumber(USERID) ){
                 console.log(grp_cartId +' cart belong to user id '+ USERID);
-                $scope.CurrentUserBuyerDetail = $scope.CurrentUserBuyer(grp_cartId,USERID);
-                $scope.isUserDetailOpen();
+                $rootScope.CurrentUserBuyerDetail = $rootScope.CurrentUserBuyer(grp_cartId,USERID);
+                $rootScope.isUserDetailOpen();
               }
         };
-        $rootScope.showFriendCart = function(USERID){
-          console.log('user id is');
-          console.log(USERID);
-          if(angular.isNumber(USERID) ){
-            console.log(' cart belong to user id '+ USERID);
-            $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);
-            $scope.isUserDetailOpen();
-          }
-        };
+
           
-        $scope.showCurrentImage  = function(imageSrc,$event) {   
+        $rootScope.showCurrentImage  = function(imageSrc,$event) {   
           console.log(imageSrc);
           console.log($event.currentTarget.src);
-          console.log($scope.CurrentProductDetailImage);
-          if($event.currentTarget.src === imageSrc && imageSrc !== $scope.CurrentProductDetailImage ){
-            $event.currentTarget.src = $scope.CurrentProductDetailImage;
-            $scope.CurrentProductDetailImage = imageSrc;
+          console.log($rootScope.CurrentProductDetailImage);
+          if($event.currentTarget.src === imageSrc && imageSrc !== $rootScope.CurrentProductDetailImage ){
+            $event.currentTarget.src = $rootScope.CurrentProductDetailImage;
+            $rootScope.CurrentProductDetailImage = imageSrc;
           }else{
-            if(imageSrc !== $scope.CurrentProductDetailImage ){
+            if(imageSrc !== $rootScope.CurrentProductDetailImage ){
               var temp = $event.currentTarget.src;
-              $event.currentTarget.src = $scope.CurrentProductDetailImage;
-              $scope.CurrentProductDetailImage = temp;
+              $event.currentTarget.src = $rootScope.CurrentProductDetailImage;
+              $rootScope.CurrentProductDetailImage = temp;
             }else{
               var temp1 = $event.currentTarget.src;
-              $event.currentTarget.src = $scope.CurrentProductDetailImage;
-              $scope.CurrentProductDetailImage = temp1;
+              $event.currentTarget.src = $rootScope.CurrentProductDetailImage;
+              $rootScope.CurrentProductDetailImage = temp1;
             }
           }
         };
 
-        $scope.timeInMs = 0;
+        vm.timeInMs = 0;
         vm.global = Global;
-        vm.lastProductID = 1;
+        $rootScope.lastProductID = 1;
 
         //declare and use methods
         vm.create = create;
@@ -301,7 +243,7 @@ import 'rxjs/add/operator/map';*/
         vm.find = find;
         vm.findOne = findOne;
 
-        $scope.$watch('lastProductID', function() {
+        $rootScope.$watch('lastProductID', function() {
             //alert('hey, lastProductID has changed!');
         });
       
@@ -325,21 +267,21 @@ import 'rxjs/add/operator/map';*/
             if (product) {
                 product.$remove();
 
-                for (var i in vm.products) {
-                    if (vm.products[i] === product) {
-                        vm.products.splice(i, 1);
+                for (var i in $rootScope.products) {
+                    if ($rootScope.products[i] === product) {
+                        $rootScope.products.splice(i, 1);
                     }
                 }
             }
             else {
-                vm.product.$remove(function(){
+                $rootScope.product.$remove(function(){
                   $state.go('products');
                 });
             }
         }
 
         function update() {
-            var product = vm.product;
+            var product = $rootScope.product;
             if (!product.updated) {
                 product.updated = [];
             }
@@ -353,10 +295,10 @@ import 'rxjs/add/operator/map';*/
         function find() {
             //products.query(function(products) {
             products.get(function(products) {
-                 vm.products = products;
+                 $rootScope.products = products;
                  grp_cartId = products['grp_cartId'];
                  $rootScope.cartTotalPrice = products['TotalCartPrice'];
-                 vm.lastProductID = 1;
+                 $rootScope.lastProductID = 1;
                  getList();
                  $rootScope.isLoaded = true;
             });
@@ -366,68 +308,68 @@ import 'rxjs/add/operator/map';*/
             products.get({
                 productId: $stateParams.productId
               }, function(product) {
-                vm.product = product;
+                $rootScope.product = product;
             });
         }
-        $scope.CurrentUserBuyer  = function(grp_cartId, USERID) {
-                    var url = baseUrl+'api/getUserDetail';
+        $rootScope.CurrentUserBuyer  = function(grp_cartId, USERID) {
+                    var url = $rootScope.baseUrl+'api/getUserDetail';
                     var postData = {
                       grp_cartId:grp_cartId,
                       USERID:USERID
                     };
-                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                    var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
                               console.log('getUserDetail');
                               console.log(newData);
-                              $scope.CurrentUserBuyerDetail = newData;
+                              $rootScope.CurrentUserBuyerDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
                       });
-                    url = baseUrl+'api/getUserProductDetails';
-                    configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                    url = $rootScope.baseUrl+'api/getUserProductDetails';
+                    configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
                               console.log('getUserProductDetails');
                               console.log(newData);
-                              $scope.CurrentUserBuyerProductsDetail = newData;
+                              $rootScope.CurrentUserBuyerProductsDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
                       });  
                
         };
-        $scope.GetFriendCart1  = function(USERID) {
-                    var url = baseUrl+'api/getUserDetail';
+        $rootScope.GetFriendCart1  = function(USERID) {
+                    var url = $rootScope.baseUrl+'api/getUserDetail';
                     var postData = {
                       USERID:USERID
                     };
-                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                    var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
                               console.log('getUserDetail');
                               console.log(newData);
-                              $scope.CurrentUserBuyerDetail = newData;
+                              $rootScope.CurrentUserBuyerDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
                       });
-                    url = baseUrl+'api/getUserProductDetails';
-                    configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                    url = $rootScope.baseUrl+'api/getUserProductDetails';
+                    configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
                               console.log('getUserProductDetails');
                               console.log(newData);
-                              $scope.CurrentUserBuyerProductsDetail = newData;
+                              $rootScope.CurrentUserBuyerProductsDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -435,65 +377,31 @@ import 'rxjs/add/operator/map';*/
                
         };
         
-        // getUserCartDetail
-        $scope.GetFriendCart  = function(USERID) {
-                    var url = baseUrl+'api/getUserCartDetail';
-                    var postData = {
-                      USERID:USERID
-                    };
-                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
-                      $http(configObj)
-                          .then(function onFulfilled(response) {
-                              var newData = JSON.stringify(response.data);
-                              newData = JSON.parse(newData);
-                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
-                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
-                              $rootScope.cartUsers = newData.cartUsers;
-                              $rootScope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
-                              $rootScope.userCartId = newData.cartId;
-                              $rootScope.cartComments = newData.cartComments;
-                          }).catch( function onRejection(errorResponse) {
-                              console.log('Error: ', errorResponse.status);
-                              console.log(errorResponse);
-                      });
-               
-        };
         
-        // check in cart users
-        $scope.checkInCartUsers = function(crtUsrs){
-          var UserID  =  Session.getItem('UserID');
-          var isMember = false;
-          angular.forEach(crtUsrs,function(value, key){
-            if(value['USERID'] == UserID){
-              console.log(UserID);
-              console.log(key);
-              isMember = true;
-            }
-          });
-          return isMember;
-        };
+        
+        
 
 
-       $scope.CurrentProduct = function(productId) {
+       $rootScope.CurrentProduct = function(productId) {
             products.get({
                 productId: productId
               }, function(product) {
-                $scope.CurrentProductDetail = product;
+                $rootScope.CurrentProductDetail = product;
                 if(product !== undefined){
-                  $scope.CurrentProductDetailImage = $scope.UploadUrl+product.img_loc;
-                  var url = baseUrl+'api/getProductBuyingUsers';
+                  $rootScope.CurrentProductDetailImage = $rootScope.UploadUrl+product.img_loc;
+                  var url = $rootScope.baseUrl+'api/getProductBuyingUsers';
                   var postData = {
                     productId:productId
                   };
 
-                  var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                  var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
 
                     $http(configObj)
                         .then(function onFulfilled(response) {
                             var newData = JSON.stringify(response.data);
                             newData = JSON.parse(newData);
                             product.buyingUser = newData.grpCartDataResponse;
-                            $scope.CurrentProductDetail = product;
+                            $rootScope.CurrentProductDetail = product;
                         }).catch( function onRejection(errorResponse) {
                             console.log('Error: ', errorResponse.status);
                             console.log(errorResponse);
@@ -507,61 +415,37 @@ import 'rxjs/add/operator/map';*/
 
 
        function getList(){
-           $scope.startTimeout();
+           $rootScope.startTimeout();
         }
 
-        $scope.startCount = 0;  
-        $scope.startTimeout = function () {  
-            $scope.startCount = $scope.startCount + 1;  
+        $rootScope.startCount = 0;  
+        $rootScope.startTimeout = function () {  
+            $rootScope.startCount = $rootScope.startCount + 1;  
             $rootScope.getProducts();
-            vm.mytimeout = $timeout($scope.startTimeout, 100000);  
+            $rootScope.mytimeout = $timeout($rootScope.startTimeout, 100000);  
         };
 
-        $scope.stopTimeout = function () {  
-            $timeout.cancel(vm.mytimeout);  
-            $scope.NoMoreProductToFetch = true;
+        $rootScope.stopTimeout = function () {  
+            $timeout.cancel($rootScope.mytimeout);  
+            $rootScope.NoMoreProductToFetch = true;
             console.log('Timer Stopped No More Products');  
         };
-        $rootScope.selectAisleID = function (aisle) { 
-            console.log(aisle);            //aisleId aisle_description aisle_name aisle_number
-            $scope.AislesIsSelected    = true;
-            $scope.AislesSelectedID    = aisle.aisleId;
-            $scope.AislesSelectedName  = aisle.aisle_name;
-            $scope.AislesSelectedDesc  = aisle.aisle_description;
-            
-           $rootScope.emptyAllProductCols();
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
-            }
-        };
-        $rootScope.emptyAllProductCols = function () {
-            $scope.lastProductID = 0;
-            $scope.arctr.products['col1'] = [];
-            $scope.arctr.products['col2'] = [];
-            $scope.arctr.products['col3'] = [];
-            $scope.arctr.products['col4'] = [];
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
-            }
 
-        };
-        $rootScope.getAllProducts = function () {
-            $rootScope.emptyAllProductCols();
-            $scope.AislesIsSelected = false;
-        };
+        
+
         $rootScope.getProducts = function () {
-                var lastProductID = $scope.lastProductID;
+                var lastProductID = $rootScope.lastProductID;
                 var nextProducts = 4;
                 var body = '';
                 var data = '';
                 if(lastProductID === undefined){
-                    lastProductID = vm.lastProductID;
+                    lastProductID = $rootScope.lastProductID;
                 }
-                var url = ApiBaseUrl+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
-                if($scope.AislesIsSelected){
-                   url = ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastProductID+'/'+nextProducts+'/'+$scope.AislesSelectedID;
+                var url = $rootScope.ApiBaseUrl+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
+                if($rootScope.AislesIsSelected){
+                   url = $rootScope.ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastProductID+'/'+nextProducts+'/'+$rootScope.AislesSelectedID;
                 }
-                var configObj = { method: 'GET',url: url, headers: headers};
+                var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         body = response.data;
@@ -570,10 +454,10 @@ import 'rxjs/add/operator/map';*/
 
                           if(data.length < 2){
                             //console.log(data);
-                            $scope.stopTimeout();
+                            $rootScope.stopTimeout();
                           }
 
-                          $scope.addObject(data);
+                          $rootScope.addObject(data);
 
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
@@ -582,7 +466,7 @@ import 'rxjs/add/operator/map';*/
         };
         $rootScope.getAisleProducts = function (aisle,lastAisleProductID = null) {
                 if(lastAisleProductID === undefined){
-                    lastAisleProductID = vm.lastAisleProductID;
+                    lastAisleProductID = $rootScope.lastAisleProductID;
                 }
                 if(lastAisleProductID == null){
                   lastAisleProductID = 0;
@@ -592,17 +476,12 @@ import 'rxjs/add/operator/map';*/
                 var aisleId = aisle.aisleId;
 
                 if(aisleId !== undefined && aisleId !== null){
-                  $scope.aisleId = aisleId;
+                  $rootScope.aisleId = aisleId;
                 }
                 var body = '';
                 var data = '';
-                var url = ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastAisleProductID+'/'+nextProducts+'/'+aisleId;
-
-
-                //var url = ApiBaseUrl+'getAllProdsInLocDefault/PK/1/1';
-                
-               
-                var configObj = { method: 'GET',url: url, headers: headers};
+                var url = $rootScope.ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastAisleProductID+'/'+nextProducts+'/'+aisleId;
+                var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         body = response.data;
@@ -611,10 +490,10 @@ import 'rxjs/add/operator/map';*/
 
                           if(data.length < 2){
                             //console.log(data);
-                            $scope.stopTimeout();
+                            $rootScope.stopTimeout();
                           }
 
-                          $scope.addObject(data);
+                          $rootScope.addObject(data);
 
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
@@ -622,7 +501,7 @@ import 'rxjs/add/operator/map';*/
                 }); 
         };
 
-        $scope.addObject = function (data) {
+        $rootScope.addObject = function (data) {
               if(data !== undefined){
                 var counter = 0;
                 var localLoopProductBrandID = 1;
@@ -632,187 +511,186 @@ import 'rxjs/add/operator/map';*/
                     counter++;
                     
                     if(counter === 1){
-                      $scope.arctr.products['col1'].push(value);
+                      $rootScope.products['col1'].push(value);
                     }
                     if(counter === 2){
-                      $scope.arctr.products['col2'].push(value);
+                      $rootScope.products['col2'].push(value);
                     }
                     if(counter === 3){
-                      $scope.arctr.products['col3'].push(value);
+                      $rootScope.products['col3'].push(value);
                     }
                     if(counter === 4){
-                      $scope.arctr.products['col4'].push(value);
+                      $rootScope.products['col4'].push(value);
                       counter = 0;
                     }
                     localLoopProductBrandID = value.ProdBrandId;         
                 });
-                $scope.lastProductID = localLoopProductBrandID;  
+                $rootScope.lastProductID = localLoopProductBrandID;  
               }else{
                 console.log('Product Public Controller Add Object Undefined Data');
               } 
         };
 
-        $scope.productDropInCart  = function (event , ui) {   
+        $rootScope.productDropInCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
             var ProdBrandId = CurrentProduct.attr('data-product-id');
             //var ProdBrandId = CurrentProduct.attr('data-product-grp-cart-id');
             if(ProdBrandId !== undefined){
               if(!cartCreated){
                 if(isGuest){  
-                  $scope.createCart(ProdBrandId);
+                  $rootScope.createCart(ProdBrandId);
                 }
               }else{
                 if(isGuest){  
-                  $scope.addToCart(grp_cartId,ProdBrandId);
+                  $rootScope.addToCart(grp_cartId,ProdBrandId);
                }
               }
             }
         };
-        $scope.productDropOutFromCart  = function (event , ui) {   
+        $rootScope.productDropOutFromCart  = function (event , ui) {   
             var CurrentProduct = ui.draggable;
             //var ProdBrandId = CurrentProduct.attr('data-product-id'); 
             var ProdBrandId   = CurrentProduct.attr('data-product-grp-cart-id');
             var ProductIndex  = CurrentProduct.attr('data-index');
             var ProductArrayType  = CurrentProduct.attr('data-type');
             if(ProductArrayType !== undefined && ProductArrayType === 'grpcart_products'){
-              vm.products.grpcart_products.splice(ProductIndex, 1);
+              $rootScope.products.grpcart_products.splice(ProductIndex, 1);
             }
             if(ProductArrayType !== undefined && ProductArrayType === 'cart'){
-              $scope.cart.splice(ProductIndex, 1);
+              $rootScope.cart.splice(ProductIndex, 1);
             }
             
               ui.draggable.remove();
             if(ProdBrandId !== undefined && grp_cartId !== undefined){
-              $scope.nl_removefromCart(grp_cartId,ProdBrandId);
+              $rootScope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
 
         // drop in cart
-        $scope.dropInCart = function(event, ui){ 
+        $rootScope.dropInCart = function(event, ui){ 
             var draggableElement = ui.draggable;
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');    
             if(typeof prodId != 'undefined' && prodId != null){
               var img = draggableElement.find('.product_image').find('img').attr('src');
-              $scope.addorCreateCart(prodId, img);
+              $rootScope.addorCreateCart(prodId, img);
               notify('Adding Product To Cart...','info');
             }
             else if(typeof friendId != 'undefined' && friendId != null){console.log(friendId);
-              $scope.addUserToCart(draggableElement);
+              $rootScope.addUserToCart(draggableElement);
               notify('Adding User To Cart...','info');
             }
 
         };
         // drop out from cart
-        $scope.dropOutFromCart = function(event, ui){
+        $rootScope.dropOutFromCart = function(event, ui){
            var draggableElement = ui.draggable;
            console.log(draggableElement);
             var prodId = draggableElement.attr('data-product-id');
             var friendId = draggableElement.attr('data-friend-id');
             if(typeof prodId != 'undefined' && prodId != null){
-              $scope.removeProdFromCart(draggableElement);
+              $rootScope.removeProdFromCart(draggableElement);
               notify('Removing Product From Cart...','info');
             }
             else if(typeof friendId != 'undefined' && friendId != null){
-              $scope.removeUserFromCart(draggableElement);
+              $rootScope.removeUserFromCart(draggableElement);
               notify('Removing User From Cart...','info');
             }
             draggableElement.remove();
         };
 
-        $scope.addToCartBtn = function(prodId, img){
-          $scope.addorCreateCart(prodId, img);
+        $rootScope.addToCartBtn = function(prodId, img){
+          $rootScope.addorCreateCart(prodId, img);
         };
 
-        $scope.addorCreateCart = function(prodId, img){
-          $scope.cart.push({
+        $rootScope.addorCreateCart = function(prodId, img){
+          $rootScope.cart.push({
             'userid':prodId,
             'img_loc':img
           });
           if(!cartCreated){
             if(isGuest){  
-              $scope.createCart(prodId);
+              $rootScope.createCart(prodId);
             }
           }else{
             if(isGuest){  
-              $scope.addToCart(grp_cartId,prodId);
+              $rootScope.addToCart(grp_cartId,prodId);
            }
           }
         };
          // add user to cart
-        $scope.addUserToCart = function(user){ 
+        $rootScope.addUserToCart = function(user){ 
           var userId = user.attr('data-friend-id');
           var img = user.find('img').attr('src');
           var Online = user.find('img').parent().hasClass('online');
           console.log('Online: '+Online);
           //if(list.indexOf(createItem.artNr) !== -1) {
-          console.log($scope.friendsCart);
+          console.log($rootScope.friendsCart);
           if (!userExistsInCart(userId)) {
-            $scope.friendsCart.push({
+            $rootScope.friendsCart.push({
               'userid':userId,
               'img_loc':img,
               'online':Online
             });
-            console.log($scope.friendsCart);
-            $scope.addUserToCartAjax(grp_cartId, userId);
+            console.log($rootScope.friendsCart);
+            $rootScope.addUserToCartAjax(grp_cartId, userId);
               var usrIndex = user.attr('data-index');
-              vm.userFirends[usrIndex]['followId'] = userId;
+              $rootScope.userFirends[usrIndex]['followId'] = userId;
           }else{
             console.log('User '+userId+' Already in cart');
           }
         };
 
         // remove prod from cart
-        $scope.removeProdFromCart = function(prod){
+        $rootScope.removeProdFromCart = function(prod){
             //var ProdBrandId = CurrentProduct.attr('data-product-id'); 
             var ProdBrandId   = prod.attr('data-product-grp-cart-id');
             var ProductIndex  = prod.attr('data-index');
             var ProductArrayType  = prod.attr('data-type');
             if(ProductArrayType !== undefined && ProductArrayType === 'grpcart_products'){
-              vm.products.grpcart_products.splice(ProductIndex, 1);
+              $rootScope.products.grpcart_products.splice(ProductIndex, 1);
             }
             if(ProductArrayType !== undefined && ProductArrayType === 'cart'){
-              $scope.cart.splice(ProductIndex, 1);
+              $rootScope.cart.splice(ProductIndex, 1);
             }
             
               prod.remove();
             if(ProdBrandId !== undefined && grp_cartId !== undefined){
-              $scope.nl_removefromCart(grp_cartId,ProdBrandId);
+              $rootScope.nl_removefromCart(grp_cartId,ProdBrandId);
             }
         };
 
         // remove prod button click
-        $scope.removeProdBtn = function(prodId, index){
+        $rootScope.removeProdBtn = function(prodId, index){
           if(prodId !== undefined && grp_cartId !== undefined){
-              $scope.nl_removefromCart(grp_cartId,prodId);
-              $scope.CurrentUserBuyerProductsDetail.splice(index, 1);
+              $rootScope.nl_removefromCart(grp_cartId,prodId);
+              $rootScope.CurrentUserBuyerProductsDetail.splice(index, 1);
             }
         };
 
         // remove user from cart 
-        $scope.removeUserFromCart = function(user){
+        $rootScope.removeUserFromCart = function(user){
              var userId   = user.attr('data-friend-id');
             var userIndex  = user.attr('data-index');
             var userArrayType  = user.attr('data-type');
             if(userArrayType !== undefined && userArrayType === 'grpcart_products'){
-              vm.products.friendsCart.splice(userIndex, 1);
+              $rootScope.products.friendsCart.splice(userIndex, 1);
             }
             if(userId !== undefined && grp_cartId !== undefined){
              console.log('User id : '+userId);
-              $scope.removeUserFromCartAjax(grp_cartId,userId);
+              $rootScope.removeUserFromCartAjax(grp_cartId,userId);
             }
         };
 
         // remove user icon in side cart window
-        $scope.removeCartUsr = function(usrId, index){
-          $scope.removeUserFromCartAjax(grp_cartId,usrId);
-          $scope.cartUsers.splice(index, 1);
+        $rootScope.removeCartUsr = function(usrId, index){
+          $rootScope.removeUserFromCartAjax(grp_cartId,usrId);
+          $rootScope.cartUsers.splice(index, 1);
         };
 
-        $scope.createCart  = function (ProdBrandId) {
-           var url = baseUrl+'api/createCart';
-           //var url = ApiBaseUrl+'createCart/PK/';
-           var configObj = { method: 'GET',url: url, headers: headers};
+        $rootScope.createCart  = function (ProdBrandId) {
+           var url = $rootScope.baseUrl+'api/createCart';
+           var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         console.log(response);
@@ -840,7 +718,7 @@ import 'rxjs/add/operator/map';*/
                           console.log('grp_cartId:'+grp_cartId);
                           console.log('ProdBrandId:'+ProdBrandId);
                           if(grp_cartId !== undefined){
-                            $scope.addToCart(grp_cartId, ProdBrandId);
+                            $rootScope.addToCart(grp_cartId, ProdBrandId);
                           }
                         }
 
@@ -850,11 +728,10 @@ import 'rxjs/add/operator/map';*/
                 }); 
 
         };
-         $scope.addToCart  = function (cartID, productID) {
-           var url = baseUrl+'api/addToCart';
-          // var url = ApiBaseUrl+'addToCart/'+productID+'/'+cartID;
+         $rootScope.addToCart  = function (cartID, productID) {
+          var url = $rootScope.baseUrl+'api/addToCart';
           var postData = {cartID:cartID,productID:productID};
-           var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+          var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         closeNoti();
@@ -863,9 +740,9 @@ import 'rxjs/add/operator/map';*/
                         if(dataJson !== undefined){
 
                           grp_cartId            = dataJson.grp_cartId;
-                          $scope.cartItemCount  = dataJson.count;
+                          $rootScope.cartItemCount  = dataJson.count;
                           $rootScope.cartTotalPrice = dataJson.current_total;
-                          $scope.cartCurrency   = dataJson.currency;
+                          $rootScope.cartCurrency   = dataJson.currency;
 
                           /*var cart_items     = dataJson.cart_items;
                           var cartUsers      = dataJson.cartUsers;
@@ -890,10 +767,10 @@ import 'rxjs/add/operator/map';*/
         };
 
         // add user to cart
-        $scope.addUserToCartAjax = function(cartId, userId){ 
-          var url = baseUrl+'api/addUserToCart';
+        $rootScope.addUserToCartAjax = function(cartId, userId){ 
+          var url = $rootScope.baseUrl+'api/addUserToCart';
           var postData = {cartID:cartId,userId:userId};
-          var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+          var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 closeNoti();
@@ -904,10 +781,10 @@ import 'rxjs/add/operator/map';*/
           }); 
         };
 
-        $scope.removeUserFromCartAjax= function(cartId,userId){
-          var url = baseUrl+'api/removeUserFromCart';
+        $rootScope.removeUserFromCartAjax= function(cartId,userId){
+          var url = $rootScope.baseUrl+'api/removeUserFromCart';
           var postData = {cartID:cartId,userId:userId};
-          var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+          var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 closeNoti();
@@ -918,10 +795,10 @@ import 'rxjs/add/operator/map';*/
           }); 
         };
 
-        $scope.nl_removefromCart  = function (cartID, productID) {
-            var url = baseUrl+'api/nl_removefromCart';
+        $rootScope.nl_removefromCart  = function (cartID, productID) {
+            var url = $rootScope.baseUrl+'api/nl_removefromCart';
             var postData = {cartID:cartID,productID:productID};
-            var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+            var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                       closeNoti();
@@ -931,9 +808,9 @@ import 'rxjs/add/operator/map';*/
                         if(dataJson !== undefined){
  
                           grp_cartId            = dataJson.grpcartX.grp_cartId;
-                          $scope.cartItemCount  = dataJson.grpcartX.count;
+                          $rootScope.cartItemCount  = dataJson.grpcartX.count;
                           $rootScope.cartTotalPrice = dataJson.grpcartX.current_total;
-                          $scope.cartCurrency   = dataJson.grpcartX.currency;
+                          $rootScope.cartCurrency   = dataJson.grpcartX.currency;
 
                         }
                     }).catch( function onRejection(errorResponse) {
@@ -942,11 +819,10 @@ import 'rxjs/add/operator/map';*/
                 }); 
           
         };
-        $scope.myfriends  = function () {
-          	var UserID 	=  Session.getItem('UserID');
-              var url = baseUrl+'api/getAllUsers';
-                //postData = {key:key};
-              var  configObj = { method: 'GET',url: url, headers: headers};
+        $rootScope.myfriends  = function () {
+          	var UserID 	= Session.getItem('UserID');
+            var url     = $rootScope.baseUrl+'api/getAllUsers';
+            var  configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                   $http(configObj)
                       .then(function onFulfilled(response) {
                           var dataJson = JSON.parse(JSON.stringify(response.data));
@@ -957,12 +833,12 @@ import 'rxjs/add/operator/map';*/
                                   if(value['USERID'] != UserID){if(value['USERID'])
                                      value['userid']  = value['USERID'];
                                      // check if avatar val null , then get default avatar
-                                    value['img_loc'] = $scope.getDefaultAvatar(value['img_loc']);
-                                    vm.userFirends.push(value);
+                                    value['img_loc'] = $rootScope.getDefaultAvatar(value['img_loc']);
+                                    $rootScope.userFirends.push(value);
                                   }
                                   
                               });
-                                Session.setItem('myfriends',vm.userFirends);
+                                Session.setItem('myfriends',$rootScope.userFirends);
                           }
                       }).catch( function onRejection(errorResponse) {
                           console.log('Error: ', errorResponse.status);
@@ -970,22 +846,22 @@ import 'rxjs/add/operator/map';*/
                   });
           
         };
-        $scope.myfriends();
+        $rootScope.myfriends();
 
-        $scope.testing  = function () {
+        $rootScope.testing  = function () {
           var key =  Session.getItem('key');
-            var url = ApiBaseUrl+'getAllProdsInLocBySize/US/'+key+'/1/2';
-            var postData = {key:key};
+          var url = $rootScope.ApiBaseUrl+'getAllProdsInLocBySize/US/'+key+'/1/2';
+          var postData = {key:key};
             console.log(postData);
-            var configObj = { method: 'GET',url: url, headers: headers};
+          var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         if(dataJson !== undefined ){
                               angular.forEach(dataJson,function(value){
-                                vm.userFirends.push(value);      
+                                $rootScope.userFirends.push(value);      
                             });
-                              Session.setItem('myfriends',vm.userFirends);
+                              Session.setItem('myfriends',$rootScope.userFirends);
                         }
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
@@ -995,18 +871,18 @@ import 'rxjs/add/operator/map';*/
         };
 
         // send friend request
-        $scope.sendFriendRequest = function(userid){
-            var UserID  =  Session.getItem('UserID');
+        $rootScope.sendFriendRequest = function(userid){
+            var UserID = Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
-                var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'followUser';
+                var key = Session.getItem('key_'+UserID);
+                var url = $rootScope.ApiBaseUrl+'followUser';
                 var postData = {key:key, query_userId:userid};
-                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '01';
+                        $rootScope.CurrentUserBuyerDetail.action = '01';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -1014,18 +890,18 @@ import 'rxjs/add/operator/map';*/
         };
 
         // unfollow user
-        $scope.unFollow = function(userid){
+        $rootScope.unFollow = function(userid){
             var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
-                var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'unfollowUser';
+                var key = Session.getItem('key_'+UserID);
+                var url = $rootScope.ApiBaseUrl+'unfollowUser';
                 var postData = {key:key, query_userId:userid};
-                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                          console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '03';
+                        $rootScope.CurrentUserBuyerDetail.action = '03';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -1033,9 +909,9 @@ import 'rxjs/add/operator/map';*/
         };
 
         // add comment to cart
-        $scope.data = {};
-        $scope.addCommentToCart = function(cartId){
-          var comment = $scope.data.comment;
+        $rootScope.data = {};
+        $rootScope.addCommentToCart = function(cartId){
+          var comment = $rootScope.data.comment;
           var UserID  =  Session.getItem('UserID');
           if(typeof UserID != 'undefined' && UserID != null){
               var key   =  Session.getItem('key_'+UserID);
@@ -1050,9 +926,9 @@ import 'rxjs/add/operator/map';*/
                 'chat_text' : comment,
                 'chattime' : new Date().toLocaleString()
               };
-              if(typeof $scope.cartComments == 'undefined')
-                $scope.cartComments = {};
-              $scope.cartComments.push(newComment);
+              if(typeof $rootScope.cartComments == 'undefined')
+                $rootScope.cartComments = {};
+              $rootScope.cartComments.push(newComment);
               var postData = {
                 'comment' :{
                 'grp_cartId' : cartId,
@@ -1062,8 +938,8 @@ import 'rxjs/add/operator/map';*/
               }
               } ;
               // insert into
-              var url = baseUrl+'api/addCommentToCart';
-              var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+              var url = $rootScope.baseUrl+'api/addCommentToCart';
+              var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
               $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
@@ -1076,19 +952,19 @@ import 'rxjs/add/operator/map';*/
         };
 
         // join cart
-        $scope.joinCart = function(cartId){
+        $rootScope.joinCart = function(cartId){
           var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
                 var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'joinCart/'+key+'/'+cartId;
-                var configObj = { method: 'GET',url: url, headers: headers};
+                var url = $rootScope.ApiBaseUrl+'joinCart/'+key+'/'+cartId;
+                var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
                 notify('Joining Cart ...','info');
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         closeNoti();
                         notify('Cart Successfully Joined','success');
                         var dataJson = JSON.parse(JSON.stringify(response.data));
-                        $scope.isCartMember = true;
+                        $rootScope.isCartMember = true;
                         console.log(dataJson);
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
@@ -1096,13 +972,13 @@ import 'rxjs/add/operator/map';*/
             } 
         };
         // leave cart
-        $scope.leaveCart = function(cartId){
+        $rootScope.leaveCart = function(cartId){
           var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
-                var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'leaveCart/'+key+'/'+cartId;
-                var configObj = { method: 'GET',url: url, headers: headers};
-                $scope.isCartMember = false;
+                var key = Session.getItem('key_'+UserID);
+                var url = $rootScope.ApiBaseUrl+'leaveCart/'+key+'/'+cartId;
+                var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
+                $rootScope.isCartMember = false;
                 notify('Leaving Cart ...','info');
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -1119,7 +995,7 @@ import 'rxjs/add/operator/map';*/
 
         };
         // on product drag start
-        $scope.onProdDragStart = function(event, ui){
+        $rootScope.onProdDragStart = function(event, ui){
           var dragElement = ui.helper;
           console.log(event);
           var x = event.pageX;
@@ -1132,7 +1008,7 @@ import 'rxjs/add/operator/map';*/
         };
 
         // on prod drag
-        $scope.onProdDrag = function(event, ui){
+        $rootScope.onProdDrag = function(event, ui){
           var dragElement = ui.helper;
           var relX = (event.pageX)+'px';
           var relY = (event.pageY)+'px';
@@ -1141,20 +1017,20 @@ import 'rxjs/add/operator/map';*/
         };
 
         // drop prod on user
-        $scope.dropOnUser = function(event, ui){
+        $rootScope.dropOnUser = function(event, ui){
           var dragElement = ui.draggable;
           var usrId = this.friends.userid;
           var prodId = dragElement.attr('data-product-id');
-          $scope.suggestProdToUsr(usrId, prodId);
+          $rootScope.suggestProdToUsr(usrId, prodId);
           notify('Suggesting Product ...','info');
         };
 
         // suggest prod to usr
-        $scope.suggestProdToUsr = function(usrId, prodId){
+        $rootScope.suggestProdToUsr = function(usrId, prodId){
           var postData = {'usrId':usrId, 'prodId':prodId};
-          var url = baseUrl+'api/suggestProd';
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-          // $scope.isCartMember = false;
+          var url = $rootScope.baseUrl+'api/suggestProd';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+          // $rootScope.isCartMember = false;
           $http(configObj)
               .then(function onFulfilled(response) {
                 closeNoti();
@@ -1166,12 +1042,12 @@ import 'rxjs/add/operator/map';*/
         };
 
         // accept product
-        $scope.acceptProdInCart = function(prodId){
+        $rootScope.acceptProdInCart = function(prodId){
           notify('Accepting Product ...','info');
           var postData = {'cartId':grp_cartId, 'prodId':prodId};
-          var url = baseUrl+'api/acceptProdInCart';
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-          // $scope.isCartMember = false;
+          var url = $rootScope.baseUrl+'api/acceptProdInCart';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+          // $rootScope.isCartMember = false;
           $http(configObj)
               .then(function onFulfilled(response) {
                 closeNoti();
@@ -1183,14 +1059,14 @@ import 'rxjs/add/operator/map';*/
         };
 
 
-        $scope.getDefaultAvatar = function(url){
+        $rootScope.getDefaultAvatar = function(url){
           if(url == null)
             url = '/images/default-avatar.png';
           return url;
        };
        function userExistsInCart(userID) {
-            for (var i = 0, len = $scope.friendsCart.length; i < len; i++) {
-                if ($scope.friendsCart[i].userid === userID)
+            for (var i = 0, len = $rootScope.friendsCart.length; i < len; i++) {
+                if ($rootScope.friendsCart[i].userid === userID)
                     return true;
             }
 
@@ -1199,11 +1075,11 @@ import 'rxjs/add/operator/map';*/
 
         // get twitter timeline
         function timeline(){
-          var url = baseUrl+'api/timeline';
-          var configObj = { method: 'POST',url: url, headers: headers};
+          var url = $rootScope.baseUrl+'api/timeline';
+          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
-                  vm.twitterPosts = response.data;
+                  $rootScope.twitterPosts = response.data;
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -1211,11 +1087,11 @@ import 'rxjs/add/operator/map';*/
         timeline();
 
         // like tweet
-        $scope.likeTweet = function(index){
-          var tweetId = vm.twitterPosts[index]['id_str'];
+        $rootScope.likeTweet = function(index){
+          var tweetId = $rootScope.twitterPosts[index]['id_str'];
           var postData = {'id':tweetId};
-          var url = baseUrl+'api/likeTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          var url = $rootScope.baseUrl+'api/likeTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 if(response.status == 200){
@@ -1225,7 +1101,7 @@ import 'rxjs/add/operator/map';*/
                     notify(response.data.errors[0].message);
                   } else {
                     notify('Liked Successfully','success');
-                    vm.twitterPosts[index]['favorite_count'] += 1;
+                    $rootScope.twitterPosts[index]['favorite_count'] += 1;
                   }
                 }
               }).catch( function onRejection(errorResponse) {
@@ -1233,11 +1109,11 @@ import 'rxjs/add/operator/map';*/
           });
         };
         // dislike tweet if like
-        $scope.dislikeTweet = function(index){
-          var tweetId = vm.twitterPosts[index]['id_str'];
+        $rootScope.dislikeTweet = function(index){
+          var tweetId = $rootScope.twitterPosts[index]['id_str'];
           var postData = {'id':tweetId};
-          var url = baseUrl+'api/dislikeTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          var url = $rootScope.baseUrl+'api/dislikeTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 if(response.status == 200){
@@ -1247,7 +1123,7 @@ import 'rxjs/add/operator/map';*/
                       notify(response.data.errors[0].message);
                   } else {
                     notify('UnLiked Successfully','success');
-                    vm.twitterPosts[index]['favorite_count'] -= 1;
+                    $rootScope.twitterPosts[index]['favorite_count'] -= 1;
                   }
                 }
               }).catch( function onRejection(errorResponse) {
@@ -1255,11 +1131,11 @@ import 'rxjs/add/operator/map';*/
           });
         };
         // delete tweet
-        $scope.deleteTweet = function(index){
-          var tweetId = vm.twitterPosts[index]['id_str'];
+        $rootScope.deleteTweet = function(index){
+          var tweetId = $rootScope.twitterPosts[index]['id_str'];
           var postData = {'id':tweetId};
-          var url = baseUrl+'api/delTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          var url = $rootScope.baseUrl+'api/delTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 if(response.status == 200){
@@ -1270,7 +1146,7 @@ import 'rxjs/add/operator/map';*/
                       notify(response.data.errors[0].message);
                   } else {
                     notify('Tweet has been Deleted Successfully','success');
-                    vm.twitterPosts.splice(index, 1);
+                    $rootScope.twitterPosts.splice(index, 1);
                   }
                 }
               }).catch( function onRejection(errorResponse) {
@@ -1281,11 +1157,11 @@ import 'rxjs/add/operator/map';*/
         // tumblr methods
 
         function tumblrPosts(){
-          var url = baseUrl+'api/tumblrPosts';
-          var configObj = { method: 'POST',url: url, headers: headers};
+          var url = $rootScope.baseUrl+'api/tumblrPosts';
+          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
-                  vm.tumblrPosts = response.data;
+                  $rootScope.tumblrPosts = response.data;
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
           }); 
@@ -1293,12 +1169,12 @@ import 'rxjs/add/operator/map';*/
         tumblrPosts();
 
         // delete tumblr post
-        $scope.delTumblrPost = function(index){
-          var blogName = vm.tumblrPosts[index].blog_name;
-          var postId = vm.tumblrPosts[index].id;
+        $rootScope.delTumblrPost = function(index){
+          var blogName = $rootScope.tumblrPosts[index].blog_name;
+          var postId = $rootScope.tumblrPosts[index].id;
           var postData = {postId:postId, blogName:blogName};
-          var url = baseUrl+'api/delTumblrPost';
-          var configObj = { method: 'POST',url: url, headers: headers};
+          var url = $rootScope.baseUrl+'api/delTumblrPost';
+          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
           console.log(postData);
           $http(configObj)
               .then(function onFulfilled(response) {
@@ -1311,13 +1187,13 @@ import 'rxjs/add/operator/map';*/
         };
 
          function getAisles(){
-          $scope.aisles = {};
-          var url = ApiBaseUrl+'getAisles';
-          var configObj = { method: 'GET',url: url, headers: headers};
+          $rootScope.aisles = {};
+          var url = $rootScope.ApiBaseUrl+'getAisles';
+          var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                 if(typeof response.data != 'undefined'){
-                  $scope.aisles = response.data;
+                  $rootScope.aisles = response.data;
                 }
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse.status);
@@ -1325,36 +1201,12 @@ import 'rxjs/add/operator/map';*/
         }
         getAisles();
 
-        // get prod by aisle
-        $rootScope.getProdByAisle = function(index){
-          if(index !== undefined && index !== 'undefined' && index !== ''){
-            var id = $scope.aisles[index].aisleId;
-          }else{
-            id = "";
-          }
-
-          var url = baseUrl+'api/getAisleProd';
-          var postData = {'id':id};
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-         // notify('Loading Products...','info');
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                  for(var i = 1; i <= 4; i++){
-                    $scope.arctr.products['col'+i] = response.data['col'+i];
-                  }
-                closeNoti();
-                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
-                else var $msg = "All Products Loaded";
-                  notify($msg,'success');
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
-          }); 
-        }
+        
 
         // get facebook post
         function fbposts(){
-          var url = baseUrl+'api/fbposts';
-          var configObj = { method: 'POST',url: url, data:{}, headers: headers};
+          var url = $rootScope.baseUrl+'api/fbposts';
+          var configObj = { method: 'POST',url: url, data:{}, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
               }).catch( function onRejection(errorResponse) {
@@ -1365,8 +1217,8 @@ import 'rxjs/add/operator/map';*/
 
         /*// get googleplus post
         function gplus(){
-          var url = baseUrl+'api/gplus';
-          var configObj = { method: 'POST',url: url, data:{}, headers: headers};
+          var url = $rootScope.baseUrl+'api/gplus';
+          var configObj = { method: 'POST',url: url, data:{}, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
               }).catch( function onRejection(errorResponse) {

@@ -1,7 +1,7 @@
 <ul class="products vertical-ticker unstyled product_list list thirdCol Col ng-cloak" isotope-container ng-cloak>
 	<div class="friends-container product_item">
 		<div class="friends-container-inner">
-			<div class="friends-block drag-to-cart" ng-repeat="friends in arctr.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: false,  placeholder:'keep', revert: 'invalid'}" data-friend-id="{{friends.userid}}" data-index="{{ $index }}" ng-model="arctr.userFirends">
+			<div class="friends-block drag-to-cart" ng-repeat="friends in $root.userFirends" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" jqyoui-draggable="{index: {{$index}}, animate: false,  placeholder:'keep', revert: 'invalid'}" data-friend-id="{{friends.userid}}" data-index="{{ $index }}" ng-model="$root.userFirends">
 				<div data-insertInline="true" data-drop="true" jqyoui-droppable="{multiple:true, onDrop:'dropOnUser(friends.userid)'}" title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()" class="user-image" ng-class="{'online': friends.online == 1}">
 					<span class="crt-usr-icon" ng-if="friends.userid==friends.followId"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
 					<img src="{{UploadUrl}}{{friends.img_loc}}" alt=""/>
@@ -9,7 +9,7 @@
 			</div>	
 		</div>
 	</div>
-	<div ng-repeat="product in arctr.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep', onStart:'onProdDragStart()'}" data-product-id="{{product.ProdBrandId}}"  isotope-item class="product_item drag-to-cart aisles-{{product.aisleId}}">
+	<div ng-repeat="product in $root.products['col3']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="$root.products['col3']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep', onStart:'onProdDragStart()'}" data-product-id="{{product.ProdBrandId}}"  isotope-item class="product_item drag-to-cart aisles-{{product.aisleId}}">
 		<!--ng-click="showProductDetail($event)"-->
 			<div ng-include="'public/views/products/product-detail.html'"></div>
 	</div>

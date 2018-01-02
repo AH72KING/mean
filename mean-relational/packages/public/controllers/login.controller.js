@@ -9,8 +9,6 @@
             //console.log('login.controller .LoginCtrl');
             //declare internal variables
             var vm = this;
-            var baseUrl = 'http://localhost:3000/';
-            var ip = window.ip;
 
             //declare scope variables
             vm.meanuser = MeanUser;
@@ -23,16 +21,16 @@
             function login(){
               console.log('login');
               //console.log('login.controller .login');
-              $scope.UserLoginInJava(vm.user);
+              $rootScope.UserLoginInJava(vm.user);
              // vm.meanuser.login(vm.user);
                 
             }
-            $scope.UserLoginInJava  = function (user) {
+            $rootScope.UserLoginInJava  = function (user) {
 
               var USERNAME  = user.USERNAME;
               var PASSWORD  = user.PASSWORD;
 
-              var url       = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
+              var url       = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
              // var postData  = {USERNAME:USERNAME,PASSWORD:PASSWORD};
               var configObj = { method: 'GET',url: url};
 
@@ -52,7 +50,7 @@
                                  Session.setItem('key_'+UserID, key);
                                  Session.setItem('UserID', UserID);
                                  Session.setItem('usrname', username);
-                                    var url2 = baseUrl+'api/SaveUserKey';
+                                    var url2 = $rootScope.baseUrl+'api/SaveUserKey';
                                     var postData2  =  {
                                       key:key,
                                       UserID:UserID

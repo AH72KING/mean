@@ -13,14 +13,14 @@
                     </div>
                 </li>
                 <!--ng-if="$index < 3" -->
-                <li ng-repeat="items in arctr.products['grpcart_products'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-product-grp-cart-id="{{items.groupCartProductId}}" data-type="grpcart_products">
+                <li ng-repeat="items in $root.products['grpcart_products'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{items.ProdBrandId}}" data-index="{{$index}}" data-product-grp-cart-id="{{items.groupCartProductId}}" data-type="grpcart_products">
                     <a data-ng-href="/products/{{items.ProdBrandId}}">
 						<img src="{{UploadUrl}}{{items.img_loc}}" alt="">
 					</a>
                 </li>
             </ul>
         </div>
-        <div class="product-in_cart-count" ng-show="((arctr.products['grpcart_products']).length + (cart).length) > 3">
+        <div class="product-in_cart-count" ng-show="(($root.products['grpcart_products']).length + (cart).length) > 3">
             <div class="counter">
                 <span class="add-icon">+</span>
                 <span class="total-count">
@@ -37,17 +37,17 @@
                             <img class="user-image" ng-class="{'online': friends.online == 1}" src="{{friends.img_loc}}" alt="" />
                         </div>
                     </div>
-                    <div class="friends-block" ng-repeat="friends in arctr.products['friendsInCart'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-index="{{$index}}" data-type="grpcart_friends">
+                    <div class="friends-block" ng-repeat="friends in $root.products['friendsInCart'] track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="friendsCart" jqyoui-draggable="{index: {{$index}},animate:false}" data-friend-id="{{friends.userid}}" data-index="{{$index}}" data-type="grpcart_friends">
                         <div title="{{friends.GIVNAME+' '+friends.SURNAME}}" ng-click="showFriendCart(friends.userid); UserDetail()" class="user-image" ng-class="{'online': friends.online == 1}">
                             <img src="{{UploadUrl}}{{ getDefaultAvatar(friends.img_loc)}}" alt="" />
                         </div>
                     </div>
                 </div>
-                <div class="users-in_cart-count" ng-show="((arctr.products['friendsInCart']).length + (friendsCart).length) > 4">
+                <div class="users-in_cart-count" ng-show="(($root.products['friendsInCart']).length + (friendsCart).length) > 4">
                     <div class="counter">
                         <span class="add-icon">+</span>
                         <span class="total-count">
-							{{cartUserCount = ((arctr.products['friendsInCart']).length + (friendsCart).length) - 4}}
+							{{cartUserCount = (($root.products['friendsInCart']).length + (friendsCart).length) - 4}}
 						</span>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
 			</a>
         </div>
     </li>
-    <li class="product_item post" ng-repeat="post in arctr.twitterPosts track by $index">
+    <li class="product_item post" ng-repeat="post in $root.twitterPosts track by $index">
         <div class="tweet head">Tweet</div>
         <div class="body">{{ post.text }}</div>
         <div class="options">
@@ -68,7 +68,7 @@
             <a title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
         </div>
     </li>
-    <li class="product_item post" ng-repeat="post in arctr.tumblrPosts track by $index">
+    <li class="product_item post" ng-repeat="post in $root.tumblrPosts track by $index">
         <div class="tumblr head">Tumblr</div>
         <div class="body">
             <span ng-if="post.type == 'text'">{{ post.body | htmlToPlaintext }}</span>
@@ -82,7 +82,7 @@
             <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
         </div>
     </li>
-    <li class="product_item drag-to-cart" ng-repeat="product in arctr.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="arctr.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
+    <li class="product_item drag-to-cart" ng-repeat="product in $root.products['grpcart_products']" data-drag="true" data-jqyoui-options="{ helper: 'clone'}" ng-model="$root.products['grpcart_products']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep'}" data-product-id="{{product.ProdBrandId}}">
         <div class="product_image">
             <a data-ng-href="/products/{{product.ProdBrandId}}">
 				<img src="{{UploadUrl}}{{product.img_loc}}" alt="">
