@@ -2,6 +2,7 @@
 /**
  * Module dependencies.
  */
+var fs = require('fs');
 var db = require('../../../config/sequelize');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
@@ -544,18 +545,30 @@ exports.fbposts = function(req,res){
 }
 
 exports.updateCover = function(req, res){
-  var buf/* whatever */; 
+  /* whatever */; 
   console.log('Json data ');
-  console.log(req.body.data); 
-  //var data = JSON.parse(req.body.data);
-  /*if (typeof Buffer.from === "function") {
-    // Node 5.10+
-    buf = Buffer.from(data, 'base64'); // Ta-da
-  } else {
-      // older Node versions
-      buf = new Buffer(data, 'base64'); // Ta-da
-  }
-  return res.jsonp(buf);*/
+  var data = req.body.data;
+ var ext = data.split(';')[0].match(/jpeg|png|gif/)[0];
+ var filename = req.body.name;
+  data = data.replace(/^data:image\/\w+;base64,/, "");
+  require("fs").writeFile("packages/public/assets/anerve/usr_images/"+filename, data, 'base64', function(err) {
+    if(err == null){
+      var user = req.user;
+      console.log('filename is');
+      console.log(filename);
+      var newuser = {user_img : filename};
+      user.updateAttributes(newuser).then(function(a){
+        var data = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename};
+        res.jsonp(data);
+      }).catch(function(err){
+        var data = {"msg":"Error Occurred","status":"error"};
+        res.jsonp(data);
+      });
+      } else {
+        var data = {"msg":"Error Occurred Test","status":"error"};
+        res.jsonp(data);
+      }
+    });
 }
 
 /*exports.googlePosts = function(req, res){
