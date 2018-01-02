@@ -650,8 +650,8 @@
                 url: options.url,
                 data: $.extend(obj, options.data),
                 success: function(response) {
-                    response = JSON.parse(response);
-                    if (response.status == "success") {
+                    //response = JSON.parse(response);
+                    /*if (response.status == "success") {
                         var file		= response.url.split('?');
                         $(element).find('.tools .saving').remove();
                         $(element).find('.tools').children().toggle();
@@ -667,14 +667,27 @@
                         $(element).find('.tools').children().toggle();
                         $(element).append($('<div class="alert alert-danger">' + response.error + '</div>').css({bottom: '10px',left: '10px',right: '10px',position: 'absolute', zIndex: 99}));
                         setTimeout(function() { _self.responseReset();},2000);
+                    }*/
+
+                    if (response.status == "success") {
+                        $(element).data('name',response.filename)
+                        $(element).data('filename',response.filename)
+                        if (options.canvas != true) {
+                            $(element).append($('<img src="' + response.filename + '" class="final" style="width: 100%" />'));
+                        }
+
+                        _self.imageFinal();
+                        notify(response.msg, response.status);
+                    } else {
+                        notify(response.msg, response.status);
                     }
                 },
-                error: function(response, status) {
+                /*error: function(response, status) {
                     $(element).find('.tools .saving').remove();
                     $(element).find('.tools').children().toggle();
                     $(element).append($('<div class="alert alert-danger"><strong>' + response.status + '</strong> ' + response.statusText + '</div>').css({bottom: '10px',left: '10px',right: '10px',position: 'absolute', zIndex: 99}));
                     setTimeout(function() { _self.responseReset();},2000);
-                }
+                }*/
             })
         },
         imageReset: function() {
