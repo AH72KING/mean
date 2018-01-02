@@ -14,22 +14,6 @@
 				            </div>
 			          </div>
 			        </div>
-			        <!-- <div class="row">
-			          <ul isotope-container ng-cloak class="ng-cloak">
-			            <li ng-repeat="product in arctr.products['col1']" ng-model="arctr.products['col1']" data-product-id="{{product.ProdBrandId}}" isotope-item class="aisles-{{product.aisleId}}" >
-			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
-			            </li>
-			            <li ng-repeat="product in arctr.products['col2']" ng-model="arctr.products['col2']" data-product-id="{{product.ProdBrandId}}" isotope-item class="aisles-{{product.aisleId}}" >
-			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
-			            </li>
-			            <li ng-repeat="product in arctr.products['col3']" ng-model="arctr.products['col3']" data-product-id="{{product.ProdBrandId}}" isotope-item class="aisles-{{product.aisleId}}" >
-			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
-			            </li>
-			            <li ng-repeat="product in arctr.products['col4']" ng-model="arctr.products['col4']" data-product-id="{{product.ProdBrandId}}" isotope-item class="aisles-{{product.aisleId}}" >
-			               <img width="200px" height="200px" src="{{UploadUrl}}{{product.img_loc}}"/>
-			            </li>
-			          </ul>
-			        </div> -->
 			        <div id="myproducts" class="product_grid">
 			        	<div class="col-sm-12 ui-widget-content">
 			        		<div class="row">
@@ -58,10 +42,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="product-id">{{arctr.products[arctr.products.length -1].ProdBrandId}}</div>
+						<div class="product-id">{{$root.products[arctr.products.length -1].ProdBrandId}}</div>
 					</div>
 				</div>
-				<h1 data-ng-hide="!arctr.products['col1'] || arctr.products['col1'].length">No products yet. 
+				<h1 data-ng-hide="!$root.products['col1'] || $root.products['col1'].length">No products yet. 
 					<br> Why don't you 
 					<a href="/products/create">Create One</a>?
 				</h1>

@@ -7,27 +7,23 @@ angular
     HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
 
     function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
-
-        var baseUrl = 'http://localhost:3000/';
-        var ip = window.ip;
         $rootScope.isLoaded = false;
-       //var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
-        var UploadUrl = 'http://localhost:3000/public/assets/';
-        var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
-        var headers = {
-                   'Access-Control-Allow-Origin': '*',
-                   'Content-Type' : 'application/json; charset=UTF-8',
-                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
-                   'Access-Control-Max-Age': '3600',
-                   'Access-Control-Allow-Credentials': 'true'
-                };
-
-        $scope.UploadUrl = 'http://localhost:3000/public/assets/';
-        $rootScope.UploadUrl  = UploadUrl;   
+        $rootScope.ip  = window.ip;
+        $rootScope.baseUrl = 'http://localhost:3000/';
+        $rootScope.UploadUrl  = 'http://localhost:3000/public/assets/';
+        $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
+        $rootScope.headers    = {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type' : 'application/json; charset=UTF-8',
+            'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+            'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
+            'Access-Control-Max-Age': '3600',
+            'Access-Control-Allow-Credentials': 'true'
+        };  
+        $rootScope.cartTotalPrice        = 0;
         //check key if expire, then logout user
         // validate key
-        $scope.socialApps = [
+        $rootScope.socialApps = [
           { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter'},
           { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr'},
           { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook'},
@@ -66,69 +62,67 @@ angular
                 ]
             }
         ];
-        $scope.provider = '';
-
-        $rootScope.cartTotalPrice        = 0;
+        $rootScope.provider = '';
 
         $rootScope.showMenuChilds = function(item){
             item.active = !item.active;
         };
         $rootScope.selectAisleID = function (aisle) { 
             console.log(aisle);            //aisleId aisle_description aisle_name aisle_number
-            $scope.AislesIsSelected    = true;
-            $scope.AislesSelectedID    = aisle.aisleId;
-            $scope.AislesSelectedName  = aisle.aisle_name;
-            $scope.AislesSelectedDesc  = aisle.aisle_description;
+            $rootScope.AislesIsSelected    = true;
+            $rootScope.AislesSelectedID    = aisle.aisleId;
+            $rootScope.AislesSelectedName  = aisle.aisle_name;
+            $rootScope.AislesSelectedDesc  = aisle.aisle_description;
             
            $rootScope.emptyAllProductCols();
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
+            if($rootScope.NoMoreProductToFetch){
+              $rootScope.startTimeout();
             }
         };
         $rootScope.emptyAllProductCols = function () {
-            $scope.lastProductID = 0;
-            $scope.arctr.products['col1'] = [];
-            $scope.arctr.products['col2'] = [];
-            $scope.arctr.products['col3'] = [];
-            $scope.arctr.products['col4'] = [];
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
+            $rootScope.lastProductID = 0;
+            $rootScope.products['col1'] = [];
+            $rootScope.products['col2'] = [];
+            $rootScope.products['col3'] = [];
+            $rootScope.products['col4'] = [];
+            if($rootScope.NoMoreProductToFetch){
+              $rootScope.startTimeout();
             }
 
         };
         $rootScope.getAllProducts = function () {
             $rootScope.emptyAllProductCols();
-            $scope.AislesIsSelected = false;
+            $rootScope.AislesIsSelected = false;
         };
         // get prod by aisle
         $rootScope.getProdByAisle = function(index){
           if(index !== undefined && index !== 'undefined' && index !== ''){
-            var id = $scope.aisles[index].aisleId;
+            var id = $rootScope.aisles[index].aisleId;
           }else{
             id = "";
           }
 
-          var url = baseUrl+'api/getAisleProd';
+          var url = $rootScope.baseUrl+'api/getAisleProd';
           var postData = {'id':id};
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
          // notify('Loading Products...','info');
           $http(configObj)
               .then(function onFulfilled(response) {
                   for(var i = 1; i <= 4; i++){
-                    $scope.arctr.products['col'+i] = response.data['col'+i];
+                    $rootScope.products['col'+i] = response.data['col'+i];
                   }
                 closeNoti();
-                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $rootScope.aisles[index].aisle_name+' Products Loaded';
                 else var $msg = "All Products Loaded";
                   notify($msg,'success');
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
-        $scope.validateKey= function(){
+        $rootScope.validateKey= function(){
 
-          var url = baseUrl+'api/validateKey';
-          var configObj = { method: 'POST',url: url, headers: headers};
+          var url = $rootScope.baseUrl+'api/validateKey';
+          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                   if(response.data == false){
@@ -136,17 +130,17 @@ angular
                   } else if(response.data != false && response.data != true) {
                     Session.setItem('UserID',response.data.userId);
                     Session.setItem('key_'+response.data.userId, response.data.key);
-                    $scope.provider = response.data.provider;
+                    $rootScope.provider = response.data.provider;
                   }
               }).catch( function onRejection(errorResponse) {
                 console.log(errorResponse);
               });
         };
-        $scope.validateKey();
-        $scope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
+        $rootScope.validateKey();
+        $rootScope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
-        $scope.userImg = Session.getItem('img_loc');
+        $rootScope.userImg = Session.getItem('img_loc');
         vm.menu = [
         /*{
             'title': 'products',
@@ -209,7 +203,7 @@ angular
             url = '/images/default-avatar.png'; 
           }else {
             url = '/images/default-avatar.png'; 
-           /* var link = UploadUrl+url;
+           /* var link = $rootScope.UploadUrl+url;
             var http = new XMLHttpRequest();
             http.open('HEAD', link, false);
             http.send();
@@ -220,17 +214,17 @@ angular
           return url;
        };
         // get friend request
-        $scope.friendRequests = function(){
+        $rootScope.friendRequests = function(){
           if(typeof Session.getItem('UserID') != 'undefined'){
           var UserID  =  Session.getItem('UserID');
             if(UserID != null){
               var key   =  Session.getItem('key_'+UserID);
-              var url = ApiBaseUrl+'myInvites/'+key;
-              var configObj = { method: 'GET',url: url, headers: headers};
+              var url = $rootScope.ApiBaseUrl+'myInvites/'+key;
+              var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
               $http(configObj)
                   .then(function onFulfilled(response) {
                       var dataJson    = JSON.parse(JSON.stringify(response.data));
-                      $scope.requests = dataJson;
+                      $rootScope.requests = dataJson;
                   }).catch( function onRejection(errorResponse) {
                     console.log(errorResponse);
                   }); 
@@ -238,7 +232,7 @@ angular
           }
         };
         try {
-          $scope.friendRequests();
+          $rootScope.friendRequests();
         }
         catch(e){
           console.log(e);
@@ -264,15 +258,15 @@ angular
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);
-            var url = ApiBaseUrl+'acceptInvitation/'+key+'/'+userId;
-            var configObj = { method: 'GET',url: url, headers: headers};
+            var url = $rootScope.ApiBaseUrl+'acceptInvitation/'+key+'/'+userId;
+            var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
             $http(configObj)
                 .then(function onFulfilled(response) {
                     var dataJson    = JSON.parse(JSON.stringify(response.data));
                     console.log(dataJson);
-                    $scope.requests.slice(index, 1);
+                    $rootScope.requests.slice(index, 1);
                     if(index === null){
-                       $scope.CurrentUserBuyerDetail.action = '02';
+                       $rootScope.CurrentUserBuyerDetail.action = '02';
                     }
                     notify('Friend Request has been Accepted Successfully');
                 }).catch( function onRejection(errorResponse) {
@@ -282,18 +276,18 @@ angular
         };
 
         // unfollow user
-        $scope.unFollow = function(userid){
+        $rootScope.unFollow = function(userid){
             var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
                 var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'unfollowUser';
+                var url = $rootScope.ApiBaseUrl+'unfollowUser';
                 var postData = {key:key, query_userId:userid};
-                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '03';
+                        $rootScope.CurrentUserBuyerDetail.action = '03';
                         notify('User Unfollowed Successfully');
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
@@ -302,18 +296,18 @@ angular
         };
 
           // send friend request
-        $scope.sendFriendRequest = function(userid){
+        $rootScope.sendFriendRequest = function(userid){
             var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
                 var key   =  Session.getItem('key_'+UserID);
-                var url = ApiBaseUrl+'followUser';
+                var url = $rootScope.ApiBaseUrl+'followUser';
                 var postData = {key:key, query_userId:userid};
-                var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '01';
+                        $rootScope.CurrentUserBuyerDetail.action = '01';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -322,11 +316,11 @@ angular
 
         // getUserCartDetail
         $rootScope.GetFriendCart  = function(USERID) {
-                    var url = baseUrl+'api/getUserCartDetail';
+                    var url = $rootScope.baseUrl+'api/getUserCartDetail';
                     var postData = {
                       USERID:USERID
                     };
-                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                    var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);

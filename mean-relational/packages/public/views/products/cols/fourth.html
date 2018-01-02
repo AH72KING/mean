@@ -1,5 +1,5 @@
 <ul class="products vertical-ticker unstyled product_list list fourthCol Col ng-cloak" isotope-container ng-cloak>
-	<li  ng-repeat="product in arctr.products['col4']" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" ng-model="arctr.products['col4']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep', onStart:'onProdDragStart()', onDrag:'onProdDrag()'}" data-product-id="{{product.ProdBrandId}}" isotope-item class="product_item drag-to-cart aisles-{{product.aisleId}}">
+	<li  ng-repeat="product in $root.products['col4']" data-drag="true" data-jqyoui-options="{ helper: 'clone' ,appendTo: 'body'}" ng-model="$root.products['col4']" jqyoui-draggable="{index: {{$index}}, animate: false, placeholder: 'keep', onStart:'onProdDragStart()', onDrag:'onProdDrag()'}" data-product-id="{{product.ProdBrandId}}" isotope-item class="product_item drag-to-cart aisles-{{product.aisleId}}">
 		<!--ng-click="showProductDetail($event)"-->
 		<div ng-include="'public/views/products/product-detail.html'"></div>
 	</li>
