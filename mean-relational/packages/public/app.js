@@ -12,8 +12,7 @@ var angularModuel = angular.module('Anerve', [
   'ngMaterial',
   'ngMessages',
   'ngSanitize',
-  'ngAnimate',
-  'iso.directives'
+  'ngAnimate'
 ]);
 var Anerve = angularModuel.directive('sidenavPushIn',sidenavPushIn);
 

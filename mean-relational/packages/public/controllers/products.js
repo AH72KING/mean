@@ -826,8 +826,6 @@
                   $http(configObj)
                       .then(function onFulfilled(response) {
                           var dataJson = JSON.parse(JSON.stringify(response.data));
-                          console.log('data json : '+dataJson);
-                          console.log(dataJson);
                           if(dataJson !== undefined ){
                                 angular.forEach(dataJson,function(value){
                                   if(value['USERID'] != UserID){if(value['USERID'])
@@ -1037,7 +1035,7 @@
                 notify('Product Suggested To Cart','success');
                 console.log(response);
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         };
 
@@ -1054,7 +1052,7 @@
                 notify('Product Accepted','success');
                 console.log(response);
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         };
 
@@ -1081,7 +1079,7 @@
               .then(function onFulfilled(response) {
                   $rootScope.twitterPosts = response.data;
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
         timeline();
@@ -1105,7 +1103,7 @@
                   }
                 }
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           });
         };
         // dislike tweet if like
@@ -1127,7 +1125,7 @@
                   }
                 }
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           });
         };
         // delete tweet
@@ -1150,7 +1148,7 @@
                   }
                 }
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           });
         };
 
@@ -1163,7 +1161,7 @@
               .then(function onFulfilled(response) {
                   $rootScope.tumblrPosts = response.data;
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
         tumblrPosts();
@@ -1182,7 +1180,7 @@
                   console.log(response);
 
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         };
 
@@ -1196,7 +1194,7 @@
                   $rootScope.aisles = response.data;
                 }
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
         getAisles();
@@ -1210,7 +1208,7 @@
           $http(configObj)
               .then(function onFulfilled(response) {
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
         fbposts();
@@ -1222,7 +1220,7 @@
           $http(configObj)
               .then(function onFulfilled(response) {
               }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
+                  console.log('Error: ', errorResponse);
           }); 
         }
        gplus();*/
