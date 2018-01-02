@@ -179,7 +179,7 @@ angular
                             // Not Authenticated
                             else {
                                 $timeout(deferred.reject);
-                                location.url('/auth/login');
+                                location.url('/');  //auth/login
                             }
                         }, function(err) {
                             //some error

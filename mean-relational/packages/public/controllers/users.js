@@ -160,7 +160,7 @@
             $http(configObj)
                 .then(function onFulfilled(response) {
                     closeNoti();
-                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                    if(typeof response.data != 'undefined' && response.data.length > 0){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];
@@ -182,7 +182,7 @@
             $http(configObj)
                 .then(function onFulfilled(response) {
                     closeNoti();
-                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                    if(typeof response.data != 'undefined' && response.data.length > 0){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];
@@ -204,7 +204,7 @@
             $http(configObj)
                 .then(function onFulfilled(response) {
                     closeNoti();
-                    if(typeof response.data != 'undefined' && response.data.length > 1){
+                    if(typeof response.data != 'undefined' && response.data.length > 0){
                         angular.forEach(response.data,function(value, key){
                             response.data[key]['GIVNAME'] = value['givname'];
                             response.data[key]['SURNAME'] = value['surname'];

@@ -18,18 +18,19 @@
   function configState($stateProvider,$urlRouterProvider){
 
           // For unmatched routes:
-      $urlRouterProvider.otherwise('/');/*
-      $urlRouterProvider.when('/api/auth/twitter', '/api/auth/twitter');
-      $urlRouterProvider.when('/api/auth/tumblr', '/api/auth/tumblr');
-      $urlRouterProvider.when('/api/auth/facebook', '/api/auth/facebook');
-      $urlRouterProvider.when('/api/auth/google', '/api/auth/google');*/
+      $urlRouterProvider.otherwise('/');
       // states for my app
       $stateProvider
           .state('home', {
           url: '/',
           templateUrl: '/public/views/products/list.html',
           controller: 'productsController',
-          controllerAs: 'arctr'
+          controllerAs: 'arctr',
+          resolve : {
+          loggedin: function(MeanUser) {
+                  return MeanUser.checkLoggedin();
+              }
+           }
         });
        /* .state('home', {
           //url: '/',

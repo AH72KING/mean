@@ -26,12 +26,12 @@
 	  	<div class="tab-contents">
 		  	<div class="init-first" ng-init="tabContent='products'"></div>
 			<div class="tabs-content" ng-show="tabContent === 'products'">
-				 <div class="product_details">
+				<div class="product_details">
 				 	<div class="tab-content-head">
 				 		<i class="fa fa-list" aria-hidden="true"></i>
 				 		<h4>Product Details</h4>
 				 	</div>
-					<div class="list buyer-products" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail track by $index">
+					<div class="list buyer-products" data-ng-repeat="buyerProduct in $root.CurrentUserBuyerProductsDetail track by $index">
 						<div class="product-detail" ng-class="{true:'suggested-prod'}[buyerProduct.action == 3]">
 							<div class="product-name">
 								Name: {{buyerProduct.name}}

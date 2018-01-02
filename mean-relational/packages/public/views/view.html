@@ -1,45 +1,226 @@
+
+<style>
+        /* USER PROFILE PAGE */
+     .card {
+        margin-top: 20px;
+        padding: 30px;
+        background-color: rgba(214, 224, 226, 0.2);
+        -webkit-border-top-left-radius:5px;
+        -moz-border-top-left-radius:5px;
+        border-top-left-radius:5px;
+        -webkit-border-top-right-radius:5px;
+        -moz-border-top-right-radius:5px;
+        border-top-right-radius:5px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .card.hovercard {
+        position: relative;
+        padding-top: 0;
+        overflow: hidden;
+        text-align: center;
+        background-color: #fff;
+        background-color: rgba(255, 255, 255, 1);
+    }
+    .card.hovercard .card-background {
+        height: 130px;
+    }
+    .card-background img {
+        -webkit-filter: blur(25px);
+        -moz-filter: blur(25px);
+        -o-filter: blur(25px);
+        -ms-filter: blur(25px);
+        filter: blur(25px);
+        margin-left: -100px;
+        margin-top: -200px;
+        min-width: 130%;
+    }
+    .card.hovercard .useravatar {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+    }
+    .card.hovercard .useravatar img {
+        width: 100px;
+        height: 100px;
+        max-width: 100px;
+        max-height: 100px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 5px solid rgba(255, 255, 255, 0.5);
+    }
+    .card.hovercard .card-info {
+        position: absolute;
+        bottom: 14px;
+        left: 0;
+        right: 0;
+    }
+    .card.hovercard .card-info .card-title {
+        padding:0 5px;
+        font-size: 20px;
+        line-height: 1;
+        color: #262626;
+        background-color: rgba(255, 255, 255, 0.1);
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+    .card.hovercard .card-info {
+        overflow: hidden;
+        font-size: 12px;
+        line-height: 20px;
+        color: #737373;
+        text-overflow: ellipsis;
+    }
+    .card.hovercard .bottom {
+        padding: 0 20px;
+        margin-bottom: 17px;
+    }
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    .relative{position: relative;}
+
+    .user-detail-wrap {background-color:white;}
+    .detail-block{border-bottom:1px solid #e6e1e1;}
+    .users-detail{max-width: 100%!important}
+    .user-image img {width: 100px;height: 100px}
+    #friends li {border: 2px solid #f3f3f3;}
+</style>
 <section class="single-user-section" ng-init="usctr.findOne()">
     <div class="container">
-        <!--span class="single-user-update">{{usctr.user.Updated_at | date:'medium'}}</span-->
-        <h2 class="single-user-name">{{usctr.user.GIVNAME}} {{usctr.user.SURNAME}}</h2>
-        <div title="{{usctr.user.GIVNAME+' '+usctr.user.SURNAME}}" class="user-image" ng-class="{'online': usctr.user.online == 1}">
-            <a data-ng-href="/users/{{usctr.user.USERID}}">
-                <img src="{{UploadUrl}}{{usctr.user.img_loc}}" alt=""/>
-            </a>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card hovercard">
+            <div class="card-background">
+                <img class="card-bkimg" alt="" src="http://lorempixel.com/100/100/people/9/">
+                <!-- http://lorempixel.com/850/280/people/9/ -->
+            </div>
+            <div class="useravatar">
+                <img alt="" src="{{UploadUrl}}{{usctr.user.img_loc}}">
+            </div>
+            <div class="card-info"> <span class="card-title">{{usctr.user.GIVNAME}} {{usctr.user.SURNAME}}</span>
+
+            </div>
+            <div class="pull-right relative"><button class="btn btn-primary"><i class="fa fa-pencil"></i> Edit Cover Photo</button></div>
         </div>
-        <div class="single-user-actions" ng-show="usctr.global.user.USERID == usctr.user.USERID">
-            <a class="btn btn-info btn-xs edit-btn" href="/users/{{usctr.user.USERID}}/edit">
-            	Edit
-            </a>
-            <a class="btn btn-danger btn-xs delete-btn" ng-click="usctr.remove();">
-               Delete
-            </a>
-        </div>
-        <div class="users-detail">
-             <div class="detail-block">
-                <label>USERNAME</label>
-                <p>{{usctr.user.USERNAME}}</p>
+        <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+                <button type="button" id="stars" class="btn btn-primary" href="#profile" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <div class="hidden-xs">Profile</div>
+                </button>
             </div>
-            <div class="detail-block">
-                <label>GENDER</label>
-                <p>{{usctr.user.GENDER}}</p>
+            <div class="btn-group" role="group">
+                <button type="button" id="favorites" ng-click="getUsers({value:'F'})" class="btn btn-default" href="#friends" data-toggle="tab"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                    <div class="hidden-xs">Friends</div>
+                </button>
             </div>
-            <div class="detail-block">
-                <label>COUNTRY</label>
-                <p>{{usctr.user.COUNTRY}}</p>
-             </div>
-            <div class="detail-block">
-                <label>EMAIL</label>
-                <p>{{usctr.user.EMAIL}}</p>
-            </div>
-            <div class="detail-block">
-                <label>About</label>
-                <p>{{usctr.user.about}}</p>
-            </div>
-            <div class="detail-block">
-                <label>Views</label>
-                <p>{{usctr.user.views}}</p>
+            <div class="btn-group" role="group">
+                <button type="button" id="following" ng-click="$root.showFriendCart(usctr.user.USERID)" class="btn btn-default" href="#cart_item" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                    <div class="hidden-xs">Cart</div>
+                </button>
             </div>
         </div>
+
+          <div class="well user-detail-wrap tab-content col-md-12">
+            <div class="tab-pane fade in active" id="profile">
+                <div class="users-detail">
+                     <div class="detail-block">
+                        <label>USERNAME:</label>
+                        <p>{{usctr.user.USERNAME}}</p>
+                    </div>
+                    <div class="detail-block">
+                        <label>GENDER:</label>
+                        <p>{{usctr.user.GENDER}}</p>
+                    </div>
+                    <div class="detail-block">
+                        <label>COUNTRY:</label>
+                        <p>{{usctr.user.COUNTRY}}</p>
+                     </div>
+                    <div class="detail-block">
+                        <label>EMAIL:</label>
+                        <p>{{usctr.user.EMAIL}}</p>
+                    </div>
+                    <div class="detail-block">
+                        <label>About:</label>
+                        <p>{{usctr.user.about}}</p>
+                    </div>
+                    <div class="detail-block">
+                        <label>Views:</label>
+                        <p>{{usctr.user.views}}</p>
+                    </div>
+                </div>
+                <div class="single-user-actions" ng-show="usctr.global.user.USERID == usctr.user.USERID">
+                    <a class="btn btn-info edit-btn" href="/users/{{usctr.user.USERID}}/edit">
+                       <i class="fa fa-pencil"></i> Edit
+                    </a>
+                    <a class="btn btn-danger delete-btn" ng-click="usctr.remove();">
+                        <i class="fa fa-trash" ></i> Delete
+                    </a>
+                </div>
+            </div>
+            <div class="tab-pane fade in" id="friends">
+                <li ng-repeat="user in usctr.users" class="pull-left col-xs-12 col-sm-6 col-md-3 col-lg-2">
+                    <div ng-class="{'online': user.online == 1}" title="{{user.givname+' '+user.surname}}" class="user-image" >
+                        <a class="users-img" data-ng-href="/users/{{user.userId}}">
+                            <img src="{{UploadUrl+$root.getDefaultAvatar(user.img_loc)}}" alt=""/>
+                            <div class="user-detail">
+                                <div class="detail">
+                                    <span>{{user.givname+' '+user.surname}} </span>
+                                </div>
+                                <div class="usr-btns">
+                                    <a ng-click="sendFriendRequest(user.userId)" ng-if="user.is_my_friend != 'Y'" class="btn-xs btn btn-success">Follow</a>
+                                    <a ng-click="unFollow(user.userId)" ng-if="user.is_my_friend == 'Y'" class="btn-xs btn btn-danger">UnFollow</a>
+                                    <a ng-click="showFriendCart(user.userId); UserDetail()" class="pull-right" title="View Cart"><i style="color:white" class="fa fa-shopping-cart btn"></i></a>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            </div>
+            <div class="tab-pane fade in" id="cart_item">
+                <div class="list buyer-products" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail track by $index">
+                    <div class="product-detail" ng-class="{true:'suggested-prod'}[buyerProduct.action == 3]">
+                        <div class="product-name">
+                            Name: {{buyerProduct.name}}
+                        </div>
+                            <br>
+                        <div class="product-price">
+                            Price: {{buyerProduct.cost_price}}
+                        </div>
+                        <span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID && buyerProduct.action != 3" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
+                        <div ng-if="buyerProduct.action == 3"  class="" style="position: absolute;left:0;bottom:0;width: 100%">
+                            <span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ UploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
+                            </span>
+                            <span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID" style="position: absolute;right:0;bottom:0;cursor: pointer">
+                            <i class="fa fa-check btn btn-success" ng-click="acceptProdInCart(buyerProduct.groupCartProductId)" title="Accept"></i>
+                            <i class="fa fa-times btn btn-danger" title="Reject"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="product-images">
+                        <div class="product-image">
+                            <img src="{{UploadUrl}}{{buyerProduct.img_loc}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        
+        </div>
+                
     </div>
 </section>
+    <script>
+        $(document).ready(function() {
+            $(".btn-pref .btn").click(function () {
+                $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+                $('.tab-pane').removeClass('active');
+                $($(this).attr('href')).addClass('active');
+                // $(".tab").addClass("active"); // instead of this do the below 
+                $(this).removeClass("btn-default").addClass("btn-primary");   
+            });
+        });
+    </script>

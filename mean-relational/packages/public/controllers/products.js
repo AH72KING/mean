@@ -260,12 +260,14 @@ import 'rxjs/add/operator/map';*/
                 $scope.isUserDetailOpen();
               }
         };
-        $scope.showFriendCart = function(USERID){
-              if(angular.isNumber(USERID) ){
-                console.log(' cart belong to user id '+ USERID);
-                $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);
-                $scope.isUserDetailOpen();
-              }
+        $rootScope.showFriendCart = function(USERID){
+          console.log('user id is');
+          console.log(USERID);
+          if(angular.isNumber(USERID) ){
+            console.log(' cart belong to user id '+ USERID);
+            $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);
+            $scope.isUserDetailOpen();
+          }
         };
           
         $scope.showCurrentImage  = function(imageSrc,$event) {   
@@ -444,12 +446,12 @@ import 'rxjs/add/operator/map';*/
                           .then(function onFulfilled(response) {
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
-                              $scope.CurrentUserBuyerDetail = newData.cartOwner;
-                              $scope.CurrentUserBuyerProductsDetail = newData.cartProducts;
-                              $scope.cartUsers = newData.cartUsers;
-                              $scope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
-                              $scope.userCartId = newData.cartId;
-                              $scope.cartComments = newData.cartComments;
+                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
+                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
+                              $rootScope.cartUsers = newData.cartUsers;
+                              $rootScope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
+                              $rootScope.userCartId = newData.cartId;
+                              $rootScope.cartComments = newData.cartComments;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
