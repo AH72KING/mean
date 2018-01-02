@@ -104,7 +104,9 @@
             <div class="card-info"> <span class="card-title">{{usctr.user.GIVNAME}} {{usctr.user.SURNAME}}</span>
 
             </div>
-            <div class="pull-right relative"><button class="btn btn-primary"><i class="fa fa-pencil"></i> Edit Cover Photo</button></div>
+            <div class="pull-right relative">
+            <button class="btn btn-primary show-upl-md" type="button" ><i class="fa fa-pencil"></i> Edit Cover Photo</button>
+            </div>
         </div>
         <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
             <div class="btn-group" role="group">
@@ -213,6 +215,18 @@
                 
     </div>
 </section>
+
+    <div class="modal" id="upload_modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="modaldialog" class="html5imageupload" data-resize="true" data-width="960" data-height="540"  data-url="api/updateCover" style="width: 100%;min-width: 100%;height: 200px">
+              <input type="file" name="thumb" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
         $(document).ready(function() {
             $(".btn-pref .btn").click(function () {
@@ -221,6 +235,29 @@
                 $($(this).attr('href')).addClass('active');
                 // $(".tab").addClass("active"); // instead of this do the below 
                 $(this).removeClass("btn-default").addClass("btn-primary");   
+            });
+            $('#modaldialog').html5imageupload();
+            // show upload modal
+            $(document).on('click','.show-upl-md', function(e){
+                console.log('testing');
+                $('#upload_modal').show();
+            })
+            $('.dropzone').html5imageupload({
+                onAfterProcessImage: function() {
+                    $('#filename').val($(this.element).data('name'));
+                },
+                onAfterCancel: function() {
+                    notify('Image Cancel');
+                    console.log($('#filename').val());
+                },
+                onAfterRemoveImage: function() {
+                    notify('Image Remove');
+                    console.log($('#filename').val());
+                },
+                onSave: function() {
+                    notify('Image Saved');
+                    console.log($('#filename').val());
+                }
             });
         });
     </script>

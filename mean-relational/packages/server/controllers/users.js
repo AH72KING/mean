@@ -543,6 +543,21 @@ exports.fbposts = function(req,res){
     }
 }
 
+exports.updateCover = function(req, res){
+  var buf/* whatever */; 
+  console.log('Json data ');
+  console.log(req.body.data); 
+  //var data = JSON.parse(req.body.data);
+  /*if (typeof Buffer.from === "function") {
+    // Node 5.10+
+    buf = Buffer.from(data, 'base64'); // Ta-da
+  } else {
+      // older Node versions
+      buf = new Buffer(data, 'base64'); // Ta-da
+  }
+  return res.jsonp(buf);*/
+}
+
 /*exports.googlePosts = function(req, res){
   plus.people.get({
   userId: 'me',
