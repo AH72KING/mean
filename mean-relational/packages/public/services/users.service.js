@@ -6,9 +6,9 @@ angular
     .module('Anerve')
     .factory('MeanUser',MeanUser);
 
-    MeanUser.$inject = ['Global','$rootScope', '$http', '$location', '$stateParams', '$q', '$timeout','$window'];
+    MeanUser.$inject = ['Global','$state', '$rootScope', '$http', '$location', '$stateParams', '$q', '$timeout','$window'];
 
-    function MeanUser (Global,$rootScope, $http, $location, $stateParams, $q, $timeout,$window) {
+    function MeanUser (Global, $state, $rootScope, $http, $location, $stateParams, $q, $timeout,$window) {
             //console.log('user services MeanUser');
             var self;
 
@@ -91,7 +91,9 @@ angular
                     })
                     .then(function (res) {
                         console.log(res);
-                        self.onIdentity(res);
+                        //location.url('/');
+                        $window.location.href = '/';
+                        //self.onIdentity(res);
                     }, function(err) {
                         console.log(err);
                         self.onIdFail(err);
@@ -170,19 +172,19 @@ angular
                 $http.get('/api/loggedin')
                         .then(function (user) {
                             // Authenticated
-                            console.log(user);
-                            console.log(user.data);
                             if (user.data !== '0') {
+                                console.log('Authenticated');
                                 $timeout(deferred.resolve);
-                            }
-
-                            // Not Authenticated
-                            else {
+                            }else{
+                                 // Not Authenticated
+                                console.log('Not Authenticated');
                                 $timeout(deferred.reject);
-                                location.url('/');  //auth/login
+                                //location.url('/all-products');
+                                location.url('/auth/login');
                             }
                         }, function(err) {
                             //some error
+                            console.log('/api/loggedin Error');
                             console.log(err);
                     });
 
@@ -201,10 +203,9 @@ angular
                           // Authenticated
                             if (user !== '0') {
                                 $timeout(deferred.reject);
-                                $location.url('/');
-                            }
-                            // Not Authenticated
-                            else {
+                                //$location.url('/');
+                            }else{
+                                 // Not Authenticated
                                 $timeout(deferred.resolve);
                             }
                         }, function(err) {

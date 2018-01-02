@@ -21,7 +21,7 @@
       $urlRouterProvider.otherwise('/');
       // states for my app
       $stateProvider
-          .state('home', {
+        .state('home', {
           url: '/',
           templateUrl: '/public/views/products/list.html',
           controller: 'productsController',
@@ -32,7 +32,7 @@
               }
            }
         });
-       /* .state('home', {
+        /*.state('home', {
           //url: '/',
           url: '/all-products',
           templateUrl: '/public/views/index.html',

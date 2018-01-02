@@ -4,9 +4,9 @@ angular
     .module('Anerve')
     .controller('HeaderController',HeaderController);
 
-    HeaderController.$inject = ['$http','$state', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope'];
+    HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
 
-    function HeaderController($http, $state, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope){
+    function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
 
         var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
@@ -115,7 +115,11 @@ angular
                 authenticated: false
               };
 
-              $state.go('auth.login');
+              //$state.go('auth.login');
+              ///$state.go('home');
+              ///$state.go('home');
+              //$location.url('/');
+              $window.location.href = '/';
 
             },function(err){
                 console.log(err);

@@ -1,5 +1,4 @@
 'use strict';
-console.log('Anerve');
 var angularModuel = angular.module('Anerve', [
   /* angular modules */
   'ngCookies',

@@ -21,6 +21,7 @@
 
             //declare logical scope methods controller
             function login(){
+              console.log('login');
               //console.log('login.controller .login');
               $scope.UserLoginInJava(vm.user);
              // vm.meanuser.login(vm.user);
