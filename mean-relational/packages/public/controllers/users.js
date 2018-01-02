@@ -5,9 +5,9 @@
       .controller('usersController',usersController);
       
       //,'$log'
-      usersController.$inject = ['$stateParams', '$location', 'Global', 'users', '$state', '$scope', '$timeout', '$http', 'Session'];
+      usersController.$inject = ['$stateParams', '$location', 'Global', 'users', '$state', '$scope', '$timeout', '$http', 'Session', '$rootScope'];
 
-  function usersController($stateParams, $location, Global, users, $state, $scope, $timeout, $http, Session){
+  function usersController($stateParams, $location, Global, users, $state, $scope, $timeout, $http, Session, $rootScope){
         var vm = this;
         var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
@@ -217,6 +217,7 @@
                     console.log('Error: ', errorResponse.status);
             }); 
         }
+        
       }
 
 })();

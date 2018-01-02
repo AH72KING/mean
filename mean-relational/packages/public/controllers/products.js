@@ -19,7 +19,7 @@ import 'rxjs/add/operator/map';*/
 
   function productsController($stateParams, $location, Global, products, $state, $scope, $timeout, $http, Session, $mdSidenav, $mdUtil, $sce, $rootScope ){
         var vm = this;
-        $rootScope.isLoaded = false;
+        
 
         var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
@@ -37,7 +37,7 @@ import 'rxjs/add/operator/map';*/
         // bind functions
 
 
-        $rootScope.cartTotalPrice        = 0;/*
+        /*
         $scope.UploadUrl            = UploadUrl;   */
         $scope.addPaymentButton     = true;
         $scope.addShippingButton    = false;
@@ -71,27 +71,7 @@ import 'rxjs/add/operator/map';*/
         var userFirends = [];
         vm.userFirends = userFirends;
 
-        $scope.toggleLeft     = buildToggler('left');
-        $scope.toggleRight    = buildToggler('right');
-        $scope.ProductDetail  = buildToggler('ProductDetail');
-        $scope.UserDetail     = buildToggler('UserDetail');
-        $scope.lockLeft = false;
-        $scope.lockRight = false;
-        $scope.lockProductDetail = false;
-        $scope.lockUserDetail = false;
 
-        $scope.isLeftOpen = function() {
-          return $mdSidenav('left').isOpen();
-        };
-        $scope.isRightOpen = function() {
-          return $mdSidenav('right').isOpen();
-        };
-        $scope.isProductDetailOpen = function() {
-          return $mdSidenav('ProductDetail').isOpen();
-        };
-        $scope.isUserDetailOpen = function() {
-          return $mdSidenav('UserDetail').isOpen();
-        };
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -256,19 +236,11 @@ import 'rxjs/add/operator/map';*/
           
               if(angular.isNumber(grp_cartId) && angular.isNumber(USERID) ){
                 console.log(grp_cartId +' cart belong to user id '+ USERID);
-                $scope.CurrentUserBuyerDetail = $scope.CurrentUserBuyer(grp_cartId,USERID);
-                $scope.isUserDetailOpen();
+                $rootScope.CurrentUserBuyerDetail = $scope.CurrentUserBuyer(grp_cartId,USERID);
+                $rootScope.isUserDetailOpen();
               }
         };
-        $rootScope.showFriendCart = function(USERID){
-          console.log('user id is');
-          console.log(USERID);
-          if(angular.isNumber(USERID) ){
-            console.log(' cart belong to user id '+ USERID);
-            $scope.CurrentUserBuyerDetail = $scope.GetFriendCart(USERID);
-            $scope.isUserDetailOpen();
-          }
-        };
+
           
         $scope.showCurrentImage  = function(imageSrc,$event) {   
           console.log(imageSrc);
@@ -382,7 +354,7 @@ import 'rxjs/add/operator/map';*/
                               newData = JSON.parse(newData);
                               console.log('getUserDetail');
                               console.log(newData);
-                              $scope.CurrentUserBuyerDetail = newData;
+                              $rootScope.CurrentUserBuyerDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -414,7 +386,7 @@ import 'rxjs/add/operator/map';*/
                               newData = JSON.parse(newData);
                               console.log('getUserDetail');
                               console.log(newData);
-                              $scope.CurrentUserBuyerDetail = newData;
+                              $rootScope.CurrentUserBuyerDetail = newData;
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -435,43 +407,9 @@ import 'rxjs/add/operator/map';*/
                
         };
         
-        // getUserCartDetail
-        $scope.GetFriendCart  = function(USERID) {
-                    var url = baseUrl+'api/getUserCartDetail';
-                    var postData = {
-                      USERID:USERID
-                    };
-                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
-                      $http(configObj)
-                          .then(function onFulfilled(response) {
-                              var newData = JSON.stringify(response.data);
-                              newData = JSON.parse(newData);
-                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
-                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
-                              $rootScope.cartUsers = newData.cartUsers;
-                              $rootScope.isCartMember = $scope.checkInCartUsers(newData.cartUsers);
-                              $rootScope.userCartId = newData.cartId;
-                              $rootScope.cartComments = newData.cartComments;
-                          }).catch( function onRejection(errorResponse) {
-                              console.log('Error: ', errorResponse.status);
-                              console.log(errorResponse);
-                      });
-               
-        };
         
-        // check in cart users
-        $scope.checkInCartUsers = function(crtUsrs){
-          var UserID  =  Session.getItem('UserID');
-          var isMember = false;
-          angular.forEach(crtUsrs,function(value, key){
-            if(value['USERID'] == UserID){
-              console.log(UserID);
-              console.log(key);
-              isMember = true;
-            }
-          });
-          return isMember;
-        };
+        
+        
 
 
        $scope.CurrentProduct = function(productId) {
@@ -522,33 +460,9 @@ import 'rxjs/add/operator/map';*/
             $scope.NoMoreProductToFetch = true;
             console.log('Timer Stopped No More Products');  
         };
-        $rootScope.selectAisleID = function (aisle) { 
-            console.log(aisle);            //aisleId aisle_description aisle_name aisle_number
-            $scope.AislesIsSelected    = true;
-            $scope.AislesSelectedID    = aisle.aisleId;
-            $scope.AislesSelectedName  = aisle.aisle_name;
-            $scope.AislesSelectedDesc  = aisle.aisle_description;
-            
-           $rootScope.emptyAllProductCols();
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
-            }
-        };
-        $rootScope.emptyAllProductCols = function () {
-            $scope.lastProductID = 0;
-            $scope.arctr.products['col1'] = [];
-            $scope.arctr.products['col2'] = [];
-            $scope.arctr.products['col3'] = [];
-            $scope.arctr.products['col4'] = [];
-            if($scope.NoMoreProductToFetch){
-              $scope.startTimeout();
-            }
 
-        };
-        $rootScope.getAllProducts = function () {
-            $rootScope.emptyAllProductCols();
-            $scope.AislesIsSelected = false;
-        };
+        
+
         $rootScope.getProducts = function () {
                 var lastProductID = $scope.lastProductID;
                 var nextProducts = 4;
@@ -1006,7 +920,7 @@ import 'rxjs/add/operator/map';*/
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                         console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '01';
+                        $rootScope.CurrentUserBuyerDetail.action = '01';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -1025,7 +939,7 @@ import 'rxjs/add/operator/map';*/
                     .then(function onFulfilled(response) {
                         var dataJson = JSON.parse(JSON.stringify(response.data));
                          console.log(dataJson);
-                        $scope.CurrentUserBuyerDetail.action = '03';
+                        $rootScope.CurrentUserBuyerDetail.action = '03';
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse.status);
                 }); 
@@ -1325,31 +1239,7 @@ import 'rxjs/add/operator/map';*/
         }
         getAisles();
 
-        // get prod by aisle
-        $rootScope.getProdByAisle = function(index){
-          if(index !== undefined && index !== 'undefined' && index !== ''){
-            var id = $scope.aisles[index].aisleId;
-          }else{
-            id = "";
-          }
-
-          var url = baseUrl+'api/getAisleProd';
-          var postData = {'id':id};
-          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
-         // notify('Loading Products...','info');
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                  for(var i = 1; i <= 4; i++){
-                    $scope.arctr.products['col'+i] = response.data['col'+i];
-                  }
-                closeNoti();
-                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
-                else var $msg = "All Products Loaded";
-                  notify($msg,'success');
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse.status);
-          }); 
-        }
+        
 
         // get facebook post
         function fbposts(){

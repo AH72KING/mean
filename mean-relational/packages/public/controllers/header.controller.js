@@ -10,6 +10,7 @@ angular
 
         var baseUrl = 'http://localhost:3000/';
         var ip = window.ip;
+        $rootScope.isLoaded = false;
        //var UploadUrl = 'http://'+ip+':8080/Anerve/images/';
         var UploadUrl = 'http://localhost:3000/public/assets/';
         var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
@@ -67,9 +68,63 @@ angular
         ];
         $scope.provider = '';
 
+        $rootScope.cartTotalPrice        = 0;
+
         $rootScope.showMenuChilds = function(item){
             item.active = !item.active;
         };
+        $rootScope.selectAisleID = function (aisle) { 
+            console.log(aisle);            //aisleId aisle_description aisle_name aisle_number
+            $scope.AislesIsSelected    = true;
+            $scope.AislesSelectedID    = aisle.aisleId;
+            $scope.AislesSelectedName  = aisle.aisle_name;
+            $scope.AislesSelectedDesc  = aisle.aisle_description;
+            
+           $rootScope.emptyAllProductCols();
+            if($scope.NoMoreProductToFetch){
+              $scope.startTimeout();
+            }
+        };
+        $rootScope.emptyAllProductCols = function () {
+            $scope.lastProductID = 0;
+            $scope.arctr.products['col1'] = [];
+            $scope.arctr.products['col2'] = [];
+            $scope.arctr.products['col3'] = [];
+            $scope.arctr.products['col4'] = [];
+            if($scope.NoMoreProductToFetch){
+              $scope.startTimeout();
+            }
+
+        };
+        $rootScope.getAllProducts = function () {
+            $rootScope.emptyAllProductCols();
+            $scope.AislesIsSelected = false;
+        };
+        // get prod by aisle
+        $rootScope.getProdByAisle = function(index){
+          if(index !== undefined && index !== 'undefined' && index !== ''){
+            var id = $scope.aisles[index].aisleId;
+          }else{
+            id = "";
+          }
+
+          var url = baseUrl+'api/getAisleProd';
+          var postData = {'id':id};
+          var configObj = { method: 'POST',url: url, data:postData, headers: headers};
+         // notify('Loading Products...','info');
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  for(var i = 1; i <= 4; i++){
+                    $scope.arctr.products['col'+i] = response.data['col'+i];
+                  }
+                closeNoti();
+                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $scope.aisles[index].aisle_name+' Products Loaded';
+                else var $msg = "All Products Loaded";
+                  notify($msg,'success');
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+          }); 
+        }
         $scope.validateKey= function(){
 
           var url = baseUrl+'api/validateKey';
@@ -126,23 +181,26 @@ angular
             }
           );
         }
-        $scope.toggleLeft     = buildToggler('left');
-        $scope.toggleRight    = buildToggler('right');
-        //$scope.ProductDetail  = buildToggler('ProductDetail');
-        $scope.lockLeft = true;
-        $scope.lockRight = true;
+        $rootScope.toggleLeft     = buildToggler('left');
+        $rootScope.toggleRight    = buildToggler('right');
+        $rootScope.ProductDetail  = buildToggler('ProductDetail');
+        $rootScope.UserDetail     = buildToggler('UserDetail');
+        $rootScope.lockLeft = false;
+        $rootScope.lockRight = false;
+        $rootScope.lockProductDetail = false;
+        $rootScope.lockUserDetail = false;
 
         
-        $scope.isLeftOpen = function() {
+        $rootScope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
         };
-        $scope.isRightOpen = function() {
+        $rootScope.isRightOpen = function() {
           return $mdSidenav('right').isOpen();
         };
-        $scope.isProductDetailOpen = function() {
+        $rootScope.isProductDetailOpen = function() {
           return $mdSidenav('ProductDetail').isOpen();
         };
-        $scope.isUserDetailOpen = function() {
+        $rootScope.isUserDetailOpen = function() {
           return $mdSidenav('UserDetail').isOpen();
         };
 
@@ -260,6 +318,52 @@ angular
                         console.log('Error: ', errorResponse.status);
                 }); 
             } 
+        };
+
+        // getUserCartDetail
+        $rootScope.GetFriendCart  = function(USERID) {
+                    var url = baseUrl+'api/getUserCartDetail';
+                    var postData = {
+                      USERID:USERID
+                    };
+                    var configObj = { method: 'POST',url: url, data: postData, headers: headers};
+                      $http(configObj)
+                          .then(function onFulfilled(response) {
+                              var newData = JSON.stringify(response.data);
+                              newData = JSON.parse(newData);
+                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
+                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
+                              $rootScope.cartUsers = newData.cartUsers;
+                              $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
+                              $rootScope.userCartId = newData.cartId;
+                              $rootScope.cartComments = newData.cartComments;
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      });
+               
+        };
+        $rootScope.showFriendCart = function(USERID){
+          console.log('user id is');
+          console.log(USERID);
+          if(angular.isNumber(USERID) ){
+            console.log(' cart belong to user id '+ USERID);
+            $rootScope.CurrentUserBuyerDetail = $rootScope.GetFriendCart(USERID);
+            $rootScope.isUserDetailOpen();
+          }
+        };
+        // check in cart users
+        $rootScope.checkInCartUsers = function(crtUsrs){
+          var UserID  =  Session.getItem('UserID');
+          var isMember = false;
+          angular.forEach(crtUsrs,function(value, key){
+            if(value['USERID'] == UserID){
+              console.log(UserID);
+              console.log(key);
+              isMember = true;
+            }
+          });
+          return isMember;
         };
        
 
