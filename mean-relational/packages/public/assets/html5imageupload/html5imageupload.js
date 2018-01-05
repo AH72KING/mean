@@ -658,7 +658,10 @@
                         $(element).find('.tools').children().toggle();
                         $(element).data('name',response.filename)
                         $(element).data('filename',response.filename)
-                        $('#profile-cover-backgroud').css('background', 'url('+response.url+') no-repeat');
+                        $('#profile-cover-backgroud').css({
+                            'background':'url('+response.url+') no-repeat',
+                            'background-size':'100%'
+                        });
                         if (options.canvas != true) {
                             $(element).append($('<img src="' + response.url + '" class="response final" style="width: 100%" />'));
                         }

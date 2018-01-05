@@ -1,6 +1,47 @@
+div#splash_cont { 
+    position: absolute; 
+    background: #000; 
+    width: 100%; 
+    height: 100vh; 
+    z-index: 100; 
+    text-align: center; 
+}
+div#splash_cont img{
+
+}
+div#splash_cont .loading-center{
+    position: absolute;
+    left: 0;
+    top: 30vh;
+    width: 100%;
+    text-align: center;
+}
+div#splash_cont .loading-center img{}
+div#splash_cont .loading-center #progressBar{
+    margin: 10px auto;
+    width: 420px;
+    height: 20px;
+    padding: 0px;
+    background:#ccc;
+    border:1px solid #aaa;
+    -moz-box-shadow: inset 0 0 3px #888;
+    -webkit-box-shadow: inset 0 0 3px #888;
+    box-shadow: inset 0 0 3px #888;
+}
+/*styling the progress bar*/
+
+div#splash_cont .loading-center  #bar{
+    background:#499aed;
+    height:100%; 
+    width:0; /*sets the bar to 0*/   
+}
 .container {
     background-image: none!important;
     margin-top: 30px;
+}
+.single-user-section .container {
+    width: 100%;
+    padding: 0px;
 }
 
 .page-parent {
@@ -4444,7 +4485,7 @@ width: 100%;
 
 .single-user-section{
     display:block;
-    padding: 20px;
+    padding: 20px 0px;
     margin: 0 auto;
 }
 .single-user-section .single-user-update{}
@@ -4527,13 +4568,14 @@ width: 100%;
 
 }
 .html5imageupload{
-    height: 250px!important;
+    height: 300px!important;
 }
 .single-user-section  .modal-dialog{
 
 }
 #upload_modal .modal-dialog{
-    width: 1100px!important;
+    max-width: 1500px!important;
+    width: 100%;
 }
 
 #filename{display: none!important;}

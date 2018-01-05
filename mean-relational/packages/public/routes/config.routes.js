@@ -28,7 +28,16 @@
           controllerAs: 'arctr',
           resolve : {
           loggedin: function(MeanUser) {
-                  return MeanUser.checkLoggedin();
+            var $return;
+                  if($return = MeanUser.checkLoggedin()== false){
+                    console.log('MeanUser');
+                    console.log($return);
+                    return false;
+                  }else{
+                    console.log('MeanUserelse');
+                    console.log($return);
+                    return $return;  
+                  }
               }
            }
         });

@@ -1,10 +1,35 @@
-
-    <!--my-frame>
-        <span>My Frame content</span>
-    </my-frame-->
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--div class="splash" ng-cloak="">
+    <p>Loading</p>
+</div-->
+<div id="splash_cont" class="animate ">
+  <div class="loading-center">
+    <img id="ruby" src="public/assets/images/ruby.png" alt="Anerve Loading Image" />
+    <h3>Loading....</h3>
+    <div id='progressBar'></div>
+  </div>
+</div>
 <script type="text/javascript" charset="utf-8">
-  $(document).ready(function () {
+  $(document).ready(function ($) {
+
+
+    var splash = $("#splash_cont");
+    setTimeout(function() {
+       splash.removeClass("animate").addClass("hide");
+    }, 2000); // <-- time in milliseconds
+
+    $('#progressBar').append('<div id="bar"></div>');
+
+    // percentage of completion
+    var progress = '100%';
+
+    // Animate the #bar div
+    $('#bar').animate({
+        width: progress
+    }, 1800);
+
+
+
+
   var trigger = $('.hamburger'),
       overlay = $('.overlay'),
      isClosed = false;

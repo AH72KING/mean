@@ -62,7 +62,7 @@ angular
                         //This is so an admin user will get full admin page
                         $window.location.reload();
                     } else {
-                    $window.location.href = response.redirect;
+                        $window.location.href = response.redirect;
                     }
                 }else{
                 $window.location.reload();
@@ -170,9 +170,11 @@ angular
                                 $timeout(deferred.resolve);
                             }else{
                                  // Not Authenticated
-                                $timeout(deferred.reject);
+                               $timeout(deferred.reject);
                                 //location.url('/all-products');
-                                location.url('/auth/login');
+                                //location.url('/auth/login');
+                              // location.url('/');
+                              return false;
                             }
                         }, function(err) {
                             //some error

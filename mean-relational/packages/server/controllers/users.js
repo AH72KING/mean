@@ -569,7 +569,8 @@ exports.updateCover = function(req, res){
   imgBuffer =  Buffer.from(imgBuffer, 'base64');
   sharp(imgBuffer)
   //.resize(width,height).toFormat(ext)
-  .resize(1110,250)
+  .resize(imageOriginalWidth,imageOriginalHeight)
+  .crop(sharp.strategy.entropy)
   .toFile(urlToWrite)
   .then(function(response){
      console.log(response);

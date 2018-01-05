@@ -1,5 +1,5 @@
 'use strict';
-var angularModuel = angular.module('Anerve', [
+var angularModel = angular.module('Anerve', [
   /* angular modules */
   'ngCookies',
   'ngResource',
@@ -14,94 +14,22 @@ var angularModuel = angular.module('Anerve', [
   'ngSanitize',
   'ngAnimate'
 ]);
-var Anerve = angularModuel.directive('sidenavPushIn',sidenavPushIn);
 
+/*var body = document.getElementsByTagName('body')[0];
 
+setTimeout(function() {
+  body.setAttribute('ng-app', 'Anerve');
+  angular.bootstrap(body, ['ng', 'Anerve']);
+  // for this remove ng-app from body tag first in jade
+}, 10); */
 
-/*angularModuel.directive('validFile',[function() {
-  return {
-    require : 'ngModel',
-    scope : {format: '@', upload : '&upload'},
-    link : function(scope, el, attrs, ngModel) {
-      // change event is fired when file is selected
-      el.bind('change', function(event) {
-        console.log(event.target.files[0]);
-        scope.upload({file:event.target.files[0]});
-        scope.$apply(function() {
-          ngModel.$setViewValue(el.val());
-          ngModel.$render();
-        });
-      })
-    }
-  }
-}]);*/
-
-
-//Anerve.directive('mAppLoading',mAppLoading);
-//Anerve.directive('myFrame',myFrame);
+var Anerve = angularModel.directive('sidenavPushIn',sidenavPushIn);
 Anerve.config(['$qProvider', function ($qProvider) {
-        $qProvider.errorOnUnhandledRejections(false);
+    $qProvider.errorOnUnhandledRejections(false);
 }]);
 
 window.ip = '192.168.100.88';
 //window.ip = '192.168.1.88';
-  
-//var baseUrl = 'http://localhost:3000/';
-//var ApiBaseUrl = 'http://'+window.ip+':8080/Anerve/anerveWs/AnerveService/';
-//var UploadUrl = baseUrl+'/assets/';
- /*var headers = {
-                   'Access-Control-Allow-Origin': '*',
-                   'Content-Type' : 'application/json; charset=UTF-8',
-                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
-                   'Access-Control-Max-Age': '3600',
-                   'Access-Control-Allow-Credentials': 'true'
-                };*/
-/*function myFrame(){
-    return {
-        restrict: 'E',
-        templateUrl:'/public/views/frame.html',
-        controller:function($scope){
-          $scope.hidden=false;
-          $scope.close=function(){
-            $scope.hidden=true;
-          };
-        },
-        transclude:false
-    };
-
-}*/
-/*
-function mAppLoading($animate){
-
-                // Return the directive configuration.
-                return({
-                    link: link,
-                    transclude:false,
-                    restrict: 'E'
-                });
-                // I bind the JavaScript events to the scope.
-                function link( scope, element, attributes ) {
-                    // Due to the way AngularJS prevents animation during the bootstrap
-                    // of the application, we can't animate the top-level container; but,
-                    // since we added "ngAnimateChildren", we can animated the inner
-                    // container during this phase.
-                    // --
-                    // NOTE: Am using .eq(1) so that we don't animate the Style block.
-                    $animate.leave( element.children().eq( 1 ) ).then(
-                        function cleanupAfterAnimation() {
-                            // Remove the root directive element.
-                            element.remove();
-                            // Clear the closed-over variable references.
-                            scope = element = attributes = null;
-                        }
-                    );
-                }
-}
-*/
-
-
-
 function sidenavPushIn(){
         return {
             restrict: 'A',
