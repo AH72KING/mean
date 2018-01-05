@@ -4524,12 +4524,31 @@ width: 100%;
 .side-bar-menu ul li ul.sub-navbar{ padding-left: 15px; }
 .side-bar-menu ul li ul.sub-navbar li{
      color: #fff;
+
+}
+.html5imageupload{
+    height: 250px!important;
+}
+.single-user-section  .modal-dialog{
+
+}
+#upload_modal .modal-dialog{
+    width: 1100px!important;
 }
 
+#filename{display: none!important;}
+.single-user-section .dropzone{
+    background: transparent!important;
+    border: none;
+    height: 250px!important;
+}
+.single-user-section .dropzone:before, .single-user-section .dropzone:after{
+    display: none;
+}
         /* USER PROFILE PAGE */
      .single-user-section .card {
-        margin-top: 20px;
-        padding: 30px;
+        /* margin-top: 20px; */
+        padding: 30px 0px;
         background-color: rgba(214, 224, 226, 0.2);
         -webkit-border-top-left-radius:5px;
         -moz-border-top-left-radius:5px;
@@ -4541,6 +4560,7 @@ width: 100%;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
+
     .single-user-section .card.hovercard {
         position: relative;
         padding-top: 0;
@@ -4550,14 +4570,9 @@ width: 100%;
         background-color: rgba(255, 255, 255, 1);
     }
     .single-user-section .card.hovercard .card-background {
-        height: 130px;
+        height: 250px;
     }
     .single-user-section .card-background img {
-        -webkit-filter: blur(25px);
-        -moz-filter: blur(25px);
-        -o-filter: blur(25px);
-        -ms-filter: blur(25px);
-        filter: blur(25px);
         margin-left: -100px;
         margin-top: -200px;
         min-width: 130%;
@@ -4580,7 +4595,7 @@ width: 100%;
     }
     .single-user-section .card.hovercard .card-info {
         position: absolute;
-        bottom: 14px;
+        bottom: 30px;
         left: 0;
         right: 0;
     }
@@ -4589,10 +4604,13 @@ width: 100%;
         font-size: 20px;
         line-height: 1;
         color: #262626;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.5);
         -webkit-border-radius: 4px;
         -moz-border-radius: 4px;
         border-radius: 4px;
+        margin: 10px 0px;
+        display: block;
+        line-height: 1.5;
     }
     .single-user-section .card.hovercard .card-info {
         overflow: hidden;
@@ -4615,3 +4633,68 @@ width: 100%;
     .single-user-section .users-detail{max-width: 100%!important}
     .single-user-section .user-image img {width: 100px;height: 100px}
     .single-user-section #friends li {border: 2px solid #f3f3f3;}
+
+.thumbnail-button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+.large-preview {
+    width: inherit;
+    right: inherit;
+    height: inherit;
+    margin: inherit;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.large-preview button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+
+.profile-cart{
+
+}
+.profile-cart .buyer-products{
+    display: inline-block;
+    vertical-align: top;
+    margin: 2px 5px;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+}
+.profile-cart .product-detail{
+
+}
+.profile-cart .product-detail .product-name{
+
+}
+.profile-cart .product-detail .product-price{
+
+}
+.profile-cart .product-detail .product-images{
+
+}
+.profile-cart .product-images .product-image{
+    text-align: center;
+}
+.profile-cart .product-images .product-image img{
+    width: 100%;
+    max-width: 200px;
+    height: 200px;
+    margin: 15px 0px;
+}
+.card.hovercard:hover .show-upl-md{
+    display: block;
+}
+.card.hovercard .show-upl-md{
+    display: none;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}

@@ -13,7 +13,6 @@ angular
             var self;
 
             function MeanUserKlass() {
-                console.log('user services MeanUserKlass');
                 this.name = 'users';
                 this.user = {};
                 this.loggedin = false;
@@ -46,7 +45,6 @@ angular
 
 
             function onIdentity(response) {
-                console.log('user services onIdentity');
                 var user = response.user ? response.user : response;
 
                 self.loggedin = true;
@@ -72,7 +70,6 @@ angular
             }
 
             function onIdFail(response) {
-                console.log('user services onIdFail');
                 self.loginError = 'Authentication failed.';
                 self.registerError = response;
                 self.validationError = response.msg;
@@ -83,7 +80,6 @@ angular
 
 
             function login(user) {
-                 console.log('user service login');
                 // this is an ugly hack due to mean-admin needs
                 $http.post('/api/login', {
                         USERNAME: user.USERNAME,
@@ -146,7 +142,6 @@ angular
             }
 
             function logout() {
-                    console.log('user services logout');
                  $http.get('/api/logout')
                         .then(function () {
                             self.user = {};
@@ -166,18 +161,15 @@ angular
             }
 
             function checkLoggedin() {
-                 console.log(' service users checkLoggedin');
                 var deferred = $q.defer();
 
                 $http.get('/api/loggedin')
                         .then(function (user) {
                             // Authenticated
                             if (user.data !== '0') {
-                                console.log('Authenticated');
                                 $timeout(deferred.resolve);
                             }else{
                                  // Not Authenticated
-                                console.log('Not Authenticated');
                                 $timeout(deferred.reject);
                                 //location.url('/all-products');
                                 location.url('/auth/login');
@@ -192,7 +184,6 @@ angular
             }
 
             function checkLoggedOut() {
-                console.log(' service users checkLoggedOut');
                 // Check if the user is not connected
                 // Initialize a new promise
                 var deferred = $q.defer();
@@ -217,7 +208,6 @@ angular
             }
 
             function checkAdmin() {
-                 console.log('user services checkAdmin');
                 var deferred = $q.defer();
 
                 // Make an AJAX call to check if the user is logged in
@@ -240,9 +230,6 @@ angular
 
                 return deferred.promise;
             }
-
-
     }
-
 
 })();

@@ -114,5 +114,7 @@ app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);
 app.route('/api/updateCover').post(users.updateCover);
 //app.route('/api/gplus').post(users.googlePosts);
+//
+app.route('/api/validatekey').get(users.validatekey);
 
 };

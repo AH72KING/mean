@@ -7,6 +7,7 @@ angular
     HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
 
     function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
+        $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
         $rootScope.baseUrl = 'http://localhost:3000/';
@@ -96,10 +97,9 @@ angular
         };
         // get prod by aisle
         $rootScope.getProdByAisle = function(index){
+          var id = "";
           if(index !== undefined && index !== 'undefined' && index !== ''){
-            var id = $rootScope.aisles[index].aisleId;
-          }else{
-            id = "";
+            id = $rootScope.aisles[index].aisleId;
           }
 
           var url = $rootScope.baseUrl+'api/getAisleProd';
@@ -112,22 +112,28 @@ angular
                     $rootScope.products['col'+i] = response.data['col'+i];
                   }
                 closeNoti();
-                if(index !== undefined && index !== 'undefined' && index !== '') var $msg = $rootScope.aisles[index].aisle_name+' Products Loaded';
-                else var $msg = "All Products Loaded";
+                if(index !== undefined && index !== 'undefined' && index !== ''){
+                  var $msg = $rootScope.aisles[index].aisle_name+' Products Loaded';
+                }else{
+                  var $msg = "All Products Loaded";
                   notify($msg,'success');
+                }
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
           }); 
-        }
-        $rootScope.validateKey= function(){
+        };
+        $rootScope.validatekey= function(){
 
-          var url = $rootScope.baseUrl+'api/validateKey';
-          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+          var url = $rootScope.baseUrl+'api/validatekey';
+          var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
           $http(configObj)
               .then(function onFulfilled(response) {
                   if(response.data == false){
-                    logout();
-                  } else if(response.data != false && response.data != true) {
+                    if($scope.isNotLogOut){
+                      $scope.isNotLogOut = true;
+                      logout();
+                    }
+                  }else if(response.data != false && response.data != true) {
                     Session.setItem('UserID',response.data.userId);
                     Session.setItem('key_'+response.data.userId, response.data.key);
                     $rootScope.provider = response.data.provider;
@@ -136,7 +142,7 @@ angular
                 console.log(errorResponse);
               });
         };
-        $rootScope.validateKey();
+        $rootScope.validatekey();
         $rootScope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;

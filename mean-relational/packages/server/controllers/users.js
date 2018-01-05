@@ -3,12 +3,12 @@
  * Module dependencies.
  */
 var fs = require('fs');
+var sharp = require('sharp');
 var db = require('../../../config/sequelize');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
  var Twitter = require('twitter');
-//var expSession = require('express-session');
  var client = new Twitter({
       consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
       consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
@@ -211,7 +211,7 @@ exports.signout = function(req, res) {
 
     }else{
           console.log('already logout from java server now logging out from mean');
-          console.log('Logout: { USERID: ' + req.user.USERID + '}');
+          console.log('Logout: { USERID: ' + user_id + '}');
           req.logout();
           res.redirect('/');
     }
@@ -400,7 +400,6 @@ exports.update = function(req, res) {
     if(typeof req.file != 'undefined'){
       newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
       // delete previous image
-      var fs = require('fs');
       fs.unlink('public/assets/'+req.body.img_loc, function(err){
           if(err) {
             console.log('unlink error');
@@ -535,42 +534,81 @@ exports.fbposts = function(req,res){
   console.log('fb userid is '+usrId);
     if(usrId != null){
       FB.api("/me/posts", function (response) {
-      /*if(!response || response.error) {
-       console.log(!response ? 'error occurred' : response.error);
-       return;
-      }*/
-      return res.jsonp(response);
-    });
+        /*if(!response || response.error) {
+         console.log(!response ? 'error occurred' : response.error);
+         return;
+        }*/
+        return res.jsonp(response);
+      });
     }
-}
+};
 
 exports.updateCover = function(req, res){
-  /* whatever */; 
   console.log('Json data ');
-  var data = req.body.data;
- var ext = data.split(';')[0].match(/jpeg|png|gif/)[0];
- var filename = req.body.name;
-  data = data.replace(/^data:image\/\w+;base64,/, "");
-  require("fs").writeFile("packages/public/assets/anerve/usr_images/"+filename, data, 'base64', function(err) {
-    if(err == null){
-      var user = req.user;
-      console.log('filename is');
-      console.log(filename);
-      var newuser = {user_img : filename};
-      user.updateAttributes(newuser).then(function(a){
-        var data = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename};
-        res.jsonp(data);
-      }).catch(function(err){
-        var data = {"msg":"Error Occurred","status":"error"};
-        res.jsonp(data);
-      });
-      } else {
-        var data = {"msg":"Error Occurred Test","status":"error"};
-        res.jsonp(data);
-      }
-    });
-}
+  var filename    = req.body.name;
+  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
+  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
+  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
+
+  var imageWidth  = Number(req.body.imageWidth);
+  var imageHeight = Number(req.body.imageHeight);
+
+  var width   = Number(req.body.width);
+  var height  = Number(req.body.height);
+
+  var left  = req.body.left;
+  var top   = req.body.top;
+
+  var urlToWrite = "packages/public/assets/anerve/usr_images/"+filename;
+  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
+
+  console.log(typeof width);
+  console.log(typeof height);
+  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
+  imgBuffer =  Buffer.from(imgBuffer, 'base64');
+  sharp(imgBuffer)
+  //.resize(width,height).toFormat(ext)
+  .resize(1110,250)
+  .toFile(urlToWrite)
+  .then(function(response){
+     console.log(response);
+     var newImage = {user_img : filename};
+     req.user.updateAttributes(newImage).then(function(user){
+
+              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
+              return res.jsonp(data2);
+            }).catch(function(err){
+              console.log(err);
+              var data2 = {"msg":"Error Occurred","status":"error"};
+              return res.jsonp(data2);
+      });
+  })
+  .catch(function(err){
+     console.log(err);
+    var data2 = {"msg":"Error Occurred Test","status":"error"};
+    return res.jsonp(data2);
+   
+  });
+  /*fs.writeFile("packages/public/assets/anerve/usr_images/"+filename, req.body.data.replace(/^data:image\/\w+;base64,/, ""), 'base64', function(err) {
+    if(err == null){
+          console.log('filename is');
+          console.log(filename);
+          var newuser = {user_img : filename};
+          req.user.updateAttributes(newuser).then(function(user){
+              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename};
+              return res.jsonp(data2);
+            }).catch(function(err){
+              console.log(err);
+              var data2 = {"msg":"Error Occurred","status":"error"};
+              res.jsonp(data2);
+          });
+      }else{
+        var data2 = {"msg":"Error Occurred Test","status":"error"};
+        res.jsonp(data2);
+      }
+    });*/
+};
 /*exports.googlePosts = function(req, res){
   plus.people.get({
   userId: 'me',
@@ -579,3 +617,46 @@ exports.updateCover = function(req, res){
     return res.jsonp(response);
   });
 }*/
+
+
+
+
+// validate current user key
+exports.validatekey = function(req, res){ 
+  if (req.user) { 
+    var usrId = req.user.USERID;
+    var provider = req.user.provider;
+    var key = localStorage.getItem('key_'+usrId);
+    if(typeof key != 'undefined'){
+        var body = '';
+        var options = {
+            hostname: ip,
+            port: '8080',
+            path: ApiBasePath+'checkKey/'+key,
+            method: 'GET',
+            headers: headers
+        };
+        req = http.request(options,function(res2){
+            res2.on('data', function(chunk) {
+                 body += chunk;
+            });
+            res2.on('end', function() {
+            console.log('checkKey'); 
+              console.log(body);
+              var data = JSON.parse(body); 
+              if(data == true){
+                data = { 'key':key, 'userId':usrId, 'provider':provider};
+              }else{ 
+                data = false;
+              }
+              return res.jsonp(data);
+            });
+        });
+        req.end();
+      }else{
+        return res.jsonp(false);
+      }
+  } else {
+    return res.jsonp(false);
+  }
+};

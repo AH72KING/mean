@@ -818,40 +818,7 @@ exports.addCommentToCart = function(req, res){
   }
 };
 
-// validate current user key
-exports.validateKey = function(req, res){ 
-  if (req.user) { 
-    var usrId = req.user.USERID;
-    var provider = req.user.provider;
-    if(typeof req.session['key_'+usrId] != 'undefined'){
-      var key = req.session['key_'+usrId];
-      var body = '';
-      var options = {
-          hostname: ip,
-          port: '8080',
-          path: ApiBasePath+'checkKey/'+key,
-          method: 'GET',
-          headers: headers
-      };
-      req = http.request(options,function(res2){
-          res2.on('data', function(chunk) {
-               body += chunk;
-          });
-          res2.on('end', function() { 
-            var data = JSON.parse(body); 
-            if(data == true){
-              data = { 'key':key, 'userId':usrId, 'provider':provider};
-            } else 
-              data = false;
-            return res.jsonp(data);
-          });
-      });
 
-
-      req.end();
-      }
-  } else return res.jsonp(true);
-};
 
 // suggest prod to user 
 exports.suggestProd = function(req, res){
@@ -989,7 +956,7 @@ exports.getAisleProd = function(req, res){
 
         return res.jsonp(productsData);
       });
-}
+};
 
 
 

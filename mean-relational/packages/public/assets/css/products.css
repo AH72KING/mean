@@ -274,6 +274,7 @@ font-size: 30px;
     max-width: 80%;
     display: block;
     box-shadow: -9px 5px 6px -2px rgba(0, 0, 0, 0.2);
+    min-height: 150px;
 }
 .my-zone-side-bar .zone-body ul.my-zone-cart-items li.product_item .product_image{
     display: inline-block;

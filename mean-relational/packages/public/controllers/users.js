@@ -76,6 +76,24 @@
                 $location.path('users/' + user.USERID);
             });
         }
+/*        $rootScope.Base64encode = function(hash) {
+            console.log(hash);
+            if(hash != '' && hash != undefined && hash != 'undefined'){
+                var hash = hash.toString();
+                console.log(typeof hash);
+                return btoa(hash);
+             }
+             return '';
+        };
+        $rootScope.Base64decode = function(hash) {
+            console.log(hash);
+            if(hash != '' && hash != undefined && hash != 'undefined'){
+                var hash = hash.toString();
+                console.log(typeof hash);
+                return atob(hash);
+            }
+            return '';
+        };*/
         $rootScope.uploadFile = function(element) {
             $rootScope.imgloc = element;
         };
