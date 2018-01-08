@@ -182,7 +182,7 @@ angular
           );
         }
         $rootScope.toggleLeft     = buildToggler('left');
-        $rootScope.toggleRight    = buildToggler('right');
+        $rootScope.toggleCart     = buildToggler('cart');
         $rootScope.ProductDetail  = buildToggler('ProductDetail');
         $rootScope.UserDetail     = buildToggler('UserDetail');
         $rootScope.lockLeft = false;
@@ -194,8 +194,8 @@ angular
         $rootScope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
         };
-        $rootScope.isRightOpen = function() {
-          return $mdSidenav('right').isOpen();
+        $rootScope.isCartOpen = function() {
+          return $mdSidenav('cart').isOpen();
         };
         $rootScope.isProductDetailOpen = function() {
           return $mdSidenav('ProductDetail').isOpen();

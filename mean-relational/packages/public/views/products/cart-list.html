@@ -1,5 +1,5 @@
 <ul id="cart-list" class="products vertical-ticker unstyled product_list list cartCol Col" style="height:95vh;">
-    <li ng-click="showFriendCart(arctr.global.user.USERID); UserDetail()" class="col-lg-12 drop-zone my_drop_box my_cart_box text-center" data-insertInline="true" data-drop="true" jqyoui-droppable="{multiple:true, onDrop:'dropInCart()',  onOut:'dropOutFromCart()'}">
+    <li ng-click="showFriendCart(arctr.global.user.USERID); UserDetail();$event.stopPropagation()" class="col-lg-12 drop-zone my_drop_box my_cart_box text-center" data-insertInline="true" data-drop="true" jqyoui-droppable="{multiple:true, onDrop:'dropInCart()',  onOut:'dropOutFromCart()'}">
         <div class="cart-price">
             <strong class="total-price" ng-model='cartTotalPrice'>${{$root.cartTotalPrice | number : 2 }}</strong>
         </div>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="my-zone-detail">
-            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="toggleRight()" data-original-title="1">Checkout >>
+            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="toggleCart();$event.stopPropagation()" data-original-title="1">Checkout >>
 			</a>
         </div>
     </li>

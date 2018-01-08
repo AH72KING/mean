@@ -14,15 +14,18 @@ var users = require('../controllers/users');
 var multer  = require('multer');
 var avatarStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/assets/anerve/usr_images/');   
+      console.log(file);
+        cb(null, 'packages/public/assets/anerve/usr_images/');   
     },
     filename: function (req, file, cb) {
+      console.log(file);
         cb(null, Date.now() + '-' + file.originalname);     
     }
 });
 var avatarhanlder = multer({ storage: avatarStorage }).single('imgloc');
 
-app.post('/api/updateuser', avatarhanlder, users.update);
+//app.post('/api/updateuser', avatarhanlder, users.update);
+app.post('/api/updateuser', users.update);
 // User Routes
 app.get('/signin', users.signin);
 app.get('/signup', users.signup);
@@ -113,6 +116,8 @@ app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);
 app.route('/api/updateCover').post(users.updateCover);
+app.route('/api/updateProfileImage').post(users.updateProfileImage);
+
 //app.route('/api/gplus').post(users.googlePosts);
 //
 app.route('/api/validatekey').get(users.validatekey);

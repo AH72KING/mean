@@ -29,7 +29,7 @@
           resolve : {
           loggedin: function(MeanUser) {
             var $return;
-                  if($return = MeanUser.checkLoggedin()== false){
+                  if($return = MeanUser.checkLoggedin() == false){
                     console.log('MeanUser');
                     console.log($return);
                     return false;

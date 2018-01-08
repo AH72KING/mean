@@ -4,6 +4,8 @@
  */
 var fs = require('fs');
 var sharp = require('sharp');
+var smartcrop = require('smartcrop-sharp');
+var querystring = require("querystring");
 var db = require('../../../config/sequelize');
 var http = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
@@ -260,7 +262,40 @@ exports.create = function(req, res) {
             console.log(err);
             return res.status(400).json(err);
           }
+          //send mail to user here;
+          if(user){
+           var body  = '';
+           var data = new Object();
+               data.email = user.EMAIL;
+               data.subject = 'Anerve Registration';
+               data.msg = 'Hi, Thanks for registering with Anerve. Your username: '+user.USERNAME+'. Happy Shopping with firends';
+            var qs = querystring.stringify(data);
+            var qslength = qs.length;   
+            var url = '/demos/anerve/mail.php';
+            var options = {
+                hostname: 'ctsdemo.com',
+                port: '80',
+                path: url,
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': qslength
+                }
+            };
+              var buffer = "";
+              var req = http.request(options, function(res) {
+                  res.on('data', function (chunk) {
+                     buffer+=chunk;
+                  });
+                  res.on('end', function() {
+                      console.log(buffer);
+                      console.log('got some mail data ?');
+                  });
+              });
 
+              req.write(qs);
+              req.end();
+          }
           res.json(user);
         });
       }).catch(function(err){
@@ -404,14 +439,15 @@ exports.update = function(req, res) {
           if(err) {
             console.log('unlink error');
             console.log(err);
-          } else
-          console.log('file deleted successfully');
+          } else{
+            console.log('file deleted successfully');
+          }
      });  
     }
 
     user.updateAttributes(newuser).then(function(a){
         // return res.jsonp(a);
-        res.redirect('/users/'+req.body.USERID+'/edit');
+        res.redirect('/users/'+req.user.USERID+'/edit');
     }).catch(function(err){
         return res.render('error', {
             error: err,
@@ -545,7 +581,7 @@ exports.fbposts = function(req,res){
 
 exports.updateCover = function(req, res){
   console.log('Json data ');
-  var filename    = req.body.name;
+  var filename    =  Date.now() + '-' +req.body.name;
   var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
   var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
@@ -591,25 +627,88 @@ exports.updateCover = function(req, res){
     return res.jsonp(data2);
    
   });
-  /*fs.writeFile("packages/public/assets/anerve/usr_images/"+filename, req.body.data.replace(/^data:image\/\w+;base64,/, ""), 'base64', function(err) {
-    if(err == null){
-          console.log('filename is');
-          console.log(filename);
-          var newuser = {user_img : filename};
-          req.user.updateAttributes(newuser).then(function(user){
-              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename};
+};
+exports.updateProfileImage = function(req, res){
+  console.log('Json data ');
+  var filename    =  Date.now() + '-' +req.body.name;
+  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
+
+  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
+  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
+
+  var imageWidth  = Number(req.body.imageWidth);
+  var imageHeight = Number(req.body.imageHeight);
+
+  var width   = Number(req.body.width);
+  var height  = Number(req.body.height);
+
+  var left  = req.body.left;
+  var top   = req.body.top;
+
+  var urlToWrite  = "packages/public/assets/anerve/usr_images/"+filename;
+  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
+  var urlToSave   = "anerve/usr_images/"+filename;
+
+  console.log(typeof width);
+  console.log(typeof height);
+  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
+  imgBuffer =  Buffer.from(imgBuffer, 'base64');
+  /*sharp(imgBuffer)
+  //.resize(width,height).toFormat(ext)
+  .resize(width,height)
+  .crop(sharp.strategy.entropy)
+  .toFile(urlToWrite)
+  .then(function(response){
+     console.log(response);
+     var newImage = {img_loc : urlToSave};
+     req.user.updateAttributes(newImage).then(function(user){
+
+              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
               return res.jsonp(data2);
             }).catch(function(err){
               console.log(err);
               var data2 = {"msg":"Error Occurred","status":"error"};
-              res.jsonp(data2);
-          });
-      }else{
-        var data2 = {"msg":"Error Occurred Test","status":"error"};
-        res.jsonp(data2);
-      }
-    });*/
+              return res.jsonp(data2);
+      });
+  })
+  .catch(function(err){
+     console.log(err);
+    var data2 = {"msg":"Error Occurred Test","status":"error"};
+    return res.jsonp(data2);
+   
+  });*/
+
+  smartcrop.crop(imgBuffer, {width: width, height: height}).then(function(result) {
+      var crop = result.topCrop;
+      sharp(imgBuffer)
+        .extract({width: crop.width, height: crop.height, left: crop.x, top: crop.y})
+        .resize(width, height)
+        .toFile(urlToWrite).then(function(response){
+           console.log(response);
+           var newImage = {img_loc : urlToSave};
+           req.user.updateAttributes(newImage).then(function(user){
+
+                    var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
+                    return res.jsonp(data2);
+                  }).catch(function(err){
+                    console.log(err);
+                    var data2 = {"msg":"Error Occurred","status":"error"};
+                    return res.jsonp(data2);
+            });
+        }).catch(function(err){
+           console.log(err);
+          var data2 = {"msg":"Error Occurred Test","status":"error"};
+          return res.jsonp(data2);
+         
+        });
+    });
+
+
+
 };
+
+
+
 /*exports.googlePosts = function(req, res){
   plus.people.get({
   userId: 'me',
