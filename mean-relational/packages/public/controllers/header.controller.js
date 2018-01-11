@@ -1,8 +1,8 @@
 (function(){
 'use strict';
-angular
-    .module('Anerve')
-    .controller('HeaderController',HeaderController);
+var $anerveModule =  angular
+      .module('Anerve');
+    $anerveModule.controller('HeaderController',HeaderController);
 
     HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
 
@@ -39,21 +39,25 @@ angular
              
            console.log(currentUserChecker.openId );
            if(currentUserChecker != undefined && currentUserChecker != 'undefined' && currentUserChecker != ''){
-               if(currentUserChecker.tw_token != null){
-                 $rootScope.twitterConnect = 'linked';
-                 $rootScope.twitterUserId = currentUserChecker.twitterUserId;
-               }
-               if(currentUserChecker.tb_token != null){
-                 $rootScope.tumblrConnect = 'linked';
-               }
-               if(currentUserChecker.fb_token != null){
-                 $rootScope.facebookConnect = 'linked';
-                 $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
-               }
-               if(currentUserChecker.go_token != null){
-                 $rootScope.googleConnect = 'linked';
-                 $rootScope.openId = currentUserChecker.openId;
-               }
+              if(currentUserChecker.connections != null && currentUserChecker != ""){
+                var connections = JSON.parse(currentUserChecker.connections);
+                console.log('test '+connections.twitter);
+                 if(connections.twitter != undefined && connections.twitter != 0){
+                   $rootScope.twitterConnect = 'Unlink';
+                   $rootScope.twitterUserId = currentUserChecker.twitterUserId;
+                 }
+                 if(connections.tumblr != undefined && connections.tumblr != 0){
+                   $rootScope.tumblrConnect = 'Unlink';
+                 }
+                 if(connections.twitter != undefined && connections.facebook != 0){
+                   $rootScope.facebookConnect = 'Unlink';
+                   $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
+                 }
+                 if(connections.twitter != undefined && connections.google != 0){
+                   $rootScope.googleConnect = 'Unlink';
+                   $rootScope.openId = currentUserChecker.openId;
+                 }
+              } 
                $rootScope.provider = currentUserChecker.provider;
            }
            $rootScope.socialApps = [
@@ -404,8 +408,27 @@ angular
           return isMember;
         };
 
-        $rootScope.redirectTo = function($url){
+        $rootScope.redirectTo = function($url, $action){
+          var index;
+          if($action != 'Unlink')
             $window.location.href = 'http://localhost:3000'+$url;
+          else {
+            var social = $rootScope.socialApps.filter(function(item) {
+              if (item.href === $url) {
+                index = $rootScope.socialApps.indexOf(item);
+                return $rootScope.socialApps.indexOf(item);
+              }
+            })[0];
+            var url = $rootScope.baseUrl+'api/disconnect';
+            var postData = {type:$rootScope.socialApps[index].key};
+            var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                  notify(response.data.msg, response.data.type);
+                  $rootScope.socialApps[index].connect = "link it";
+                }).catch( function onRejection(errorResponse) {
+            }); 
+          }
         }
        
 

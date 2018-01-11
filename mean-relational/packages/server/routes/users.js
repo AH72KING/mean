@@ -131,5 +131,6 @@ app.route('/api/validatekey').get(users.validatekey);
 
 
 app.route('/api/getUser').get(users.getUser);
+app.route('/api/disconnect').post(users.disconnectSocial);
 
 };

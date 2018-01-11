@@ -1049,118 +1049,128 @@
             return false;
         }
 
-        // get twitter timeline
-        function timeline(){
-          var url = $rootScope.baseUrl+'api/timeline';
-          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                  $rootScope.twitterPosts = response.data;
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          }); 
+        if (window.user != null && window.user.connections != null && window.user.connections != ''){
+            var connections = JSON.parse(window.user.connections);
+            if(connections.twitter != 'undefined' && connections.twitter != '0' ){
+              // get twitter timeline
+              function timeline(){
+                var url = $rootScope.baseUrl+'api/timeline';
+                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.twitterPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+              }
+              timeline();
+
+              // like tweet
+              $rootScope.likeTweet = function(index){
+                var tweetId = $rootScope.twitterPosts[index]['id_str'];
+                var postData = {'id':tweetId};
+                var url = $rootScope.baseUrl+'api/likeTweet';
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                      if(response.status == 200){
+                       if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                        var code = response.data.errors[0].code;
+                        if(code == 139) 
+                          notify(response.data.errors[0].message);
+                        } else {
+                          notify('Liked Successfully','success');
+                          $rootScope.twitterPosts[index]['favorite_count'] += 1;
+                        }
+                      }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              };
+              // dislike tweet if like
+              $rootScope.dislikeTweet = function(index){
+                var tweetId = $rootScope.twitterPosts[index]['id_str'];
+                var postData = {'id':tweetId};
+                var url = $rootScope.baseUrl+'api/dislikeTweet';
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                      if(response.status == 200){
+                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                          var code = response.data.errors[0].code;
+                          if(code == 144) 
+                            notify(response.data.errors[0].message);
+                        } else {
+                          notify('UnLiked Successfully','success');
+                          $rootScope.twitterPosts[index]['favorite_count'] -= 1;
+                        }
+                      }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              };
+              // delete tweet
+              $rootScope.deleteTweet = function(index){
+                var tweetId = $rootScope.twitterPosts[index]['id_str'];
+                var postData = {'id':tweetId};
+                var url = $rootScope.baseUrl+'api/delTweet';
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                      if(response.status == 200){
+                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                          var code = response.data.errors[0].code;
+                          console.log(code);
+                          //if(code == 144) 
+                            notify(response.data.errors[0].message);
+                        } else {
+                          notify('Tweet has been Deleted Successfully','success');
+                          $rootScope.twitterPosts.splice(index, 1);
+                        }
+                      }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              };
+
+            }
+
+
+            if(connections.tumblr != 'undefined' && connections.tumblr != 0 ){
+              console.log('tumblr')
+              // tumblr methods
+              function tumblrPosts(){
+                var url = $rootScope.baseUrl+'api/tumblrPosts';
+                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.tumblrPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+              }
+              tumblrPosts();
+
+              // delete tumblr post
+              $rootScope.delTumblrPost = function(index){
+                var blogName = $rootScope.tumblrPosts[index].blog_name;
+                var postId = $rootScope.tumblrPosts[index].id;
+                var postData = {postId:postId, blogName:blogName};
+                var url = $rootScope.baseUrl+'api/delTumblrPost';
+                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                console.log(postData);
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        notify('Post Deleted','success');
+                        console.log(response);
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+              };
+            }
         }
-        timeline();
 
-        // like tweet
-        $rootScope.likeTweet = function(index){
-          var tweetId = $rootScope.twitterPosts[index]['id_str'];
-          var postData = {'id':tweetId};
-          var url = $rootScope.baseUrl+'api/likeTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                if(response.status == 200){
-                 if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                  var code = response.data.errors[0].code;
-                  if(code == 139) 
-                    notify(response.data.errors[0].message);
-                  } else {
-                    notify('Liked Successfully','success');
-                    $rootScope.twitterPosts[index]['favorite_count'] += 1;
-                  }
-                }
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          });
-        };
-        // dislike tweet if like
-        $rootScope.dislikeTweet = function(index){
-          var tweetId = $rootScope.twitterPosts[index]['id_str'];
-          var postData = {'id':tweetId};
-          var url = $rootScope.baseUrl+'api/dislikeTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                if(response.status == 200){
-                  if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                    var code = response.data.errors[0].code;
-                    if(code == 144) 
-                      notify(response.data.errors[0].message);
-                  } else {
-                    notify('UnLiked Successfully','success');
-                    $rootScope.twitterPosts[index]['favorite_count'] -= 1;
-                  }
-                }
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          });
-        };
-        // delete tweet
-        $rootScope.deleteTweet = function(index){
-          var tweetId = $rootScope.twitterPosts[index]['id_str'];
-          var postData = {'id':tweetId};
-          var url = $rootScope.baseUrl+'api/delTweet';
-          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                if(response.status == 200){
-                  if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                    var code = response.data.errors[0].code;
-                    console.log(code);
-                    //if(code == 144) 
-                      notify(response.data.errors[0].message);
-                  } else {
-                    notify('Tweet has been Deleted Successfully','success');
-                    $rootScope.twitterPosts.splice(index, 1);
-                  }
-                }
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          });
-        };
-
-        // tumblr methods
-
-        function tumblrPosts(){
-          var url = $rootScope.baseUrl+'api/tumblrPosts';
-          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                  $rootScope.tumblrPosts = response.data;
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          }); 
-        }
-        tumblrPosts();
-
-        // delete tumblr post
-        $rootScope.delTumblrPost = function(index){
-          var blogName = $rootScope.tumblrPosts[index].blog_name;
-          var postId = $rootScope.tumblrPosts[index].id;
-          var postData = {postId:postId, blogName:blogName};
-          var url = $rootScope.baseUrl+'api/delTumblrPost';
-          var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
-          console.log(postData);
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                  notify('Post Deleted','success');
-                  console.log(response);
-
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          }); 
-        };
 
          function getAisles(){
           $rootScope.aisles = {};

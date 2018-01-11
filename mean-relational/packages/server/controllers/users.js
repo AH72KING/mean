@@ -696,3 +696,38 @@ exports.validatekey = function(req, res){
 exports.getUser = function(req,res) {
        return res.send(req.user);
 };
+
+// disconnect social 
+exports.disconnectSocial = function(req, res){
+  console.log(req.body);
+  var type = req.body.type;
+  var usrId = req.user.USERID;
+  var updateConnect = "";
+  db.User.find({where : { USERID: usrId }}).then(function(user){
+      if (!user) {
+            console.log('no user');
+            return res.jsonp({"type":"error","msg":"User not found"});
+      } else {
+         if(user.connections != null || user.connections != ""){
+            updateConnect = {'connections':JSON.parse(user.connections)};
+            updateConnect.connections[type] = 0;
+          } else {
+            updateConnect = {'connections':{}};
+            updateConnect.connections[type] = 0;
+            console.log('not null');
+          }
+          updateConnect.connections = JSON.stringify(updateConnect.connections);
+          // update db
+          user.updateAttributes(updateConnect).then(function(a){
+          console.log('Success');
+            return res.jsonp({"type":"success","msg":"Successfully Disconnected"})
+          }).catch(function(err){
+            return res.jsonp({"type":"error","msg":err});
+          });
+      }
+        }).catch(function(err){
+            return res.jsonp({"type":"error","msg":err});
+        });
+      
+
+}
