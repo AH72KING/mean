@@ -1,30 +1,18 @@
-
 'use strict';
-/**
- * Module dependencies.
- */
-const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
-const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
-
-const stripe = require("stripe")(keySecret);
 const bodyParser = require("body-parser");
 var express     = require('express');
-
 const app = express();
 app.use(express.static("public"));
 //split upload endpoint out
-
-/*app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());*/
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-var cluster = require('cluster');
-var env             = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var config          = require('./config/config');
-var db              = require('./config/sequelize');
-var passport        = require('./config/passport');
-var winston         = require('./config/winston');
+var cluster   = require('cluster');
+var env       = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var config    = require('./config/config');
+var db        = require('./config/sequelize');
+var passport  = require('./config/passport');
+var winston   = require('./config/winston');
 var port = process.env.PORT || config.port;
 
 var allowCrossDomain = function(req, res, next) {

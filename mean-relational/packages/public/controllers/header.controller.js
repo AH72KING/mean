@@ -63,7 +63,7 @@ angular
             { 'name':'Google',  'key':'google',  'href':'/api/auth/google',   'connect':$rootScope.googleConnect},
           ];
           console.log($rootScope.socialApps);
-        })
+        });
         $rootScope.cartTotalPrice        = 0;
         //check key if expire, then logout user
         // validate key
@@ -406,7 +406,7 @@ angular
 
         $rootScope.redirectTo = function($url){
             $window.location.href = 'http://localhost:3000'+$url;
-        }
+        };
        
 
        /*  var socket = io.connect();

@@ -344,6 +344,7 @@ exports.SaveUserKey = function(req, res){
 
  // get all users
  exports.AllUsers = function(req, res){
+    var Query = '';
     if (req.user) {
                var USERID = req.user.USERID;
               //db.product.findAll().then(function(product){
@@ -352,7 +353,7 @@ exports.SaveUserKey = function(req, res){
              });*/
               // get current user cart id
          
-         var Query = 'SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = '+USERID+' AND gu.userRole = "O" ORDER BY gu.`groupCartuserId` DESC LIMIT 1';
+          Query = 'SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = '+USERID+' AND gu.userRole = "O" ORDER BY gu.`groupCartuserId` DESC LIMIT 1';
          var userCartId = 0;
          db.sequelize.query(Query,{raw: false}).then(result => {
             if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
