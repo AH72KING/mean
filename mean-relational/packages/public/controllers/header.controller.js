@@ -49,11 +49,11 @@ var $anerveModule =  angular
                  if(connections.tumblr != undefined && connections.tumblr != 0){
                    $rootScope.tumblrConnect = 'Unlink';
                  }
-                 if(connections.twitter != undefined && connections.facebook != 0){
+                 if(connections.facebook != undefined && connections.facebook != 0){
                    $rootScope.facebookConnect = 'Unlink';
                    $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
                  }
-                 if(connections.twitter != undefined && connections.google != 0){
+                 if(connections.google != undefined && connections.google != 0){
                    $rootScope.googleConnect = 'Unlink';
                    $rootScope.openId = currentUserChecker.openId;
                  }
