@@ -42,6 +42,10 @@
         $rootScope.userFirends = userFirends;
 
 
+        $rootScope.postModal = {
+          modalClass : 'hide-al',
+          currentSocial : 'twitter'
+        };
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -1051,7 +1055,7 @@
 
         if (window.user != null && window.user.connections != null && window.user.connections != ''){
             var connections = JSON.parse(window.user.connections);
-            if(connections.twitter != 'undefined' && connections.twitter != '0' ){
+            if(connections.twitter != undefined && connections.twitter != 0 ){
               // get twitter timeline
               function timeline(){
                 var url = $rootScope.baseUrl+'api/timeline';
@@ -1133,10 +1137,34 @@
                 });
               };
 
+              // post tweet
+
+              $rootScope.postTwitter =function(){
+                var url = $rootScope.baseUrl+'api/postTweet';
+                var postData = {'msg':$rootScope.data.tw_text};
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                      if(response.status == 200){
+                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                          var code = response.data.errors[0].code;
+                          console.log(code);
+                          //if(code == 144) 
+                            notify(response.data.errors[0].message);
+                        } else {
+                          notify('Status has been Updated Successfully','success');
+                          $rootScope.postModal.modalClass = "hide-al";
+                        }
+                      }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              }
+
             }
 
 
-            if(connections.tumblr != 'undefined' && connections.tumblr != 0 ){
+            if(connections.tumblr != undefined && connections.tumblr != 0 ){
               console.log('tumblr')
               // tumblr methods
               function tumblrPosts(){
@@ -1201,6 +1229,15 @@
           }); 
         }
         fbposts();
+
+
+        $rootScope.showPostModal = function(type){
+          $rootScope.postModal.modalClass = "show-al";
+          switch(type){
+            case 'twitter':
+            break;
+          }
+        }
 
         /*// get googleplus post
         function gplus(){

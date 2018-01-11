@@ -29,7 +29,6 @@ var $anerveModule =  angular
              $rootScope.googleConnect   = 'link it';
 
              $rootScope.provider = 'local';
-
         $http.get($rootScope.baseUrl+'api/getUser').then(function(result) { 
            var currentUserChecker = $rootScope.currentUser = result.data;
 

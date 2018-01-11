@@ -60,7 +60,7 @@
         </div>
     </li>
     <li class="product_item post" ng-repeat="post in $root.twitterPosts track by $index">
-        <div class="tweet head">Tweet</div>
+        <div class="tweet head"><i ng-click="showPostModal('twitter')" class="fa fa-plus"></i>  Tweet</div>
         <div class="body">{{ post.text }}</div>
         <div class="options">
             <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
@@ -93,3 +93,42 @@
     </li>
     <!--div class="placeholder" ng-hide="hideMe()">Add your items here</div-->
 </ul>
+
+
+<!-- Social Post Modal -->
+
+<div class="modal fade in social-mdl {{ postModal.modalClass }}" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content col-xs-12">
+        <ul class="nav nav-pills">
+          <li ng-class="{'active':postModal.currentSocial == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="postModal.currentSocial = 'facebook'">Facebook</a></li>
+          <li ng-class="{'active':postModal.currentSocial == 'twitter'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'twitter'">Twitter</a></li>
+          <li ng-class="{'active':postModal.currentSocial == 'tumblr'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'tumblr'">Tumblr</a></li>
+          <li ng-class="{'active':postModal.currentSocial == 'google'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'google'">Google</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="fb" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'facebook', 'tab-pane fade':postModal.currentSocial != 'facebook'}">
+            <h3>HOME</h3>
+            <p>Some content.</p>
+          </div>
+          <div id="tw" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'twitter', 'tab-pane fade':postModal.currentSocial != 'twitter'}">
+            <div class="post-wrap col-xs-12">
+                <div class=""><strong>Create Post :</strong></div>
+                <textarea placeholder="Wirte Post" class="form-control" ng-model="data.tw_text" rows="3"></textarea>
+                <input type="submit" class="btn btn-success btn-md" value="Send" ng-click="postTwitter()" />
+                <input type="submit" class="btn btn-md" value="Cancel" />
+            </div>
+          </div>
+          <div id="tb" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'tumblr', 'tab-pane fade':postModal.currentSocial != 'tumblr'}">
+            <h3>Menu 2</h3>
+            <p>Some content in menu 2.</p>
+          </div>
+          <div id="go" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'google', 'tab-pane fade':postModal.currentSocial != 'google'}">
+            <h3>Menu 2</h3>
+            <p>Some content in menu 2.</p>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

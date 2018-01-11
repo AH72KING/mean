@@ -505,7 +505,14 @@ exports.delTweet = function(req, res){
       return res.jsonp(tweet);
   });
 };
-
+// post tweet
+exports.postTweet = function(req, res){
+  var msg = req.body.msg;
+  var params = {status:msg};
+  client.post('statuses/update', params, function(error, tweet, response) {
+      return res.jsonp(tweet);
+  });
+};
 // tumblr apis
 
 exports.tumblrPosts = function(req, res){
