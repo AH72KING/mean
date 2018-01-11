@@ -3,8 +3,8 @@
  * Module dependencies.
  */
 var fs = require('fs');
-var sharp = require('sharp');
-var smartcrop = require('smartcrop-sharp');
+//var sharp = require('sharp');
+//var smartcrop = require('smartcrop-sharp');
 var querystring = require("querystring");
 var db = require('../../../config/sequelize');
 var http = require('http');
@@ -546,7 +546,7 @@ exports.fbposts = function(req,res){
 };
 
 exports.updateCover = function(req, res){
-  var filename    =  Date.now() + '-' +req.body.name;
+  /*var filename    =  Date.now() + '-' +req.body.name;
   var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
   var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
@@ -588,10 +588,10 @@ exports.updateCover = function(req, res){
     var data2 = {"msg":"Error Occurred Test","status":"error"};
     return res.jsonp(data2);
    
-  });
+  });*/
 };
 exports.updateProfileImage = function(req, res){
-  var filename    =  Date.now() + '-' +req.body.name;
+  /*var filename    =  Date.now() + '-' +req.body.name;
   var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
   var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
@@ -638,7 +638,7 @@ exports.updateProfileImage = function(req, res){
     });
 
 
-
+*/
 };
 
 
