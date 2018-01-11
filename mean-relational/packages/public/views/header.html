@@ -166,7 +166,7 @@
                               <strong>{{app.name}}</strong> 
                               <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label>
                               <span class="pull-right">
-                                <a ng-if="provider != app.key" ng-click="redirectTo(app.href)" ui-sref="#"  ng-class="{'linked':'btn-success', 'link it':'btn-danger'}[app.connect]" class="btn btn-xs " >{{app.connect}}</a>
+                                <a ng-if="provider != app.key" ng-click="redirectTo(app.href, app.connect)" ui-sref="#"  ng-class="{'Unlink':'btn-success', 'link it':'btn-danger'}[app.connect]" class="btn btn-xs " >{{app.connect}}</a>
                               </span>
                             </li>
                         </ul>

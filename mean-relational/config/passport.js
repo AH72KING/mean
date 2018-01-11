@@ -110,9 +110,18 @@ passport.use(new TumblrStrategy({
             if(!user){ 
                     // we cannot create user from Tumblr now as it does not proivde email
             } else { 
+                var updateConnect = "";
+                if(user.connections != '' && user.connections != null){
+                    updateConnect = {'connections':JSON.parse(user.connections)};
+                    updateConnect.connections['tumblr'] = 1;
+                } else {
+                    updateConnect = {'connections':{'tumblr':1}};
+                }
+                updateConnect.connections = JSON.stringify(updateConnect.connections);
                 db.User.update({
                     tb_token: token,
-                    tb_secret: tokenSecret
+                    tb_secret: tokenSecret,
+                    connections : updateConnect.connections
                 }, {
                   where: {USERID: current_user_id}
                 });
@@ -178,7 +187,12 @@ passport.use(new TwitterStrategy({
                     var fullname = profile.displayName.split(" ");
                     var fname = fullname[0];
                     var lname = fullname[1];
+                    var updateConnect = "";
                     if(!user){ 
+                        
+                        updateConnect = {'connections':{'twitter':1}};
+                        updateConnect.connections = JSON.stringify(updateConnect.connections);
+                       
                         db.User.create({
                             twitterUserId: profile.id,
                             GIVNAME: fname,
@@ -187,7 +201,8 @@ passport.use(new TwitterStrategy({
                             EMAIL: email,
                             provider: provider,
                             tw_token: token,
-                            tw_secret: tokenSecret
+                            tw_secret: tokenSecret,
+                            connections : updateConnect.connections
                         }).then(function(u){ 
                             if(u.USERID){
                                 db.Login.create({
@@ -207,10 +222,18 @@ passport.use(new TwitterStrategy({
                             }
                         });
                     } else { 
+                        if(user.connections != '' && user.connections != null){
+                            updateConnect = {'connections':JSON.parse(user.connections)};
+                            updateConnect.connections['twitter'] = 1;
+                        } else {
+                            updateConnect = {'connections':{'twitter':1}};
+                        }
+                        updateConnect.connections = JSON.stringify(updateConnect.connections);
                         db.User.update({
                             twitterUserId: profile.id,
                             tw_token: token,
-                            tw_secret: tokenSecret
+                            tw_secret: tokenSecret,
+                            connections : updateConnect.connections
                         }, {
                           where: whereObject
                         });
