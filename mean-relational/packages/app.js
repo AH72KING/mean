@@ -2,9 +2,7 @@
 var favicon = require('serve-favicon'),
     express = require('express'),
     cors 	= require('cors');
-
 module.exports = function (app) {
-
     // Set views path, template engine and default layout
     app.set('views', __dirname + '/server/views');
 
@@ -12,7 +10,7 @@ module.exports = function (app) {
     app.use(favicon(__dirname + '/public/assets/img/icons/favicon.ico'));
 
     // Adding robots and humans txt
-     app.use(express.static(__dirname + '/public/assets/static'));
+    app.use(express.static(__dirname + '/public/assets/static'));
 
 };
 
@@ -56,11 +54,3 @@ module.exports = function (app) {
       next();
 
     });
-   /* app.config(['$qProvider', function ($qProvider) {
-        $qProvider.errorOnUnhandledRejections(false);
-    }]);*/
-    /*app.config(['$httpProvider', function($httpProvider) {
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    }
-]);*/

@@ -56,7 +56,7 @@ var $anerveModule =  angular
                    $rootScope.googleConnect = 'Unlink';
                    $rootScope.openId = currentUserChecker.openId;
                  }
-              } 
+              }
                $rootScope.provider = currentUserChecker.provider;
            }
            $rootScope.socialApps = [
@@ -66,7 +66,7 @@ var $anerveModule =  angular
             { 'name':'Google',  'key':'google',  'href':'/api/auth/google',   'connect':$rootScope.googleConnect},
           ];
           console.log($rootScope.socialApps);
-        })
+        });
         $rootScope.cartTotalPrice        = 0;
         //check key if expire, then logout user
         // validate key
@@ -426,10 +426,10 @@ var $anerveModule =  angular
                   notify(response.data.msg, response.data.type);
                   $rootScope.socialApps[index].connect = "link it";
                 }).catch( function onRejection(errorResponse) {
-            }); 
+            });
           }
-        }
-       
+        };
+
 
        /*  var socket = io.connect();
           socket.on('news', function (data) {

@@ -36,7 +36,7 @@
             templateUrl: '/public/views/view.html',
             controller: 'usersController',
             controllerAs: 'usctr'
-        })
+        });
 
   }
 
