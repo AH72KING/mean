@@ -1157,10 +1157,11 @@
                 var postId = $rootScope.tumblrPosts[index].id;
                 var postData = {postId:postId, blogName:blogName};
                 var url = $rootScope.baseUrl+'api/delTumblrPost';
-                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
                 console.log(postData);
                 $http(configObj)
                     .then(function onFulfilled(response) {
+                        $rootScope.tumblrPosts.splice(index, 1);
                         notify('Post Deleted','success');
                         console.log(response);
 
