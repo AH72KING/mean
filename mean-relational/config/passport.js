@@ -96,8 +96,12 @@ passport.use(new TumblrStrategy({
     callbackURL: config.tumblr.callbackURL
   },
   function(token, tokenSecret, profile, done) {
-    localStorage.setItem('tb_token', token);
-    localStorage.setItem('tb_secret', tokenSecret);
+    if(token != 'undefined' && token != undefined){
+        localStorage.setItem('tb_token', token);
+    }
+    if(tokenSecret != 'undefined' && tokenSecret != undefined){
+        localStorage.setItem('tb_secret', tokenSecret);
+    }
     var current_user_id = localStorage.getItem('current_user_id');
     console.log('current_user_id');
     console.log(current_user_id);
@@ -139,8 +143,12 @@ passport.use(new TwitterStrategy({
         includeEmail:true,
     },
     function(token, tokenSecret, profile, done) {
-        localStorage.setItem('tw_token', token);
-        localStorage.setItem('tw_secret', tokenSecret);
+        if(tw_token != 'undefined' && tw_token != undefined){
+            localStorage.setItem('tw_token', token);
+        }
+        if(tokenSecret != 'undefined' && tokenSecret != undefined){
+            localStorage.setItem('tw_secret', tokenSecret);
+        }
 
         var Twitter = require('twitter');
         var client = new Twitter({
@@ -190,9 +198,6 @@ passport.use(new TwitterStrategy({
                         });
                     } else { 
                         db.User.update({
-                            provider: provider,
-                            GIVNAME: fname,
-                            SURNAME : lname,
                             twitterUserId: profile.id,
                             tw_token: token,
                             tw_secret: tokenSecret
@@ -275,7 +280,6 @@ passport.use(new FacebookStrategy({
                 });
             } else {
                 db.User.update({
-                    provider: provider,
                     facebookUserId: FacebookID,
                     fb_token: accessToken,
                     fb_rtoken: refreshToken,
@@ -303,8 +307,12 @@ passport.use(new GoogleStrategy({
     //realm: config.google.realm
   },
   function(token, refreshToken, profile, done) {
-        localStorage.setItem('go_token', token);
-        localStorage.setItem('go_rtoken', refreshToken);   
+        if(token != 'undefined' && token != undefined){
+            localStorage.setItem('go_token', token);
+        }
+        if(refreshToken != 'undefined' && refreshToken != undefined){
+            localStorage.setItem('go_rtoken', refreshToken);   
+        }
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
@@ -353,7 +361,6 @@ passport.use(new GoogleStrategy({
                     });
                 } else {
                     db.User.update({
-                        provider: provider,
                         openID: GoogleID,
                         go_token: token,
                         go_rtoken: refreshToken,
