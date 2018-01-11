@@ -158,6 +158,9 @@ passport.use(new TwitterStrategy({
         if(tokenSecret != 'undefined' && tokenSecret != undefined){
             localStorage.setItem('tw_secret', tokenSecret);
         }
+        var current_user_id = localStorage.getItem('current_user_id');
+        console.log('current_user_id');
+        console.log(current_user_id);
 
         var Twitter = require('twitter');
         var client = new Twitter({
@@ -171,9 +174,16 @@ passport.use(new TwitterStrategy({
         client.get('account/verify_credentials', params, function(error, tweets, response) {
             email = JSON.parse(response.body).email;
             var provider  = 'twitter';
-            if(email != undefined && email != 'undefined' && email != ''){
-
-                db.User.find({where: {EMAIL:email}}).then(function(user){
+            var whereObject = {};
+            if(current_user_id != undefined && current_user_id != 'undefined' && current_user_id != ''){
+                    whereObject.USERID = current_user_id;
+            }else{
+                if(email != undefined && email != 'undefined' && email != ''){
+                      whereObject.EMAIL = email;
+                  }
+            }
+            if(whereObject){
+                db.User.find({where: whereObject}).then(function(user){
                     var fullname = profile.displayName.split(" ");
                     var fname = fullname[0];
                     var lname = fullname[1];
@@ -225,7 +235,7 @@ passport.use(new TwitterStrategy({
                             tw_secret: tokenSecret,
                             connections : updateConnect.connections
                         }, {
-                          where: {EMAIL:email}
+                          where: whereObject
                         });
                        // UserLoginInJava(user); 
                         db.Login.update({online:1},{where:{userId:user.USERID}}); 
@@ -267,57 +277,69 @@ passport.use(new FacebookStrategy({
         var profileUrl      = profile.profileUrl;
         var email           = profile.emails[0].value;
         var provider        = profile.provider;
-
-        db.User.find({where : {EMAIL: email}}).then(function(user){
-            //use where as facebookUserId for a good reason
-            if(!user){
-                db.User.create({
-                    GIVNAME: givenName,
-                    SURNAME:familyName,
-                    GENDER:gender,
-                    EMAIL: email,
-                    USERNAME: email,
-                    provider: provider,
-                    facebookUserId: FacebookID,
-                    fb_token: accessToken,
-                    fb_rtoken: refreshToken,
-                }).then(function(u){
-                    if(u.USERID){
-                        db.Login.create({
-                            userId: u.USERID,
-                            givname: givenName,
-                            surname: familyName,
-                            username: email,
-                            password:socialPass,
-                            role: 'U'
-                        }).then(function(l){ 
-                            //UserLoginInJava(u); 
-                                db.Login.update({online:1},{where:{userId:l.userId}});
-                                db.User.update({online:1},{where:{USERID:l.userId}});   
-                            winston.info('New User (facebook) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
-                            winston.info('New Login (facebook) : { id: ' + l.userId + ', username: ' + l.username + ' }');
-                            done(null, u);
-                        });
-                    }
-
-                });
-            } else {
-                db.User.update({
-                    facebookUserId: FacebookID,
-                    fb_token: accessToken,
-                    fb_rtoken: refreshToken,
-                }, {
-                  where: {EMAIL: email}
-                });
-                //UserLoginInJava(user);
-                    db.Login.update({online:1},{where:{userId:user.USERID}}); 
-                    db.User.update({online:1},{where:{USERID:user.USERID}}); 
-                winston.info('Login (facebook) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
-                done(null, user);
+        var current_user_id = localStorage.getItem('current_user_id');
+        console.log('current_user_id');
+        console.log(current_user_id);
+            var whereObject = {};
+            if(current_user_id != undefined && current_user_id != 'undefined' && current_user_id != ''){
+                    whereObject.USERID = current_user_id;
+            }else{
+                if(email != undefined && email != 'undefined' && email != ''){
+                      whereObject.EMAIL = email;
+                  }
             }
-        }).catch(function(err){
-            done(err, null);
-        });
+        if(whereObject){
+            db.User.find({where : whereObject}).then(function(user){
+                //use where as facebookUserId for a good reason
+                if(!user){
+                    db.User.create({
+                        GIVNAME: givenName,
+                        SURNAME:familyName,
+                        GENDER:gender,
+                        EMAIL: email,
+                        USERNAME: email,
+                        provider: provider,
+                        facebookUserId: FacebookID,
+                        fb_token: accessToken,
+                        fb_rtoken: refreshToken,
+                    }).then(function(u){
+                        if(u.USERID){
+                            db.Login.create({
+                                userId: u.USERID,
+                                givname: givenName,
+                                surname: familyName,
+                                username: email,
+                                password:socialPass,
+                                role: 'U'
+                            }).then(function(l){ 
+                                //UserLoginInJava(u); 
+                                    db.Login.update({online:1},{where:{userId:l.userId}});
+                                    db.User.update({online:1},{where:{USERID:l.userId}});   
+                                winston.info('New User (facebook) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
+                                winston.info('New Login (facebook) : { id: ' + l.userId + ', username: ' + l.username + ' }');
+                                done(null, u);
+                            });
+                        }
+
+                    });
+                } else {
+                    db.User.update({
+                        facebookUserId: FacebookID,
+                        fb_token: accessToken,
+                        fb_rtoken: refreshToken,
+                    }, {
+                      where:whereObject
+                    });
+                    //UserLoginInJava(user);
+                        db.Login.update({online:1},{where:{userId:user.USERID}}); 
+                        db.User.update({online:1},{where:{USERID:user.USERID}}); 
+                    winston.info('Login (facebook) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+                    done(null, user);
+                }
+            }).catch(function(err){
+                done(err, null);
+            });
+        }
     }
 ));
 
@@ -336,71 +358,84 @@ passport.use(new GoogleStrategy({
         if(refreshToken != 'undefined' && refreshToken != undefined){
             localStorage.setItem('go_rtoken', refreshToken);   
         }
+        var current_user_id = localStorage.getItem('current_user_id');
+        console.log('current_user_id');
+        console.log(current_user_id);
+            
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
-        var GoogleID      = profile.id;
-       // var username        = profile.username;
-        var displayName     = profile.displayName;
-        var givenName       = profile.name.givenName;
-        var familyName      = profile.name.familyName;
-        var middleName      = '';//profile.name.middleName;
-        var photos          = profile.photos[0].value;
-        var gender          = profile.gender;
-        var email           = profile.emails[0].value;
-        var provider        = profile.provider;
+            var GoogleID      = profile.id;
+           // var username        = profile.username;
+            var displayName     = profile.displayName;
+            var givenName       = profile.name.givenName;
+            var familyName      = profile.name.familyName;
+            var middleName      = '';//profile.name.middleName;
+            var photos          = profile.photos[0].value;
+            var gender          = profile.gender;
+            var email           = profile.emails[0].value;
+            var provider        = profile.provider;
 
-            db.User.find({where : {EMAIL: email}}).then(function(user){
-                if(!user){
-                    db.User.create({
-                        GIVNAME: givenName,
-                        SURNAME:familyName,
-                        GENDER:gender,
-                        EMAIL: email,
-                        USERNAME: email,
-                        provider: provider,
-                        openID: GoogleID,
-                        go_token: token,
-                        go_rtoken: refreshToken,
-                    }).then(function(u){
-                        if(u.USERID){
-                            db.Login.create({
-                                userId: u.USERID,
-                                givname: givenName,
-                                surname: familyName,
-                                username: email,
-                                password:socialPass,
-                                role: 'U'
-                            }).then(function(l){
-                               // UserLoginInJava(u);  
-                                db.Login.update({online:1},{where:{userId:l.userId}});    
-                                db.User.update({online:1},{where:{USERID:l.userId}});    
-                                winston.info('New User (Google) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
-                                winston.info('New Login (Google) : { id: ' + l.userId + ', username: ' + l.username + ' }');
-                                done(null, u);
-                            });
-                        }
-                        
-                    });
-                } else {
-                    db.User.update({
-                        openID: GoogleID,
-                        go_token: token,
-                        go_rtoken: refreshToken,
-                    }, {
-                      where: {EMAIL: email}
-                    });
-                  //  UserLoginInJava(user); 
-                    db.Login.update({online:1},{where:{userId:user.USERID}});
-                    db.User.update({online:1},{where:{USERID:user.USERID}}); 
-                    winston.info('Login (Google) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
-                    done(null, user);
+            var whereObject = {};
+            if(current_user_id != undefined && current_user_id != 'undefined' && current_user_id != ''){
+                    whereObject.USERID = current_user_id;
+            }else{
+                if(email != undefined && email != 'undefined' && email != ''){
+                    whereObject.EMAIL = email;
                 }
-            }).catch(function(err){
-                done(err, null);
-            });
+            }
+            if(whereObject){
+                    db.User.find({where : whereObject}).then(function(user){
+                        if(!user){
+                            db.User.create({
+                                GIVNAME: givenName,
+                                SURNAME:familyName,
+                                GENDER:gender,
+                                EMAIL: email,
+                                USERNAME: email,
+                                provider: provider,
+                                openID: GoogleID,
+                                go_token: token,
+                                go_rtoken: refreshToken,
+                            }).then(function(u){
+                                if(u.USERID){
+                                    db.Login.create({
+                                        userId: u.USERID,
+                                        givname: givenName,
+                                        surname: familyName,
+                                        username: email,
+                                        password:socialPass,
+                                        role: 'U'
+                                    }).then(function(l){
+                                       // UserLoginInJava(u);  
+                                        db.Login.update({online:1},{where:{userId:l.userId}});    
+                                        db.User.update({online:1},{where:{USERID:l.userId}});    
+                                        winston.info('New User (Google) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
+                                        winston.info('New Login (Google) : { id: ' + l.userId + ', username: ' + l.username + ' }');
+                                        done(null, u);
+                                    });
+                                }
+                                
+                            });
+                        } else {
+                            db.User.update({
+                                openID: GoogleID,
+                                go_token: token,
+                                go_rtoken: refreshToken,
+                            }, {
+                              where: whereObject
+                            });
+                          //  UserLoginInJava(user); 
+                            db.Login.update({online:1},{where:{userId:user.USERID}});
+                            db.User.update({online:1},{where:{USERID:user.USERID}}); 
+                            winston.info('Login (Google) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+                            done(null, user);
+                        }
+                    }).catch(function(err){
+                        done(err, null);
+                    });
+                }
         });
-
     }
 ));
 
