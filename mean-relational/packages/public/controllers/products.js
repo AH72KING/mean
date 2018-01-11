@@ -1197,6 +1197,22 @@
                         console.log('Error: ', errorResponse);
                 }); 
               };
+
+              // post tumblr
+              $rootScope.postTumblr = function(){
+                var postData = {'msg':$rootScope.data.tb_text};
+                var url = $rootScope.baseUrl+'api/postTumblr';
+                var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
+                console.log(postData);
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        notify('Post Submitted Successfully','success');
+                        $rootScope.postModal.modalClass = "hide-al";
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+              }
             }
         }
 

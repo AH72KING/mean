@@ -528,7 +528,7 @@ exports.tumblrPosts = function(req, res){
         });    
       }
     }
-});
+  });
 };
 // Delete a given post
 exports.delTumblrPost = function(req, res){
@@ -536,6 +536,22 @@ exports.delTumblrPost = function(req, res){
   var postId = req.body.postId;
   tmblr_client.deletePost(blogName, postId, function(err, resp) {
     return res.jsonp(resp.posts);
+  });
+};
+
+// post tumblr
+exports.postTumblr = function(req, res){
+  var msg = req.body.msg;
+  var params = {body:msg};
+  tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name;   
+        tmblr_client.createTextPost(blogName, params, function(err, resp) {
+          return res.jsonp(resp.posts);
+        }); 
+      }
+    }
   });
 };
 

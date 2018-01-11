@@ -120,6 +120,7 @@ app.route('/api/likeTweet').post(users.likeTweet);
 app.route('/api/dislikeTweet').post(users.dislikeTweet);
 app.route('/api/delTweet').post(users.delTweet);
 app.route('/api/postTweet').post(users.postTweet);
+app.route('/api/postTumblr').post(users.postTumblr);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);
