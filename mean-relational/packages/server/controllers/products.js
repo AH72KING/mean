@@ -19,23 +19,6 @@ const bodyParser = require('body-parser');
 
 app.use(express.static('public'));
 
-var Twitter = require('twitter');
- 
-var client = new Twitter({
-  consumer_key: '',
-  consumer_secret: '',
-  access_token_key: '',
-  access_token_secret: ''
-});
- 
-var params = {screen_name: 'nodejs'};
-client.get('statuses/user_timeline', params, function(error, tweets, response) {
-  if (!error) {
-    console.log(tweets);
-    console.log(response);
-  }
-});
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -221,12 +204,8 @@ exports.all = function(req, res) {
 
        db.User.find({where: {USERID: user_id}, include: [db.Grpcart]}).then(function(user){
           if(!user){
-
-            //console.log('Failed to Get Group Cart ID for user  ' + user_id);
             productsData['Failed to Get Group Cart ID for user'] = user_id;
           }else{
-
-            //console.log(user);
             productsData['user'] = user; 
             productsData['user_id'] = user.USERID;
           }
@@ -337,7 +316,6 @@ exports.createCart = function(req, res) {
     }
     var data = {};
     if(grp_cartId !== undefined && grp_cartId !== null){
-        console.log('!== undefined');
         data.grp_cartId = grp_cartId;
         data = JSON.stringify(data);
         data = JSON.parse(data);
@@ -349,14 +327,9 @@ exports.createCart = function(req, res) {
           var url = '';
           var key = '';
         if (RequestUser) {
-
-          console.log('!== key');
           key = localStorage.getItem('key_'+user_id); 
           url = ApiBasePath+'createCart/'+key+'/';
-          console.log(ApiBasePath+'createCart/'+key+'/');
-
         }else{
-          
             url = ApiBasePath+'createCart_guest/PK/';
         }
 
@@ -375,10 +348,8 @@ exports.createCart = function(req, res) {
             });
 
             res2.on('end', function() {
-           
-              console.log(body);
+
                 data = JSON.parse(body); 
-                console.log(data);
                               /*var cart_items     = data.cart_items;
                               var cartUsers      = data.cartUsers;
                               var cart_chats     = data.cart_chats;
@@ -393,7 +364,7 @@ exports.createCart = function(req, res) {
                               var createtime     = data.createtime;
                               var current_total  = data.current_total;
                               var currency       = data.currency;*/
-                if (RequestUser) {
+                if(RequestUser){
                   localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
                 }else{
                   localStorage.setItem('grp_cartId',grp_cartId);   
@@ -413,7 +384,6 @@ exports.createCart = function(req, res) {
 exports.addToCart = function(req, res) {
     var cartID    = req.body.cartID;
     var productID = req.body.productID;
-
     
     var url = '';
     //addToCart_guest_thin
@@ -422,7 +392,7 @@ exports.addToCart = function(req, res) {
 
       var key = '';
       var user_id = 0;
-        if (req.user) {
+        if(req.user){
           user_id = req.user.USERID;
           key = localStorage.getItem('key_'+user_id); 
           url = ApiBasePath+'addToCart_thin/'+key+'/'+productID+'/'+cartID+'/';
@@ -444,7 +414,6 @@ exports.addToCart = function(req, res) {
         });
 
         res2.on('end', function() { 
-            console.log(body);
            // data = JSON.stringify(body);
             data = JSON.parse(body);  
             return res.jsonp(data);
@@ -491,7 +460,7 @@ exports.addUserToCart = function(req, res){
         });
 
         res2.on('end', function() { 
-            console.log(body);
+
            // data = JSON.stringify(body);
             data = JSON.parse(body);  
             return res.jsonp(data);
@@ -518,7 +487,6 @@ exports.removeUserFromCart = function(req, res){
       user_id = req.user.USERID;
       key = localStorage.getItem('key_'+user_id); 
       url = ApiBasePath+'bootUserfromCart/'+key+'/'+cartID+'/'+userId+'/';
-      console.log(url);
     }
     var options = {
         hostname: ip,
@@ -534,11 +502,7 @@ exports.removeUserFromCart = function(req, res){
         });
 
         res2.on('end', function() { 
-           // console.log(body);
-            //data = JSON.stringify(body);
-           // console.log(data);
             data = JSON.parse(body);  
-            //console.log(body);
             return res.jsonp(data);
         });
     });
@@ -571,7 +535,6 @@ exports.getGroupCart = function(req, res) {
 exports.nl_removefromCart = function(req, res) {
     var cartID = req.body.cartID;
     var productID = req.body.productID;
-    console.log(cartID+'__'+productID);
      //return res.jsonp(cartID+'__'+productID);
     //var url = ApiBaseUrl+'nl_removefromCart/'+cartID+'/'+productID+'/';
     var body = '';
@@ -583,7 +546,6 @@ exports.nl_removefromCart = function(req, res) {
         method: 'GET',
         headers: headers
     };
-    console.log(ApiBasePath+'nl_removefromCart/'+cartID+'/'+productID+'/');
     req = http.request(options,function(res2){
 
         res2.on('data', function(chunk) {
@@ -591,11 +553,7 @@ exports.nl_removefromCart = function(req, res) {
         });
 
         res2.on('end', function() { 
-           // console.log(body);
-            //data = JSON.stringify(body);
-           // console.log(data);
             data = JSON.parse(body);  
-            //console.log(body);
             return res.jsonp(data);
         });
     });
@@ -758,7 +716,6 @@ exports.getUserCartDetail = function(req, res){
       var USERID     = req.body.USERID;
       // first get Cart Id,
       var Query = 'SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = '+USERID+' AND gu.userRole = "O" ORDER BY gu.`groupCartuserId` DESC LIMIT 1';
-      console.log('Query is '+Query);
       db.sequelize.query(Query,{raw: false}).then(result => {
         if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
             var userCartId = result[0][0]['grp_cartId'];
@@ -828,7 +785,6 @@ exports.suggestProd = function(req, res){
     var Query = 'SELECT gcp.grp_cartId FROM group_cart_products gcp '+
     'WHERE gcp.crt_addedby_user = '+usrId+' AND gcp.action = 1 ORDER BY gcp.groupCartProductId DESC';
       db.sequelize.query(Query,{raw: false}).then(cartId => {
-        console.log('Test is ');
           if(typeof cartId[0][0] != 'undefined'){
             if(typeof cartId[0][0]['grp_cartId'] != 'undefined'){
               var cartID = cartId[0][0]['grp_cartId'];
@@ -853,7 +809,7 @@ exports.suggestProd = function(req, res){
                     });
 
                     res2.on('end', function() { 
-                        console.log(body);
+
                        // data = JSON.stringify(body);
                         data = JSON.parse(body);  
                         return res.jsonp(data);
@@ -879,7 +835,6 @@ exports.acceptProdInCart = function(req, res){
     var current_user_id = req.user.USERID;
     var key = localStorage.getItem('key_'+current_user_id); 
     var url = ApiBasePath+'acceptToCartProd_thin/'+key+'/'+prodId+'/'+cartId+'/';
-    console.log('url is : '+url);
       //addToCart_guest_thin
       var body = '';
       var data = [];
@@ -898,7 +853,7 @@ exports.acceptProdInCart = function(req, res){
           });
 
           res2.on('end', function() { 
-              console.log(body);
+ 
              // data = JSON.stringify(body);
               data = JSON.parse(body);  
               return res.jsonp(data);

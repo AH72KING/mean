@@ -92,6 +92,9 @@
     // Custom Globals
     "globals"       : {
       "angular":true,
-      "$":true
+      "$":true,
+      "Stripe": true,
+      "notify": true,
+      "closeNoti": true
       }        // additional predefined global variables
 }

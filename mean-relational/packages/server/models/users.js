@@ -68,11 +68,19 @@ module.exports = function(sequelize, DataTypes) {
 			provider: 	DataTypes.STRING,
 			salt: 		DataTypes.STRING,
 			facebookUserId: DataTypes.INTEGER,
-			twitterUserId: DataTypes.INTEGER,
-			twitterKey: DataTypes.STRING,
-			twitterSecret: DataTypes.STRING,
+			twitterUserId: 	DataTypes.INTEGER,
+			twitterKey: 	DataTypes.STRING,
+			twitterSecret: 	DataTypes.STRING,
 			github: 	DataTypes.STRING,
-			openId: 	DataTypes.STRING
+			openId: 	DataTypes.STRING,
+			tb_token: 	DataTypes.STRING,
+			tb_secret: 	DataTypes.STRING,
+			tw_token: 	DataTypes.STRING,
+			tw_secret: 	DataTypes.STRING,
+			fb_token: 	DataTypes.STRING,
+			fb_rtoken: 	DataTypes.STRING,
+			go_token: 	DataTypes.STRING,
+			go_rtoken: 	DataTypes.STRING
 		},
 		{
 			instanceMethods: {

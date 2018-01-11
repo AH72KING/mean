@@ -27,7 +27,6 @@ module.exports = function(sequelize, DataTypes) {
 		{
 			tableName: 'groupcart',
 			associate: function(models) {
-				console.log(models);
 				//Grpcart.belongsTo(models.User);
 			}
 		}		

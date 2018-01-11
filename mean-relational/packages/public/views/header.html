@@ -62,8 +62,8 @@
   <div class="sidenavdemoBasicUsage header-container"> <!--layout="column"--> 
 
   <section layout="row" flex="">
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="isLeftOpen()">
-
+    <md-sidenav sidenav-pull-out class="md-sidenav-left md-whiteframe-z2" md-component-id="left"> 
+      <!--md-is-locked-open="isLeftOpen()"-->
       <md-toolbar class="md-theme-indigo">
         <h1 class="md-toolbar-tools">Sidenav Left</h1>
         <md-button ng-click="close()" class="md-primary" hide-gt-md="">
@@ -164,9 +164,9 @@
                         <ul class="dropdown-menu" style="max-height: 250px;width: 200px;overflow-y:scroll;">
                             <li class="col-md-12" ng-repeat="app in socialApps track by $index">
                               <strong>{{app.name}}</strong> 
-                              <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label> 
+                              <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label>
                               <span class="pull-right">
-                                <a ng-if="provider != app.key" href="localhost:3000/api/auth/tumblr" class="btn btn-xs btn-success" >Connect</a>
+                                <a ng-if="provider != app.key" ng-click="redirectTo(app.href)" ui-sref="#"  ng-class="{'linked':'btn-success', 'link it':'btn-danger'}[app.connect]" class="btn btn-xs " >{{app.connect}}</a>
                               </span>
                             </li>
                         </ul>

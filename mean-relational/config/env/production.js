@@ -39,8 +39,8 @@ module.exports = {
         callbackURL: 'http://localhost:3000/api/auth/facebook/callback'
     },
     twitter: {
-        clientID: 'qiRHRqGv8Xx0SgZ8B0f9I2fqb',
-        clientSecret: '5Tt474fnjccFgXwEjYtlM6OjQxgAcczaKppSjBhMbjBTYtKFD0',
+        clientID: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
+        clientSecret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
         callbackURL: 'http://localhost:3000/api/auth/twitter/callback'
     },
     github: {

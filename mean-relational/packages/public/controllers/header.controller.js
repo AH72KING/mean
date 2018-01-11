@@ -10,7 +10,8 @@ angular
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
-        $rootScope.baseUrl = 'http://localhost:3000/';
+
+        $rootScope.baseUrl    = 'http://localhost:3000/';
         $rootScope.UploadUrl  = 'http://localhost:3000/public/assets/';
         $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
         $rootScope.headers    = {
@@ -21,15 +22,52 @@ angular
             'Access-Control-Max-Age': '3600',
             'Access-Control-Allow-Credentials': 'true'
         };  
+
+             $rootScope.twitterConnect  = 'link it';
+             $rootScope.tumblrConnect   = 'link it';
+             $rootScope.facebookConnect = 'link it';
+             $rootScope.googleConnect   = 'link it';
+
+             $rootScope.provider = 'local';
+
+        $http.get($rootScope.baseUrl+'api/getUser').then(function(result) { 
+           var currentUserChecker = $rootScope.currentUser = result.data;
+
+           console.log('currentUser');
+           console.log($rootScope.currentUser);
+
+             
+           console.log(currentUserChecker.openId );
+           if(currentUserChecker != undefined && currentUserChecker != 'undefined' && currentUserChecker != ''){
+               if(currentUserChecker.tw_token != null){
+                 $rootScope.twitterConnect = 'linked';
+                 $rootScope.twitterUserId = currentUserChecker.twitterUserId;
+               }
+               if(currentUserChecker.tb_token != null){
+                 $rootScope.tumblrConnect = 'linked';
+               }
+               if(currentUserChecker.fb_token != null){
+                 $rootScope.facebookConnect = 'linked';
+                 $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
+               }
+               if(currentUserChecker.go_token != null){
+                 $rootScope.googleConnect = 'linked';
+                 $rootScope.openId = currentUserChecker.openId;
+               }
+               $rootScope.provider = currentUserChecker.provider;
+           }
+           $rootScope.socialApps = [
+            { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter',  'connect':$rootScope.twitterConnect },
+            { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr',   'connect':$rootScope.tumblrConnect},
+            { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook', 'connect':$rootScope.facebookConnect},
+            { 'name':'Google',  'key':'google',  'href':'/api/auth/google',   'connect':$rootScope.googleConnect},
+          ];
+          console.log($rootScope.socialApps);
+        })
         $rootScope.cartTotalPrice        = 0;
         //check key if expire, then logout user
         // validate key
-        $rootScope.socialApps = [
-          { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter'},
-          { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr'},
-          { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook'},
-          { 'name':'Google',  'key':'google',  'href':'/api/auth/google'},
-        ];
+        
          $rootScope.SideBarLeftMenuItems = [
             {
                 name: "Profile",
@@ -63,7 +101,7 @@ angular
                 ]
             }
         ];
-        $rootScope.provider = '';
+
 
         $rootScope.showMenuChilds = function(item){
             item.active = !item.active;
@@ -365,6 +403,10 @@ angular
           });
           return isMember;
         };
+
+        $rootScope.redirectTo = function($url){
+            $window.location.href = 'http://localhost:3000'+$url;
+        }
        
 
        /*  var socket = io.connect();
@@ -373,4 +415,5 @@ angular
             socket.emit('news', { my: 'just testing socket' });
           });*/
     }
+
 })();

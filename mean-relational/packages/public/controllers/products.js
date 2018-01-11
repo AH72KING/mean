@@ -846,28 +846,6 @@
         };
         $rootScope.myfriends();
 
-        $rootScope.testing  = function () {
-          var key =  Session.getItem('key');
-          var url = $rootScope.ApiBaseUrl+'getAllProdsInLocBySize/US/'+key+'/1/2';
-          var postData = {key:key};
-            console.log(postData);
-          var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        var dataJson = JSON.parse(JSON.stringify(response.data));
-                        if(dataJson !== undefined ){
-                              angular.forEach(dataJson,function(value){
-                                $rootScope.userFirends.push(value);      
-                            });
-                              Session.setItem('myfriends',$rootScope.userFirends);
-                        }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                        console.log(errorResponse);
-                }); 
-          
-        };
-
         // send friend request
         $rootScope.sendFriendRequest = function(userid){
             var UserID = Session.getItem('UserID');

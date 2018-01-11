@@ -39,11 +39,6 @@ var oauth2Client = new OAuth2(
   'http://localhost:3000/api/auth/google/callback'
 );
 
-
-
- //console.log('user server controller');
- //
-
         //var baseUrl = 'http://localhost:3000/';
         var ip = db.sequelize.config.host;
         //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
@@ -62,7 +57,6 @@ var oauth2Client = new OAuth2(
  * Auth callback
  */
 exports.authCallback = function(req, res) {
-    console.log('user server controller authCallback');
 
     var USERNAME  = req.user.USERNAME;
     var body = '';
@@ -83,8 +77,7 @@ exports.authCallback = function(req, res) {
           var dataJson = JSON.parse(body);
           var userId = req.user.USERID;
           req.session.UserID = userId;
-          req.session['key_'+userId] = dataJson.key;
-          console.log(req.session); 
+          req.session['key_'+userId] = dataJson.key; 
           res.redirect('/');
         });
     });
@@ -103,7 +96,6 @@ exports.tumblrCallback = function(req, res){
  * Show login form
  */
 exports.signin = function(req, res) {
-     console.log('user server controller signin');
     res.render('users/signin', {
         title: 'Signin',
         message: req.flash('error')
@@ -117,28 +109,29 @@ exports.login = function(req, res) {
     var current_total = 0;
     var currency = 'USD';
     if(req.user){
-      var user_id = req.user.USERID;
-      db.Grpcart.find({where : { owner_userId: user_id }}).then(function(groupcart){
+        var user_id = req.user.USERID;
+        console.log('Login Current User with ID '+ user_id);
+        localStorage.setItem('current_user_id',user_id);  
+        db.Grpcart.find({where : { owner_userId: user_id }}).then(function(groupcart){
+          if(!groupcart){
 
-        if(!groupcart){
+            console.log('Failed to Get Group Cart ID for user  ' + user_id);
+          }else{
 
-          console.log('Failed to Get Group Cart ID for user  ' + user_id);
-        }else{
+            currency      = groupcart.currency; 
+            grp_cartId    = groupcart.grp_cartId;
+            current_total = groupcart.current_total;
+            
+            localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
+            localStorage.setItem('current_total_'+grp_cartId,current_total);   
+            localStorage.setItem('currency_'+grp_cartId,currency);  
+            //UserLoginInJava(req.user);
 
-          currency      = groupcart.currency; 
-          grp_cartId    = groupcart.grp_cartId;
-          current_total = groupcart.current_total;
-          
-          localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
-          localStorage.setItem('current_total_'+grp_cartId,current_total);   
-          localStorage.setItem('currency_'+grp_cartId,currency);  
-          //UserLoginInJava(req.user);
-
-        }
-      }).catch(function(err){
+          }
+        }).catch(function(err){
           console.log('error');
           console.log(err);
-      });
+        });
     }
     res.json({
         user: req.user,
@@ -154,7 +147,6 @@ exports.login = function(req, res) {
  */
 exports.signup = function(req, res) {
      localStorage.removeItem('grp_cartId');
-    console.log('user server controller signup');
     res.render('users/signup', {
         title: 'Sign up',
     });
@@ -176,9 +168,6 @@ exports.signout = function(req, res) {
           user_id = req.user.USERID;
           key = localStorage.getItem('key_'+user_id); 
           url = ApiBasePath+'logout/'+key+'/';
-          console.log(key);
-          console.log(user_id);
-          console.log(url);
 
       var options = {
           hostname: ip,
@@ -195,9 +184,6 @@ exports.signout = function(req, res) {
           });
 
           res2.on('end', function() { 
-              console.log(body);
-              
-              console.log('Logout: { USERID: ' + user_id +'}');
                db.Login.update({online:0},{where:{userId:user_id}});
                db.User.update({online:0},{where:{USERID:user_id}});
               req.logout();
@@ -212,8 +198,6 @@ exports.signout = function(req, res) {
       req3.end();
 
     }else{
-          console.log('already logout from java server now logging out from mean');
-          console.log('Logout: { USERID: ' + user_id + '}');
           req.logout();
           res.redirect('/');
     }
@@ -225,7 +209,6 @@ exports.signout = function(req, res) {
  * Session
  */
 exports.session = function(req, res) {
-    console.log('user server controller session');
     res.redirect('/');
 };
 
@@ -233,12 +216,8 @@ exports.session = function(req, res) {
  * Create user
  */
 exports.create = function(req, res) {
-    console.log('create server controller user.js ');
-   // console.log(req.body);
     var user = db.User.build(req.body);
     var login = db.Login.build(req.body);
-    console.log('create server controller user.js db.User.build');
-    //console.log(user);
 
     user.provider = 'local';
     user.online = 1;
@@ -257,9 +236,7 @@ exports.create = function(req, res) {
 
       login.save().then(function(){
         req.logIn(user, function(err){
-          console.log(err);
           if(err) {
-            console.log(err);
             return res.status(400).json(err);
           }
           //send mail to user here;
@@ -288,8 +265,6 @@ exports.create = function(req, res) {
                      buffer+=chunk;
                   });
                   res.on('end', function() {
-                      console.log(buffer);
-                      console.log('got some mail data ?');
                   });
               });
 
@@ -312,7 +287,6 @@ exports.create = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
-    console.log('user server controller me');
     res.jsonp(req.user || null);
 };
 
@@ -320,8 +294,6 @@ exports.me = function(req, res) {
  * Find user by USERID
  */
 exports.user = function(req, res, next, USERID) {
-    console.log('user server controller user');
-
     db.User.find({where : { USERID: USERID }}).then(function(user){
       if (!user) {
         return next(new Error('Failed to load User ' + USERID));
@@ -337,8 +309,6 @@ exports.user = function(req, res, next, USERID) {
  * Generic require login routing middleware
  */
 exports.requiresLogin = function(req, res, next) {
-    console.log('user server controller requiresLogin');
-
     if (!req.isAuthenticated()) {
         return res.send(401, 'User is not authorized');
     }
@@ -362,15 +332,10 @@ exports.hasAuthorization = function(req, res, next) {
 exports.SaveUserKey = function(req, res){
   var user_id = req.body.UserID;
   var key = req.body.key;
-  console.log(key);
-  console.log(user_id);
   if (user_id) {
-        console.log('logged in user runs ');
-        console.log(user_id);
         localStorage.setItem('key_'+user_id,key); 
     } else {
         //not logged in
-        console.log('not logged in user runs why ');
         localStorage.setItem('key',key);
     }
       
@@ -380,28 +345,37 @@ exports.SaveUserKey = function(req, res){
  // get all users
  exports.AllUsers = function(req, res){
     if (req.user) {
-         var USERID = req.user.USERID;
-      //db.product.findAll().then(function(product){
-   /* db.User.findAll().then(function(users){
-          return res.jsonp(users);
-   });*/
-    // get current user cart id
-   
-    var Query = 'SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = '+USERID+' AND gu.userRole = "O" ORDER BY gu.`groupCartuserId` DESC LIMIT 1';
-   var userCartId = 0;
-   db.sequelize.query(Query,{raw: false}).then(result => {
-      if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
-          userCartId = result[0][0]['grp_cartId'];
-      }
-      Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.online, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
-      ' LEFT JOIN group_cart_users gu ON gu.userid = u.`USERID`'+
-      ' AND gu.grp_cartId = '+userCartId+' AND gu.action = 2 WHERE u.USERID != '+USERID; 
-      
-      db.sequelize.query(Query,{raw: false}).then(users => {
-          return res.jsonp(users[0]);
-      });
-    });
-  }
+               var USERID = req.user.USERID;
+              //db.product.findAll().then(function(product){
+             /* db.User.findAll().then(function(users){
+                    return res.jsonp(users);
+             });*/
+              // get current user cart id
+         
+         var Query = 'SELECT gu.grp_cartId FROM group_cart_users gu WHERE gu.userid = '+USERID+' AND gu.userRole = "O" ORDER BY gu.`groupCartuserId` DESC LIMIT 1';
+         var userCartId = 0;
+         db.sequelize.query(Query,{raw: false}).then(result => {
+            if(typeof result[0][0] != 'undefined' && result[0][0]['grp_cartId'] != null){
+                userCartId = result[0][0]['grp_cartId'];
+            }
+            Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.online, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
+            ' LEFT JOIN group_cart_users gu ON gu.userid = u.`USERID`'+
+            ' AND gu.grp_cartId = '+userCartId+' AND gu.action = 2 WHERE u.USERID != '+USERID; 
+            
+            db.sequelize.query(Query,{raw: false}).then(users => {
+                return res.jsonp(users[0]);
+            });
+          });
+    }else{
+      //get All USers or return false
+      var grp_cartId = localStorage.getItem('grp_cartId');   
+       Query = 'SELECT u.USERID as userid, u.GIVNAME, u.SURNAME, u.online, u.user_img, u.img_loc, gu.action, gu.userid as followId FROM users u'+
+            ' LEFT JOIN group_cart_users gu ON gu.userid = u.`USERID`'+
+            ' AND gu.grp_cartId = '+grp_cartId+' AND gu.action = 2';    
+            db.sequelize.query(Query,{raw: false}).then(users => {
+                return res.jsonp(users[0]);
+            });
+    }
  };
 
 
@@ -411,8 +385,6 @@ exports.SaveUserKey = function(req, res){
 exports.show = function(req, res) {
     // Sending down the user that was just preloaded by the users.user function
     // and saves user on the req object.
-    //console.log(req.profile);
-    //req.profile prev return was req.user
     return res.jsonp(req.profile);
 };
 
@@ -437,10 +409,8 @@ exports.update = function(req, res) {
       // delete previous image
       fs.unlink('public/assets/'+req.body.img_loc, function(err){
           if(err) {
-            console.log('unlink error');
             console.log(err);
           } else{
-            console.log('file deleted successfully');
           }
      });  
     }
@@ -492,30 +462,30 @@ exports.all = function(req, res) {
 
 exports.updateuser = function(req, res){
   // req.file is the `avatar` file
-  console.log(req.file);
-  console.log('post data');
-  console.log(req.body);
 };
 
 
 // get user timeline
 exports.timeline = function(req, res){
-  var usrId = req.user.twitterUserId;
-  console.log('username is '+usrId);
-    if(usrId != null){
-      var params = {count:4, id:usrId};
-      client.get('statuses/user_timeline', params, function(error, tweets, response) {
-        console.log(response);
-          return res.jsonp(tweets);
-      });
-    }
+   
+  if(req.user){
+    var usrId = req.user.twitterUserId;
+    console.log('username is '+usrId);
+      if(usrId != null){
+        var params = {count:4, id:usrId};
+        client.get('statuses/user_timeline', params, function(error, tweets, response) {
+            return res.jsonp(tweets);
+        });
+      }
+  }else{
+    return res.jsonp('');
+  }
 };
 // like tweet
 exports.likeTweet = function(req, res){
   var tweetId = req.body.id;
   var params = {id:tweetId};
   client.post('favorites/create', params, function(error, tweet, response) {
-    console.log(response);
       return res.jsonp(tweet);
   });
 };
@@ -524,7 +494,6 @@ exports.dislikeTweet = function(req, res){
   var tweetId = req.body.id;
   var params = {id:tweetId};
   client.post('favorites/destroy', params, function(error, tweet, response) {
-    console.log(response);
       return res.jsonp(tweet);
   });
 };
@@ -533,7 +502,6 @@ exports.delTweet = function(req, res){
   var tweetId = req.body.id;
   var params = {id:tweetId};
   client.post('statuses/destroy', params, function(error, tweet, response) {
-    console.log(response);
       return res.jsonp(tweet);
   });
 };
@@ -565,22 +533,19 @@ exports.delTumblrPost = function(req, res){
 
 
 exports.fbposts = function(req,res){
-
-  var usrId = req.user.facebookUserId;
-  console.log('fb userid is '+usrId);
-    if(usrId != null){
-      FB.api("/me/posts", function (response) {
-        /*if(!response || response.error) {
-         console.log(!response ? 'error occurred' : response.error);
-         return;
-        }*/
-        return res.jsonp(response);
-      });
-    }
+  if(req.user){
+    var usrId = req.user.facebookUserId;
+      if(usrId != null){
+        FB.api("/me/posts", function (response) {
+          return res.jsonp(response);
+        });
+      }
+  }else{
+     return res.jsonp('');
+  }
 };
 
 exports.updateCover = function(req, res){
-  console.log('Json data ');
   var filename    =  Date.now() + '-' +req.body.name;
   var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
@@ -599,17 +564,14 @@ exports.updateCover = function(req, res){
   var urlToWrite = "packages/public/assets/anerve/usr_images/"+filename;
   var urlToSend   = "public/assets/anerve/usr_images/"+filename;
 
-  console.log(typeof width);
-  console.log(typeof height);
+
   var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
   imgBuffer =  Buffer.from(imgBuffer, 'base64');
   sharp(imgBuffer)
-  //.resize(width,height).toFormat(ext)
   .resize(imageOriginalWidth,imageOriginalHeight)
   .crop(sharp.strategy.entropy)
   .toFile(urlToWrite)
   .then(function(response){
-     console.log(response);
      var newImage = {user_img : filename};
      req.user.updateAttributes(newImage).then(function(user){
 
@@ -629,7 +591,6 @@ exports.updateCover = function(req, res){
   });
 };
 exports.updateProfileImage = function(req, res){
-  console.log('Json data ');
   var filename    =  Date.now() + '-' +req.body.name;
   var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
 
@@ -649,34 +610,8 @@ exports.updateProfileImage = function(req, res){
   var urlToSend   = "public/assets/anerve/usr_images/"+filename;
   var urlToSave   = "anerve/usr_images/"+filename;
 
-  console.log(typeof width);
-  console.log(typeof height);
   var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
   imgBuffer =  Buffer.from(imgBuffer, 'base64');
-  /*sharp(imgBuffer)
-  //.resize(width,height).toFormat(ext)
-  .resize(width,height)
-  .crop(sharp.strategy.entropy)
-  .toFile(urlToWrite)
-  .then(function(response){
-     console.log(response);
-     var newImage = {img_loc : urlToSave};
-     req.user.updateAttributes(newImage).then(function(user){
-
-              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
-              return res.jsonp(data2);
-            }).catch(function(err){
-              console.log(err);
-              var data2 = {"msg":"Error Occurred","status":"error"};
-              return res.jsonp(data2);
-      });
-  })
-  .catch(function(err){
-     console.log(err);
-    var data2 = {"msg":"Error Occurred Test","status":"error"};
-    return res.jsonp(data2);
-   
-  });*/
 
   smartcrop.crop(imgBuffer, {width: width, height: height}).then(function(result) {
       var crop = result.topCrop;
@@ -684,7 +619,6 @@ exports.updateProfileImage = function(req, res){
         .extract({width: crop.width, height: crop.height, left: crop.x, top: crop.y})
         .resize(width, height)
         .toFile(urlToWrite).then(function(response){
-           console.log(response);
            var newImage = {img_loc : urlToSave};
            req.user.updateAttributes(newImage).then(function(user){
 
@@ -741,8 +675,6 @@ exports.validatekey = function(req, res){
                  body += chunk;
             });
             res2.on('end', function() {
-            console.log('checkKey'); 
-              console.log(body);
               var data = JSON.parse(body); 
               if(data == true){
                 data = { 'key':key, 'userId':usrId, 'provider':provider};
@@ -759,4 +691,8 @@ exports.validatekey = function(req, res){
   } else {
     return res.jsonp(false);
   }
+};
+
+exports.getUser = function(req,res) {
+       return res.send(req.user);
 };

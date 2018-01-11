@@ -7,18 +7,15 @@
 var passport = require('passport');
 
 module.exports = function(app) {
-  //console.log('exports server user routes ');
 // User Routes
 var users = require('../controllers/users');
 
 var multer  = require('multer');
 var avatarStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-      console.log(file);
         cb(null, 'packages/public/assets/anerve/usr_images/');   
     },
     filename: function (req, file, cb) {
-      console.log(file);
         cb(null, Date.now() + '-' + file.originalname);     
     }
 });
@@ -84,6 +81,16 @@ app.get('/api/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/signin'
 }), users.authCallback);
 
+/*app.get('/api/auth/twitter',
+  passport.authenticate('twitter'));
+
+app.get('/api/auth/twitter/callback', 
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });*/
+
 // Setting the google oauth routes
 app.get('/api/auth/google', passport.authenticate('google', {
     failureRedirect: '/signin',
@@ -121,5 +128,8 @@ app.route('/api/updateProfileImage').post(users.updateProfileImage);
 //app.route('/api/gplus').post(users.googlePosts);
 //
 app.route('/api/validatekey').get(users.validatekey);
+
+
+app.route('/api/getUser').get(users.getUser);
 
 };

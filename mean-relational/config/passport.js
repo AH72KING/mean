@@ -2,27 +2,32 @@
 var passport    = require('passport');
 var bcrypt      = require('bcrypt');
 // These are different types of authentication strategies that can be used with Passport.
-var LocalStrategy = require('passport-local').Strategy;
-var TwitterStrategy = require('passport-twitter').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
-var TumblrStrategy = require('passport-tumblr').Strategy;
-//var GoogleStrategy = require('passport-google').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var config = require('./config');
-var db = require('./sequelize');
+var LocalStrategy       = require('passport-local').Strategy;
+var TwitterStrategy     = require('passport-twitter').Strategy;
+var FacebookStrategy    = require('passport-facebook').Strategy;
+var TumblrStrategy      = require('passport-tumblr').Strategy;
+//var GoogleStrategy    = require('passport-google').Strategy;
+var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
+
+var config  = require('./config');
+var db      = require('./sequelize');
 var winston = require('./winston');
+
 var SocialPassword = 'social';
 
 var express = require('express');
-var http = require('http');
+var http    = require('http');
+
 var LocalStorage = require('node-localstorage').LocalStorage,
-   localStorage = new LocalStorage('./scratch');
+    localStorage = new LocalStorage('./scratch');
 
 var app = express();
+
 const bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
 var ip = config.db.host;
 var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
 var headers = {
@@ -51,9 +56,12 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(USERID, done) {
     db.User.find({where: {USERID: USERID}})
     .then(function(user){
-        if(!user) return done('error');
+
+        if(!user){return done('error');}
+
         winston.info('Session: { USERID: ' + user.USERID + ', USERNAME: ' + user.USERNAME + ' }');
         done(null, user);
+
     }).catch(function(err){
         done(err, null);
     });
@@ -90,12 +98,31 @@ passport.use(new TumblrStrategy({
   function(token, tokenSecret, profile, done) {
     localStorage.setItem('tb_token', token);
     localStorage.setItem('tb_secret', tokenSecret);
-    db.User.find({where: {USERID: 399}}).then(function(user){
-        winston.info('New User (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
-        done(null, user);
-    }).catch(function(err){
-        done(err, null);
-    });
+    var current_user_id = localStorage.getItem('current_user_id');
+    console.log('current_user_id');
+    console.log(current_user_id);
+    if(current_user_id != '' && current_user_id != undefined && current_user_id != 'undefined'){
+        db.User.find({where: {USERID: current_user_id}}).then(function(user){
+            if(!user){ 
+                    // we cannot create user from Tumblr now as it does not proivde email
+            } else { 
+                db.User.update({
+                    tb_token: token,
+                    tb_secret: tokenSecret
+                }, {
+                  where: {USERID: current_user_id}
+                });
+
+                winston.info('New User (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+                done(null, user);
+            }
+           
+        }).catch(function(err){
+            done(err, null);
+        });
+    }else{
+        done('Fail Due to Missing User ID', null);
+    }
   }
 ));
 
@@ -105,6 +132,7 @@ passport.use(new TwitterStrategy({
         consumerKey: config.twitter.clientID,
         consumerSecret: config.twitter.clientSecret,
         callbackURL: config.twitter.callbackURL,
+       // userProfileURL: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
         profileFields: ['id' ,'email', 'displayName', 'include_email=true'],
         email: true,
        // userProfileURL  : 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
@@ -113,54 +141,75 @@ passport.use(new TwitterStrategy({
     function(token, tokenSecret, profile, done) {
         localStorage.setItem('tw_token', token);
         localStorage.setItem('tw_secret', tokenSecret);
-        var provider  = 'twitter';
-        db.User.find({where: {twitterUserId: profile.id}}).then(function(user){
-            var fullname = profile.displayName.split(" ");
-            var fname = fullname[0];
-            var lname = fullname[1];
-            if(!user){ 
-                db.User.create({
-                    twitterUserId: profile.id,
-                    GIVNAME: fname,
-                    SURNAME : lname,
-                    USERNAME: profile.username,
-                    provider: provider
-                }).then(function(u){ 
-                    if(u.USERID){
-                        db.Login.create({
-                            userId: u.USERID,
-                            givname: profile.displayName,
-                            username: profile.username,
-                            password:socialPass,
-                            role: 'U'
-                        }).then(function(l){  
-                           // UserLoginInJava(u); 
-                                db.Login.update({online:1},{where:{userId:l.userId}});
-                                db.User.update({online:1},{where:{USERID:l.userId}}); 
-                            winston.info('New User (twitter) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
-                            winston.info('New Login (twitter) : { id: ' + l.userId + ', username: ' + l.username + ' }');
-                            done(null, u);
-                        });
-                    }
-                });
-            } else { 
-                db.User.update({
-                    provider: provider,
-                    GIVNAME: fname,
-                    SURNAME : lname,
-                    twitterUserId: profile.id
-                }, {
-                  where: {twitterUserId: profile.id}
-                });
-               // UserLoginInJava(user); 
-                db.Login.update({online:1},{where:{userId:user.USERID}}); 
-                db.User.update({online:1},{where:{USERID:user.USERID}}); 
-                winston.info('Login (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
-                done(null, user);
-            }
 
-        }).catch(function(err){
-            done(err, null);
+        var Twitter = require('twitter');
+        var client = new Twitter({
+              consumer_key: config.twitter.clientID,
+              consumer_secret: config.twitter.clientSecret,
+              access_token_key: localStorage.getItem('tw_token'),
+              access_token_secret: localStorage.getItem('tw_secret')
+            });
+        var email = '';
+        var params = {include_email:true};
+        client.get('account/verify_credentials', params, function(error, tweets, response) {
+            email = JSON.parse(response.body).email;
+            var provider  = 'twitter';
+            if(email != undefined && email != 'undefined' && email != ''){
+
+                db.User.find({where: {EMAIL:email}}).then(function(user){
+                    var fullname = profile.displayName.split(" ");
+                    var fname = fullname[0];
+                    var lname = fullname[1];
+                    if(!user){ 
+                        db.User.create({
+                            twitterUserId: profile.id,
+                            GIVNAME: fname,
+                            SURNAME : lname,
+                            USERNAME: profile.username,
+                            EMAIL: email,
+                            provider: provider,
+                            tw_token: token,
+                            tw_secret: tokenSecret
+                        }).then(function(u){ 
+                            if(u.USERID){
+                                db.Login.create({
+                                    userId: u.USERID,
+                                    givname: profile.displayName,
+                                    username: profile.username,
+                                    password:socialPass,
+                                    role: 'U'
+                                }).then(function(l){  
+                                   // UserLoginInJava(u); 
+                                        db.Login.update({online:1},{where:{userId:l.userId}});
+                                        db.User.update({online:1},{where:{USERID:l.userId}}); 
+                                    winston.info('New User (twitter) : { id: ' + u.USERID + ', username: ' + u.USERNAME + ' }');
+                                    winston.info('New Login (twitter) : { id: ' + l.userId + ', username: ' + l.username + ' }');
+                                    done(null, u);
+                                });
+                            }
+                        });
+                    } else { 
+                        db.User.update({
+                            provider: provider,
+                            GIVNAME: fname,
+                            SURNAME : lname,
+                            twitterUserId: profile.id,
+                            tw_token: token,
+                            tw_secret: tokenSecret
+                        }, {
+                          where: {EMAIL:email}
+                        });
+                       // UserLoginInJava(user); 
+                        db.Login.update({online:1},{where:{userId:user.USERID}}); 
+                        db.User.update({online:1},{where:{USERID:user.USERID}}); 
+                        winston.info('Login (twitter) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+                        done(null, user);
+                    }
+
+                }).catch(function(err){
+                    done(err, null);
+                });
+            }
         });
     }
 ));
@@ -173,8 +222,12 @@ passport.use(new FacebookStrategy({
         profileFields: ['id' ,'email', 'displayName', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
     },
     function(accessToken, refreshToken, profile, done) {
-
-        localStorage.setItem('fb_token', accessToken);
+        if(accessToken != '' && accessToken != undefined && accessToken != 'undefined'){
+            localStorage.setItem('fb_token', accessToken);
+        }
+        if(refreshToken != '' && refreshToken != undefined && refreshToken != 'undefined'){
+            localStorage.setItem('fb_rtoken', refreshToken);
+        }
 
         var FacebookID      = profile.id;
        // var username        = profile.username;
@@ -197,7 +250,9 @@ passport.use(new FacebookStrategy({
                     EMAIL: email,
                     USERNAME: email,
                     provider: provider,
-                    facebookUserId: FacebookID
+                    facebookUserId: FacebookID,
+                    fb_token: accessToken,
+                    fb_rtoken: refreshToken,
                 }).then(function(u){
                     if(u.USERID){
                         db.Login.create({
@@ -221,7 +276,9 @@ passport.use(new FacebookStrategy({
             } else {
                 db.User.update({
                     provider: provider,
-                    facebookUserId: FacebookID
+                    facebookUserId: FacebookID,
+                    fb_token: accessToken,
+                    fb_rtoken: refreshToken,
                 }, {
                   where: {EMAIL: email}
                 });
@@ -246,7 +303,8 @@ passport.use(new GoogleStrategy({
     //realm: config.google.realm
   },
   function(token, refreshToken, profile, done) {
-
+        localStorage.setItem('go_token', token);
+        localStorage.setItem('go_rtoken', refreshToken);   
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
@@ -270,7 +328,9 @@ passport.use(new GoogleStrategy({
                         EMAIL: email,
                         USERNAME: email,
                         provider: provider,
-                        openID: GoogleID
+                        openID: GoogleID,
+                        go_token: token,
+                        go_rtoken: refreshToken,
                     }).then(function(u){
                         if(u.USERID){
                             db.Login.create({
@@ -294,7 +354,9 @@ passport.use(new GoogleStrategy({
                 } else {
                     db.User.update({
                         provider: provider,
-                        openID: GoogleID
+                        openID: GoogleID,
+                        go_token: token,
+                        go_rtoken: refreshToken,
                     }, {
                       where: {EMAIL: email}
                     });
