@@ -42,6 +42,10 @@
         $rootScope.userFirends = userFirends;
 
 
+        $rootScope.postModal = {
+          modalClass : 'hide-al',
+          currentSocial : 'twitter'
+        };
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -1133,11 +1137,35 @@
                 });
               };
 
+              // post tweet
+
+              $rootScope.postTwitter =function(){
+                var url = $rootScope.baseUrl+'api/postTweet';
+                var postData = {'msg':$rootScope.data.tw_text};
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                      if(response.status == 200){
+                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                          var code = response.data.errors[0].code;
+                          console.log(code);
+                          //if(code == 144)
+                            notify(response.data.errors[0].message);
+                        } else {
+                          notify('Status has been Updated Successfully','success');
+                          $rootScope.postModal.modalClass = "hide-al";
+                        }
+                      }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              }
+
             }
 
 
             if(connections.tumblr != undefined && connections.tumblr != 0 ){
-              console.log('tumblr');
+              console.log('tumblr')
               // tumblr methods
               function tumblrPosts(){
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
@@ -1169,6 +1197,22 @@
                         console.log('Error: ', errorResponse);
                 }); 
               };
+
+              // post tumblr
+              $rootScope.postTumblr = function(){
+                var postData = {'msg':$rootScope.data.tb_text};
+                var url = $rootScope.baseUrl+'api/postTumblr';
+                var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
+                console.log(postData);
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        notify('Post Submitted Successfully','success');
+                        $rootScope.postModal.modalClass = "hide-al";
+
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
+              }
             }
         }
 
@@ -1201,6 +1245,15 @@
           }); 
         }
         fbposts();
+
+
+        $rootScope.showPostModal = function(type){
+          $rootScope.postModal.modalClass = "show-al";
+          switch(type){
+            case 'twitter':
+            break;
+          }
+        }
 
         /*// get googleplus post
         function gplus(){

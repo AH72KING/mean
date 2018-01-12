@@ -1368,3 +1368,5 @@ body .friends-in-cart-container{
 .post .body{padding: 5px 10px;}
 .post .options {position: absolute;bottom: 5px;left: 5px;display: none}
 .post:hover .options{display: block}
+.modal.show-al{display: block!important;}
+.modal.hide-al{display: none!important;}
