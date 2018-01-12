@@ -17,14 +17,6 @@ const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
 const stripe = require('stripe')(keySecret);
 const bodyParser = require('body-parser');
 
-/*const linkedInProfile = require('linkedin-public-profile');
-
-const url = 'https://de.linkedin.com/in/julianamelung';
-
-// standard usage
-linkedInProfile(url).then(profile => {  // chain your logic
-  console.log(profile);
-});*/
 app.use(express.static('public'));
 
 app.use(bodyParser.urlencoded({extended: false}));
