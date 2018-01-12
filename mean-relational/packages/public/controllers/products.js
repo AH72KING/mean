@@ -1051,7 +1051,7 @@
 
         if (window.user != null && window.user.connections != null && window.user.connections != ''){
             var connections = JSON.parse(window.user.connections);
-            if(connections.twitter != 'undefined' && connections.twitter != '0' ){
+            if(connections.twitter != undefined && connections.twitter != 0 ){
               // get twitter timeline
               function timeline(){
                 var url = $rootScope.baseUrl+'api/timeline';
@@ -1136,8 +1136,8 @@
             }
 
 
-            if(connections.tumblr != 'undefined' && connections.tumblr != 0 ){
-              console.log('tumblr')
+            if(connections.tumblr != undefined && connections.tumblr != 0 ){
+              console.log('tumblr');
               // tumblr methods
               function tumblrPosts(){
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
