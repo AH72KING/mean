@@ -555,6 +555,52 @@ exports.postTumblr = function(req, res){
   });
 };
 
+// post tumblr photo
+exports.postTumblrPhoto = function(req, res){
+  var params = {type : 'photo'};
+  if(req.body.src != undefined && req.body.src != null)
+    params.source = req.body.src;
+  else 
+    params.data64 = req.body.data;
+  tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name;   
+        tmblr_client.createPhotoPost(blogName, params, function(err, resp) {
+          return res.jsonp(resp);
+        }); 
+      }
+    }
+  });
+}
+
+// post tumblr video
+exports.postTumblrVideo = function(req, res){
+  var params = {type : 'video'};
+  if(req.body.vid_src != undefined && req.body.vid_src != null)
+    params.URI  = req.body.vid_src;
+  else 
+    params.data = req.body.data;
+  console.log(params);
+  tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name;   
+        tmblr_client.createVideoPost(blogName, params, function(err, resp) {
+          console.log(err);
+          return res.jsonp(resp);
+        }); 
+      }
+    }
+  });
+}
+
+// post media tweet
+exports.postMediaTweet = function(req, res){
+  console.log(req.body);
+  console.log(req.file);
+  return res.jsonp('');
+}
 
 exports.fbposts = function(req,res){
   if(req.user){
