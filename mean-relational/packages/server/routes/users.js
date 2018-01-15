@@ -19,7 +19,8 @@ var avatarStorage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname);     
     }
 });
-var avatarhanlder = multer({ storage: avatarStorage }).single('imgloc');
+var upload = multer({ storage: avatarStorage });
+var avatarhanlder = upload.single('imgloc');
 
 app.post('/api/updateuserprofileimage', avatarhanlder, users.updateuserprofileimage);
 app.post('/api/updateuser', users.update);
@@ -120,7 +121,10 @@ app.route('/api/likeTweet').post(users.likeTweet);
 app.route('/api/dislikeTweet').post(users.dislikeTweet);
 app.route('/api/delTweet').post(users.delTweet);
 app.route('/api/postTweet').post(users.postTweet);
+app.route('/api/postMediaTweet', upload.single('twfile')).post(users.postMediaTweet);
 app.route('/api/postTumblr').post(users.postTumblr);
+app.route('/api/postTumblrPhoto').post(users.postTumblrPhoto);
+app.route('/api/postTumblrVideo').post(users.postTumblrVideo);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);

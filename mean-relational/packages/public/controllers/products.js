@@ -41,11 +41,19 @@
         var userFirends = [];
         $rootScope.userFirends = userFirends;
 
-
+        $rootScope.twfile = '';
         $rootScope.postModal = {
           modalClass : 'hide-al',
-          currentSocial : 'twitter'
+          currentSocial : 'twitter',
+          postype : 'Text'
         };
+
+        //social post types
+        $rootScope.postTypes = {
+          tumblr : ['Text', 'Photo', 'Quote', 'Link', 'Video', 'Audio'],
+          twitter: ['Text']
+        };
+
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -1139,9 +1147,12 @@
 
               // post tweet
 
-              $rootScope.postTwitter =function(){
+              $rootScope.postTwitter =function(e){
                 var url = $rootScope.baseUrl+'api/postTweet';
                 var postData = {'msg':$rootScope.data.tw_text};
+                console.log($rootScope.data.tw_file);
+                if($rootScope.data.tw_file != "")
+                  url =$rootScope.baseUrl+'api/postMediaTweet';
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -1200,10 +1211,28 @@
 
               // post tumblr
               $rootScope.postTumblr = function(){
-                var postData = {'msg':$rootScope.data.tb_text};
-                var url = $rootScope.baseUrl+'api/postTumblr';
+                var urlMethod, postData;
+                if($rootScope.postModal.postype == 'Text' && $rootScope.data.tb_text != null){
+                  postData = {'msg':$rootScope.data.tb_text};
+                  urlMethod = "api/postTumblr";
+                }
+                else if($rootScope.postModal.postype == 'Photo') {
+                  if($rootScope.data.tb_src != null){
+                    postData = {'src':$rootScope.data.tb_src};
+                  }
+                  urlMethod = "api/postTumblrPhoto";
+                  
+                }
+                else if($rootScope.postModal.postype == 'Video') {
+                  if($rootScope.data.tb_vid_src != null){
+                    postData = {'vid_src':$rootScope.data.tb_vid_src};
+                  }
+                  urlMethod = "api/postTumblrVideo";
+                  
+                }
+                var url = $rootScope.baseUrl+urlMethod;
                 var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
-                console.log(postData);
+                
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         notify('Post Submitted Successfully','success');
@@ -1215,7 +1244,11 @@
               }
             }
         }
-
+        // watch
+         $rootScope.uploadFile = function(element) {
+            $rootScope.twfile = element;
+            console.log(element);
+        };
 
          function getAisles(){
           $rootScope.aisles = {};
@@ -1249,12 +1282,11 @@
 
         $rootScope.showPostModal = function(type){
           $rootScope.postModal.modalClass = "show-al";
-          switch(type){
-            case 'twitter':
-            break;
-          }
+          $rootScope.postModal.currentSocial = type;
+          $('.html5imageupload').html5imageupload();
         }
 
+        
         /*// get googleplus post
         function gplus(){
           var url = $rootScope.baseUrl+'api/gplus';
