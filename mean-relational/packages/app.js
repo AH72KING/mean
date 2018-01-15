@@ -2,6 +2,7 @@
 var favicon = require('serve-favicon'),
     express = require('express'),
     cors 	= require('cors');
+
 module.exports = function (app) {
     // Set views path, template engine and default layout
     app.set('views', __dirname + '/server/views');

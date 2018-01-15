@@ -790,7 +790,7 @@ exports.disconnectSocial = function(req, res){
           // update db
           user.updateAttributes(updateConnect).then(function(a){
           console.log('Success');
-            return res.jsonp({"type":"success","msg":"Successfully Disconnected"})
+            return res.jsonp({"type":"success","msg":"Successfully Disconnected"});
           }).catch(function(err){
             return res.jsonp({"type":"error","msg":err});
           });
@@ -800,4 +800,4 @@ exports.disconnectSocial = function(req, res){
         });
       
 
-}
+};

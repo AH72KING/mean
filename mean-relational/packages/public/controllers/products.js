@@ -1160,7 +1160,7 @@
                         if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
                           var code = response.data.errors[0].code;
                           console.log(code);
-                          //if(code == 144) 
+                          //if(code == 144)
                             notify(response.data.errors[0].message);
                         } else {
                           notify('Status has been Updated Successfully','success');
@@ -1240,7 +1240,7 @@
 
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
-                }); 
+                });
               }
             }
         }
