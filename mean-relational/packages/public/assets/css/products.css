@@ -1370,3 +1370,9 @@ body .friends-in-cart-container{
 .post:hover .options{display: block}
 .modal.show-al{display: block!important;}
 .modal.hide-al{display: none!important;}
+.social-color{border: 1px dashed;}
+.twitter-color{background-color:#1da1f2;}
+.facebook-color{background-color:#3b5998;}
+.google-color{background-color:#ea4335;}
+.tumblr-color{background-color:#35465c;}
+.social-icon {text-align:center;width: 30px;color: white;padding: 4px 8px;border-radius: 100%;right: 6px;top: 10px;position: relative;}

@@ -561,7 +561,7 @@ exports.postTumblrPhoto = function(req, res){
   if(req.body.src != undefined && req.body.src != null)
     params.source = req.body.src;
   else 
-    params.data64 = req.body.data;
+    params.data64 = req.body.data.replace(/^data:image\/\w+;base64,/, "");
   tmblr_client.userInfo(function(err, data) {
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
@@ -578,7 +578,7 @@ exports.postTumblrPhoto = function(req, res){
 exports.postTumblrVideo = function(req, res){
   var params = {type : 'video'};
   if(req.body.vid_src != undefined && req.body.vid_src != null)
-    params.URI  = req.body.vid_src;
+    params.embed  = req.body.vid_src;
   else 
     params.data = req.body.data;
   console.log(params);
@@ -587,7 +587,60 @@ exports.postTumblrVideo = function(req, res){
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;   
         tmblr_client.createVideoPost(blogName, params, function(err, resp) {
-          console.log(err);
+          console.log(resp);
+          return res.jsonp(resp.posts);
+        }); 
+      }
+    }
+  });
+}
+
+// post tumblr quote
+exports.postTumblrQuote = function(req, res){
+  var params = {type : 'quote'};
+  if(req.body.quote != undefined && req.body.quote != null){
+    params.quote  = req.body.quote;
+    if(req.body.source != undefined && req.body.source != null)
+      params.source = req.body.source;
+  }
+  
+  tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name;   
+        tmblr_client.createQuotePost(blogName, params, function(err, resp) {
+          console.log(resp);
+          return res.jsonp(resp);
+        }); 
+      }
+    }
+  });
+}
+// postTumblrLink
+exports.postTumblrLink = function(req, res){
+  var params = {type : 'link'};
+  if(req.body.url != undefined && req.body.url != null){
+    params.url  = req.body.url;
+    if(req.body.title != undefined && req.body.title != null)
+      params.title = req.body.title;
+
+    if(req.body.description != undefined && req.body.description != null)
+      params.description = req.body.description;
+
+    if(req.body.thumbnail != undefined && req.body.thumbnail != null)
+      params.thumbnail = req.body.thumbnail;
+
+    if(req.body.title != undefined && req.body.title != null)
+      params.author = req.body.author;
+    
+  }
+  
+  tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name;   
+        tmblr_client.createLinkPost(blogName, params, function(err, resp) {
+          console.log(resp);
           return res.jsonp(resp);
         }); 
       }
