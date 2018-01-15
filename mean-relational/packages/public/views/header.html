@@ -3,7 +3,7 @@
 </div-->
 <div id="splash_cont" class="animate ">
   <div class="loading-center">
-    <img id="ruby" src="public/assets/images/ruby.png" alt="Anerve Loading Image" />
+    <img id="ruby" src="/public/assets/images/ruby.png" alt="Anerve Loading Image" />
     <h3>Loading....</h3>
     <div id='progressBar'></div>
   </div>
@@ -14,7 +14,7 @@
 
     var splash = $("#splash_cont");
     setTimeout(function() {
-       splash.removeClass("animate").addClass("hide");
+      splash.removeClass("animate").addClass("hide");
     }, 2000); // <-- time in milliseconds
 
     $('#progressBar').append('<div id="bar"></div>');

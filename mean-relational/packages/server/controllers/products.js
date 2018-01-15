@@ -1,24 +1,15 @@
 'use strict';
-
-/**
- * Module dependencies.
- */
-
-var db = require('../../../config/sequelize');
+var db      = require('../../../config/sequelize');
 var express = require('express');
-var http = require('http');
+var http    = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
 var app = express();
-
 const keyPublishable  = 'pk_test_sZay0UdHi8gZBfIRtvWefcLy';
 const keySecret       = 'sk_test_ta2435vzjD2vjo0eIP9gMPQk';
-
-const stripe = require('stripe')(keySecret);
-const bodyParser = require('body-parser');
-
+const stripe          = require('stripe')(keySecret);
+const bodyParser      = require('body-parser');
 app.use(express.static('public'));
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 

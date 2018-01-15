@@ -1,17 +1,15 @@
 'use strict';
-/**
- * Module dependencies.
- */
 var fs = require('fs');
 //var sharp = require('sharp');
 //var smartcrop = require('smartcrop-sharp');
+//var Cropper = require('cropperjs')
 var querystring = require("querystring");
-var db = require('../../../config/sequelize');
-var http = require('http');
+var db          = require('../../../config/sequelize');
+var http        = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
- var Twitter = require('twitter');
- var client = new Twitter({
+ var Twitter  = require('twitter');
+ var client   = new Twitter({
       consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
       consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
       access_token_key: localStorage.getItem('tw_token'),
@@ -408,7 +406,7 @@ exports.update = function(req, res) {
     if(typeof req.file != 'undefined'){
       newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
       // delete previous image
-      fs.unlink('public/assets/'+req.body.img_loc, function(err){
+      fs.unlink('/public/assets/'+req.body.img_loc, function(err){
           if(err) {
             console.log(err);
           } else{
@@ -427,7 +425,35 @@ exports.update = function(req, res) {
     });
 };
 
+/**
+ * Update a user
+ */
+exports.updateuserprofileimage = function(req, res) {
 
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+    var newuser = {};
+    if(typeof req.file != 'undefined'){
+      newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+      // delete previous image
+      fs.unlink('/assets/'+req.body.img_loc, function(err){
+          if(err) {
+            console.log(err);
+          } else{
+          }
+     });  
+    }
+
+    user.updateAttributes(newuser).then(function(a){
+        // return res.jsonp(a);
+        res.redirect('/users/'+req.user.USERID+'/edit');
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
 /**
  * Delete an user
  */
@@ -585,8 +611,8 @@ exports.updateCover = function(req, res){
   var left  = req.body.left;
   var top   = req.body.top;
 
-  var urlToWrite = "packages/public/assets/anerve/usr_images/"+filename;
-  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
+  var urlToWrite = "/public/assets/anerve/usr_images/"+filename;
+  var urlToSend  = "/assets/anerve/usr_images/"+filename;
 
 
   var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
@@ -630,8 +656,8 @@ exports.updateProfileImage = function(req, res){
   var left  = req.body.left;
   var top   = req.body.top;
 
-  var urlToWrite  = "packages/public/assets/anerve/usr_images/"+filename;
-  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
+  var urlToWrite  =  "/public/assets/anerve/usr_images/"+filename;
+  var urlToSend   =  "/assets/anerve/usr_images/"+filename;
   var urlToSave   = "anerve/usr_images/"+filename;
 
   var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");

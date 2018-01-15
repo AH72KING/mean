@@ -1,3 +1,25 @@
+.crop-model-profile{
+
+ }
+.crop-model-profile .modal-content{
+    background: #0000005e;
+ }   
+.crop-profile{
+    max-width: 500px;
+    margin: 0 auto;
+}
+.crop-profile-area{
+    overflow: hidden;
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+    vertical-align: top;
+  }
+.crop-profile-preview {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
 div#splash_cont { 
     position: absolute; 
     background: #000; 
