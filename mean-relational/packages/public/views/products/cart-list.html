@@ -117,8 +117,7 @@
           <div id="tw" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'twitter', 'tab-pane fade':postModal.currentSocial != 'twitter'}">
             <div class="post-wrap col-xs-12">
                 <form ng-submit="postTwitter($event)" class="tw_post_form" enctype="multipart/form-data" action="api/postMediaTweet" method="POST">
-                    <div class=""><strong>Create Tweet :</strong>
-                        <select ng-options="o as o for o in postTypes.tumblr" name="postype" ng-model="postModal.postype"></select></div>
+                    <div class=""><strong>Create Tweet :</strong></div>
                     <textarea placeholder="Wirte Message" name="tw_text" class="form-control" ng-model="data.tw_text" rows="3"></textarea>
                     <input type="file" name="twfile" ng-model="data.twfile" />
                     <input type="submit" class="btn btn-success btn-md" value="Send" />
