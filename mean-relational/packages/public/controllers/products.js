@@ -1230,6 +1230,35 @@
                   urlMethod = "api/postTumblrVideo";
                   
                 }
+                else if($rootScope.postModal.postype == 'Quote') {
+                  if($rootScope.data.tb_quote != null){
+                    postData = {'quote':$rootScope.data.tb_quote};
+                    if($rootScope.data.tb_source != null){
+                      postData.source = $rootScope.data.tb_source;
+                    }
+                  }
+                  urlMethod = "api/postTumblrQuote";
+                  
+                }
+                else if($rootScope.postModal.postype == 'Link') {
+                  if($rootScope.data.tb_link != null){
+                    postData = {'url':$rootScope.data.tb_link};
+                    if($rootScope.data.tb_link_title != null)
+                      postData.title = $rootScope.data.tb_link_title;
+
+                    if($rootScope.data.tb_link_desc != null)
+                      postData.description = $rootScope.data.tb_link_desc;
+
+                    if($rootScope.data.tb_link_thumb != null)
+                      postData.thumbnail = $rootScope.data.tb_link_thumb;
+
+                    if($rootScope.data.tb_link_auth != null)
+                      postData.author = $rootScope.data.tb_link_auth;
+                    
+                  }
+                  urlMethod = "api/postTumblrLink";
+                  
+                }
                 var url = $rootScope.baseUrl+urlMethod;
                 var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
                 

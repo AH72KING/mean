@@ -112,7 +112,9 @@ app.get('/api/auth/tumblr', passport.authenticate('tumblr', {
 
 app.get('/api/auth/tumblr/callback', passport.authenticate('tumblr', {
     failureRedirect: '/all-products'
-}), function(req, res) {res.redirect('/all-products');});
+}), users.tumblrSaveBlog); //users.tumblrSaveBlog 
+
+//function(req, res) {res.redirect('/all-products');
 
 // Finish with setting up the USERID param
 app.param('USERID', users.user);
@@ -125,6 +127,8 @@ app.route('/api/postMediaTweet', upload.single('twfile')).post(users.postMediaTw
 app.route('/api/postTumblr').post(users.postTumblr);
 app.route('/api/postTumblrPhoto').post(users.postTumblrPhoto);
 app.route('/api/postTumblrVideo').post(users.postTumblrVideo);
+app.route('/api/postTumblrQuote').post(users.postTumblrQuote);
+app.route('/api/postTumblrLink').post(users.postTumblrLink);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);

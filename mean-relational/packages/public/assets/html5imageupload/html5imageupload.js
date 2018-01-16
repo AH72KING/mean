@@ -650,8 +650,8 @@
                 url: options.url,
                 data: $.extend(obj, options.data),
                 success: function(response) {
-                    console.log(response);
-                    console.log(element);
+                    $('.show-al').addClass('hide-al').removeClass('show-al');
+                    notify('Successfully Submitted','success');
                     if (response.status == "success") {
                         var file        = response.url;
                         $(element).find('.tools .saving').remove();

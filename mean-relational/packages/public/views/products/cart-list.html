@@ -79,6 +79,17 @@
                 <source src="{{ post.video_url }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            <div ng-if="post.type=='quote'">
+                <strong>Quote: </strong> <span>{{ post.text }}</span><br>
+                <strong>Source: </strong> <span>{{ post.source }}</span>
+            </div>
+            <div ng-if="post.type=='link'">
+                <img src="{{ post.link_image }}" class="pull-right" style="width:30px;height:30px" />
+                <strong>Page Title: </strong> <span>{{ post.title }}</span><br>
+                <strong>Description: </strong> <span>{{ post.description | htmlToPlaintext  }}</span><br>
+                <strong>Author: </strong> <span>{{ post.link_author }}</span><br>
+                <strong>Link: </strong> <span>{{ post.url }}</span>
+            </div>
         </div>
         <div class="options">
             <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
@@ -97,7 +108,7 @@
 
 <!-- Social Post Modal -->
 
-<div class="modal fade in social-mdl {{ postModal.modalClass }}" >
+<div class="modal fade in social-mdl {{ postModal.modalClass }} {{ postModal.currentSocial }}-mdl" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content col-xs-12">
         <ul class="nav nav-pills">
@@ -107,6 +118,7 @@
           <li ng-class="{'active':postModal.currentSocial == 'google'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'google'">Google</a></li>
 
           <span class="pull-right" ng-click="postModal.modalClass = 'hide-al'" title="Close"><i class="fa fa-remove"></i></span>
+          <span class="pull-right social-icon {{postModal.currentSocial}}-color"><i class="fa fa-{{postModal.currentSocial}}"></i></span>
         </ul>
 
         <div class="tab-content">
@@ -117,8 +129,7 @@
           <div id="tw" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'twitter', 'tab-pane fade':postModal.currentSocial != 'twitter'}">
             <div class="post-wrap col-xs-12">
                 <form ng-submit="postTwitter($event)" class="tw_post_form" enctype="multipart/form-data" action="api/postMediaTweet" method="POST">
-                    <div class=""><strong>Create Tweet :</strong>
-                        <select ng-options="o as o for o in postTypes.tumblr" name="postype" ng-model="postModal.postype"></select></div>
+                    <div class=""><strong>Create Tweet :</strong></div>
                     <textarea placeholder="Wirte Message" name="tw_text" class="form-control" ng-model="data.tw_text" rows="3"></textarea>
                     <input type="file" name="twfile" ng-model="data.twfile" />
                     <input type="submit" class="btn btn-success btn-md" value="Send" />
@@ -134,7 +145,7 @@
                 <div class=" col-xs-12" ng-show="postModal.postype == 'Text'">
                     <textarea placeholder="Wirte Message" class="form-control" ng-model="data.tb_text" rows="3"></textarea>
                 </div>
-                <div class=" col-xs-12" ng-show="postModal.postype == 'Photo'">
+                <div class="col-xs-12" ng-show="postModal.postype == 'Photo'">
                     <strong>Enter Image Url Or Drop Image: </strong>
                     <input type="text" class="form-control" ng-model="data.tb_src" placeholder="Paste Image HTTP Url"><br>
                     <div class="dropzone html5imageupload"
@@ -149,10 +160,28 @@
                       <input type="file" name="thumb" />
                     </div>
                 </div>
-                <div class=" col-xs-12" ng-show="postModal.postype == 'Video'">
+                <div class="col-xs-12" ng-show="postModal.postype == 'Quote'">
+                    <strong>Quote:</strong>
+                    <textarea placeholder="Wirte Quote" class="form-control" ng-model="data.tb_quote" rows="3"></textarea>
+                    <strong>Source:</strong>
+                    <textarea placeholder="Source" class="form-control" ng-model="data.tb_source" rows="3"></textarea>
+                </div>
+                <div class="col-xs-12" ng-show="postModal.postype == 'Video'">
                     <strong>Enter Video Url Or Upload Video: </strong>
                     <input type="text" class="form-control" ng-model="data.tb_vid_src" ><br>
                       <input type="file" name="video_file" />
+                </div>
+                <div class="col-xs-12" ng-show="postModal.postype == 'Link'">
+                    <strong>Title (Of the page the link points to): </strong>
+                    <input type="text" class="form-control" ng-model="data.tb_link_title" >
+                    <strong>Link: </strong>
+                    <input type="text" placeholder="E.g http://anerve.com" class="form-control" ng-model="data.tb_link" >
+                    <strong>Description: </strong>
+                    <textarea type="text" class="form-control" rows="2" ng-model="data.tb_link_desc" ></textarea>
+                    <strong>Thumbnail (URL): </strong>
+                    <input type="text" placeholder="E.g http://anerve.com" class="form-control" ng-model="data.tb_link_thumb" >
+                    <strong>Author (Of the page the link points to): </strong>
+                    <input type="text" placeholder="" class="form-control" ng-model="data.tb_link_auth" >
                 </div>
                 <input type="submit" class="btn btn-success btn-md" value="Send" ng-click="postTumblr()" />
             </div>
@@ -168,6 +197,21 @@
 
 <script>
 $(document).ready(function() {
-    $('.html5imageupload').html5imageupload();
+    $('.html5imageupload').html5imageupload({
+        onAfterProcessImage: function(res) { console.log('me here');
+                    notify('Post Submitted Successfully','success');
+                    $('.show-al').addClass('hide-al').removeClass('show-al');
+                },
+                onAfterCancel: function(res) {console.log('now here');
+                    $('.show-al').addClass('hide-al').removeClass('show-al');
+                },
+                onAfterRemoveImage: function(res) {console.log('now in after remove');
+                    $('.show-al').addClass('hide-al').removeClass('show-al');
+                },
+                onSave: function(res) {console.log('on save');
+                    notify('Post Submitted Successfully','success');
+                    $('.show-al').addClass('hide-al').removeClass('show-al');
+                }
+    });
 });
 </script>
