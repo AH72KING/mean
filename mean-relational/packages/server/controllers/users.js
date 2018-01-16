@@ -587,7 +587,7 @@ exports.postTumblrPhoto = function(req, res){
   if(req.body.src != undefined && req.body.src != null)
     params.source = req.body.src;
   else 
-    params.data64 = req.body.data;
+    params.data64 = req.body.data.replace(/^data:image\/\w+;base64,/, "");
   tmblr_client.userInfo(function(err, data) {
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
@@ -604,7 +604,7 @@ exports.postTumblrPhoto = function(req, res){
 exports.postTumblrVideo = function(req, res){
   var params = {type : 'video'};
   if(req.body.vid_src != undefined && req.body.vid_src != null)
-    params.URI  = req.body.vid_src;
+    params.embed  = req.body.vid_src;
   else 
     params.data = req.body.data;
   console.log(params);
