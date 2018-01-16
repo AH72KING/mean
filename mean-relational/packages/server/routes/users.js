@@ -13,16 +13,17 @@ var users = require('../controllers/users');
 var multer  = require('multer');
 var avatarStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,  '/public/assets/anerve/usr_images/');   
+        cb(null,  'packages/public/assets/anerve/usr_images/');   
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);     
     }
 });
 var upload = multer({ storage: avatarStorage });
-var avatarhanlder = upload.single('imgloc');
+var avatarhanlder = upload.single('file');
 
 app.post('/api/updateuserprofileimage', avatarhanlder, users.updateuserprofileimage);
+app.post('/api/updateusercoverimage', avatarhanlder, users.updateusercoverimage);
 app.post('/api/updateuser', users.update);
 // User Routes
 app.get('/signin', users.signin);

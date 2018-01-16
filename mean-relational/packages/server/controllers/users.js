@@ -456,6 +456,7 @@ exports.updateuserprofileimage = function(req, res) {
       // delete previous image
       fs.unlink('/assets/'+req.body.img_loc, function(err){
           if(err) {
+            console.log('/assets/'+req.body.img_loc);
             console.log(err);
           } else{
           }
@@ -472,6 +473,38 @@ exports.updateuserprofileimage = function(req, res) {
         });
     });
 };
+
+/**
+ * Update a user
+ */
+exports.updateusercoverimage = function(req, res) {
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+    var newuser = {};
+    if(typeof req.file != 'undefined'){
+      newuser['user_img'] = 'anerve/usr_images/'+req.file.filename;
+      // delete previous image
+      fs.unlink('/assets/'+req.body.img_loc, function(err){
+          if(err) {
+            console.log('/assets/'+req.body.img_loc);
+            console.log(err);
+          } else{
+          }
+     });  
+    }
+
+    user.updateAttributes(newuser).then(function(a){
+        // return res.jsonp(a);
+        res.redirect('/users/'+req.user.USERID+'/edit');
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
+
+
 /**
  * Delete an user
  */
@@ -525,7 +558,7 @@ exports.timeline = function(req, res){
       }).then(function(users){
         if(users[0] && users[0].twitterUserId != null){
           var params = {count:4, id:users[0].twitterUserId};
-          client.get('statuses/user_timeline', params, function(error, tweets, response) {
+          client.get('statuses/home_timeline', params, function(error, tweets, response) {
               return res.jsonp(tweets);
           });
         }
@@ -539,7 +572,7 @@ exports.timeline = function(req, res){
     }
     else if(usrId != null){
       var params = {count:4, id:usrId};
-      client.get('statuses/user_timeline', params, function(error, tweets, response) {
+      client.get('statuses/home_timeline', params, function(error, tweets, response) {
           return res.jsonp(tweets);
       });
     }
