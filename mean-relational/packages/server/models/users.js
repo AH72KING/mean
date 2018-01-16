@@ -81,7 +81,8 @@ module.exports = function(sequelize, DataTypes) {
 			fb_rtoken: 	DataTypes.STRING,
 			go_token: 	DataTypes.STRING,
 			go_rtoken: 	DataTypes.STRING,
-			connections: 	DataTypes.TEXT
+			connections: 	DataTypes.TEXT,
+			tumblr_blog: 	DataTypes.STRING
 		},
 		{
 			instanceMethods: {

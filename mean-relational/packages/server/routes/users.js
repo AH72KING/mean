@@ -112,7 +112,9 @@ app.get('/api/auth/tumblr', passport.authenticate('tumblr', {
 
 app.get('/api/auth/tumblr/callback', passport.authenticate('tumblr', {
     failureRedirect: '/all-products'
-}), function(req, res) {res.redirect('/all-products');});
+}), users.tumblrSaveBlog); //users.tumblrSaveBlog 
+
+//function(req, res) {res.redirect('/all-products');
 
 // Finish with setting up the USERID param
 app.param('USERID', users.user);

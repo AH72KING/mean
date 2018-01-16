@@ -31,7 +31,7 @@
             //alert('hey, lastUserID has changed!');
         });
       
-
+        $rootScope.social = {};
         //methods
          function create() {
            /* var user = new Users({
@@ -223,6 +223,37 @@
             }); 
         }
         
+
+        $rootScope.setCurrentSoicalUser = function(id){
+            $rootScope.social.current = 'twitter';
+            $rootScope.social.userId = id;
+            $rootScope.getPosts('twitter');
+        }
+
+        $rootScope.getPosts = function(social){
+            $rootScope.social.current = social;
+            if(social == 'twitter'){
+                var url = $rootScope.baseUrl+'api/timeline';
+                var postData = {'userId':$rootScope.social.userId};
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.twitterPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+            } else if(social == 'tumblr'){
+                var url = $rootScope.baseUrl+'api/tumblrPosts';
+                var postData = {'userId':$rootScope.social.userId};
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.tumblrPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+            }
+        }
       }
 
 })();

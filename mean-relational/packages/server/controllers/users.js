@@ -103,7 +103,7 @@ exports.signin = function(req, res) {
 };
 
 
-exports.login = function(req, res) {
+exports.login = function(req, res) { 
     localStorage.removeItem('grp_cartId');
     var grp_cartId = null;
     var current_total = 0;
@@ -140,6 +140,24 @@ exports.login = function(req, res) {
 };
 
 
+exports.tumblrSaveBlog = function(req, res){
+  var usrId = req.user.USERID;
+  console.log(usrId);
+   tmblr_client.userInfo(function(err, data) {
+   if(data !== undefined && data !== '' && data !== null) {
+      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+        var blogName = data.user.blogs[0].name; 
+        req.session.tb_blog = blogName;
+        db.User.update({tumblr_blog:blogName},{where:{USERID:usrId}}).then(function(user){
+          console.log(user);
+        }).catch(function(err){
+          console.log(err);
+        });
+        res.redirect('/all-products');
+      }
+    } else res.redirect('/all-products');
+  });
+}
 
 
 /**
@@ -470,17 +488,36 @@ exports.updateuser = function(req, res){
 exports.timeline = function(req, res){
    
   if(req.user){
-    var usrId = req.user.twitterUserId;
-    console.log('username is '+usrId);
-      if(usrId != null){
-        var params = {count:4, id:usrId};
-        client.get('statuses/user_timeline', params, function(error, tweets, response) {
-            return res.jsonp(tweets);
-        });
-      }
-  }else{
-    return res.jsonp('');
-  }
+    var usrId = req.user.twitterUserId; // logged in user twitter id
+    var socialUsrId = req.body.userId;
+    var userId = req.user.USERID;
+    if (userId != socialUsrId) { // if the user is not logged in one, get twitter id
+      db.User.findAll({
+        where: {
+          USERID: socialUsrId
+        }
+      }).then(function(users){
+        if(users[0] && users[0].twitterUserId != null){
+          var params = {count:4, id:users[0].twitterUserId};
+          client.get('statuses/user_timeline', params, function(error, tweets, response) {
+              return res.jsonp(tweets);
+          });
+        }
+
+      }).catch(function(err){
+          return res.render('error', {
+              error: err,
+              status: 500
+          });
+      });
+    }
+    else if(usrId != null){
+      var params = {count:4, id:usrId};
+      client.get('statuses/user_timeline', params, function(error, tweets, response) {
+          return res.jsonp(tweets);
+      });
+    }
+  }else { return res.jsonp(''); }
 };
 // like tweet
 exports.likeTweet = function(req, res){
@@ -517,18 +554,39 @@ exports.postTweet = function(req, res){
 // tumblr apis
 
 exports.tumblrPosts = function(req, res){
+  var blogName = req.user.tumblr_blog; // logged in user tumblr blog
+  var logInUserId = req.user.USERID;
+  var reqUserId = req.body.userId;
+  if(reqUserId != logInUserId){
+    db.User.findAll({
+        where: {USERID: reqUserId}
+      }).then(function(users){
+        if(users[0] && users[0].tumblr_blog != null && users[0].tumblr_blog != ''){
+          tmblr_client.blogPosts(users[0].tumblr_blog, {limit:4}, function(err, resp) {
+            return res.jsonp(resp.posts); // use them for something
+          });  
+        }
+      }).catch(function(err){
+          return res.render('error', {
+              error: err,
+              status: 500
+          });
+      });
+  } else {
+    tmblr_client.blogPosts(blogName, {limit:4}, function(err, resp) {
+      return res.jsonp(resp.posts); // use them for something
+    });  
+  }  
 
-  tmblr_client.userInfo(function(err, data) {
+
+  /*tmblr_client.userInfo(function(err, data) {
 
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
-        var blogName = data.user.blogs[0].name;
-        tmblr_client.blogPosts(blogName, {limit:4}, function(err, resp) {
-          return res.jsonp(resp.posts); // use them for something
-        });    
+       
       }
     }
-  });
+  });*/
 };
 // Delete a given post
 exports.delTumblrPost = function(req, res){

@@ -2,8 +2,15 @@
 'use strict';
 var $anerveModule =  angular
       .module('Anerve');
+      $anerveModule.
+      filter('capitalize', function() {
+          return function(input) {
+            return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+          }
+        }
+      );
     $anerveModule.controller('HeaderController',HeaderController);
-
+    
     HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
 
     function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
@@ -249,7 +256,7 @@ var $anerveModule =  angular
           if(url == null){
             url = '/images/default-avatar.png'; 
           }else {
-            url = '/images/default-avatar.png'; 
+            //url = '/images/default-avatar.png'; 
            /* var link = $rootScope.UploadUrl+url;
             var http = new XMLHttpRequest();
             http.open('HEAD', link, false);
