@@ -31,11 +31,19 @@
             //alert('hey, lastUserID has changed!');
         });
       
-        $rootScope.social = {};
+        $rootScope.social = {
+            limit:4,
+            tumblr: [4,8,12,16,20],
+            twitter:[],
+            count:0
+        };
+        for(var i = 4; i<=200; i=i+4){
+            $rootScope.social.twitter.push(i);
+        }
         //methods
          function create() {
            /* var user = new Users({
-                title: vm.title,
+                title: vm.title,$rootScope.social.twitter
                 content: vm.content
             });
 
@@ -223,7 +231,7 @@
             }); 
         }
 
-    // Ng - file - uploader    
+    // Ng - file - uploader
     var uploaderProfile = $scope.uploaderProfile = new FileUploader({
         url: '/api/updateuserprofileimage'
     });
@@ -344,10 +352,12 @@
         }
 
         $rootScope.getPosts = function(social){
+        $rootScope.getPosts = function(social, limit=4){
             $rootScope.social.current = social;
             if(social == 'twitter'){
                 var url = $rootScope.baseUrl+'api/timeline';
-                var postData = {'userId':$rootScope.social.userId};
+                var postData = {'userId':$rootScope.social.userId, limit:limit};
+                console.log(postData);
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -357,7 +367,8 @@
                 });
             } else if(social == 'tumblr'){
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
-                var postData = {'userId':$rootScope.social.userId};
+                var postData = {'userId':$rootScope.social.userId, limit:limit};
+                console.log(postData);
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -368,4 +379,20 @@
             }
         }
     }
+        $rootScope.getAllPosts = function(id){
+            $rootScope.social.current = 'twitter';
+            $rootScope.social.userId = id;
+            if($rootScope.social.count == 0){
+                $rootScope.getPosts('twitter');
+                $rootScope.getPosts('tumblr');
+                $rootScope.social.count += 1;
+            }
+        }
+        $rootScope.limitChange = function(social){
+            var limit = $rootScope.social.limit;
+            $rootScope.getPosts(social, limit);
+        }
+
+      }
+
 })();

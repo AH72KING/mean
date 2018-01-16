@@ -60,7 +60,11 @@
         </div>
     </li>
     <li class="product_item post" ng-repeat="post in $root.twitterPosts track by $index">
-        <div class="tweet head"><i ng-click="showPostModal('twitter')" class="fa fa-plus"></i>  Tweet</div>
+        <div class="tweet head">
+            <i ng-click="showPostModal('twitter')" class="fa fa-plus"></i>
+            <span class="small-avatar"><img src="{{ post.user.profile_image_url}}" /> </span>
+            {{post.user.screen_name}}
+        </div>
         <div class="body">{{ post.text }}</div>
         <div class="options">
             <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>

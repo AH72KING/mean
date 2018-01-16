@@ -4505,8 +4505,8 @@ width: 100%;
 .user-image.online::after{
     content: "";
 }
-.small-avatar img {    height: 30px;
-    width: 30px;
+.small-avatar img {    height: 30px!important;
+    width: 30px!important;
     border-radius: 100px;}
 
 
