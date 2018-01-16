@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" id="following" ng-click="setCurrentSoicalUser(usctr.user.USERID)" class="btn btn-default" href="#social_posts" data-toggle="tab"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                <button type="button" id="following" ng-click="getAllPosts(usctr.user.USERID)" class="btn btn-default" href="#social_posts" data-toggle="tab"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
                     <div class="hidden-xs">Social</div>
                 </button>
             </div>
@@ -121,10 +121,20 @@
             </div>
             <div class="tab-pane fade in soical-posts" id="social_posts">
                 <ul class="nav nav-pills">
-                  <li ng-class="{'active':social.current == 'twitter'}"><a data-toggle="pill" ng-click="getPosts('twitter')">Twitter</a></li>
-                  <li ng-class="{'active':social.current == 'tumblr'}"><a data-toggle="pill" ng-click="getPosts('tumblr')">Tumblr</a></li>
-                  <li ng-class="{'active':social.current == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="getPosts('facebook')">Facebook</a></li>
-                  <li ng-class="{'active':social.current == 'google'}"><a data-toggle="pill" ng-click="getPosts('google')">Google</a></li>
+                  <li ng-class="{'active':social.current == 'twitter'}"><a data-toggle="pill" ng-click="social.current = 'twitter'">Twitter</a></li>
+                  <li ng-class="{'active':social.current == 'tumblr'}"><a data-toggle="pill" ng-click="social.current = 'tumblr'">Tumblr</a></li>
+                  <li ng-class="{'active':social.current == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="social.current = 'facebook'">Facebook</a></li>
+                  <li ng-class="{'active':social.current == 'google'}"><a data-toggle="pill" ng-click="social.current = 'google'">Google</a></li>
+
+                  <div class="pull-right">
+                      <div class=""" >
+                        <lable>Limit: </lable>
+                        <select ng-change = "limitChange('twitter')" class="form-control" ng-model="social.limit">
+                            <option ng-repeat="val in social[social.current]">{{val}}</option>
+                        </select>
+                      </div>
+
+                  </div>
                 </ul>
 
                 <div class="tab-content">
@@ -134,7 +144,9 @@
                   <div id="tw" ng-class="{'tab-pane fade in active':social.current == 'twitter', 'tab-pane fade':social.current != 'twitter'}">
                     <div class="post-wrap col-xs-12">
                         <li class="prof-social post col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="post in $root.twitterPosts track by $index">
-                            <div class="tweet head"><i ng-click="showPostModal('twitter')" class="fa fa-plus"></i>  Tweet</div>
+                            <div class="tweet head">
+                            <span class="small-avatar"><img src="{{ post.user.profile_image_url}}" /> </span>
+                             {{post.user.screen_name}}</div>
                             <div class="body">{{ post.text }}</div>
                             <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
                                 <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
@@ -168,7 +180,7 @@
                                     <strong>Link: </strong> <span>{{ post.url }}</span>
                                 </div>
                             </div>
-                            <div class="options">
+                            <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
                                 <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
                             </div>
                         </li>
