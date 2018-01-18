@@ -490,7 +490,7 @@ exports.updateusercoverimage = function(req, res) {
             console.log('/assets/'+req.body.img_loc);
             console.log(err);
           } else{
-            
+
           }
      });  
     }
@@ -808,104 +808,6 @@ exports.fbposts = function(req,res){
   }
 };
 
-exports.updateCover = function(req, res){
-  /*var filename    =  Date.now() + '-' +req.body.name;
-  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
-
-  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
-  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
-
-  var imageWidth  = Number(req.body.imageWidth);
-  var imageHeight = Number(req.body.imageHeight);
-
-  var width   = Number(req.body.width);
-  var height  = Number(req.body.height);
-
-  var left  = req.body.left;
-  var top   = req.body.top;
-
-  var urlToWrite = "/public/assets/anerve/usr_images/"+filename;
-  var urlToSend  = "/assets/anerve/usr_images/"+filename;
-
-
-  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
-  imgBuffer =  Buffer.from(imgBuffer, 'base64');
-  sharp(imgBuffer)
-  .resize(imageOriginalWidth,imageOriginalHeight)
-  .crop(sharp.strategy.entropy)
-  .toFile(urlToWrite)
-  .then(function(response){
-     var newImage = {user_img : filename};
-     req.user.updateAttributes(newImage).then(function(user){
-
-              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
-              return res.jsonp(data2);
-            }).catch(function(err){
-              console.log(err);
-              var data2 = {"msg":"Error Occurred","status":"error"};
-              return res.jsonp(data2);
-      });
-  })
-  .catch(function(err){
-     console.log(err);
-    var data2 = {"msg":"Error Occurred Test","status":"error"};
-    return res.jsonp(data2);
-   
-  });*/
-};
-exports.updateProfileImage = function(req, res){
-  /*var filename    =  Date.now() + '-' +req.body.name;
-  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
-
-  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
-  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
-
-  var imageWidth  = Number(req.body.imageWidth);
-  var imageHeight = Number(req.body.imageHeight);
-
-  var width   = Number(req.body.width);
-  var height  = Number(req.body.height);
-
-  var left  = req.body.left;
-  var top   = req.body.top;
-
-  var urlToWrite  =  "/public/assets/anerve/usr_images/"+filename;
-  var urlToSend   =  "/assets/anerve/usr_images/"+filename;
-  var urlToSave   = "anerve/usr_images/"+filename;
-
-  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
-  imgBuffer =  Buffer.from(imgBuffer, 'base64');
-
-  smartcrop.crop(imgBuffer, {width: width, height: height}).then(function(result) {
-      var crop = result.topCrop;
-      sharp(imgBuffer)
-        .extract({width: crop.width, height: crop.height, left: crop.x, top: crop.y})
-        .resize(width, height)
-        .toFile(urlToWrite).then(function(response){
-           var newImage = {img_loc : urlToSave};
-           req.user.updateAttributes(newImage).then(function(user){
-
-                    var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
-                    return res.jsonp(data2);
-                  }).catch(function(err){
-                    console.log(err);
-                    var data2 = {"msg":"Error Occurred","status":"error"};
-                    return res.jsonp(data2);
-            });
-        }).catch(function(err){
-           console.log(err);
-          var data2 = {"msg":"Error Occurred Test","status":"error"};
-          return res.jsonp(data2);
-         
-        });
-    });
-
-
-*/
-};
-
-
-
 /*exports.googlePosts = function(req, res){
   plus.people.get({
   userId: 'me',
@@ -914,8 +816,6 @@ exports.updateProfileImage = function(req, res){
     return res.jsonp(response);
   });
 }*/
-
-
 
 
 // validate current user key

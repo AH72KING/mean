@@ -133,8 +133,6 @@ app.route('/api/postTumblrLink').post(users.postTumblrLink);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
 app.route('/api/fbposts').post(users.fbposts);
-app.route('/api/updateCover').post(users.updateCover);
-app.route('/api/updateProfileImage').post(users.updateProfileImage);
 
 //app.route('/api/gplus').post(users.googlePosts);
 //
