@@ -41,19 +41,7 @@
         var userFirends = [];
         $rootScope.userFirends = userFirends;
 
-        $rootScope.twfile = '';
-        $rootScope.postModal = {
-          modalClass : 'hide-al',
-          currentSocial : 'twitter',
-          postype : 'Text'
-        };
-
-        //social post types
-        $rootScope.postTypes = {
-          tumblr : ['Text', 'Photo', 'Quote', 'Link', 'Video', 'Audio'],
-          twitter: ['Text']
-        };
-
+        
 
         /**
          * Build handler to open/close a SideNav; when animation finishes
@@ -1121,29 +1109,6 @@
                         console.log('Error: ', errorResponse);
                 });
               };
-              // delete tweet
-              $rootScope.deleteTweet = function(index){
-                var tweetId = $rootScope.twitterPosts[index]['id_str'];
-                var postData = {'id':tweetId};
-                var url = $rootScope.baseUrl+'api/delTweet';
-                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                      if(response.status == 200){
-                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                          var code = response.data.errors[0].code;
-                          console.log(code);
-                          //if(code == 144) 
-                            notify(response.data.errors[0].message);
-                        } else {
-                          notify('Tweet has been Deleted Successfully','success');
-                          $rootScope.twitterPosts.splice(index, 1);
-                        }
-                      }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                });
-              };
 
               // post tweet
 
@@ -1189,25 +1154,6 @@
                 }); 
               }
               tumblrPosts();
-
-              // delete tumblr post
-              $rootScope.delTumblrPost = function(index){
-                var blogName = $rootScope.tumblrPosts[index].blog_name;
-                var postId = $rootScope.tumblrPosts[index].id;
-                var postData = {postId:postId, blogName:blogName};
-                var url = $rootScope.baseUrl+'api/delTumblrPost';
-                var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
-                console.log(postData);
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        $rootScope.tumblrPosts.splice(index, 1);
-                        notify('Post Deleted','success');
-                        console.log(response);
-
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                }); 
-              };
 
               // post tumblr
               $rootScope.postTumblr = function(){
@@ -1308,12 +1254,6 @@
         }
         fbposts();
 
-
-        $rootScope.showPostModal = function(type){
-          $rootScope.postModal.modalClass = "show-al";
-          $rootScope.postModal.currentSocial = type;
-          $('.html5imageupload').html5imageupload();
-        }
 
         
         /*// get googleplus post

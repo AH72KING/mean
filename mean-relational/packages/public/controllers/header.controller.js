@@ -112,6 +112,20 @@ var $anerveModule =  angular
             }
         ];
 
+        $rootScope.twfile = '';
+        $rootScope.postModal = {
+          modalClass : 'hide-al',
+          currentSocial : 'twitter',
+          postype : 'Text',
+          action : ''
+        };
+
+        //social post types
+        $rootScope.postTypes = {
+          tumblr : ['Text', 'Photo', 'Quote', 'Link', 'Video', 'Audio'],
+          twitter: ['Text']
+        };
+
 
         $rootScope.showMenuChilds = function(item){
             item.active = !item.active;
@@ -438,6 +452,74 @@ var $anerveModule =  angular
         };
 
 
+
+        $rootScope.showPostModal = function(type, action = ""){
+          console.log('me here with type '+type);
+          $rootScope.postModal.modalClass = "show-al";
+          $rootScope.postModal.currentSocial = type;
+          $rootScope.postModal.action = action;
+          $('.html5imageupload').html5imageupload();
+        }
+
+
+        // delete tweet
+        $rootScope.deleteTweet = function(index){
+          var tweetId = $rootScope.twitterPosts[index]['id_str'];
+          var postData = {'id':tweetId};
+          var url = $rootScope.baseUrl+'api/delTweet';
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                if(response.status == 200){
+                  if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                    var code = response.data.errors[0].code;
+                    console.log(code);
+                    //if(code == 144) 
+                      notify(response.data.errors[0].message);
+                  } else {
+                    notify('Tweet has been Deleted Successfully','success');
+                    $rootScope.twitterPosts.splice(index, 1);
+                  }
+                }
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse);
+          });
+        };
+
+        // delete tumblr post
+        $rootScope.delTumblrPost = function(index){
+          var blogName = $rootScope.tumblrPosts[index].blog_name;
+          var postId = $rootScope.tumblrPosts[index].id;
+          var postData = {postId:postId, blogName:blogName};
+          var url = $rootScope.baseUrl+'api/delTumblrPost';
+          var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
+          console.log(postData);
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  $rootScope.tumblrPosts.splice(index, 1);
+                  notify('Post Deleted','success');
+                  console.log(response);
+
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse);
+          }); 
+        };
+
+
+        // watch post modal action 
+        $rootScope.$watch('postModal.action', function(newVal, oldVal){
+          if(newVal == 'edit'){
+            // check soical type
+            var currentSocial = $rootScope.postModal.currentSocial;
+            switch(currentSocial){
+              case 'twitter':
+              break;
+              case 'tumblr':
+              break;
+              
+            }
+          }
+        })
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);

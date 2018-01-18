@@ -129,11 +129,10 @@
                   <div class="pull-right">
                       <div class=""" >
                         <lable>Limit: </lable>
-                        <select ng-change = "limitChange('twitter')" class="form-control" ng-model="social.limit">
+                        <select ng-change = "limitChange(social.current)" class="form-control" ng-model="social.limit">
                             <option ng-repeat="val in social[social.current]">{{val}}</option>
                         </select>
                       </div>
-
                   </div>
                 </ul>
 
@@ -146,7 +145,12 @@
                         <li class="prof-social post col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="post in $root.twitterPosts track by $index">
                             <div class="tweet head">
                             <span class="small-avatar"><img src="{{ post.user.profile_image_url}}" /> </span>
-                             {{post.user.screen_name}}</div>
+                             {{post.user.screen_name}}
+                            <span class="pull-right" ng-if="post.can_reblog == true">
+                            <i class="fa fa-pencil" ng-click="showPostModal(social.current)"></i>
+                            <i ng-click="deleteTweet($index)" class="fa fa-trash"></i>
+                            </span>
+                            </div>
                             <div class="body">{{ post.text }}</div>
                             <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
                                 <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
@@ -160,7 +164,12 @@
                   <div id="tb" ng-class="{'tab-pane fade in active':social.current == 'tumblr', 'tab-pane fade':social.current != 'tumblr'}">
                     <div class="post-wrap col-xs-12">
                         <li class="prof-social post col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="post in $root.tumblrPosts track by $index">
-                            <div class="tumblr head">Type: {{ post.type | capitalize}}</div>
+                            <div class="tumblr head">
+                            <span class="pull-right">
+                            <i class="fa fa-pencil" ng-if="post.can_reblog == true" ng-click="$root.showPostModal(social.current, 'edit')"></i>
+                            <i ng-click="delTumblrPost($index)" class="fa fa-trash"></i>
+                            </span>
+                            Type: {{ post.type | capitalize}} </div>
                             <div class="body col-xs-12">
                                 <span ng-if="post.type == 'text'">{{ post.body | htmlToPlaintext }}</span>
                                 <img class="img-responsive main" ng-if="post.type == 'photo'" src="{{ post.photos[0].original_size.url }}" />
@@ -217,6 +226,10 @@
         </div>
       </div>
     </div>
+
+<!-- Social Post Modal -->
+
+<div ng-include="'public/views/posts-modal.html'"></div>
     <script>
 
         $(document).ready(function() {

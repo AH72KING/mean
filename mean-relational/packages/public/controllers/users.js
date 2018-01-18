@@ -272,6 +272,11 @@
             $rootScope.getPosts(social, limit);
         }
 
+        // edit posts 
+        $rootScope.editPost = function(){
+            
+        }
+
       }
 
 })();

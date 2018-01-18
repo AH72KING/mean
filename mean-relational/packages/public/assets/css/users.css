@@ -52,3 +52,14 @@
   bottom: 0;width: 100%;
 }
 .users-list li:hover .user-detail{ display: block }
+
+.modal.show-al{display: block!important;}
+.modal.hide-al{display: none!important;}
+.social-color{border: 1px dashed;}
+.twitter-color{background-color:#1da1f2;}
+.facebook-color{background-color:#3b5998;}
+.google-color{background-color:#ea4335;}
+.tumblr-color{background-color:#35465c;}
+.social-icon {text-align:center;width: 30px;color: white;padding: 4px 8px;border-radius: 100%;right: 6px;top: 10px;position: relative;}
+.prof-social{height: 220px;box-shadow: 0px 0px 1px 0px grey;list-style-type: none;padding: 5px;}
+.prof-social img.main{max-height: 160px}
