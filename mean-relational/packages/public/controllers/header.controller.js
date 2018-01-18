@@ -117,7 +117,8 @@ var $anerveModule =  angular
           modalClass : 'hide-al',
           currentSocial : 'twitter',
           postype : 'Text',
-          action : ''
+          index : '',
+          postId : ''
         };
 
         //social post types
@@ -126,6 +127,18 @@ var $anerveModule =  angular
           twitter: ['Text']
         };
 
+        $rootScope.data = {
+          'tb_text':'',
+          'tb_src' :'',
+          'tb_quote' :'',
+          'tb_source' :'',
+          'tb_vid_src' :'',
+          'tb_link_title' :'',
+          'tb_link' :'',
+          'tb_link_desc' :'',
+          'tb_link_thumb' :'',
+          'tb_link_auth' :'',
+        };
 
         $rootScope.showMenuChilds = function(item){
             item.active = !item.active;
@@ -453,11 +466,11 @@ var $anerveModule =  angular
 
 
 
-        $rootScope.showPostModal = function(type, action = ""){
+        $rootScope.showPostModal = function(type, index = ""){
           console.log('me here with type '+type);
           $rootScope.postModal.modalClass = "show-al";
           $rootScope.postModal.currentSocial = type;
-          $rootScope.postModal.action = action;
+          $rootScope.postModal.index = index;
           $('.html5imageupload').html5imageupload();
         }
 
@@ -507,19 +520,141 @@ var $anerveModule =  angular
 
 
         // watch post modal action 
-        $rootScope.$watch('postModal.action', function(newVal, oldVal){
-          if(newVal == 'edit'){
+        $rootScope.$watch('postModal.index', function(newVal, oldVal){
+          if(newVal != ''){
             // check soical type
+            var post = '';
             var currentSocial = $rootScope.postModal.currentSocial;
             switch(currentSocial){
+              case 'tumblr':
+                post = $rootScope.tumblrPosts[newVal];
+                $rootScope.postModal.postype = post.type.charAt(0).toUpperCase() + post.type.substr(1).toLowerCase();             
+                $rootScope.postModal.postId = $rootScope.tumblrPosts[newVal].id;  
+                switch(post.type){
+                  case 'text':
+                    $rootScope.data.tb_text = angular.element(post.body).text();
+                    break;
+                  case 'photo':
+                    $rootScope.data.tb_src = post.photos[0].original_size.url;
+                    break;
+                  case 'video':
+                    $rootScope.data.tb_vid_src = post.video_url;
+                    break;
+                  case 'quote':
+                    $rootScope.data.tb_quote = post.text;
+                    $rootScope.data.tb_source = post.source;
+                    break;
+                  case 'link':
+                    $rootScope.data.tb_link_title = post.title;
+                    $rootScope.data.tb_link = post.url;
+                    $rootScope.data.tb_link_desc = angular.element(post.description).text();
+                    $rootScope.data.tb_link_thumb = post.link_image;
+                    $rootScope.data.tb_link_auth = post.link_author;
+                    break;
+                }
+                break;
               case 'twitter':
               break;
-              case 'tumblr':
-              break;
-              
+
             }
           }
         })
+
+        // post tumblr
+        $rootScope.postTumblr = function(){
+          var urlMethod, postData;
+          if($rootScope.postModal.postype == 'Text' && $rootScope.data.tb_text != null){
+            postData = {'msg':$rootScope.data.tb_text};
+            urlMethod = "api/postTumblr";
+          }
+          else if($rootScope.postModal.postype == 'Photo') {
+            if($rootScope.data.tb_src != null){
+              postData = {'src':$rootScope.data.tb_src};
+            }
+            urlMethod = "api/postTumblrPhoto";
+            
+          }
+          else if($rootScope.postModal.postype == 'Video') {
+            if($rootScope.data.tb_vid_src != null){
+              postData = {'vid_src':$rootScope.data.tb_vid_src};
+            }
+            urlMethod = "api/postTumblrVideo";
+            
+          }
+          else if($rootScope.postModal.postype == 'Quote') {
+            if($rootScope.data.tb_quote != null){
+              postData = {'quote':$rootScope.data.tb_quote};
+              if($rootScope.data.tb_source != null){
+                postData.source = $rootScope.data.tb_source;
+              }
+            }
+            urlMethod = "api/postTumblrQuote";
+            
+          }
+          else if($rootScope.postModal.postype == 'Link') {
+            if($rootScope.data.tb_link != null){
+              postData = {'url':$rootScope.data.tb_link};
+              if($rootScope.data.tb_link_title != null)
+                postData.title = $rootScope.data.tb_link_title;
+
+              if($rootScope.data.tb_link_desc != null)
+                postData.description = $rootScope.data.tb_link_desc;
+
+              if($rootScope.data.tb_link_thumb != null)
+                postData.thumbnail = $rootScope.data.tb_link_thumb;
+
+              if($rootScope.data.tb_link_auth != null)
+                postData.author = $rootScope.data.tb_link_auth;
+              
+            }
+            urlMethod = "api/postTumblrLink";
+            
+          }
+          
+          postData.id = $rootScope.postModal.postId;
+
+          
+          var url = $rootScope.baseUrl+urlMethod;
+          var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
+          
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                  notify('Post Submitted Successfully','success');
+                  $rootScope.postModal.modalClass = "hide-al";
+                  if($rootScope.postModal.index != ''){
+                    editPostData();
+                    $rootScope.postModal.index = '';
+                  }
+
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse);
+          });
+        }
+
+        function editPostData(){
+          switch($rootScope.postModal.postype){
+            case 'text':
+              $rootScope.tumblrPosts[$rootScope.postModal.index].body = $rootScope.data.tb_text;
+              break;
+            case 'photo':
+              $rootScope.tumblrPosts[$rootScope.postModal.index].photos[0].original_size.url = $rootScope.data.tb_src;
+              break;
+            case 'video':
+              $rootScope.tumblrPosts[$rootScope.postModal.index].video_url = $rootScope.data.tb_vid_src;
+              break;
+            case 'quote':
+              $rootScope.tumblrPosts[$rootScope.postModal.index].text = $rootScope.data.tb_quote;
+              $rootScope.tumblrPosts[$rootScope.postModal.index].source = $rootScope.data.tb_source;
+              break;
+            case 'link':
+              $rootScope.tumblrPosts[$rootScope.postModal.index].title = $rootScope.data.tb_link_title;
+              $rootScope.tumblrPosts[$rootScope.postModal.index].url = $rootScope.data.tb_link;
+              $rootScope.tumblrPosts[$rootScope.postModal.index].description = $rootScope.data.tb_link_desc;
+              $rootScope.tumblrPosts[$rootScope.postModal.index].link_image = $rootScope.data.tb_link_thumb;
+              $rootScope.tumblrPosts[$rootScope.postModal.index].link_author = $rootScope.data.tb_link_auth;
+              break;
+          }
+        }
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);

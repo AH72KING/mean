@@ -1155,68 +1155,6 @@
               }
               tumblrPosts();
 
-              // post tumblr
-              $rootScope.postTumblr = function(){
-                var urlMethod, postData;
-                if($rootScope.postModal.postype == 'Text' && $rootScope.data.tb_text != null){
-                  postData = {'msg':$rootScope.data.tb_text};
-                  urlMethod = "api/postTumblr";
-                }
-                else if($rootScope.postModal.postype == 'Photo') {
-                  if($rootScope.data.tb_src != null){
-                    postData = {'src':$rootScope.data.tb_src};
-                  }
-                  urlMethod = "api/postTumblrPhoto";
-                  
-                }
-                else if($rootScope.postModal.postype == 'Video') {
-                  if($rootScope.data.tb_vid_src != null){
-                    postData = {'vid_src':$rootScope.data.tb_vid_src};
-                  }
-                  urlMethod = "api/postTumblrVideo";
-                  
-                }
-                else if($rootScope.postModal.postype == 'Quote') {
-                  if($rootScope.data.tb_quote != null){
-                    postData = {'quote':$rootScope.data.tb_quote};
-                    if($rootScope.data.tb_source != null){
-                      postData.source = $rootScope.data.tb_source;
-                    }
-                  }
-                  urlMethod = "api/postTumblrQuote";
-                  
-                }
-                else if($rootScope.postModal.postype == 'Link') {
-                  if($rootScope.data.tb_link != null){
-                    postData = {'url':$rootScope.data.tb_link};
-                    if($rootScope.data.tb_link_title != null)
-                      postData.title = $rootScope.data.tb_link_title;
-
-                    if($rootScope.data.tb_link_desc != null)
-                      postData.description = $rootScope.data.tb_link_desc;
-
-                    if($rootScope.data.tb_link_thumb != null)
-                      postData.thumbnail = $rootScope.data.tb_link_thumb;
-
-                    if($rootScope.data.tb_link_auth != null)
-                      postData.author = $rootScope.data.tb_link_auth;
-                    
-                  }
-                  urlMethod = "api/postTumblrLink";
-                  
-                }
-                var url = $rootScope.baseUrl+urlMethod;
-                var configObj = { method: 'POST',url: url, data:postData,  headers: $rootScope.headers};
-                
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        notify('Post Submitted Successfully','success');
-                        $rootScope.postModal.modalClass = "hide-al";
-
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                });
-              }
             }
         }
         // watch
