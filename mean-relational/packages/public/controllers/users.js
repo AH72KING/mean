@@ -291,10 +291,7 @@
      *   https://github.com/nervgh/angular-file-upload/issues/208
      */
     uploaderProfile.onBeforeUploadItem = function(item) {
-      var blob = dataURItoBlob(item.croppedImage);
-      item._file = blob;
-    };
-    uploaderCover.onBeforeUploadItem = function(item) {
+      //vm.user.img_loc = item.croppedImage; thats a bad idea because there is path also in source
       var blob = dataURItoBlob(item.croppedImage);
       item._file = blob;
     };
@@ -334,16 +331,39 @@
     uploaderProfile.onErrorItem = function(fileItem, response, status, headers) {
         console.info('onErrorItem', fileItem, response, status, headers);
     };
+    */
+
     uploaderProfile.onCancelItem = function(fileItem, response, status, headers) {
         console.info('onCancelItem', fileItem, response, status, headers);
+        $rootScope.closeModals();
     };
     uploaderProfile.onCompleteItem = function(fileItem, response, status, headers) {
         console.info('onCompleteItem', fileItem, response, status, headers);
+        vm.user.img_loc = response.img_loc;
+        console.info('onCompleteItem', window.user);
     };
     uploaderProfile.onCompleteAll = function() {
         console.info('onCompleteAll');
-    };*/
+        $rootScope.closeModals();
+    };
 
+    uploaderCover.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+        $rootScope.closeModals();
+    };
+    uploaderCover.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+        vm.user.user_img = response.user_img;
+        console.info('onCompleteItem', window.user);
+    };
+    uploaderCover.onCompleteAll = function() {
+        console.info('onCompleteAll');
+        $rootScope.closeModals();
+    };
+    
+    $rootScope.closeModals =function(){
+        closeModal();
+    };
 
         $rootScope.setCurrentSoicalUser = function(id){
             $rootScope.social.current = 'twitter';

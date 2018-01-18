@@ -136,7 +136,7 @@
                   <div class="pull-right">
                       <div class=""" >
                         <lable>Limit: </lable>
-                        <select ng-change = "limitChange('twitter')" class="form-control" ng-model="social.limit">
+                        <select ng-change = "limitChange(social.current)" class="form-control" ng-model="social.limit">
                             <option ng-repeat="val in social[social.current]">{{val}}</option>
                         </select>
                       </div>
@@ -217,8 +217,7 @@
                                     <div class="cropArea crop-profile-area">
                                         <img-crop image="item.image" result-image="item.croppedImage"></img-crop>
                                     </div>
-                                    <div>Cropped Image:</div>
-                                    <div>
+                                    <div class="crop-profile-preview">
                                         <img ng-src="{{item.croppedImage}}" />
                                     </div>
                                 </div>
@@ -241,6 +240,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-close-btn">
+                <a href="#" ng-click="closeModals()">
+                    <i class="fa fa-times"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -303,4 +307,8 @@
                 $('#upload_cover_image_modal').show();
             })
         });
+            function closeModal(){
+                $('#upload_profile_image_modal').hide();
+                $('#upload_cover_image_modal').hide();
+            }
 </script>

@@ -459,13 +459,14 @@ exports.updateuserprofileimage = function(req, res) {
             console.log('/assets/'+req.body.img_loc);
             console.log(err);
           } else{
+              res.jsonp(newuser);
           }
      });
     }
 
     user.updateAttributes(newuser).then(function(a){
         // return res.jsonp(a);
-        res.redirect('/users/'+req.user.USERID+'/edit');
+        res.jsonp(newuser);
     }).catch(function(err){
         return res.render('error', {
             error: err,
@@ -489,13 +490,14 @@ exports.updateusercoverimage = function(req, res) {
             console.log('/assets/'+req.body.img_loc);
             console.log(err);
           } else{
+            
           }
      });  
     }
 
     user.updateAttributes(newuser).then(function(a){
         // return res.jsonp(a);
-        res.redirect('/users/'+req.user.USERID+'/edit');
+        res.jsonp(newuser);
     }).catch(function(err){
         return res.render('error', {
             error: err,
@@ -551,44 +553,45 @@ exports.timeline = function(req, res){
     var userId = req.user.USERID;
     var socialUsrId = userId;
     var limit
-    if (req.body.userId != undefined && req.body.userId != '')
+    if (req.body.userId != undefined && req.body.userId != ''){
       socialUsrId = req.body.userId;
-    if(req.body.limit != undefined && req.body.limit != '')
+    }
+    if(req.body.limit != undefined && req.body.limit != ''){
       limit = req.body.limit;
-    else limit = 4;
-    if (userId != socialUsrId) { // if the user is not logged in one, get twitter id
-      db.User.findAll({
-        where: {
-          USERID: socialUsrId
-        }
-      }).then(function(users){
-        if(users[0] && users[0].twitterUserId != null){
-          var params = {count:4, id:users[0].twitterUserId};
-          client.get('statuses/home_timeline', params, function(error, tweets, response) {
-          var params = {count:limit, user_id:users[0].twitterUserId};
-          console.log(params);
-          client.get('statuses/user_timeline', params, function(error, tweets, response) {
-              return res.jsonp(tweets);
-          });
-        }
+    }else {
+      limit = 4;
+    }
 
-      }).catch(function(err){
-          return res.render('error', {
-              error: err,
-              status: 500
+      if (userId != socialUsrId) { // if the user is not logged in one, get twitter id
+          db.User.findAll({
+            where: {
+              USERID: socialUsrId
+            }
+          }).then(function(users){
+            if(users[0] && users[0].twitterUserId != null){
+              var params = {count:limit, user_id:users[0].twitterUserId};
+              console.log(params);
+              client.get('statuses/user_timeline', params, function(error, tweets, response) {
+                  return res.jsonp(tweets);
+              });
+            }
+
+          }).catch(function(err){
+              return res.render('error', {
+                  error: err,
+                  status: 500
+              });
           });
-      });
-    }
-    else if(usrId != null){
-      var params = {count:4, id:usrId};
-      client.get('statuses/home_timeline', params, function(error, tweets, response) {
-    else if(tw_usrId != null){
-      var params = {count:limit, user_id:tw_usrId};
-      client.get('statuses/home_timeline', params, function(error, tweets, response) {
-          return res.jsonp(tweets);
-      });
-    }
-  }else { return res.jsonp(''); }
+      }else if(tw_usrId != null){
+        var params = {count:limit, user_id:tw_usrId};
+        client.get('statuses/home_timeline', params, function(error, tweets, response) {
+            return res.jsonp(tweets);
+        });
+      }
+
+  }else{ 
+    return res.jsonp(''); 
+  }
 };
 // like tweet
 exports.likeTweet = function(req, res){
