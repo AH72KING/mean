@@ -5,9 +5,9 @@
       .controller('usersController',usersController);
       
       //,'$log'
-      usersController.$inject = ['$stateParams', '$location', 'Global', 'users', '$state', '$scope', '$timeout', '$http', 'Session', '$rootScope'];
+      usersController.$inject = ['$stateParams', '$location', 'Global', 'users', '$state', '$scope', '$timeout', '$http', 'Session', '$rootScope', 'FileUploader' ];
 
-  function usersController($stateParams, $location, Global, users, $state, $scope, $timeout, $http, Session, $rootScope){
+  function usersController($stateParams, $location, Global, users, $state, $scope, $timeout, $http, Session, $rootScope, FileUploader){
         var vm = this;
      
         $rootScope.timeInMs = 0;
@@ -230,34 +230,175 @@
                     console.log('Error: ', errorResponse.status);
             }); 
         }
-        
 
+    // Ng - file - uploader
+    var uploaderProfile = $scope.uploaderProfile = new FileUploader({
+        url: '/api/updateuserprofileimage'
+    });
+    var uploaderCover = $scope.uploaderCover = new FileUploader({
+        url: '/api/updateusercoverimage'
+    });
+
+    // FILTERS
+
+    uploaderProfile.filters.push({
+        name: 'imageFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+    uploaderCover.filters.push({
+        name: 'imageFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+    // CALLBACKS
+
+    /**
+     * Show preview with cropping
+     */
+    uploaderProfile.onAfterAddingFile = function(item) {
+      // $scope.croppedImage = '';
+      item.croppedImage = '';
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        $scope.$apply(function(){
+          item.image = event.target.result;
+        });
+      };
+      reader.readAsDataURL(item._file);
+    };
+    uploaderCover.onAfterAddingFile = function(item) {
+      // $scope.croppedImage = '';
+      item.croppedImage = '';
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        $scope.$apply(function(){
+          item.image = event.target.result;
+        });
+      };
+      reader.readAsDataURL(item._file);
+    };
+
+    /**
+     * Upload Blob (cropped image) instead of file.
+     * @see
+     *   https://developer.mozilla.org/en-US/docs/Web/API/FormData
+     *   https://github.com/nervgh/angular-file-upload/issues/208
+     */
+    uploaderProfile.onBeforeUploadItem = function(item) {
+      //vm.user.img_loc = item.croppedImage; thats a bad idea because there is path also in source
+      var blob = dataURItoBlob(item.croppedImage);
+      item._file = blob;
+    };
+
+    /**
+     * Converts data uri to Blob. Necessary for uploading.
+     * @see
+     *   http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
+     * @param  {String} dataURI
+     * @return {Blob}
+     */
+    var dataURItoBlob = function(dataURI) {
+      var binary = atob(dataURI.split(',')[1]);
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+      var array = [];
+      for(var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], {type: mimeString});
+    };
+
+    /*uploaderProfile.onWhenAddingFileFailed = function(item, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploaderProfile.onAfterAddingAll = function(addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploaderProfile.onProgressItem = function(fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploaderProfile.onProgressAll = function(progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploaderProfile.onSuccessItem = function(fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploaderProfile.onErrorItem = function(fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    */
+
+    uploaderProfile.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+        $rootScope.closeModals();
+    };
+    uploaderProfile.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+        vm.user.img_loc = response.img_loc;
+        console.info('onCompleteItem', window.user);
+    };
+    uploaderProfile.onCompleteAll = function() {
+        console.info('onCompleteAll');
+        $rootScope.closeModals();
+    };
+
+    uploaderCover.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+        $rootScope.closeModals();
+    };
+    uploaderCover.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+        vm.user.user_img = response.user_img;
+        console.info('onCompleteItem', window.user);
+    };
+    uploaderCover.onCompleteAll = function() {
+        console.info('onCompleteAll');
+        $rootScope.closeModals();
+    };
+    
+    $rootScope.closeModals =function(){
+        closeModal();
+    };
+
+        $rootScope.setCurrentSoicalUser = function(id){
+            $rootScope.social.current = 'twitter';
+            $rootScope.social.userId = id;
+            $rootScope.getPosts('twitter');
+        }
+
+        $rootScope.getPosts = function(social){
         $rootScope.getPosts = function(social, limit=4){
             $rootScope.social.current = social;
             if(social == 'twitter'){
                 var url = $rootScope.baseUrl+'api/timeline';
                 var postData = {'userId':$rootScope.social.userId, limit:limit};
-                console.log(postData); 
+                console.log(postData);
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         $rootScope.twitterPosts = response.data;
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
-                }); 
+                });
             } else if(social == 'tumblr'){
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
                 var postData = {'userId':$rootScope.social.userId, limit:limit};
-                console.log(postData); 
+                console.log(postData);
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         $rootScope.tumblrPosts = response.data;
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
-                }); 
+                });
             }
         }
+    }
         $rootScope.getAllPosts = function(id){
             $rootScope.social.current = 'twitter';
             $rootScope.social.userId = id;
@@ -265,7 +406,7 @@
                 $rootScope.getPosts('twitter');
                 $rootScope.getPosts('tumblr');
                 $rootScope.social.count += 1;
-            } 
+            }
         }
         $rootScope.limitChange = function(social){
             var limit = $rootScope.social.limit;

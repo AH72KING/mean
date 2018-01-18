@@ -12,7 +12,9 @@ var angularModel = angular.module('Anerve', [
   'ngMaterial',
   'ngMessages',
   'ngSanitize',
-  'ngAnimate'
+  'ngAnimate',
+  'angularFileUpload',
+  'ngImgCrop'
 ]);
 
 /*var body = document.getElementsByTagName('body')[0];

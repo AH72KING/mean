@@ -3,7 +3,7 @@
 </div-->
 <div id="splash_cont" class="animate ">
   <div class="loading-center">
-    <img id="ruby" src="public/assets/images/ruby.png" alt="Anerve Loading Image" />
+    <img id="ruby" src="/public/assets/images/ruby.png" alt="Anerve Loading Image" />
     <h3>Loading....</h3>
     <div id='progressBar'></div>
   </div>
@@ -14,7 +14,7 @@
 
     var splash = $("#splash_cont");
     setTimeout(function() {
-       splash.removeClass("animate").addClass("hide");
+      splash.removeClass("animate").addClass("hide");
     }, 2000); // <-- time in milliseconds
 
     $('#progressBar').append('<div id="bar"></div>');
@@ -185,7 +185,11 @@
                     </li>
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
-                            <span class="log-usr-img small-avatar"> <img src="{{ UploadUrl+getDefaultAvatar(hdctr.global.user.img_loc) }}"/>   {{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}</span> <b class="caret"></b>
+                            <span class="log-usr-img small-avatar"> 
+                              <img src="{{ UploadUrl+getDefaultAvatar(hdctr.global.user.img_loc) }}"/> 
+                                {{hdctr.global.user.GIVNAME}} {{hdctr.global.user.SURNAME}}
+                            </span> 
+                            <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ baseUrl+'users/'+hdctr.global.user.USERID}}" ng-click="hdctr.userDetail()">Profile</a></li>

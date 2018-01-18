@@ -2,7 +2,7 @@
     <div class="container">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card hovercard">
-            <div id="profile-cover-backgroud" class="card-background card-bkimg" style="background:url('{{UploadUrl}}anerve/usr_images/{{usctr.user.user_img}}') no-repeat;background-size: 100%!important;" >
+            <div id="profile-cover-backgroud" class="card-background card-bkimg" style="background:url('{{UploadUrl}}{{usctr.user.user_img}}') no-repeat;background-size: 100%!important;" >
             </div>
             <div class="useravatar">
                 <img alt="" src="{{UploadUrl}}{{usctr.user.img_loc}}">
@@ -11,7 +11,14 @@
 
             </div>
             <div class="pull-right relative">
-            <button class="btn btn-primary show-upl-md" type="button" ><i class="fa fa-pencil"></i> Edit Cover Photo</button>
+                <button class="btn btn-primary show-upl-md show-profile-md" type="button" >
+                    <i class="fa fa-pencil"></i>
+                    Edit Profile Photo
+                </button>
+                <button class="btn btn-primary show-upl-md show-cover-md" type="button" >
+                    <i class="fa fa-pencil"></i>
+                    Edit Cover Photo
+                </button>
             </div>
         </div>
         <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
@@ -133,6 +140,7 @@
                             <option ng-repeat="val in social[social.current]">{{val}}</option>
                         </select>
                       </div>
+
                   </div>
                 </ul>
 
@@ -205,33 +213,94 @@
         </div>
                 
     </div>
+
 </section>
-
-    <div class="modal" id="upload_modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+<div class="modal upload_modal" id="upload_profile_image_modal" role="dialog" aria-labelledby="profile-image-model" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-body">
-            <div id="modaldialog" class="html5imageupload" 
-            data-resize="true" 
-            data-width="1500" 
-            data-height="700"  
-            data-url="api/updateCover" 
-            data-originalsize = "false"
-            data-resize="true"
-            data-canvas="false"
-            style="width: 100%;min-width: 100%;height: 200px">
-              <input type="file" name="thumb" />
+            <div class="modal-body">
+                <div id="modaldialog">
+                    <div class="crop-profile">
+                        <div class="row" nv-file-drop="" uploader="uploaderProfile">
+                            <div class="col-md-12" style="margin-bottom: 20px">
+                                <div ng-repeat="item in uploaderProfile.queue">
+                                    <div class="cropArea crop-profile-area">
+                                        <img-crop image="item.image" result-image="item.croppedImage"></img-crop>
+                                    </div>
+                                    <div class="crop-profile-preview">
+                                        <img ng-src="{{item.croppedImage}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <input type="file" nv-file-select="" uploader="uploaderProfile" ng-click="uploaderProfile.clearQueue();" /><br/>
+                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderProfile.uploadAll()" ng-disabled="!uploaderProfile.getNotUploadedItems().length">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                        Upload
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderProfile.cancelAll()" ng-disabled="!uploaderProfile.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderProfile.clearQueue()" ng-disabled="!uploaderProfile.queue.length">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Remove
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="modal-close-btn">
+                <a href="#" ng-click="closeModals()">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-<!-- Social Post Modal -->
-
-<div ng-include="'public/views/posts-modal.html'"></div>
-    <script>
-
+<div class="modal upload_modal" id="upload_cover_image_modal" role="dialog" aria-labelledby="cover-image-model" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="modaldialog">
+                    <div class="crop-profile">
+                        <div class="row" nv-file-drop="" uploader="uploaderCover">
+                            <div class="col-md-12" style="margin-bottom: 20px">
+                                <div ng-repeat="item in uploaderCover.queue">
+                                    <div class="cropArea crop-profile-area">
+                                        <img-crop image="item.image" result-image="item.croppedImage"></img-crop>
+                                    </div>
+                                    <div>Cropped Image:</div>
+                                    <div>
+                                        <img ng-src="{{item.croppedImage}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <input type="file" nv-file-select="" uploader="uploaderCover" ng-click="uploaderCover.clearQueue();" /><br/>
+                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderCover.uploadAll()" ng-disabled="!uploaderCover.getNotUploadedItems().length">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                        Upload
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderCover.cancelAll()" ng-disabled="!uploaderCover.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderCover.clearQueue()" ng-disabled="!uploaderCover.queue.length">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Remove
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
         $(document).ready(function() {
             $(".btn-pref .btn").click(function () {
                 $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
@@ -241,33 +310,15 @@
                 $(this).removeClass("btn-default").addClass("btn-primary");   
             });
             // show upload modal
-            $(document).on('click','.show-upl-md', function(e){
-                console.log('testing');
-                $('#upload_modal').show();
+            $(document).on('click','.show-profile-md', function(e){
+                $('#upload_profile_image_modal').show();
             })
-            $('#modaldialog').html5imageupload({
-                onAfterProcessImage: function(res) {
-                    $('#upload_modal').hide();
-                     console.log(res);
-                     console.log('upload_modal');
-                },
-                onAfterCancel: function(res) {
-                    notify('Image Cancel');
-                    console.log(res);
-                    console.log($('#filename').val());
-                },
-                onAfterRemoveImage: function(res) {
-                    notify('Image Remove');
-                    console.log(res);
-                    console.log($('#filename').val());
-                },
-                onSave: function(res) {
-                    notify('Image Saved');
-                    console.log(res);
-                    console.log($('#filename').val());
-                }
-            });
+            $(document).on('click','.show-cover-md', function(e){
+                $('#upload_cover_image_modal').show();
+            })
         });
-    </script>
-
-
+            function closeModal(){
+                $('#upload_profile_image_modal').hide();
+                $('#upload_cover_image_modal').hide();
+            }
+</script>

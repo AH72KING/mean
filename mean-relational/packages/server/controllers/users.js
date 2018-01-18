@@ -1,17 +1,15 @@
 'use strict';
-/**
- * Module dependencies.
- */
 var fs = require('fs');
 //var sharp = require('sharp');
 //var smartcrop = require('smartcrop-sharp');
+//var Cropper = require('cropperjs')
 var querystring = require("querystring");
-var db = require('../../../config/sequelize');
-var http = require('http');
+var db          = require('../../../config/sequelize');
+var http        = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
- var Twitter = require('twitter');
- var client = new Twitter({
+ var Twitter  = require('twitter');
+ var client   = new Twitter({
       consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
       consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
       access_token_key: localStorage.getItem('tw_token'),
@@ -424,19 +422,82 @@ exports.update = function(req, res) {
         About:    req.body.About,
     };
     if(typeof req.file != 'undefined'){
-      newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+      /*newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
       // delete previous image
-      fs.unlink('public/assets/'+req.body.img_loc, function(err){
+      fs.unlink('/public/assets/'+req.body.img_loc, function(err){
           if(err) {
             console.log(err);
           } else{
+          }
+     });*/
+    }
+
+    user.updateAttributes(newuser).then(function(a){
+        // return res.jsonp(a);
+        res.redirect('/users/'+req.user.USERID+'/edit');
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
+
+/**
+ * Update a user
+ */
+exports.updateuserprofileimage = function(req, res) {
+
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+    var newuser = {};
+    if(typeof req.file != 'undefined'){
+      newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+      // delete previous image
+      fs.unlink('/assets/'+req.body.img_loc, function(err){
+          if(err) {
+            console.log('/assets/'+req.body.img_loc);
+            console.log(err);
+          } else{
+              res.jsonp(newuser);
+          }
+     });
+    }
+
+    user.updateAttributes(newuser).then(function(a){
+        // return res.jsonp(a);
+        res.jsonp(newuser);
+    }).catch(function(err){
+        return res.render('error', {
+            error: err,
+            status: 500
+        });
+    });
+};
+
+/**
+ * Update a user
+ */
+exports.updateusercoverimage = function(req, res) {
+    // create a new variable to hold the user that was placed on the req object.
+    var user = req.user;
+    var newuser = {};
+    if(typeof req.file != 'undefined'){
+      newuser['user_img'] = 'anerve/usr_images/'+req.file.filename;
+      // delete previous image
+      fs.unlink('/assets/'+req.body.img_loc, function(err){
+          if(err) {
+            console.log('/assets/'+req.body.img_loc);
+            console.log(err);
+          } else{
+
           }
      });  
     }
 
     user.updateAttributes(newuser).then(function(a){
         // return res.jsonp(a);
-        res.redirect('/users/'+req.user.USERID+'/edit');
+        res.jsonp(newuser);
     }).catch(function(err){
         return res.render('error', {
             error: err,
@@ -492,39 +553,45 @@ exports.timeline = function(req, res){
     var userId = req.user.USERID;
     var socialUsrId = userId;
     var limit
-    if (req.body.userId != undefined && req.body.userId != '')
+    if (req.body.userId != undefined && req.body.userId != ''){
       socialUsrId = req.body.userId;
-    if(req.body.limit != undefined && req.body.limit != '')
+    }
+    if(req.body.limit != undefined && req.body.limit != ''){
       limit = req.body.limit;
-    else limit = 4;
-    if (userId != socialUsrId) { // if the user is not logged in one, get twitter id
-      db.User.findAll({
-        where: {
-          USERID: socialUsrId
-        }
-      }).then(function(users){
-        if(users[0] && users[0].twitterUserId != null){
-          var params = {count:limit, user_id:users[0].twitterUserId};
-          console.log(params);
-          client.get('statuses/user_timeline', params, function(error, tweets, response) {
-              return res.jsonp(tweets);
-          });
-        }
+    }else {
+      limit = 4;
+    }
 
-      }).catch(function(err){
-          return res.render('error', {
-              error: err,
-              status: 500
+      if (userId != socialUsrId) { // if the user is not logged in one, get twitter id
+          db.User.findAll({
+            where: {
+              USERID: socialUsrId
+            }
+          }).then(function(users){
+            if(users[0] && users[0].twitterUserId != null){
+              var params = {count:limit, user_id:users[0].twitterUserId};
+              console.log(params);
+              client.get('statuses/user_timeline', params, function(error, tweets, response) {
+                  return res.jsonp(tweets);
+              });
+            }
+
+          }).catch(function(err){
+              return res.render('error', {
+                  error: err,
+                  status: 500
+              });
           });
-      });
-    }
-    else if(tw_usrId != null){
-      var params = {count:limit, user_id:tw_usrId};
-      client.get('statuses/home_timeline', params, function(error, tweets, response) {
-          return res.jsonp(tweets);
-      });
-    }
-  }else { return res.jsonp(''); }
+      }else if(tw_usrId != null){
+        var params = {count:limit, user_id:tw_usrId};
+        client.get('statuses/home_timeline', params, function(error, tweets, response) {
+            return res.jsonp(tweets);
+        });
+      }
+
+  }else{ 
+    return res.jsonp(''); 
+  }
 };
 // like tweet
 exports.likeTweet = function(req, res){
@@ -741,104 +808,6 @@ exports.fbposts = function(req,res){
   }
 };
 
-exports.updateCover = function(req, res){
-  /*var filename    =  Date.now() + '-' +req.body.name;
-  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
-
-  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
-  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
-
-  var imageWidth  = Number(req.body.imageWidth);
-  var imageHeight = Number(req.body.imageHeight);
-
-  var width   = Number(req.body.width);
-  var height  = Number(req.body.height);
-
-  var left  = req.body.left;
-  var top   = req.body.top;
-
-  var urlToWrite = "packages/public/assets/anerve/usr_images/"+filename;
-  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
-
-
-  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
-  imgBuffer =  Buffer.from(imgBuffer, 'base64');
-  sharp(imgBuffer)
-  .resize(imageOriginalWidth,imageOriginalHeight)
-  .crop(sharp.strategy.entropy)
-  .toFile(urlToWrite)
-  .then(function(response){
-     var newImage = {user_img : filename};
-     req.user.updateAttributes(newImage).then(function(user){
-
-              var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
-              return res.jsonp(data2);
-            }).catch(function(err){
-              console.log(err);
-              var data2 = {"msg":"Error Occurred","status":"error"};
-              return res.jsonp(data2);
-      });
-  })
-  .catch(function(err){
-     console.log(err);
-    var data2 = {"msg":"Error Occurred Test","status":"error"};
-    return res.jsonp(data2);
-   
-  });*/
-};
-exports.updateProfileImage = function(req, res){
-  /*var filename    =  Date.now() + '-' +req.body.name;
-  var ext = req.body.data.split(';')[0].match(/jpeg|png|gif/)[0];
-
-  var imageOriginalWidth  = Number(req.body.imageOriginalWidth);
-  var imageOriginalHeight = Number(req.body.imageOriginalHeight);
-
-  var imageWidth  = Number(req.body.imageWidth);
-  var imageHeight = Number(req.body.imageHeight);
-
-  var width   = Number(req.body.width);
-  var height  = Number(req.body.height);
-
-  var left  = req.body.left;
-  var top   = req.body.top;
-
-  var urlToWrite  = "packages/public/assets/anerve/usr_images/"+filename;
-  var urlToSend   = "public/assets/anerve/usr_images/"+filename;
-  var urlToSave   = "anerve/usr_images/"+filename;
-
-  var imgBuffer = req.body.data.replace(/^data:image\/\w+;base64,/, "");
-  imgBuffer =  Buffer.from(imgBuffer, 'base64');
-
-  smartcrop.crop(imgBuffer, {width: width, height: height}).then(function(result) {
-      var crop = result.topCrop;
-      sharp(imgBuffer)
-        .extract({width: crop.width, height: crop.height, left: crop.x, top: crop.y})
-        .resize(width, height)
-        .toFile(urlToWrite).then(function(response){
-           var newImage = {img_loc : urlToSave};
-           req.user.updateAttributes(newImage).then(function(user){
-
-                    var data2 = {"msg":"Cover Photo Updated Successfully","status":"success","filename":filename,"url" :urlToSend};
-                    return res.jsonp(data2);
-                  }).catch(function(err){
-                    console.log(err);
-                    var data2 = {"msg":"Error Occurred","status":"error"};
-                    return res.jsonp(data2);
-            });
-        }).catch(function(err){
-           console.log(err);
-          var data2 = {"msg":"Error Occurred Test","status":"error"};
-          return res.jsonp(data2);
-         
-        });
-    });
-
-
-*/
-};
-
-
-
 /*exports.googlePosts = function(req, res){
   plus.people.get({
   userId: 'me',
@@ -847,8 +816,6 @@ exports.updateProfileImage = function(req, res){
     return res.jsonp(response);
   });
 }*/
-
-
 
 
 // validate current user key
