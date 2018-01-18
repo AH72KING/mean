@@ -422,14 +422,14 @@ exports.update = function(req, res) {
         About:    req.body.About,
     };
     if(typeof req.file != 'undefined'){
-      newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
+      /*newuser['img_loc'] = 'anerve/usr_images/'+req.file.filename;
       // delete previous image
       fs.unlink('/public/assets/'+req.body.img_loc, function(err){
           if(err) {
             console.log(err);
           } else{
           }
-     });
+     });*/
     }
 
     user.updateAttributes(newuser).then(function(a){
