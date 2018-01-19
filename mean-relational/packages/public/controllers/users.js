@@ -371,7 +371,6 @@
             $rootScope.getPosts('twitter');
         }
 
-        $rootScope.getPosts = function(social){
         $rootScope.getPosts = function(social, limit=4){
             $rootScope.social.current = social;
             if(social == 'twitter'){
@@ -396,15 +395,25 @@
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
                 });
+            }else if(social == 'instagram'){
+                var url = $rootScope.baseUrl+'api/instagramPosts';
+                var postData = {'userId':$rootScope.social.userId};
+                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.instagramPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                });
             }
         }
-    }
         $rootScope.getAllPosts = function(id){
             $rootScope.social.current = 'twitter';
             $rootScope.social.userId = id;
             if($rootScope.social.count == 0){
                 $rootScope.getPosts('twitter');
                 $rootScope.getPosts('tumblr');
+                $rootScope.getPosts('instagram');
                 $rootScope.social.count += 1;
             }
         }

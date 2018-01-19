@@ -1365,7 +1365,7 @@ body .friends-in-cart-container{
 .post {position: relative;}
 .tweet {background-color: #3B94D9;}
 .post .head{color: white;font-weight: bold;padding: 10px 10px;}
-.post .body{padding: 5px 10px;}
+.post .body{padding: 5px 10px;position: relative;}
 .post .options {position: absolute;bottom: 5px;left: 5px;display: none}
 .post:hover .options{display: block}
 .modal.show-al{display: block!important;}
@@ -1377,4 +1377,7 @@ body .friends-in-cart-container{
 .tumblr-color{background-color:#35465c;}
 .social-icon {text-align:center;width: 30px;color: white;padding: 4px 8px;border-radius: 100%;right: 6px;top: 10px;position: relative;}
 .prof-social{height: 220px;box-shadow: 0px 0px 1px 0px grey;list-style-type: none;padding: 5px;}
-.prof-social img.main{max-height: 160px}
+/*.prof-social img.main{max-height: 160px}*/
+.instagram{background: linear-gradient(to right, #cd486b, #4c68d7);}
+.post .media-txt {display:none;color:white;position: absolute;top: 0;width: 100%;height: 100%;left: 0;background-color:rgba(0, 0, 0, .8);}
+.post .body:hover .media-txt{display: block}

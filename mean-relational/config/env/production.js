@@ -59,5 +59,11 @@ module.exports = {
         clientID: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
         clientSecret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
         callbackURL: 'http://localhost:3000/api/auth/tumblr/callback'
+    },
+    instagram: {
+        realm: 'http://localhost:3000/',
+        clientID: '54247227ad9a474992a090171abe7bfe',
+        clientSecret: 'd33eb782538a40a8bc54d636055f4138',
+        callbackURL: 'http://localhost:3000/api/auth/instagram/callback'
     }
 };

@@ -59,6 +59,27 @@
 			</a>
         </div>
     </li>
+
+
+    <li class="product_item post" ng-repeat="post in $root.instagramPosts.data track by $index">
+        <div class="instagram head">
+            <i ng-click="showPostModal('instagram')" class="fa fa-plus"></i>
+            <span class="small-avatar"><img src="{{ post.user.profile_picture}}" /> </span>
+            {{post.user.full_name}}
+        </div>
+        <div class="body">
+            <img ng-if="post.type == 'image'" src="{{ post.images.low_resolution.url }}" />
+            <div class="media-txt" ng-if="post.caption.text != ''">
+                <span>{{ post.caption.text }}</span>
+            </div>
+        </div>
+        <div class="options">
+            <a title="{{ post.likes.count}} Likes" ng-click="post.user_has_liked != true ? likeOrUnlike($index, 'like') : ''"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
+            <a title="Unlike" ng-click="likeOrUnlike($index, 'unlike')"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
+        </div>
+    </li>
+
+
     <li class="product_item post" ng-repeat="post in $root.twitterPosts track by $index">
         <div class="tweet head">
             <i ng-click="showPostModal('twitter')" class="fa fa-plus"></i>

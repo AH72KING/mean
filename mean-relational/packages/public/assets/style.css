@@ -4800,3 +4800,4 @@ width: 100%;
 .card.hovercard .show-upl-md.show-profile-md{
     bottom: 60px;
 }
+.post-wrap .post{overflow: hidden;}

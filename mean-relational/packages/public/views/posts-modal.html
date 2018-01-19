@@ -5,7 +5,6 @@
           <li ng-class="{'active':postModal.currentSocial == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="postModal.currentSocial = 'facebook'">Facebook</a></li>
           <li ng-class="{'active':postModal.currentSocial == 'twitter'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'twitter'">Twitter</a></li>
           <li ng-class="{'active':postModal.currentSocial == 'tumblr'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'tumblr'">Tumblr</a></li>
-          <li ng-class="{'active':postModal.currentSocial == 'google'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'google'">Google</a></li>
 
           <span class="pull-right" ng-click="postModal.modalClass = 'hide-al'" title="Close"><i class="fa fa-remove"></i></span>
           <span class="pull-right social-icon {{postModal.currentSocial}}-color"><i class="fa fa-{{postModal.currentSocial}}"></i></span>
@@ -75,10 +74,6 @@
                 </div>
                 <input type="submit" class="btn btn-success btn-md" value="Send" ng-click="$root.postTumblr(postModal.postId)" />
             </div>
-          </div>
-          <div id="go" ng-class="{'tab-pane fade in active':postModal.currentSocial == 'google', 'tab-pane fade':postModal.currentSocial != 'google'}">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
           </div>
         </div>
     </div>

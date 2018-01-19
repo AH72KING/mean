@@ -131,7 +131,7 @@
                   <li ng-class="{'active':social.current == 'twitter'}"><a data-toggle="pill" ng-click="social.current = 'twitter'">Twitter</a></li>
                   <li ng-class="{'active':social.current == 'tumblr'}"><a data-toggle="pill" ng-click="social.current = 'tumblr'">Tumblr</a></li>
                   <li ng-class="{'active':social.current == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="social.current = 'facebook'">Facebook</a></li>
-                  <li ng-class="{'active':social.current == 'google'}"><a data-toggle="pill" ng-click="social.current = 'google'">Google</a></li>
+                  <li ng-class="{'active':social.current == 'instagram'}"><a data-toggle="pill" ng-click="social.current = 'instagram'">Instagram</a></li>
 
                   <div class="pull-right">
                       <div class=""" >
@@ -203,8 +203,26 @@
                         </li>
                     </div>
                   </div>
-                  <div id="go" ng-class="{'tab-pane fade in active':social.current == 'google', 'tab-pane fade':social.current != 'google'}">
-                    <p>Google Posts</p>
+                  <div id="inst" ng-class="{'tab-pane fade in active':social.current == 'instagram', 'tab-pane fade':social.current != 'instagram'}">
+                    
+                    <div class="post-wrap col-xs-12">
+                        <li class="prof-social post col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="post in $root.instagramPosts.data track by $index">
+                            <div class="instagram head">
+                                <span class="small-avatar"><img src="{{ post.user.profile_picture}}" /> </span>
+                                {{post.user.full_name}}
+                            </div>
+                            <div class="body">
+                                <img class="img-responsive main" ng-if="post.type == 'image'" src="{{ post.images.low_resolution.url }}" />
+                                <div class="media-txt" ng-if="post.caption.text != ''">
+                                    <span>{{ post.caption.text }}</span>
+                                </div>
+                            </div>
+                            <div class="options">
+                                <a title="{{ post.likes.count}} Likes" ng-click="post.user_has_liked != true ? likeOrUnlike($index, 'like') : ''"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
+                                <a title="Unlike" ng-click="likeOrUnlike($index, 'unlike')"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
+                            </div>
+                        </li>
+                    </div>
                   </div>
                 </div>
             </div>

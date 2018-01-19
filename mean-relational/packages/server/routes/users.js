@@ -83,6 +83,16 @@ app.get('/api/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/signin'
 }), users.authCallback);
 
+// Setting the instagram oauth routes
+app.get('/api/auth/instagram', passport.authenticate('instagram', {
+    scope: ['basic','public_content','follower_list','comments','relationships','likes'],
+    failureRedirect: '/signin'
+}), users.signin);
+
+app.get('/api/auth/instagram/callback', passport.authenticate('instagram', {
+    failureRedirect: '/signin'
+}), function(req, res) {res.redirect('/all-products'); });
+
 /*app.get('/api/auth/twitter',
   passport.authenticate('twitter'));
 
@@ -132,6 +142,9 @@ app.route('/api/postTumblrQuote').post(users.postTumblrQuote);
 app.route('/api/postTumblrLink').post(users.postTumblrLink);
 app.route('/api/tumblrPosts').post(users.tumblrPosts);
 app.route('/api/delTumblrPost').post(users.delTumblrPost);
+app.route('/api/instagramPosts').post(users.instagramPosts);
+app.route('/api/likeInsta').post(users.likeInsta);
+app.route('/api/dislikeInsta').post(users.dislikeInsta);
 app.route('/api/fbposts').post(users.fbposts);
 
 //app.route('/api/gplus').post(users.googlePosts);

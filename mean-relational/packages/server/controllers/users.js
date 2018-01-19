@@ -37,18 +37,25 @@ var oauth2Client = new OAuth2(
   'http://localhost:3000/api/auth/google/callback'
 );
 
-        //var baseUrl = 'http://localhost:3000/';
-        var ip = db.sequelize.config.host;
-        //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
-        var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
-        var headers = {
-                   'Access-Control-Allow-Origin': '*',
-                   'Content-Type' : 'application/json; charset=UTF-8',
-                   'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-                   'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
-                   'Access-Control-Max-Age': '3600',
-                   'Access-Control-Allow-Credentials': 'true'
-                };
+
+var Instagram = require('node-instagram').default;
+var ig = new Instagram({
+  clientId: '54247227ad9a474992a090171abe7bfe',
+  clientSecret: 'd33eb782538a40a8bc54d636055f4138',
+  accessToken: localStorage.getItem('ig_token'),
+});
+//var baseUrl = 'http://localhost:3000/';
+var ip = db.sequelize.config.host;
+//var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
+var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
+var headers = {
+           'Access-Control-Allow-Origin': '*',
+           'Content-Type' : 'application/json; charset=UTF-8',
+           'Access-Control-Allow-Headers': 'content-type, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+           'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT',
+           'Access-Control-Max-Age': '3600',
+           'Access-Control-Allow-Credentials': 'true'
+        };
 
 
 /**
@@ -844,6 +851,49 @@ exports.fbposts = function(req,res){
      return res.jsonp('');
   }
 };
+
+
+exports.instagramPosts = function(req, res){
+  if(req.body.userId != undefined && req.body.userId != ''){
+    db.User.findAll({
+            where: {USERID: req.body.userId}
+          }).then(function(users){
+            if(users[0] && users[0].ig_id != null && users[0].ig_id != ''){
+
+              ig.get('users/'+users[0].ig_id+'/media/recent').then((data) => {
+                return res.jsonp(data);
+              }).catch(function(err){
+              });
+            }
+      }).catch(function(err){
+          return res.render('error', {
+              error: err,
+              status: 500
+          });
+      });
+  } else {
+    ig.get('users/self/media/recent').then((data) => {
+      return res.jsonp(data);
+    }).catch(function(err){
+    });
+  }
+}
+
+exports.likeInsta = function(req, res){
+  ig.post('media/'+req.body.id+'/likes').then((data) => {
+    return res.jsonp(data);
+  }).catch(function(err){
+  });
+}
+
+exports.dislikeInsta = function(req, res){
+  ig.delete('media/'+req.body.id+'/likes').then((data) => {
+    return res.jsonp(data);
+  }).catch(function(err){
+  });
+}
+
+
 
 /*exports.googlePosts = function(req, res){
   plus.people.get({

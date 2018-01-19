@@ -33,7 +33,8 @@ var $anerveModule =  angular
              $rootScope.twitterConnect  = 'link it';
              $rootScope.tumblrConnect   = 'link it';
              $rootScope.facebookConnect = 'link it';
-             $rootScope.googleConnect   = 'link it';
+             //$rootScope.googleConnect   = 'link it';
+             $rootScope.instagramConnect   = 'link it';
 
              $rootScope.provider = 'local';
         $http.get($rootScope.baseUrl+'api/getUser').then(function(result) { 
@@ -59,10 +60,14 @@ var $anerveModule =  angular
                    $rootScope.facebookConnect = 'Unlink';
                    $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
                  }
-                 if(connections.google != undefined && connections.google != 0){
+                 if(connections.instagram != undefined && connections.instagram != 0){
+                   $rootScope.instagramConnect = 'Unlink';
+                   $rootScope.ig_id = currentUserChecker.ig_id;
+                 }
+                /* if(connections.google != undefined && connections.google != 0){
                    $rootScope.googleConnect = 'Unlink';
                    $rootScope.openId = currentUserChecker.openId;
-                 }
+                 }*/
               }
                $rootScope.provider = currentUserChecker.provider;
            }
@@ -70,7 +75,7 @@ var $anerveModule =  angular
             { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter',  'connect':$rootScope.twitterConnect },
             { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr',   'connect':$rootScope.tumblrConnect},
             { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook', 'connect':$rootScope.facebookConnect},
-            { 'name':'Google',  'key':'google',  'href':'/api/auth/google',   'connect':$rootScope.googleConnect},
+            { 'name':'Instagram',  'key':'instagram',  'href':'/api/auth/instagram',   'connect':$rootScope.instagramConnect},
           ];
           console.log($rootScope.socialApps);
         });

@@ -8,6 +8,7 @@ var FacebookStrategy    = require('passport-facebook').Strategy;
 var TumblrStrategy      = require('passport-tumblr').Strategy;
 //var GoogleStrategy    = require('passport-google').Strategy;
 var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
+var InstagramStrategy      = require('passport-instagram').Strategy;
 
 var config  = require('./config');
 var db      = require('./sequelize');
@@ -437,6 +438,50 @@ passport.use(new GoogleStrategy({
                 }
         });
     }
+));
+
+passport.use(new InstagramStrategy({
+    clientID: config.instagram.clientID,
+    clientSecret: config.instagram.clientSecret,
+    callbackURL: config.instagram.callbackURL
+  },
+  function(token, tokenSecret, profile, done) {
+    if(token != 'undefined' && token != undefined){
+        localStorage.setItem('ig_token', token);
+    }
+    var current_user_id = localStorage.getItem('current_user_id');
+    if(current_user_id != '' && current_user_id != undefined && current_user_id != 'undefined'){
+        db.User.find({where: {USERID: current_user_id}}).then(function(user){
+            if(!user){ 
+                    // we cannot create user from Tumblr now as it does not proivde email
+            } else { 
+                var updateConnect = "";
+                if(user.connections != '' && user.connections != null){
+                    updateConnect = {'connections':JSON.parse(user.connections)};
+                    updateConnect.connections['instagram'] = 1;
+                } else {
+                    updateConnect = {'connections':{'instagram':1}};
+                }
+                updateConnect.connections = JSON.stringify(updateConnect.connections);
+                db.User.update({
+                    ig_token: token,
+                    connections : updateConnect.connections,
+                    ig_id: profile.id
+                }, {
+                  where: {USERID: current_user_id}
+                });
+
+                winston.info('New User (instagram) : { id: ' + user.USERID + ', username: ' + user.USERNAME + ' }');
+                done(null, user);
+            }
+           
+        }).catch(function(err){
+            done(err, null);
+        });
+    }else{
+        done('Fail Due to Missing User ID', null);
+    }
+  }
 ));
 
 

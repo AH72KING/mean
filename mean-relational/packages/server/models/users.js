@@ -82,7 +82,9 @@ module.exports = function(sequelize, DataTypes) {
 			go_token: 	DataTypes.STRING,
 			go_rtoken: 	DataTypes.STRING,
 			connections: 	DataTypes.TEXT,
-			tumblr_blog: 	DataTypes.STRING
+			tumblr_blog: 	DataTypes.STRING,
+			ig_id: 	DataTypes.STRING,
+			ig_token: 	DataTypes.STRING
 		},
 		{
 			instanceMethods: {
