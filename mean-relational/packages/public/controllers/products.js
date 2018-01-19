@@ -40,7 +40,6 @@
         $rootScope.userFirends = []; // friends Array;
         var userFirends = [];
         $rootScope.userFirends = userFirends;
-
         
 
         /**
