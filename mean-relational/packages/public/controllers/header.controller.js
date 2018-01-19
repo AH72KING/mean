@@ -17,7 +17,6 @@ var $anerveModule =  angular
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
-
         $rootScope.baseUrl    = 'http://localhost:3000/';
         $rootScope.UploadUrl  = 'http://localhost:3000/public/assets/';
         $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
