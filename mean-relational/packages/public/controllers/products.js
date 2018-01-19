@@ -1114,9 +1114,9 @@
               $rootScope.postTwitter =function(e){
                 var url = $rootScope.baseUrl+'api/postTweet';
                 var postData = {'msg':$rootScope.data.tw_text};
-                console.log($rootScope.data.tw_file);
+                console.log($rootScope.data.tw_file);/*
                 if($rootScope.data.tw_file != "")
-                  url =$rootScope.baseUrl+'api/postMediaTweet';
+                  url =$rootScope.baseUrl+'api/postMediaTweet';*/
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -1207,28 +1207,6 @@
         fbposts();
 
 
-        $rootScope.likeOrUnlike = function(i, action){
-          if(action == 'like'){
-            var url = $rootScope.baseUrl+'api/likeInsta';
-            var msg = "Liked Successfully";
-            $rootScope.instagramPosts.data[i].likes.count += 1;
-            $rootScope.instagramPosts.data[i].user_has_liked = true;
-          }
-          else {
-            var url = $rootScope.baseUrl+'api/dislikeInsta';
-            var msg = "Uniked Successfully";
-            $rootScope.instagramPosts.data[i].likes.count -= 1;
-            $rootScope.instagramPosts.data[i].user_has_liked = false;
-          }
-          var postData = {id:$rootScope.instagramPosts.data[i].id};
-          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                notify(msg,'success');
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          }); 
-        }
         
         /*// get googleplus post
         function gplus(){

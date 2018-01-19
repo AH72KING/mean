@@ -659,6 +659,30 @@ var $anerveModule =  angular
               break;
           }
         }
+
+        
+        $rootScope.likeOrUnlike = function(i, action){
+          if(action == 'like'){
+            var url = $rootScope.baseUrl+'api/likeInsta';
+            var msg = "Liked Successfully";
+            $rootScope.instagramPosts.data[i].likes.count += 1;
+            $rootScope.instagramPosts.data[i].user_has_liked = true;
+          }
+          else {
+            var url = $rootScope.baseUrl+'api/dislikeInsta';
+            var msg = "Uniked Successfully";
+            $rootScope.instagramPosts.data[i].likes.count -= 1;
+            $rootScope.instagramPosts.data[i].user_has_liked = false;
+          }
+          var postData = {id:$rootScope.instagramPosts.data[i].id};
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                notify(msg,'success');
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse);
+          }); 
+        }
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);

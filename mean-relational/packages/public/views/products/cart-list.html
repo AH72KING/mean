@@ -63,7 +63,6 @@
 
     <li class="product_item post" ng-repeat="post in $root.instagramPosts.data track by $index">
         <div class="instagram head">
-            <i ng-click="showPostModal('instagram')" class="fa fa-plus"></i>
             <span class="small-avatar"><img src="{{ post.user.profile_picture}}" /> </span>
             {{post.user.full_name}}
         </div>
