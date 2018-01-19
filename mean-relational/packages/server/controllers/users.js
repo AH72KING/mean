@@ -687,9 +687,16 @@ exports.postTumblr = function(req, res){
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;   
-        tmblr_client.createTextPost(blogName, params, function(err, resp) {
-          return res.jsonp(resp.posts);
-        }); 
+        if(req.body.id == undefined || req.body.id == ''){
+          tmblr_client.createTextPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp.posts);
+          }); 
+        } else{
+          params.id = req.body.id;
+          tmblr_client.editPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp.posts);
+          }); 
+        }
       }
     }
   });
@@ -705,10 +712,17 @@ exports.postTumblrPhoto = function(req, res){
   tmblr_client.userInfo(function(err, data) {
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
-        var blogName = data.user.blogs[0].name;   
-        tmblr_client.createPhotoPost(blogName, params, function(err, resp) {
-          return res.jsonp(resp);
-        }); 
+        var blogName = data.user.blogs[0].name;  
+        if(req.body.id == undefined || req.body.id == ''){ 
+          tmblr_client.createPhotoPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp);
+          }); 
+        } else {
+          params.id = req.body.id;
+          tmblr_client.editPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp.posts);
+          }); 
+        }
       }
     }
   });
@@ -726,10 +740,17 @@ exports.postTumblrVideo = function(req, res){
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;   
-        tmblr_client.createVideoPost(blogName, params, function(err, resp) {
-          console.log(resp);
-          return res.jsonp(resp.posts);
-        }); 
+        if(req.body.id == undefined || req.body.id == ''){
+          tmblr_client.createVideoPost(blogName, params, function(err, resp) {
+            console.log(resp);
+            return res.jsonp(resp.posts);
+          }); 
+        } else {
+          params.id = req.body.id;
+          tmblr_client.editPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp.posts);
+          }); 
+        }
       }
     }
   });
@@ -748,10 +769,19 @@ exports.postTumblrQuote = function(req, res){
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;   
-        tmblr_client.createQuotePost(blogName, params, function(err, resp) {
-          console.log(resp);
-          return res.jsonp(resp);
-        }); 
+        if(req.body.id == undefined || req.body.id == ''){
+          tmblr_client.createQuotePost(blogName, params, function(err, resp) {
+            console.log(resp);
+            return res.jsonp(resp);
+          }); 
+        } else {
+          console.log("params are ");
+          params.id = req.body.id;
+          console.log(params);
+          tmblr_client.editPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp);
+          }); 
+        }
       }
     }
   });
@@ -779,10 +809,17 @@ exports.postTumblrLink = function(req, res){
    if(data !== undefined && data !== '' && data !== null) {
       if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
         var blogName = data.user.blogs[0].name;   
-        tmblr_client.createLinkPost(blogName, params, function(err, resp) {
-          console.log(resp);
-          return res.jsonp(resp);
-        }); 
+        if(req.body.id == undefined || req.body.id == ''){
+          tmblr_client.createLinkPost(blogName, params, function(err, resp) {
+            console.log(resp);
+            return res.jsonp(resp);
+          }); 
+        } else {
+          params.id = req.body.id;
+          tmblr_client.editPost(blogName, params, function(err, resp) {
+            return res.jsonp(resp.posts);
+          }); 
+        }
       }
     }
   });
