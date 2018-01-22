@@ -741,15 +741,42 @@ exports.getUserCartDetail = function(req, res){
                         db.sequelize.query(Query,{raw: false}).then(cartProducts => {
                               data['cartProducts'] = cartProducts[0];
                               return res.jsonp(data);
+                          }).catch(function(err){
+                              return res.render('error', {
+                                  error: err,
+                                  status: 500
+                              });
                           }); // cartproducts
-                      }); // cartcomments
-                  }); // cartusers
-              }); //cartowners
+                      }).catch(function(err){
+                              return res.render('error', {
+                                  error: err,
+                                  status: 500
+                              });
+                          }); // cartproducts; // cartcomments
+                  }).catch(function(err){
+                          return res.render('error', {
+                              error: err,
+                              status: 500
+                          });
+                      }); // cartproducts; // cartusers
+              }).catch(function(err){
+                  return res.render('error', {
+                      error: err,
+                      status: 500
+                  });
+              }); // cartproducts; //cartowners
 
 
 
+        } else {
+            return res.jsonp({'msg':'No Cart Belongs To That User','type':'info','isEmpty':true});
         }
-      });
+      }).catch(function(err){
+          return res.render('error', {
+              error: err,
+              status: 500
+          });
+      }); // cartproducts;
     }
 };
 

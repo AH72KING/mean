@@ -261,6 +261,13 @@ passport.use(new FacebookStrategy({
         profileFields: ['id' ,'email', 'displayName', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
     },
     function(accessToken, refreshToken, profile, done) {
+        console.log('fb access token');
+        console.log(accessToken);
+        console.log('refreshToken');
+        console.log(refreshToken);
+        console.log('profile info');
+        console.log(profile);
+        
         if(accessToken != '' && accessToken != undefined && accessToken != 'undefined'){
             localStorage.setItem('fb_token', accessToken);
         }

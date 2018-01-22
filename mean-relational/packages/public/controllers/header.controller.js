@@ -9,6 +9,18 @@ var $anerveModule =  angular
           }
         }
       );
+
+    $anerveModule.directive('fallbackSrc', function () {
+        var fallbackSrc = {
+            link: function postLink(scope, iElement, iAttrs) {
+                iElement.bind('error', function() {
+                    angular.element(this).attr("src", iAttrs.fallbackSrc);
+                });
+            }
+        }
+        return fallbackSrc;
+    });
+
     $anerveModule.controller('HeaderController',HeaderController);
     
     HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
@@ -408,14 +420,20 @@ var $anerveModule =  angular
                     var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
+                              closeNoti();
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
-                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
-                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
-                              $rootScope.cartUsers = newData.cartUsers;
-                              $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
-                              $rootScope.userCartId = newData.cartId;
-                              $rootScope.cartComments = newData.cartComments;
+                              if(newData.isEmpty != 'undefined' && newData.isEmpty == true){
+                                notify(newData.msg, newData.type);
+                              } else { 
+                                $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
+                                $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
+                                $rootScope.cartUsers = newData.cartUsers;
+                                $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
+                                $rootScope.userCartId = newData.cartId;
+                                $rootScope.cartComments = newData.cartComments;
+                                $rootScope.UserDetail()
+                              }
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -662,7 +680,25 @@ var $anerveModule =  angular
 
         
         $rootScope.likeOrUnlike = function(i, action){
-          if(action == 'like'){
+          console.log('Test');
+         var socket = new io.Socket('localhost',{'port':3000});
+          //socket.connect();
+
+          socket.on('open', function(){
+              console.log('connected');
+              socket.send('hi!'); 
+          });
+
+
+          socket.on('packet', function(data){ 
+              console.log('message recived: ' + data);
+          });
+
+          socket.on('close', function(){
+              console.log('disconected');
+          });
+
+          /*if(action == 'like'){
             var url = $rootScope.baseUrl+'api/likeInsta';
             var msg = "Liked Successfully";
             $rootScope.instagramPosts.data[i].likes.count += 1;
@@ -681,13 +717,61 @@ var $anerveModule =  angular
                 notify(msg,'success');
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
-          }); 
+          }); */
         }
+
+
+          // like tweet
+          $rootScope.likeTweet = function(index){
+            var tweetId = $rootScope.twitterPosts[index]['id_str'];
+            var postData = {'id':tweetId};
+            var url = $rootScope.baseUrl+'api/likeTweet';
+            var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                  if(response.status == 200){
+                   if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                    var code = response.data.errors[0].code;
+                    if(code == 139) 
+                      notify(response.data.errors[0].message);
+                    } else {
+                      notify('Liked Successfully','success');
+                      $rootScope.twitterPosts[index]['favorite_count'] += 1;
+                    }
+                  }
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse);
+            });
+          };
+          // dislike tweet if like
+          $rootScope.dislikeTweet = function(index){
+            var tweetId = $rootScope.twitterPosts[index]['id_str'];
+            var postData = {'id':tweetId};
+            var url = $rootScope.baseUrl+'api/dislikeTweet';
+            var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                  if(response.status == 200){
+                    if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                      var code = response.data.errors[0].code;
+                      if(code == 144) 
+                        notify(response.data.errors[0].message);
+                    } else {
+                      notify('UnLiked Successfully','success');
+                      $rootScope.twitterPosts[index]['favorite_count'] -= 1;
+                    }
+                  }
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse);
+            });
+          };
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);
             socket.emit('news', { my: 'just testing socket' });
           });*/
+
+      
     }
 
 })();

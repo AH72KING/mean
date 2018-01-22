@@ -70,7 +70,8 @@
 					<div class="usr-img list crt_usrs col-md-2" ng-repeat="user in cartUsers track by $index">
                       <div title="Remove User" ng-click="removeCartUsr(user.USERID, $index)" class="icon crt-usr-img" title="{{user.GIVNAME+' '+user.SURNAME}}">
 
-                      	<img src="{{UploadUrl+getDefaultAvatar(user.img_loc)}}" />
+                      	<img fallback-src="{{UploadUrl+'/images/default-avatar.png'}}" src="{{UploadUrl+getDefaultAvatar(user.img_loc)}}" />
+
                       </div>
                     </div>
 				</div>

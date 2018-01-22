@@ -2,9 +2,9 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content col-xs-12">
         <ul class="nav nav-pills">
-          <li ng-class="{'active':postModal.currentSocial == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="postModal.currentSocial = 'facebook'">Facebook</a></li>
-          <li ng-class="{'active':postModal.currentSocial == 'twitter'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'twitter'">Twitter</a></li>
-          <li ng-class="{'active':postModal.currentSocial == 'tumblr'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'tumblr'">Tumblr</a></li>
+          <li ng-if="postModal.currentSocial == 'facebook'" ng-class="{'active':postModal.currentSocial == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="postModal.currentSocial = 'facebook'">Facebook</a></li>
+          <li ng-if="postModal.currentSocial == 'twitter'" ng-class="{'active':postModal.currentSocial == 'twitter'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'twitter'">Twitter</a></li>
+          <li ng-if="postModal.currentSocial == 'tumblr'" ng-class="{'active':postModal.currentSocial == 'tumblr'}"><a data-toggle="pill" ng-click="postModal.currentSocial = 'tumblr'">Tumblr</a></li>
 
           <span class="pull-right" ng-click="postModal.modalClass = 'hide-al'" title="Close"><i class="fa fa-remove"></i></span>
           <span class="pull-right social-icon {{postModal.currentSocial}}-color"><i class="fa fa-{{postModal.currentSocial}}"></i></span>

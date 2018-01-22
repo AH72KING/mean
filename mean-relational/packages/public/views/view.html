@@ -160,11 +160,11 @@
                             </span>
                             </div>
                             <div class="body">{{ post.text }}</div>
-                            <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
+                            <div class="options">
                                 <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
                                 <a title="Unlike" ng-click="dislikeTweet($index)"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
                                 <a title="Retweet" ng-click="retweet($index)"><i class="fa fa-reply btn-info btn btn-xs"></i></a>
-                                <a title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
+                                <a ng-if="usctr.user.twitterUserId == post.user.id_str" title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
                             </div>
                         </li>
                     </div>
