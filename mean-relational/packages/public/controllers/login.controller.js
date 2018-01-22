@@ -25,7 +25,7 @@
              // vm.meanuser.login(vm.user);
                 
             }
-            $rootScope.UserLoginInJava  = function (user) {
+           /* $rootScope.UserLoginInJava  = function (user) {
 
               var USERNAME  = user.USERNAME;
               var PASSWORD  = user.PASSWORD;
@@ -71,7 +71,7 @@
                               console.log(errorResponse);
                       }); 
 
-          };
+          };*/
 
 
       }

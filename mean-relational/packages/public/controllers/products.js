@@ -569,7 +569,7 @@
         $rootScope.dropInCart = function(event, ui){ 
             var draggableElement = ui.draggable;
             var prodId = draggableElement.attr('data-product-id');
-            var friendId = draggableElement.attr('data-friend-id');    
+            var friendId = draggableElement.attr('data-friend-id'); 
             if(typeof prodId != 'undefined' && prodId != null){
               var img = draggableElement.find('.product_image').find('img').attr('src');
               $rootScope.addorCreateCart(prodId, img);
@@ -602,12 +602,7 @@
           $rootScope.addorCreateCart(prodId, img);
         };
 
-        $rootScope.addorCreateCart = function(prodId, img){
-          $rootScope.products['grpcart_products'].push({
-            'ProdBrandId':prodId,
-            'img_loc':img.replace($rootScope.UploadUrl, '')
-          });
-
+        $rootScope.addorCreateCart = function(prodId, img){   
           $rootScope.cart.push({
             'userid':prodId,
             'img_loc':img
@@ -1169,7 +1164,11 @@
         }
         fbposts();
 
-
+        vm.loginUser = {};
+        //declare scope methods controllers
+        $rootScope.loginUser = function(){
+           $rootScope.UserLoginInJava(vm.loginUser);
+        }
         
         /*// get googleplus post
         function gplus(){

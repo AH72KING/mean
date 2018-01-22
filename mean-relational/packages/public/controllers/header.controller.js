@@ -23,9 +23,9 @@ var $anerveModule =  angular
 
     $anerveModule.controller('HeaderController',HeaderController);
     
-    HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
+    HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window', 'MeanUser'];
 
-    function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
+    function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window, MeanUser){
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
@@ -237,6 +237,8 @@ var $anerveModule =  angular
         $rootScope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
+        
+        vm.meanuser = MeanUser;
         $rootScope.userImg = Session.getItem('img_loc');
         vm.menu = [
         /*{
@@ -771,6 +773,54 @@ var $anerveModule =  angular
             socket.emit('news', { my: 'just testing socket' });
           });*/
 
+
+
+            $rootScope.UserLoginInJava  = function (user) {
+
+              var USERNAME  = user.USERNAME;
+              var PASSWORD  = user.PASSWORD;
+
+              var url       = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
+             // var postData  = {USERNAME:USERNAME,PASSWORD:PASSWORD};
+              var configObj = { method: 'GET',url: url};
+
+                  $http(configObj)
+                    .then(function onFulfilled(response) {
+                          var dataJson = JSON.parse(JSON.stringify(response.data));
+                          console.log(dataJson);
+                          if(dataJson !== undefined){
+                            var key = dataJson.key;
+                            var UserID = dataJson.usr.userid;
+                            var img_loc = dataJson.usr.img_loc;
+                            var givname = dataJson.usr.givname;
+                            var surname = dataJson.usr.surname;
+                            var username = dataJson.usr.username;
+                            console.log(img_loc+' '+givname+' '+surname);
+                              if(key !== undefined){
+                                 Session.setItem('key_'+UserID, key);
+                                 Session.setItem('UserID', UserID);
+                                 Session.setItem('usrname', username);
+                                    var url2 = $rootScope.baseUrl+'api/SaveUserKey';
+                                    var postData2  =  {
+                                      key:key,
+                                      UserID:UserID
+                                    };
+                                    var configObj2 = { method: 'POST',url: url2, data: postData2};
+                                        $http(configObj2)
+                                            .then(function onFulfilled(response2) {
+                                              vm.meanuser.login(user);
+                                            }).catch( function onRejection(errorResponse2) {
+                                                console.log('Error: ', errorResponse2.status);
+                                                console.log(errorResponse2);
+                                        }); 
+                                    }
+                          }
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      }); 
+
+          };
       
     }
 
