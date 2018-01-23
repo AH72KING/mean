@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="my-zone-detail">
-            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="toggleCart();$event.stopPropagation()" data-original-title="1">Checkout >>
+            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-danger btn-checkout" ng-click="toggleCart();$event.stopPropagation()" data-original-title="1">Checkout >>
 			</a>
         </div>
     </li>
@@ -72,7 +72,9 @@
             <input type="password" ng-model="arctr.loginUser.PASSWORD" class="form-control" placeholder="Password" />
         </div>
         <div class="my-zone-detail">
-            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary btn-checkout" ng-click="loginUser()" data-original-title="1">Login
+            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-danger" ng-click="loginUser()" data-original-title="1">Login
+            </a>
+            <a data-toggle="tooltip" title="" data-placement="top" class="btn btn-primary" ui-sref="auth.register" data-original-title="1">Sign Up
             </a>
         </div>
     </li>
