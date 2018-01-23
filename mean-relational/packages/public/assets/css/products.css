@@ -12,7 +12,7 @@
     border: none!important;
 }
 .my-zone-detail a.btn.btn-checkout {
-    background: rgba(255, 0, 0, 0.71);
+    /*background: rgba(255, 0, 0, 0.71);*/
     color: white;
     width: 100%;
     border-radius: 10px;

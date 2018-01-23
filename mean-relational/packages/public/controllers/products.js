@@ -569,7 +569,7 @@
         $rootScope.dropInCart = function(event, ui){ 
             var draggableElement = ui.draggable;
             var prodId = draggableElement.attr('data-product-id');
-            var friendId = draggableElement.attr('data-friend-id');    
+            var friendId = draggableElement.attr('data-friend-id'); 
             if(typeof prodId != 'undefined' && prodId != null){
               var img = draggableElement.find('.product_image').find('img').attr('src');
               $rootScope.addorCreateCart(prodId, img);
@@ -602,7 +602,7 @@
           $rootScope.addorCreateCart(prodId, img);
         };
 
-        $rootScope.addorCreateCart = function(prodId, img){
+        $rootScope.addorCreateCart = function(prodId, img){   
           $rootScope.cart.push({
             'userid':prodId,
             'img_loc':img
@@ -1064,59 +1064,17 @@
               }
               timeline();
 
-              // like tweet
-              $rootScope.likeTweet = function(index){
-                var tweetId = $rootScope.twitterPosts[index]['id_str'];
-                var postData = {'id':tweetId};
-                var url = $rootScope.baseUrl+'api/likeTweet';
-                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                      if(response.status == 200){
-                       if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                        var code = response.data.errors[0].code;
-                        if(code == 139) 
-                          notify(response.data.errors[0].message);
-                        } else {
-                          notify('Liked Successfully','success');
-                          $rootScope.twitterPosts[index]['favorite_count'] += 1;
-                        }
-                      }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                });
-              };
-              // dislike tweet if like
-              $rootScope.dislikeTweet = function(index){
-                var tweetId = $rootScope.twitterPosts[index]['id_str'];
-                var postData = {'id':tweetId};
-                var url = $rootScope.baseUrl+'api/dislikeTweet';
-                var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                      if(response.status == 200){
-                        if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
-                          var code = response.data.errors[0].code;
-                          if(code == 144) 
-                            notify(response.data.errors[0].message);
-                        } else {
-                          notify('UnLiked Successfully','success');
-                          $rootScope.twitterPosts[index]['favorite_count'] -= 1;
-                        }
-                      }
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                });
-              };
+            
 
               // post tweet
 
               $rootScope.postTwitter =function(e){
+                e.preventDefault();
                 var url = $rootScope.baseUrl+'api/postTweet';
                 var postData = {'msg':$rootScope.data.tw_text};
-                console.log($rootScope.data.tw_file);
+                console.log($rootScope.data.tw_file);/*
                 if($rootScope.data.tw_file != "")
-                  url =$rootScope.baseUrl+'api/postMediaTweet';
+                  url =$rootScope.baseUrl+'api/postMediaTweet';*/
                 var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
@@ -1206,28 +1164,10 @@
         }
         fbposts();
 
-
-        $rootScope.likeOrUnlike = function(i, action){
-          if(action == 'like'){
-            var url = $rootScope.baseUrl+'api/likeInsta';
-            var msg = "Liked Successfully";
-            $rootScope.instagramPosts.data[i].likes.count += 1;
-            $rootScope.instagramPosts.data[i].user_has_liked = true;
-          }
-          else {
-            var url = $rootScope.baseUrl+'api/dislikeInsta';
-            var msg = "Uniked Successfully";
-            $rootScope.instagramPosts.data[i].likes.count -= 1;
-            $rootScope.instagramPosts.data[i].user_has_liked = false;
-          }
-          var postData = {id:$rootScope.instagramPosts.data[i].id};
-          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                notify(msg,'success');
-              }).catch( function onRejection(errorResponse) {
-                  console.log('Error: ', errorResponse);
-          }); 
+        vm.loginUser = {};
+        //declare scope methods controllers
+        $rootScope.loginUser = function(){
+           $rootScope.UserLoginInJava(vm.loginUser);
         }
         
         /*// get googleplus post

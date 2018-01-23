@@ -9,11 +9,23 @@ var $anerveModule =  angular
           }
         }
       );
+
+    $anerveModule.directive('fallbackSrc', function () {
+        var fallbackSrc = {
+            link: function postLink(scope, iElement, iAttrs) {
+                iElement.bind('error', function() {
+                    angular.element(this).attr("src", iAttrs.fallbackSrc);
+                });
+            }
+        }
+        return fallbackSrc;
+    });
+
     $anerveModule.controller('HeaderController',HeaderController);
     
-    HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window'];
+    HeaderController.$inject = ['$http', '$state', '$location', '$scope', 'Global','$mdSidenav', '$mdUtil','$log', 'Session','$rootScope', '$window', 'MeanUser'];
 
-    function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window){
+    function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window, MeanUser){
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
@@ -225,6 +237,8 @@ var $anerveModule =  angular
         $rootScope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
+        
+        vm.meanuser = MeanUser;
         $rootScope.userImg = Session.getItem('img_loc');
         vm.menu = [
         /*{
@@ -408,14 +422,20 @@ var $anerveModule =  angular
                     var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
                       $http(configObj)
                           .then(function onFulfilled(response) {
+                              closeNoti();
                               var newData = JSON.stringify(response.data);
                               newData = JSON.parse(newData);
-                              $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
-                              $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
-                              $rootScope.cartUsers = newData.cartUsers;
-                              $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
-                              $rootScope.userCartId = newData.cartId;
-                              $rootScope.cartComments = newData.cartComments;
+                              if(newData.isEmpty != 'undefined' && newData.isEmpty == true){
+                                notify(newData.msg, newData.type);
+                              } else { 
+                                $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
+                                $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
+                                $rootScope.cartUsers = newData.cartUsers;
+                                $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
+                                $rootScope.userCartId = newData.cartId;
+                                $rootScope.cartComments = newData.cartComments;
+                                $rootScope.UserDetail()
+                              }
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
                               console.log(errorResponse);
@@ -659,11 +679,149 @@ var $anerveModule =  angular
               break;
           }
         }
+
+        
+        $rootScope.likeOrUnlike = function(i, action){
+          console.log('Test');
+         var socket = new io.Socket('localhost',{'port':3000});
+          //socket.connect();
+
+          socket.on('open', function(){
+              console.log('connected');
+              socket.send('hi!'); 
+          });
+
+
+          socket.on('packet', function(data){ 
+              console.log('message recived: ' + data);
+          });
+
+          socket.on('close', function(){
+              console.log('disconected');
+          });
+
+          /*if(action == 'like'){
+            var url = $rootScope.baseUrl+'api/likeInsta';
+            var msg = "Liked Successfully";
+            $rootScope.instagramPosts.data[i].likes.count += 1;
+            $rootScope.instagramPosts.data[i].user_has_liked = true;
+          }
+          else {
+            var url = $rootScope.baseUrl+'api/dislikeInsta';
+            var msg = "Uniked Successfully";
+            $rootScope.instagramPosts.data[i].likes.count -= 1;
+            $rootScope.instagramPosts.data[i].user_has_liked = false;
+          }
+          var postData = {id:$rootScope.instagramPosts.data[i].id};
+          var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+          $http(configObj)
+              .then(function onFulfilled(response) {
+                notify(msg,'success');
+              }).catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse);
+          }); */
+        }
+
+
+          // like tweet
+          $rootScope.likeTweet = function(index){
+            var tweetId = $rootScope.twitterPosts[index]['id_str'];
+            var postData = {'id':tweetId};
+            var url = $rootScope.baseUrl+'api/likeTweet';
+            var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                  if(response.status == 200){
+                   if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                    var code = response.data.errors[0].code;
+                    if(code == 139) 
+                      notify(response.data.errors[0].message);
+                    } else {
+                      notify('Liked Successfully','success');
+                      $rootScope.twitterPosts[index]['favorite_count'] += 1;
+                    }
+                  }
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse);
+            });
+          };
+          // dislike tweet if like
+          $rootScope.dislikeTweet = function(index){
+            var tweetId = $rootScope.twitterPosts[index]['id_str'];
+            var postData = {'id':tweetId};
+            var url = $rootScope.baseUrl+'api/dislikeTweet';
+            var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+            $http(configObj)
+                .then(function onFulfilled(response) {
+                  if(response.status == 200){
+                    if(typeof response.data != 'undefined' && typeof response.data.errors != 'undefined'){
+                      var code = response.data.errors[0].code;
+                      if(code == 144) 
+                        notify(response.data.errors[0].message);
+                    } else {
+                      notify('UnLiked Successfully','success');
+                      $rootScope.twitterPosts[index]['favorite_count'] -= 1;
+                    }
+                  }
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse);
+            });
+          };
        /*  var socket = io.connect();
           socket.on('news', function (data) {
             console.log(data);
             socket.emit('news', { my: 'just testing socket' });
           });*/
+
+
+
+            $rootScope.UserLoginInJava  = function (user) {
+
+              var USERNAME  = user.USERNAME;
+              var PASSWORD  = user.PASSWORD;
+
+              var url       = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
+             // var postData  = {USERNAME:USERNAME,PASSWORD:PASSWORD};
+              var configObj = { method: 'GET',url: url};
+
+                  $http(configObj)
+                    .then(function onFulfilled(response) {
+                          var dataJson = JSON.parse(JSON.stringify(response.data));
+                          console.log(dataJson);
+                          if(dataJson !== undefined){
+                            var key = dataJson.key;
+                            var UserID = dataJson.usr.userid;
+                            var img_loc = dataJson.usr.img_loc;
+                            var givname = dataJson.usr.givname;
+                            var surname = dataJson.usr.surname;
+                            var username = dataJson.usr.username;
+                            console.log(img_loc+' '+givname+' '+surname);
+                              if(key !== undefined){
+                                 Session.setItem('key_'+UserID, key);
+                                 Session.setItem('UserID', UserID);
+                                 Session.setItem('usrname', username);
+                                    var url2 = $rootScope.baseUrl+'api/SaveUserKey';
+                                    var postData2  =  {
+                                      key:key,
+                                      UserID:UserID
+                                    };
+                                    var configObj2 = { method: 'POST',url: url2, data: postData2};
+                                        $http(configObj2)
+                                            .then(function onFulfilled(response2) {
+                                              vm.meanuser.login(user);
+                                            }).catch( function onRejection(errorResponse2) {
+                                                console.log('Error: ', errorResponse2.status);
+                                                console.log(errorResponse2);
+                                        }); 
+                                    }
+                          }
+                          }).catch( function onRejection(errorResponse) {
+                              console.log('Error: ', errorResponse.status);
+                              console.log(errorResponse);
+                      }); 
+
+          };
+      
     }
 
 })();
