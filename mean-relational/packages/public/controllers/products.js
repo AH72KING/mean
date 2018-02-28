@@ -387,7 +387,7 @@
               }, function(product) {
                 $rootScope.CurrentProductDetail = product;
                 if(product !== undefined){
-                  $rootScope.CurrentProductDetailImage = $rootScope.UploadUrl+product.img_loc;
+                  $rootScope.CurrentProductDetailImage = $rootScope.ApiUploadUrl+product.img_loc;
                   var url = $rootScope.baseUrl+'api/getProductBuyingUsers';
                   var postData = {
                     productId:productId
@@ -1092,13 +1092,12 @@
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
                 });
-              }
-
+              };
             }
 
 
             if(connections.tumblr != undefined && connections.tumblr != 0 ){
-              console.log('tumblr')
+              console.log('tumblr');
               // tumblr methods
               function tumblrPosts(){
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
@@ -1168,7 +1167,7 @@
         //declare scope methods controllers
         $rootScope.loginUser = function(){
            $rootScope.UserLoginInJava(vm.loginUser);
-        }
+        };
         
         /*// get googleplus post
         function gplus(){

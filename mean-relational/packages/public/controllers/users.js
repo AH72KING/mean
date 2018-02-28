@@ -139,6 +139,9 @@
                 USERID: $stateParams.USERID
               }, function(user) {
                 vm.user = user;
+                $rootScope.getUsers({value:'A'});
+                $rootScope.showFriendCart(user.USERID);
+                $rootScope.getAllPosts(user.USERID);
             });
         }
 
@@ -148,7 +151,7 @@
             var type = usertype.value;
             switch(type){
                 case 'A': 
-                    find(); break;
+                    getAllUsers(); break;
                 case 'F':
                     getFriends(); break;
                 case 'M':
@@ -159,9 +162,12 @@
             }
         };
         // get user friends
-        function getAllUsers(){
+        function getAllUsers($removeUserIDs= null){
             users.query(function(users) {
-                 vm.users = users;
+                if($removeUserIDs != null){
+                 //forech
+                }
+                vm.users = users;
             });
         }
         // get user friends
@@ -369,7 +375,7 @@
             $rootScope.social.current = 'twitter';
             $rootScope.social.userId = id;
             $rootScope.getPosts('twitter');
-        }
+        };
 
         $rootScope.getPosts = function(social, limit=4){
             $rootScope.social.current = social;
@@ -406,7 +412,7 @@
                         console.log('Error: ', errorResponse);
                 });
             }
-        }
+        };
         $rootScope.getAllPosts = function(id){
             $rootScope.social.current = 'twitter';
             $rootScope.social.userId = id;
@@ -416,17 +422,15 @@
                 $rootScope.getPosts('instagram');
                 $rootScope.social.count += 1;
             }
-        }
+        };
         $rootScope.limitChange = function(social){
             var limit = $rootScope.social.limit;
             $rootScope.getPosts(social, limit);
-        }
+        };
 
         // edit posts 
         $rootScope.editPost = function(){
             
-        }
-
+        };
       }
-
 })();

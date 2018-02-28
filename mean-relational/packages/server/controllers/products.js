@@ -157,7 +157,8 @@ exports.all = function(req, res) {
     //db.product.findAll().then(function(product){
    db.product.findAll({limit: 12, 
       where: {
-        status : 'A'
+        status : 'A',
+        prodType : 'P'
       }
     }).then(function(product){
         var col1 = [];
@@ -306,7 +307,7 @@ exports.createCart = function(req, res) {
         grp_cartId =  localStorage.getItem('grp_cartId');
     }
     var data = {};
-    if(grp_cartId !== undefined && grp_cartId !== null){
+    if(grp_cartId !== undefined && grp_cartId !== null && grp_cartId > 0){
         data.grp_cartId = grp_cartId;
         data = JSON.stringify(data);
         data = JSON.parse(data);
@@ -317,11 +318,11 @@ exports.createCart = function(req, res) {
           data = [];
           var url = '';
           var key = '';
-        if (RequestUser) {
+        if(RequestUser){
           key = localStorage.getItem('key_'+user_id); 
           url = ApiBasePath+'createCart/'+key+'/';
         }else{
-            url = ApiBasePath+'createCart_guest/PK/';
+          url = ApiBasePath+'createCart_guest/PK/';
         }
 
         var options = {
@@ -891,7 +892,10 @@ exports.getAisleProd = function(req, res){
    var productsData = {};
    var $id = req.body.id;
    var $where = {};
-   if($id != "") $where.aisleId = $id;
+    if($id != ""){
+      $where.aisleId = $id;
+    }
+    $where.prodType = "P";
    db.product.findAll({limit: 12, 
       where: $where
     }).then(function(product){

@@ -29,7 +29,8 @@ module.exports = function(sequelize, DataTypes) {
 			position: DataTypes.TEXT,
 			rank: DataTypes.TEXT,
 			prev_rank: DataTypes.TEXT,
-			aisleId:DataTypes.INTEGER
+			aisleId:DataTypes.INTEGER,
+			prodType:DataTypes.STRING
 		},
 		{
 		timestamps: false,

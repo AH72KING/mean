@@ -162,7 +162,7 @@ exports.tumblrSaveBlog = function(req, res){
       }
     } else res.redirect('/all-products');
   });
-}
+};
 
 
 /**
@@ -268,7 +268,9 @@ exports.create = function(req, res) {
            var data = new Object();
                data.email = user.EMAIL;
                data.subject = 'Anerve Registration';
-               data.msg = 'Hi, Thanks for registering with Anerve. Your username: '+user.USERNAME+'. Happy Shopping with firends';
+               data.msg = 'Hi, Thanks for registering with Anerve. Your username: '+user.USERNAME+'. Happy Shopping with friends';
+               data.msg = 'Please Activate your account by clicking on link below ';
+               data.msg = 'http://localhost:3000/anerve/activate/account/';
             var qs = querystring.stringify(data);
             var qslength = qs.length;   
             var url = '/demos/anerve/mail.php';
@@ -355,13 +357,14 @@ exports.hasAuthorization = function(req, res, next) {
 exports.SaveUserKey = function(req, res){
   var user_id = req.body.UserID;
   var key = req.body.key;
-  if (user_id) {
+  console.log('SaveUserKey');
+  console.log(key);
+  console.log(user_id);
+  if(user_id){
         localStorage.setItem('key_'+user_id,key); 
-    } else {
-        //not logged in
-        localStorage.setItem('key',key);
+    }else{
+      localStorage.setItem('key',key);
     }
-      
    return res.send(200, 'Key Added To Session '+key);        
  };
 
@@ -559,7 +562,7 @@ exports.timeline = function(req, res){
     var tw_usrId = req.user.twitterUserId; // logged in user twitter id
     var userId = req.user.USERID;
     var socialUsrId = userId;
-    var limit
+    var limit;
     if (req.body.userId != undefined && req.body.userId != ''){
       socialUsrId = req.body.userId;
     }
@@ -733,7 +736,7 @@ exports.postTumblrPhoto = function(req, res){
       }
     }
   });
-}
+};
 
 // post tumblr video
 exports.postTumblrVideo = function(req, res){
@@ -761,7 +764,7 @@ exports.postTumblrVideo = function(req, res){
       }
     }
   });
-}
+};
 
 // post tumblr quote
 exports.postTumblrQuote = function(req, res){
@@ -792,7 +795,7 @@ exports.postTumblrQuote = function(req, res){
       }
     }
   });
-}
+};
 // postTumblrLink
 exports.postTumblrLink = function(req, res){
   var params = {type : 'link'};
@@ -830,14 +833,14 @@ exports.postTumblrLink = function(req, res){
       }
     }
   });
-}
+};
 
 // post media tweet
 exports.postMediaTweet = function(req, res){
   console.log(req.body);
   console.log(req.file);
   return res.jsonp('');
-}
+};
 
 exports.fbposts = function(req,res){
   if(req.user){
@@ -877,23 +880,21 @@ exports.instagramPosts = function(req, res){
     }).catch(function(err){
     });
   }
-}
+};
 
 exports.likeInsta = function(req, res){
   ig.post('media/'+req.body.id+'/likes').then((data) => {
     return res.jsonp(data);
   }).catch(function(err){
   });
-}
+};
 
 exports.dislikeInsta = function(req, res){
   ig.delete('media/'+req.body.id+'/likes').then((data) => {
     return res.jsonp(data);
   }).catch(function(err){
   });
-}
-
-
+};
 
 /*exports.googlePosts = function(req, res){
   plus.people.get({
@@ -902,7 +903,7 @@ exports.dislikeInsta = function(req, res){
   }, function (err, response) {
     return res.jsonp(response);
   });
-}*/
+};*/
 
 
 // validate current user key
@@ -954,10 +955,10 @@ exports.disconnectSocial = function(req, res){
   var usrId = req.user.USERID;
   var updateConnect = "";
   db.User.find({where : { USERID: usrId }}).then(function(user){
-      if (!user) {
+      if(!user){
             console.log('no user');
             return res.jsonp({"type":"error","msg":"User not found"});
-      } else {
+      }else{
          if(user.connections != null || user.connections != ""){
             updateConnect = {'connections':JSON.parse(user.connections)};
             updateConnect.connections[type] = 0;
@@ -978,6 +979,4 @@ exports.disconnectSocial = function(req, res){
         }).catch(function(err){
             return res.jsonp({"type":"error","msg":err});
         });
-      
-
 };

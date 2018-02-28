@@ -385,13 +385,13 @@ passport.use(new GoogleStrategy({
             var provider        = profile.provider;
 
             var whereObject = {};
-            if(current_user_id != undefined && current_user_id != 'undefined' && current_user_id != ''){
-                    whereObject.USERID = current_user_id;
-            }else{
-                if(email != undefined && email != 'undefined' && email != ''){
+             if(email != undefined && email != 'undefined' && email != ''){
                     whereObject.EMAIL = email;
+             }else{
+                if(current_user_id != undefined && current_user_id != 'undefined' && current_user_id != ''){
+                    whereObject.USERID = current_user_id;
                 }
-            }
+             }
             if(whereObject){
                     db.User.find({where : whereObject}).then(function(user){
                         if(!user){

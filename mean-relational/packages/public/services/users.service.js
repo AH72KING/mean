@@ -65,7 +65,7 @@ angular
                         $window.location.href = response.redirect;
                     }
                 }else{
-                $window.location.reload();
+                    $window.location.reload();
                 }
             }
 
@@ -106,7 +106,8 @@ angular
                         SURNAME: user.SURNAME
                     })
                      .then(function (res) {
-                        self.onIdentity(res);
+                        $window.location.href = '/';
+                        //self.onIdentity(res);
                     }, function(err) {
                         console.log(err);
                         self.onIdFail(err);

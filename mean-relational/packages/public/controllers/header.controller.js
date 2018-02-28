@@ -6,7 +6,7 @@ var $anerveModule =  angular
       filter('capitalize', function() {
           return function(input) {
             return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-          }
+          };
         }
       );
 
@@ -17,7 +17,7 @@ var $anerveModule =  angular
                     angular.element(this).attr("src", iAttrs.fallbackSrc);
                 });
             }
-        }
+        };
         return fallbackSrc;
     });
 
@@ -30,6 +30,7 @@ var $anerveModule =  angular
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
         $rootScope.baseUrl    = 'http://localhost:3000/';
+        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+':8080/Anerve/uploads/';
         $rootScope.UploadUrl  = 'http://localhost:3000/public/assets/';
         $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
         $rootScope.headers    = {
@@ -434,7 +435,7 @@ var $anerveModule =  angular
                                 $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
                                 $rootScope.userCartId = newData.cartId;
                                 $rootScope.cartComments = newData.cartComments;
-                                $rootScope.UserDetail()
+                                $rootScope.UserDetail();
                               }
                           }).catch( function onRejection(errorResponse) {
                               console.log('Error: ', errorResponse.status);
@@ -496,7 +497,7 @@ var $anerveModule =  angular
           $rootScope.postModal.currentSocial = type;
           $rootScope.postModal.index = index;
           $('.html5imageupload').html5imageupload();
-        }
+        };
 
 
         // delete tweet
@@ -582,7 +583,7 @@ var $anerveModule =  angular
 
             }
           }
-        })
+        });
 
         // post tumblr
         $rootScope.postTumblr = function(){
@@ -590,22 +591,18 @@ var $anerveModule =  angular
           if($rootScope.postModal.postype == 'Text' && $rootScope.data.tb_text != null){
             postData = {'msg':$rootScope.data.tb_text};
             urlMethod = "api/postTumblr";
-          }
-          else if($rootScope.postModal.postype == 'Photo') {
+          }else if($rootScope.postModal.postype == 'Photo') {
             if($rootScope.data.tb_src != null){
               postData = {'src':$rootScope.data.tb_src};
             }
             urlMethod = "api/postTumblrPhoto";
             
-          }
-          else if($rootScope.postModal.postype == 'Video') {
+          }else if($rootScope.postModal.postype == 'Video') {
             if($rootScope.data.tb_vid_src != null){
               postData = {'vid_src':$rootScope.data.tb_vid_src};
             }
             urlMethod = "api/postTumblrVideo";
-            
-          }
-          else if($rootScope.postModal.postype == 'Quote') {
+          }else if($rootScope.postModal.postype == 'Quote') {
             if($rootScope.data.tb_quote != null){
               postData = {'quote':$rootScope.data.tb_quote};
               if($rootScope.data.tb_source != null){
@@ -613,9 +610,7 @@ var $anerveModule =  angular
               }
             }
             urlMethod = "api/postTumblrQuote";
-            
-          }
-          else if($rootScope.postModal.postype == 'Link') {
+          }else if($rootScope.postModal.postype == 'Link') {
             if($rootScope.data.tb_link != null){
               postData = {'url':$rootScope.data.tb_link};
               if($rootScope.data.tb_link_title != null)
@@ -653,7 +648,7 @@ var $anerveModule =  angular
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
           });
-        }
+        };
 
         function editPostData(){
           switch($rootScope.postModal.postype){
@@ -691,7 +686,6 @@ var $anerveModule =  angular
               socket.send('hi!'); 
           });
 
-
           socket.on('packet', function(data){ 
               console.log('message recived: ' + data);
           });
@@ -720,7 +714,7 @@ var $anerveModule =  angular
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
           }); */
-        }
+        };
 
 
           // like tweet
@@ -775,13 +769,12 @@ var $anerveModule =  angular
 
 
 
-            $rootScope.UserLoginInJava  = function (user) {
+            $rootScope.UserLoginInJava = function (user) {
 
               var USERNAME  = user.USERNAME;
               var PASSWORD  = user.PASSWORD;
 
               var url       = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
-             // var postData  = {USERNAME:USERNAME,PASSWORD:PASSWORD};
               var configObj = { method: 'GET',url: url};
 
                   $http(configObj)
