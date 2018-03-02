@@ -30,8 +30,7 @@ Anerve.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-//window.ip = '192.168.100.88';
-window.ip = '192.168.1.88';
+window.ip = '34.214.120.75';
 function sidenavPushIn(){
         return {
             restrict: 'A',
