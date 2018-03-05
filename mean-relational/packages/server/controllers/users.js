@@ -15,7 +15,7 @@ var LocalStorage = require('node-localstorage').LocalStorage,
       access_token_key: localStorage.getItem('tw_token'),
       access_token_secret: localStorage.getItem('tw_secret')
     });
-
+var ip = db.sequelize.config.host;
 var tumblr = require('tumblr.js');
 var tmblr_client = tumblr.createClient({
   consumer_key: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
@@ -34,7 +34,7 @@ var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(
   '972158488032-4ovojau9eipa5voof0aaoh1qv0v0k0tt.apps.googleusercontent.com',
   'C2zw8rtG4jDBM0LDQrlauGyr',
-  'http://localhost:3000/api/auth/google/callback'
+  'http://'+ip+':3000/api/auth/google/callback'
 );
 
 
@@ -44,9 +44,7 @@ var ig = new Instagram({
   clientSecret: 'd33eb782538a40a8bc54d636055f4138',
   accessToken: localStorage.getItem('ig_token'),
 });
-//var baseUrl = 'http://localhost:3000/';
-var ip = db.sequelize.config.host;
-//var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
+
 var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
 var headers = {
            'Access-Control-Allow-Origin': '*',
@@ -270,7 +268,7 @@ exports.create = function(req, res) {
                data.subject = 'Anerve Registration';
                data.msg = 'Hi, Thanks for registering with Anerve. Your username: '+user.USERNAME+'. Happy Shopping with friends';
                data.msg = 'Please Activate your account by clicking on link below ';
-               data.msg = 'http://localhost:3000/anerve/activate/account/';
+               data.msg = 'http://'+ip+':3000/anerve/activate/account/';
             var qs = querystring.stringify(data);
             var qslength = qs.length;   
             var url = '/demos/anerve/mail.php';

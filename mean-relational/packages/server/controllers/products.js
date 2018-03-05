@@ -13,10 +13,7 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
-        //var baseUrl = 'http://localhost:3000/';
         var ip = db.sequelize.config.host;
-        //var ApiBaseUrl = 'http://'+ip+':8080/Anerve/anerveWs/AnerveService/';
         var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
         var headers = {
                    'Access-Control-Allow-Origin': '*',

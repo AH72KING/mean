@@ -29,9 +29,9 @@ var $anerveModule =  angular
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
-        $rootScope.baseUrl    = 'http://localhost:3000/';
-        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+':8080/Anerve/uploads/';
-        $rootScope.UploadUrl  = 'http://localhost:3000/public/assets/';
+        $rootScope.baseUrl    = 'http://34.214.120.75:3000/';
+        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+':8080/uploads/';
+        $rootScope.UploadUrl  = 'http://34.214.120.75:3000/public/assets/';
         $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
         $rootScope.headers    = {
             'Access-Control-Allow-Origin': '*',

@@ -20,29 +20,17 @@ module.exports = function(grunt) {
         watch: {
             jade: {
                 files: paths.jade,
-                options: {
-                    livereload: true,
-                },
             },
             js: {
                 files: paths.js,
                 tasks: ['jshint'],
-                options: {
-                    livereload: true,
-                },
             },
             html: {
                 files: paths.html,
-                options: {
-                    livereload: true,
-                },
             },
             css: {
                 files: paths.css,
-                tasks: ['csslint'],
-                options: {
-                    livereload: true
-                }
+                tasks: ['csslint']
             }
         },
         ngAnnotate:{
