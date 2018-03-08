@@ -11,6 +11,8 @@ module.exports = function(app) {
 app.route('/api/charge').post(products.charge);
 app.route('/api/products').get(products.all);
 
+app.route('/api/getAisles').get(products.getAisles);
+
 app.get('/api/createCart', products.createCart);
 
 app.route('/api/addToCart').post(products.addToCart);
@@ -43,7 +45,7 @@ app.route('/api/addCommentToCart').post(products.addCommentToCart);
 app.route('/api/suggestProd').post(products.suggestProd);
 app.route('/api/acceptProdInCart').post(products.acceptProdInCart);
 app.route('/api/getAisleProd').post(products.getAisleProd);
-app.route('/api/getAisles').post(products.getAisles);
+
 
 app.param('productId', products.product);
 };
