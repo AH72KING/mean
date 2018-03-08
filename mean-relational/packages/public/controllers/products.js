@@ -440,11 +440,19 @@
                 if(lastProductID === undefined){
                     lastProductID = $rootScope.lastProductID;
                 }
-                var url = $rootScope.ApiBaseUrl+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
-                if($rootScope.AislesIsSelected){
-                   url = $rootScope.ApiBaseUrl+'getAllProdsInLocDefaultInAisle_mini/PK/'+lastProductID+'/'+nextProducts+'/'+$rootScope.AislesSelectedID;
+                var postData = {
+                  'lastProductID':lastProductID,
+                  'nextProducts':nextProducts
                 }
-                var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
+                //var url = $rootScope.baseUrl+'api/getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
+                var url = $rootScope.baseUrl+'api/getAllProdsInLocDefault_thin';
+                if($rootScope.AislesIsSelected){
+                   //url = $rootScope.baseUrl+'api/getAllProdsInLocDefaultInAisle_mini/PK/'+lastProductID+'/'+nextProducts+'/'+$rootScope.AislesSelectedID;
+                   url = $rootScope.baseUrl+'api/getAllProdsInLocDefaultInAisle_mini';
+                   postData['AislesSelectedID'] = $rootScope.AislesSelectedID;
+                }
+
+                var configObj = { method: 'POST', url: url, data: postData, headers: $rootScope.headers};
                 $http(configObj)
                     .then(function onFulfilled(response) {
                         body = response.data;

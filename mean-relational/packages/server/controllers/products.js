@@ -964,6 +964,73 @@ exports.getAisles = function(req, res){
 };
 
 
+// getAllProdsInLocDefault_thin
+exports.getAllProdsInLocDefault_thin = function(req, res){
+   var lastProductID = req.body.lastProductID;
+   var nextProducts = req.body.nextProducts;
+    var url = ApiBasePath+'getAllProdsInLocDefault_thin/'+lastProductID+'/'+lastProductID;
+    var body = '';
+    var data = [];
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    req = http.request(options,function(res2){
+      res2.on('data', function(chunk) {
+           body += chunk;
+      });
+      res2.on('end', function() { 
+        //data = JSON.stringify(body);
+          data = JSON.parse(body);  
+          return res.jsonp(data);
+      });
+    });
+
+    req.on('error', function(e){
+       console.log('problem with request:'+ e.message);
+    });
+
+    req.end();
+
+};
+
+// getAllProdsInLocDefaultInAisle_mini
+exports.getAllProdsInLocDefaultInAisle_mini = function(req, res){
+    var lastProductID     = req.body.lastProductID;
+    var nextProducts      = req.body.nextProducts;
+    var AislesSelectedID  = req.body.AislesSelectedID;
+    var url = ApiBasePath+'getAllProdsInLocDefaultInAisle_mini/'+lastProductID+'/'+lastProductID+'/'+AislesSelectedID;
+    var body = '';
+    var data = [];
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    req = http.request(options,function(res2){
+      res2.on('data', function(chunk) {
+           body += chunk;
+      });
+      res2.on('end', function() { 
+        //data = JSON.stringify(body);
+          data = JSON.parse(body);  
+          return res.jsonp(data);
+      });
+    });
+
+    req.on('error', function(e){
+       console.log('problem with request:'+ e.message);
+    });
+
+    req.end();
+
+};
+
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 
 FROM groupcart a 
 INNER JOIN group_cart_products b on a.grp_cartId = b.grp_cartId 

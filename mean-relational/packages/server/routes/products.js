@@ -46,6 +46,9 @@ app.route('/api/suggestProd').post(products.suggestProd);
 app.route('/api/acceptProdInCart').post(products.acceptProdInCart);
 app.route('/api/getAisleProd').post(products.getAisleProd);
 
+app.route('/api/getAllProdsInLocDefault_thin').post(products.getAllProdsInLocDefault_thin);
+app.route('/api/getAllProdsInLocDefaultInAisle_mini').post(products.getAllProdsInLocDefaultInAisle_mini);
+
 
 app.param('productId', products.product);
 };
