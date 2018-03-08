@@ -316,18 +316,18 @@ var $anerveModule =  angular
         // get friend request
         $rootScope.friendRequests = function(){
           if(typeof Session.getItem('UserID') != 'undefined'){
-          var UserID  =  Session.getItem('UserID');
+            var UserID  =  Session.getItem('UserID');
             if(UserID != null){
               var key   =  Session.getItem('key_'+UserID);
-              var url = $rootScope.ApiBaseUrl+'myInvites/'+key;
-              var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
-              $http(configObj)
-                  .then(function onFulfilled(response) {
-                      var dataJson    = JSON.parse(JSON.stringify(response.data));
-                      $rootScope.requests = dataJson;
-                  }).catch( function onRejection(errorResponse) {
-                    console.log(errorResponse);
-                  }); 
+              var url = $rootScope.baseUrl+'api/friendRequests';
+              var postData = {'key':key};
+              var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+              $http(configObj).then(function onFulfilled(response) {
+                   var dataJson    = JSON.parse(JSON.stringify(response.data));
+                   $rootScope.requests = dataJson;
+              }).catch( function onRejection(errorResponse) {
+                  console.log(errorResponse);
+              });    
             }
           }
         };
@@ -358,20 +358,19 @@ var $anerveModule =  angular
           var currentUId  =  Session.getItem('UserID');
           if(typeof currentUId != 'undefined' && currentUId != null){
             var key   =  Session.getItem('key_'+currentUId);
-            var url = $rootScope.ApiBaseUrl+'acceptInvitation/'+key+'/'+userId;
-            var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
-            $http(configObj)
-                .then(function onFulfilled(response) {
-                    var dataJson    = JSON.parse(JSON.stringify(response.data));
-                    console.log(dataJson);
-                    $rootScope.requests.slice(index, 1);
+              var url = $rootScope.baseUrl+'api/acceptRequest';
+              var postData = {'key':key,'userId':userId};
+              var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
+              $http(configObj).then(function onFulfilled(response) {
+                   var dataJson    = JSON.parse(JSON.stringify(response.data));
+                   $rootScope.requests.slice(index, 1);
                     if(index === null){
-                       $rootScope.CurrentUserBuyerDetail.action = '02';
+                      $rootScope.CurrentUserBuyerDetail.action = '02';
                     }
                     notify('Friend Request has been Accepted Successfully');
-                }).catch( function onRejection(errorResponse) {
+              }).catch( function onRejection(errorResponse) {
                   console.log(errorResponse);
-                }); 
+              }); 
           }
         };
 

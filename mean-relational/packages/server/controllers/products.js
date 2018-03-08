@@ -932,7 +932,36 @@ exports.getAisleProd = function(req, res){
       });
 };
 
+// getAisles
+exports.getAisles = function(req, res){
+    var url = ApiBasePath+'getAisles';
+    var body = '';
+    var data = [];
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    req = http.request(options,function(res2){
+      res2.on('data', function(chunk) {
+           body += chunk;
+      });
+      res2.on('end', function() { 
+        //data = JSON.stringify(body);
+          data = JSON.parse(body);  
+          return res.jsonp(data);
+      });
+    });
 
+    req.on('error', function(e){
+       console.log('problem with request:'+ e.message);
+    });
+
+    req.end();
+
+};
 
 
 /*SELECT u.USERID, u.GIVNAME ,b.groupCartProductId, b.crt_item 

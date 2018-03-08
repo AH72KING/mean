@@ -978,3 +978,62 @@ exports.disconnectSocial = function(req, res){
             return res.jsonp({"type":"error","msg":err});
         });
 };
+exports.friendRequests = function(req, res){
+  console.log(req.body);
+    var key = req.body.key;
+    var usrId = req.user.USERID;
+    var body = '';
+    var data = [];
+    var url = ApiBasePath+'myInvites/'+key;
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        
+        method: 'POST',
+        headers: headers
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          return res.jsonp(data);
+        });
+    });
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
+};
+
+exports.acceptRequest = function(req, res){
+  console.log(req.body);
+    var key = req.body.key;
+    var usrId = req.body.usrId;
+    var USERID = req.user.USERID;//loggedIN please check
+    var body = '';
+    var data = [];
+    var url = ApiBasePath+'acceptInvitation/'+key+'/'usrId;
+    var options = {
+        hostname: ip,
+        port: '8080',
+        path: url,
+        method: 'GET',
+        headers: headers
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          return res.jsonp(data);
+        });
+    });
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
+};

@@ -1129,25 +1129,23 @@
             }
         }
         // watch
-         $rootScope.uploadFile = function(element) {
+        $rootScope.uploadFile = function(element) {
             $rootScope.twfile = element;
             console.log(element);
         };
 
-         function getAisles(){
+        $rootScope.getAisles = function(element){
           $rootScope.aisles = {};
-          var url = $rootScope.ApiBaseUrl+'getAisles';
+          var url = $rootScope.baseUrl+'api/getAisles';
           var configObj = { method: 'GET',url: url, headers: $rootScope.headers};
-          $http(configObj)
-              .then(function onFulfilled(response) {
-                if(typeof response.data != 'undefined'){
-                  $rootScope.aisles = response.data;
-                }
+              $http(configObj).then(function onFulfilled(response) {
+                   var dataJson    = JSON.parse(JSON.stringify(response.data));
+                   $rootScope.aisles = response.data;
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
-          }); 
+              });     
         }
-        getAisles();
+        $rootScope.getAisles();
 
         
 
