@@ -989,7 +989,6 @@ exports.friendRequests = function(req, res){
         hostname: ip,
         port: '8080',
         path: url,
-        
         method: 'POST',
         headers: headers
     };
@@ -1015,7 +1014,7 @@ exports.acceptRequest = function(req, res){
     var USERID = req.user.USERID;//loggedIN please check
     var body = '';
     var data = [];
-    var url = ApiBasePath+'acceptInvitation/'+key+'/'usrId;
+    var url = ApiBasePath+'acceptInvitation/'+key+'/'+usrId;
     var options = {
         hostname: ip,
         port: '8080',

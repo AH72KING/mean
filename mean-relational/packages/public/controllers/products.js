@@ -1144,7 +1144,7 @@
               }).catch( function onRejection(errorResponse) {
                   console.log('Error: ', errorResponse);
               });     
-        }
+        };
         $rootScope.getAisles();
 
         
