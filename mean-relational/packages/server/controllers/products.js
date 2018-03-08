@@ -984,6 +984,8 @@ exports.getAllProdsInLocDefault_thin = function(req, res){
       });
       res2.on('end', function() { 
         //data = JSON.stringify(body);
+          console.log(url);
+          console.log(body);
           data = JSON.parse(body);  
           return res.jsonp(data);
       });
