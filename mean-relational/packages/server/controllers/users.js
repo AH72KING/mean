@@ -15,7 +15,8 @@ var LocalStorage = require('node-localstorage').LocalStorage,
       access_token_key: localStorage.getItem('tw_token'),
       access_token_secret: localStorage.getItem('tw_secret')
     });
-var ip = db.sequelize.config.live;
+//var ip = db.sequelize.config.host;
+var ip = '34.214.120.75';
 var tumblr = require('tumblr.js');
 var tmblr_client = tumblr.createClient({
   consumer_key: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
