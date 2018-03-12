@@ -324,7 +324,7 @@ exports.createCart = function(req, res) {
 
         var options = {
               hostname: ip,
-              port: '8080',
+              port: '80',
               path: url,
               method: 'GET',
               headers: headers
@@ -390,7 +390,7 @@ exports.addToCart = function(req, res) {
         }
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -436,7 +436,7 @@ exports.addUserToCart = function(req, res){
     }
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -479,7 +479,7 @@ exports.removeUserFromCart = function(req, res){
     }
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -530,7 +530,7 @@ exports.nl_removefromCart = function(req, res) {
     var data = [];
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: ApiBasePath+'nl_removefromCart/'+cartID+'/'+productID+'/',
         method: 'GET',
         headers: headers
@@ -608,7 +608,7 @@ exports.myfriends =  function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: ApiBasePath+'myfriends_mini/'+key+'/',
         method: 'GET',
         headers: headers
@@ -812,7 +812,7 @@ exports.suggestProd = function(req, res){
                 var data = [];
                 var options = {
                     hostname: ip,
-                    port: '8080',
+                    port: '80',
                     path: url,
                     method: 'GET',
                     headers: headers
@@ -856,7 +856,7 @@ exports.acceptProdInCart = function(req, res){
       var data = [];
       var options = {
           hostname: ip,
-          port: '8080',
+          port: '80',
           path: url,
           method: 'GET',
           headers: headers
@@ -939,7 +939,7 @@ exports.getAisles = function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -973,7 +973,7 @@ exports.getAllProdsInLocDefault_thin = function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -1009,7 +1009,7 @@ exports.getAllProdsInLocDefaultInAisle_mini = function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers

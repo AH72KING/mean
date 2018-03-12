@@ -67,7 +67,7 @@ exports.authCallback = function(req, res) {
     var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
@@ -192,7 +192,7 @@ exports.signout = function(req, res) {
 
       var options = {
           hostname: ip,
-          port: '8080',
+          port: '80',
           path: url,
           method: 'GET',
           headers: headers
@@ -914,7 +914,7 @@ exports.validatekey = function(req, res){
         var body = '';
         var options = {
             hostname: ip,
-            port: '8080',
+            port: '80',
             path: ApiBasePath+'checkKey/'+key,
             method: 'GET',
             headers: headers
@@ -990,7 +990,7 @@ exports.friendRequests = function(req, res){
     var url = ApiBasePath+'myInvites/'+key;
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'POST',
         headers: headers
@@ -1020,7 +1020,7 @@ exports.acceptRequest = function(req, res){
     var url = ApiBasePath+'acceptInvitation/'+key+'/'+usrId;
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers

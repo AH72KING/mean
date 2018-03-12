@@ -30,9 +30,9 @@ var $anerveModule =  angular
         $rootScope.isLoaded = false;
         $rootScope.ip  = window.ip;
         $rootScope.baseUrl    = 'http://34.214.120.75:3000/';
-        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+':8080/uploads/';
+        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+'/uploads/';
         $rootScope.UploadUrl  = 'http://34.214.120.75:3000/public/assets/';
-        $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/';
+        $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+'/Anerve/anerveWs/AnerveService/';
         $rootScope.headers    = {
             'Access-Control-Allow-Origin': '*',
             'Content-Type' : 'application/json; charset=UTF-8',
@@ -773,7 +773,7 @@ var $anerveModule =  angular
               var USERNAME  = user.USERNAME;
               var PASSWORD  = user.PASSWORD;
 
-              var url       = 'http://'+$rootScope.ip+':8080/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
+              var url       = 'http://'+$rootScope.ip+'/Anerve/anerveWs/AnerveService/loginservice/'+USERNAME+'/'+PASSWORD;
               var configObj = { method: 'GET',url: url};
 
                   $http(configObj)

@@ -499,7 +499,7 @@ function UserLoginInJava(user) {
     var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
     var options = {
         hostname: ip,
-        port: '8080',
+        port: '80',
         path: url,
         method: 'GET',
         headers: headers
