@@ -2,6 +2,7 @@ module.exports = {
     // This is your MYSQL Database configuration
     db: {
         host:'localhost',
+        live:'34.214.120.75',
         username: 'root',
         password: 'tinga',
         name: 'spine',
