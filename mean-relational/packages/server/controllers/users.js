@@ -981,7 +981,10 @@ exports.disconnectSocial = function(req, res){
 exports.friendRequests = function(req, res){
   console.log(req.body);
     var key = req.body.key;
-    var usrId = req.user.USERID;
+    /*var usrId = '';
+    if(req.user){
+      usrId = req.user.USERID;
+    }*/
     var body = '';
     var data = [];
     var url = ApiBasePath+'myInvites/'+key;
