@@ -374,24 +374,23 @@ var $anerveModule =  angular
           }
         };
 
-        // unfollow user
+         // unfollow user
         $rootScope.unFollow = function(userid){
             var UserID  =  Session.getItem('UserID');
             if(typeof UserID != 'undefined' && UserID != null){
-                var key   =  Session.getItem('key_'+UserID);
-                var url = $rootScope.ApiBaseUrl+'unfollowUser';
-                var postData = {key:key, query_userId:userid};
-                var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        var dataJson = JSON.parse(JSON.stringify(response.data));
-                        console.log(dataJson);
-                        $rootScope.CurrentUserBuyerDetail.action = '03';
-                        notify('User Unfollowed Successfully');
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse.status);
-                }); 
-            } 
+              var key   =  Session.getItem('key_'+UserID);
+              var url = $rootScope.baseUrl+'api/unfollowUser';
+              var postData = {key:key, query_userId:userid};
+              var configObj = { method: 'POST',url: url, data: postData, headers: $rootScope.headers};
+                $http(configObj).then(function onFulfilled(response) {
+                    var dataJson = JSON.parse(JSON.stringify(response.data));
+                    console.log(dataJson);
+                    $rootScope.CurrentUserBuyerDetail.action = '03';
+                }).catch( function onRejection(errorResponse) {
+                    console.log('Error: ', errorResponse.status);
+                    console.log(errorResponse);
+                });
+            }
         };
                   // send friend request
         $rootScope.sendFriendRequest = function(userid){

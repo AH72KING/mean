@@ -159,6 +159,7 @@ app.route('/api/disconnect').post(users.disconnectSocial);
 app.route('/api/friendRequests').post(users.friendRequests);
 app.route('/api/acceptRequest').post(users.acceptRequest);
 app.route('/api/followUser').post(users.followUser);
+app.route('/api/unfollowUser').post(users.unfollowUser);
 app.route('/api/UserLoginInJava').post(users.UserLoginInJava);
 
 };

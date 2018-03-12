@@ -1080,6 +1080,44 @@ exports.followUser = function(req, res){
     req2.end();
 };
 
+exports.unfollowUser = function(req, res){
+  console.log(req.body);
+    var key = req.body.key;
+    var query_userId = req.body.query_userId;
+    var USERID = req.user.USERID;//loggedIN please check
+    var body = '';
+    var data = [];
+    var data2 = {key,key};
+    var url = ApiBasePath+'unfollowUser/';
+    var qs = querystring.stringify(data2);
+    var qslength = qs.length;   
+    var options = {
+        hostname: ip,
+        port: '80',
+        path: url,
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': qslength
+        }
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          return res.jsonp(data);
+        });
+    });
+    req.write(qs);
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
+};
+
+
 exports.UserLoginInJava = function(req, res){
   console.log(req.body);
     var PASSWORD = req.body.PASSWORD;
