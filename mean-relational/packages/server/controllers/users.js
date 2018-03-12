@@ -992,7 +992,7 @@ exports.friendRequests = function(req, res){
         hostname: ip,
         port: '80',
         path: url,
-        method: 'POST',
+        method: 'GET',
         headers: headers
     };
     var req2 = http.request(options,function(res2){
@@ -1018,12 +1018,81 @@ exports.acceptRequest = function(req, res){
     var body = '';
     var data = [];
     var url = ApiBasePath+'acceptInvitation/'+key+'/'+usrId;
+    
     var options = {
         hostname: ip,
         port: '80',
         path: url,
         method: 'GET',
-        headers: headers
+        headers:headers
+        
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          return res.jsonp(data);
+        });
+    });
+    
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
+};
+
+exports.followUser = function(req, res){
+  console.log(req.body);
+    var key = req.body.key;
+    var query_userId = req.body.query_userId;
+    var USERID = req.user.USERID;//loggedIN please check
+    var body = '';
+    var data = [];
+    var data2 = {key,key};
+    var url = ApiBasePath+'followUser/';
+    var qs = querystring.stringify(data2);
+    var qslength = qs.length;   
+    var options = {
+        hostname: ip,
+        port: '80',
+        path: url,
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': qslength
+        }
+    };
+    var req2 = http.request(options,function(res2){
+        res2.on('data', function(chunk) {
+          body += chunk;
+        });
+        res2.on('end', function() { 
+          var dataJson = JSON.parse(body);
+          return res.jsonp(data);
+        });
+    });
+    req.write(qs);
+    req2.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+    req2.end();
+};
+
+exports.UserLoginInJava = function(req, res){
+  console.log(req.body);
+    var PASSWORD = req.body.PASSWORD;
+    var USERNAME = req.user.USERNAME;//loggedIN please check
+    var body = '';
+    var data = [];
+    var url = ApiBasePath+'loginservice/'+USERNAME+'/'+PASSWORD;
+    var options = {
+        hostname: ip,
+        port: '80',
+        path: url,
+        method: 'GET',
+        headers:headers
     };
     var req2 = http.request(options,function(res2){
         res2.on('data', function(chunk) {
