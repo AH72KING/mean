@@ -934,6 +934,7 @@ exports.getAisleProd = function(req, res){
 
 // getAisles
 exports.getAisles = function(req, res){
+    console.log(ip);
     var url = ApiBasePath+'getAisles';
     var body = '';
     var data = [];
