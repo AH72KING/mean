@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
         //var ip = db.sequelize.config.host;
-      var ip = '34.214.120.75';
+      var ip = '172.104.62.180';
         var ApiBasePath = '/Anerve/anerveWs/AnerveService/';
         var headers = {
                    'Access-Control-Allow-Origin': '*',
@@ -294,6 +294,8 @@ exports.all = function(req, res) {
 
 exports.createCart = function(req, res) {
     var RequestUser = req.user;
+    //console.log('req.user');
+    //console.log(req.user);
     var grp_cartId = null;
     var user_id = 0;
     if (RequestUser) {
@@ -322,10 +324,10 @@ exports.createCart = function(req, res) {
         }else{
           url = ApiBasePath+'createCart_guest/PK/';
         }
-
+        console.log(url);
         var options = {
               hostname: ip,
-              port: '80',
+              port: '8080',
               path: url,
               method: 'GET',
               headers: headers
@@ -338,7 +340,7 @@ exports.createCart = function(req, res) {
             });
 
             res2.on('end', function() {
-
+                
                 data = JSON.parse(body); 
                               /*var cart_items     = data.cart_items;
                               var cartUsers      = data.cartUsers;
@@ -391,7 +393,7 @@ exports.addToCart = function(req, res) {
         }
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -437,7 +439,7 @@ exports.addUserToCart = function(req, res){
     }
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -480,7 +482,7 @@ exports.removeUserFromCart = function(req, res){
     }
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -531,7 +533,7 @@ exports.nl_removefromCart = function(req, res) {
     var data = [];
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: ApiBasePath+'nl_removefromCart/'+cartID+'/'+productID+'/',
         method: 'GET',
         headers: headers
@@ -609,7 +611,7 @@ exports.myfriends =  function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: ApiBasePath+'myfriends_mini/'+key+'/',
         method: 'GET',
         headers: headers
@@ -813,7 +815,7 @@ exports.suggestProd = function(req, res){
                 var data = [];
                 var options = {
                     hostname: ip,
-                    port: '80',
+                    port: '8080',
                     path: url,
                     method: 'GET',
                     headers: headers
@@ -857,7 +859,7 @@ exports.acceptProdInCart = function(req, res){
       var data = [];
       var options = {
           hostname: ip,
-          port: '80',
+          port: '8080',
           path: url,
           method: 'GET',
           headers: headers
@@ -941,7 +943,7 @@ exports.getAisles = function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -966,16 +968,52 @@ exports.getAisles = function(req, res){
 };
 
 
+// getAllOffers
+exports.getAllOffers = function(req, res){
+    var lastProductID = req.body.lastProductID;
+     var url = ApiBasePath+'fetch_offers';
+     // return res.jsonp(ip+':'+'8080'+'/'+url);
+     var body = '';
+     var data = [];
+     var options = {
+         hostname: ip,
+         port: '8080',
+         path: url,
+         method: 'GET',
+         headers: headers
+     };
+     req = http.request(options,function(res2){
+       res2.on('data', function(chunk) {
+            body += chunk;
+       });
+       res2.on('end', function() { 
+         //data = JSON.stringify(body);
+           console.log(url);
+           console.log(body);
+           var offerData = JSON.parse(body);  
+           return res.jsonp(offerData);
+       });
+     });
+ 
+     req.on('error', function(e){
+        console.log('problem with request:'+ e.message);
+     });
+ 
+     req.end();
+ 
+ };
+ 
 // getAllProdsInLocDefault_thin
 exports.getAllProdsInLocDefault_thin = function(req, res){
    var lastProductID = req.body.lastProductID;
    var nextProducts = req.body.nextProducts;
     var url = ApiBasePath+'getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
+    // return res.jsonp(ip+':'+'8080'+'/'+url);
     var body = '';
     var data = [];
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -1011,7 +1049,7 @@ exports.getAllProdsInLocDefaultInAisle_mini = function(req, res){
     var data = [];
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers

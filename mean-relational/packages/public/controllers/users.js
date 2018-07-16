@@ -391,6 +391,7 @@
                         console.log('Error: ', errorResponse);
                 });
             } else if(social == 'tumblr'){
+                console.log(social);
                 var url = $rootScope.baseUrl+'api/tumblrPosts';
                 var postData = {'userId':$rootScope.social.userId, limit:limit};
                 console.log(postData);

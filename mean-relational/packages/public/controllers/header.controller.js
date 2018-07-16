@@ -28,10 +28,11 @@ var $anerveModule =  angular
     function HeaderController($http, $state, $location, $scope, Global, $mdSidenav, $mdUtil, $log, Session, $rootScope, $window, MeanUser){
         $scope.isNotLogOut = false;
         $rootScope.isLoaded = false;
+        $rootScope.productDetailTab = 0;
         $rootScope.ip  = window.ip;
-        $rootScope.baseUrl    = 'http://34.214.120.75:3000/';
-        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+'/uploads/';
-        $rootScope.UploadUrl  = 'http://34.214.120.75:3000/public/assets/';
+        $rootScope.baseUrl    = 'http://172.104.62.180:5000/';
+        $rootScope.ApiUploadUrl = 'http://'+$rootScope.ip+':8080/uploads/';
+        $rootScope.UploadUrl  = 'http://172.104.62.180:5000/public/assets/';
         $rootScope.ApiBaseUrl = 'http://'+$rootScope.ip+'/Anerve/anerveWs/AnerveService/';
         $rootScope.headers    = {
             'Access-Control-Allow-Origin': '*',
@@ -43,13 +44,18 @@ var $anerveModule =  angular
         };  
 
              $rootScope.twitterConnect  = 'link it';
+             $rootScope.twitterText  = '<i class="fa fa-link"></i>';
              $rootScope.tumblrConnect   = 'link it';
+             $rootScope.tumblrText  = '<i class="fa fa-link"></i>';
              $rootScope.facebookConnect = 'link it';
+             $rootScope.facebookText  = '<i class="fa fa-link"></i>';
              //$rootScope.googleConnect   = 'link it';
+             //$rootScope.googleText  = '<i class="fa fa-link"></i>';
              $rootScope.instagramConnect   = 'link it';
+             $rootScope.instagramText  = '<i class="fa fa-link"></i>';
 
              $rootScope.provider = 'local';
-        $http.get($rootScope.baseUrl+'api/getUser').then(function(result) { 
+            $http.get($rootScope.baseUrl+'api/getUser').then(function(result) { 
            var currentUserChecker = $rootScope.currentUser = result.data;
 
            console.log('currentUser');
@@ -63,31 +69,36 @@ var $anerveModule =  angular
                 console.log('test '+connections.twitter);
                  if(connections.twitter != undefined && connections.twitter != 0){
                    $rootScope.twitterConnect = 'Unlink';
+                   $rootScope.twitterText = '<i class="fa fa-chain-broken"></i>';
                    $rootScope.twitterUserId = currentUserChecker.twitterUserId;
                  }
                  if(connections.tumblr != undefined && connections.tumblr != 0){
                    $rootScope.tumblrConnect = 'Unlink';
+                   $rootScope.tumblrText = '<i class="fa fa-chain-broken"></i>';
                  }
                  if(connections.facebook != undefined && connections.facebook != 0){
                    $rootScope.facebookConnect = 'Unlink';
+                   $rootScope.facebookText = '<i class="fa fa-chain-broken"></i>';
                    $rootScope.facebookUserId  = currentUserChecker.facebookUserId;
                  }
                  if(connections.instagram != undefined && connections.instagram != 0){
                    $rootScope.instagramConnect = 'Unlink';
+                   $rootScope.instagramText = '<i class="fa fa-chain-broken"></i>';
                    $rootScope.ig_id = currentUserChecker.ig_id;
                  }
                 /* if(connections.google != undefined && connections.google != 0){
                    $rootScope.googleConnect = 'Unlink';
+                   $rootScope.googleText = '<i class="fa fa-chain-broken"></i>';
                    $rootScope.openId = currentUserChecker.openId;
                  }*/
               }
                $rootScope.provider = currentUserChecker.provider;
            }
            $rootScope.socialApps = [
-            { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter',  'connect':$rootScope.twitterConnect },
-            { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr',   'connect':$rootScope.tumblrConnect},
-            { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook', 'connect':$rootScope.facebookConnect},
-            { 'name':'Instagram',  'key':'instagram',  'href':'/api/auth/instagram',   'connect':$rootScope.instagramConnect},
+            { 'name':'Twitter', 'key':'twitter', 'href':'/api/auth/twitter', 'text':$rootScope.twitterText, 'connect':$rootScope.twitterConnect },
+            { 'name':'Tumblr',  'key':'tumblr',  'href':'/api/auth/tumblr', 'text':$rootScope.tumblrText,   'connect':$rootScope.tumblrConnect},
+            { 'name':'Facebook','key':'facebook','href':'/api/auth/facebook', 'text':$rootScope.facebookText, 'connect':$rootScope.facebookConnect},
+            { 'name':'Instagram',  'key':'instagram',  'href':'/api/auth/instagram', 'text':$rootScope.instagramText,   'connect':$rootScope.instagramConnect},
           ];
           console.log($rootScope.socialApps);
         });
@@ -214,6 +225,10 @@ var $anerveModule =  angular
                   console.log('Error: ', errorResponse);
           }); 
         };
+        $rootScope.doTheBack = function() {
+          window.history.back();
+        };
+
         $rootScope.validatekey= function(){
 
           var url = $rootScope.baseUrl+'api/validatekey';
@@ -221,11 +236,21 @@ var $anerveModule =  angular
           $http(configObj)
               .then(function onFulfilled(response) {
                   if(response.data == false){
+                    console.log('no key');
+                    console.log($rootScope.currentUser);
+                    //var currentUIdLog  =  Session.getItem('UserID');
+                    var currentUIdLog  =  $rootScope.currentUser.USERID;
+                    console.log(currentUIdLog);
+                    if(typeof currentUIdLog != 'undefined' && currentUIdLog != null){
+                      console.log('login');
+                      logout();
+                    }
                     if($scope.isNotLogOut){
                       $scope.isNotLogOut = true;
                       logout();
                     }
                   }else if(response.data != false && response.data != true) {
+                    console.log('key here');
                     Session.setItem('UserID',response.data.userId);
                     Session.setItem('key_'+response.data.userId, response.data.key);
                     $rootScope.provider = response.data.provider;
@@ -235,7 +260,7 @@ var $anerveModule =  angular
               });
         };
         $rootScope.validatekey();
-        $rootScope.defaultAvatar = 'http://localhost:3000/public/assets/images/default-avatar.png';
+        $rootScope.defaultAvatar = 'http://172.104.62.180:5000/public/assets/images/default-avatar.png';
         var vm = this;
         vm.global = Global;
         
@@ -284,7 +309,10 @@ var $anerveModule =  angular
         $rootScope.lockProductDetail = false;
         $rootScope.lockUserDetail = false;
 
-        
+        $rootScope.toggleSidebar = function(sidebar) {
+          console.log(sidebar);
+          return $mdSidenav(sidebar).toggle();
+        };
         $rootScope.isLeftOpen = function() {
           return $mdSidenav('left').isOpen();
         };
@@ -300,7 +328,7 @@ var $anerveModule =  angular
 
         $rootScope.getDefaultAvatar = function(url){
           if(url == null){
-            url = '/images/default-avatar.png'; 
+            url = 'anerve/usr_images/default-avatar.png'; 
           }else {
             //url = '/images/default-avatar.png'; 
            /* var link = $rootScope.UploadUrl+url;
@@ -429,6 +457,8 @@ var $anerveModule =  angular
                                 $rootScope.CurrentUserBuyerDetail = newData.cartOwner;
                                 $rootScope.CurrentUserBuyerProductsDetail = newData.cartProducts;
                                 $rootScope.cartUsers = newData.cartUsers;
+                                //console.log('cartUsers');
+                                //console.log($rootScope.cartUsers);
                                 $rootScope.isCartMember = $rootScope.checkInCartUsers(newData.cartUsers);
                                 $rootScope.userCartId = newData.cartId;
                                 $rootScope.cartComments = newData.cartComments;
@@ -441,6 +471,10 @@ var $anerveModule =  angular
                
         };
         $rootScope.showFriendCart = function(USERID){
+          if($rootScope.productDetailTab == 22){
+            $rootScope.productDetailTab = 0;
+            return false;
+          }
           console.log('user id is');
           console.log(USERID);
           if(angular.isNumber(USERID) ){
@@ -466,7 +500,7 @@ var $anerveModule =  angular
         $rootScope.redirectTo = function($url, $action){
           var index;
           if($action != 'Unlink')
-            $window.location.href = 'http://localhost:3000'+$url;
+            $window.location.href = 'http://172.104.62.180:5000'+$url;
           else {
             var social = $rootScope.socialApps.filter(function(item) {
               if (item.href === $url) {
@@ -480,7 +514,7 @@ var $anerveModule =  angular
             $http(configObj)
                 .then(function onFulfilled(response) {
                   notify(response.data.msg, response.data.type);
-                  $rootScope.socialApps[index].connect = "link it";
+                  $rootScope.socialApps[index].connect = "<i class='fa fa-link'></i>";
                 }).catch( function onRejection(errorResponse) {
             });
           }
@@ -675,7 +709,7 @@ var $anerveModule =  angular
         
         $rootScope.likeOrUnlike = function(i, action){
           console.log('Test');
-         var socket = new io.Socket('localhost',{'port':3000});
+         var socket = new io.Socket('localhost',{'port':5000});
           //socket.connect();
 
           socket.on('open', function(){
@@ -777,6 +811,7 @@ var $anerveModule =  angular
             var url = $rootScope.baseUrl+'api/UserLoginInJava';
             var configObj = { method: 'POST',url: url, data:postData, headers: $rootScope.headers};
             $http(configObj).then(function onFulfilled(response) {
+              console.log(response.data);
                var dataJson = JSON.parse(JSON.stringify(response.data));
                   console.log(dataJson);
                   if(dataJson !== undefined){

@@ -5,22 +5,23 @@ var fs = require('fs');
 //var Cropper = require('cropperjs')
 var querystring = require("querystring");
 var db          = require('../../../config/sequelize');
+var config          = require('../../../config/env/development');
 var http        = require('http');
 var LocalStorage = require('node-localstorage').LocalStorage,
    localStorage = new LocalStorage('./scratch');
  var Twitter  = require('twitter');
  var client   = new Twitter({
-      consumer_key: 'vz7LHCrSnlS5W2YD1vNfL0R0m',
-      consumer_secret: 'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
+      consumer_key: config.twitter.clientID,//'vz7LHCrSnlS5W2YD1vNfL0R0m',
+      consumer_secret: config.twitter.clientSecret,//'km6YqqfomFfqLMeWx5ciFCP460FCB0FbT0BomVnDVyYAgZMDGc',
       access_token_key: localStorage.getItem('tw_token'),
       access_token_secret: localStorage.getItem('tw_secret')
     });
 //var ip = db.sequelize.config.host;
-var ip = '34.214.120.75';
+var ip = '172.104.62.180';
 var tumblr = require('tumblr.js');
 var tmblr_client = tumblr.createClient({
-  consumer_key: 'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
-  consumer_secret: 'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
+  consumer_key: config.tumblr.clientID,//'e5BirzJiZ65hTYdhn152Qxz7AAG150HK6i25Y4QL10VH1Uv1Cd',
+  consumer_secret: config.tumblr.clientSecret,//'Di2DiV3CBgHhvHajDoKhIUM6w0A7RVTWqiv18RL619uHduCC6D',
   token: localStorage.getItem('tb_token'),
   token_secret: localStorage.getItem('tb_secret')
 });
@@ -35,7 +36,7 @@ var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(
   '972158488032-4ovojau9eipa5voof0aaoh1qv0v0k0tt.apps.googleusercontent.com',
   'C2zw8rtG4jDBM0LDQrlauGyr',
-  'http://'+ip+':3000/api/auth/google/callback'
+  'http://'+ip+':5000/api/auth/google/callback'
 );
 
 
@@ -68,7 +69,7 @@ exports.authCallback = function(req, res) {
     var url = ApiBasePath+'loginSocialSimple/'+USERNAME;
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -77,7 +78,7 @@ exports.authCallback = function(req, res) {
         res2.on('data', function(chunk) {
           body += chunk;
         });
-        res2.on('end', function() { 
+        res2.on('end', function() {
           var dataJson = JSON.parse(body);
           var userId = req.user.USERID;
           req.session.UserID = userId;
@@ -193,7 +194,7 @@ exports.signout = function(req, res) {
 
       var options = {
           hostname: ip,
-          port: '80',
+          port: '8080',
           path: url,
           method: 'GET',
           headers: headers
@@ -269,13 +270,13 @@ exports.create = function(req, res) {
                data.subject = 'Anerve Registration';
                data.msg = 'Hi, Thanks for registering with Anerve. Your username: '+user.USERNAME+'. Happy Shopping with friends';
                data.msg = 'Please Activate your account by clicking on link below ';
-               data.msg = 'http://'+ip+':3000/anerve/activate/account/';
+               data.msg = 'http://'+ip+':5000/anerve/activate/account/';
             var qs = querystring.stringify(data);
             var qslength = qs.length;   
             var url = '/demos/anerve/mail.php';
             var options = {
                 hostname: 'ctsdemo.com',
-                port: '80',
+                port: '8080',
                 path: url,
                 method: 'POST',
                 headers:{
@@ -638,46 +639,51 @@ exports.postTweet = function(req, res){
 
 exports.tumblrPosts = function(req, res){
   var blogName = req.user.tumblr_blog; // logged in user tumblr blog
-  var logInUserId = req.user.USERID;
-  var reqUserId = logInUserId;
-  var limit;
-  if(req.body.userId != undefined && req.body.userId != '')
-    reqUserId = req.body.userId;
+  if(blogName != undefined && blogName != ''){
+    var logInUserId = req.user.USERID;
+    var reqUserId = logInUserId;
+    var limit;
+    if(req.body.userId != undefined && req.body.userId != '')
+      reqUserId = req.body.userId;
 
-  if(req.body.limit != undefined && req.body.limit != '')
-    limit = req.body.limit;
-  else limit = 4;
+    if(req.body.limit != undefined && req.body.limit != '')
+      limit = req.body.limit;
+    else limit = 4;
 
-  if(reqUserId != logInUserId){
-    db.User.findAll({
-        where: {USERID: reqUserId}
-      }).then(function(users){
-        if(users[0] && users[0].tumblr_blog != null && users[0].tumblr_blog != ''){
-          tmblr_client.blogPosts(users[0].tumblr_blog, {limit:limit}, function(err, resp) {
-            return res.jsonp(resp.posts); // use them for something
-          });  
+    if(reqUserId != logInUserId){
+      db.User.findAll({
+          where: {USERID: reqUserId}
+        }).then(function(users){
+          if(users[0] && users[0].tumblr_blog != null && users[0].tumblr_blog != ''){
+            tmblr_client.blogPosts(users[0].tumblr_blog, {limit:limit}, function(err, resp) {
+              return res.jsonp(resp.posts); // use them for something
+            });  
+          }
+        }).catch(function(err){
+            return res.render('error', {
+                error: err,
+                status: 500
+            });
+        });
+    } else {
+      tmblr_client.blogPosts(blogName, {limit:limit}, function(err, resp) {
+        return res.jsonp(resp.posts); // use them for something
+      });  
+    }  
+
+
+    /*tmblr_client.userInfo(function(err, data) {
+
+     if(data !== undefined && data !== '' && data !== null) {
+        if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
+         
         }
-      }).catch(function(err){
-          return res.render('error', {
-              error: err,
-              status: 500
-          });
-      });
-  } else {
-    tmblr_client.blogPosts(blogName, {limit:limit}, function(err, resp) {
-      return res.jsonp(resp.posts); // use them for something
-    });  
-  }  
-
-
-  /*tmblr_client.userInfo(function(err, data) {
-
-   if(data !== undefined && data !== '' && data !== null) {
-      if(typeof data.user.blogs != 'undefined' && typeof data.user.blogs[0] != 'undefined') {
-       
       }
-    }
-  });*/
+    });*/
+   
+  }else{
+     return res.jsonp('');// no tumbler
+  }
 };
 // Delete a given post
 exports.delTumblrPost = function(req, res){
@@ -865,7 +871,10 @@ exports.instagramPosts = function(req, res){
               ig.get('users/'+users[0].ig_id+'/media/recent').then((data) => {
                 return res.jsonp(data);
               }).catch(function(err){
+
               });
+            }else{
+              return res.jsonp('');
             }
       }).catch(function(err){
           return res.render('error', {
@@ -915,7 +924,7 @@ exports.validatekey = function(req, res){
         var body = '';
         var options = {
             hostname: ip,
-            port: '80',
+            port: '8080',
             path: ApiBasePath+'checkKey/'+key,
             method: 'GET',
             headers: headers
@@ -991,7 +1000,7 @@ exports.friendRequests = function(req, res){
     var url = ApiBasePath+'myInvites/'+key;
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers: headers
@@ -1022,7 +1031,7 @@ exports.acceptRequest = function(req, res){
     
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers:headers
@@ -1057,7 +1066,7 @@ exports.followUser = function(req, res){
     var qslength = qs.length;   
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'POST',
         headers:{
@@ -1094,7 +1103,7 @@ exports.unfollowUser = function(req, res){
     var qslength = qs.length;   
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'POST',
         headers:{
@@ -1122,13 +1131,13 @@ exports.unfollowUser = function(req, res){
 exports.UserLoginInJava = function(req, res){
   console.log(req.body);
     var PASSWORD = req.body.PASSWORD;
-    var USERNAME = req.user.USERNAME;//loggedIN please check
+    var USERNAME = req.body.USERNAME;//loggedIN please check
     var body = '';
     var data = [];
     var url = ApiBasePath+'loginservice/'+USERNAME+'/'+PASSWORD;
     var options = {
         hostname: ip,
-        port: '80',
+        port: '8080',
         path: url,
         method: 'GET',
         headers:headers
@@ -1137,8 +1146,10 @@ exports.UserLoginInJava = function(req, res){
         res2.on('data', function(chunk) {
           body += chunk;
         });
-        res2.on('end', function() { 
-          var dataJson = JSON.parse(body);
+        res2.on('end', function() {
+
+          //data = JSON.stringify(body);
+          data = JSON.parse(body);
           return res.jsonp(data);
         });
     });

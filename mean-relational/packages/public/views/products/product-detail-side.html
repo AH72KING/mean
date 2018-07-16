@@ -1,5 +1,5 @@
 <div class="product-detail-container">
-	<div class="product_image">
+	<div class="product_image product_detail_side">
 		<div class="product-taga" ng-click="ProductDetail()" >
 			
 			<img src="{{CurrentProductDetailImage}}" alt="">
@@ -85,7 +85,7 @@
 				 	<h4>Offers</h4>
 				</div>
 				<div class="price">
-						{{CurrentProductDetail.cost_price}}
+					{{CurrentProductDetail.buy_now_price}}
 				</div>
 			</div>
 			<div class="tabs-content" ng-show="tabContent === 'shipping'">

@@ -1,8 +1,8 @@
 <ul class="my-zone-cart-items" ng-hide="hideMyZoneCart">
 		            <li class="product_item" ng-repeat="product in cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}" data-product-id="{{product.ProdBrandId}}" data-index="{{$index}}" data-type="cart">
-						<div class="product_image">
+						<div class="product_image local-cart-images">
 							<a data-ng-href="/products/{{product.ProdBrandId}}">
-								<img src="{{UploadUrl}}{{product.img_loc}}" alt="">
+								<img src="{{product.img_loc}}" alt="">
 							</a>
 						</div>
 						<div class="product-detail">
@@ -11,9 +11,9 @@
 							</div>
 							<div class="quantity-price-container">
 								<span class="quantity-multiple-icon">X</span>
-								<span class="product-quantity">{{product.quantity}}</span>								
+								<span class="product-quantity">1</span>								
 								<span class="equal-icon">=</span>								
-								<span class="product-price" data-cost="{{product.cost_price}}">{{product.cost_price}}</span>								
+								<span class="product-price" data-cost="{{product.buy_now_price}}">{{product.buy_now_price}}</span>							
 							</div>
 							<div class="shipping-details">	
 								<p>Free Shipping to <span class="country-flag">Australia</span></p>
@@ -22,10 +22,9 @@
 					</li>
 					<!--ng-if="$index < 3" -->	
 		           <li class="product_item" ng-repeat="items in $root.products.products_cart track by $index" data-drag="true" data-jqyoui-options="{}" ng-model="cart" jqyoui-draggable="{index: {{$index}},animate:false}"  data-product-id="{{items.ProdBrandId}}"  data-product-grp-cart-id="{{items.groupCartProductId}}" data-index="{{$index}}" data-type="grpcart_products">
-
-		           		<div class="product_image">
+		           		<div class="product_image db-cart-images">
 							<a data-ng-href="/products/{{items.ProdBrandId}}">
-								<img src="{{UploadUrl}}{{items.img_loc}}" alt="">
+								<img src="{{$root.ApiUploadUrl}}{{items.img_loc}}" alt="">
 							</a>
 						</div>
 						<div class="product-detail">
@@ -36,7 +35,7 @@
 								<span class="quantity-multiple-icon">X</span>
 								<span class="product-quantity">{{items.qunatity}}</span>								
 								<span class="equal-icon">=</span>								
-								<span class="product-price" data-cost="{{items.cost_price}}">{{items.cost_price}}</span>								
+								<span class="product-price" data-cost="{{items.buy_now_price}}">{{items.buy_now_price}}</span>								
 							</div>
 							<div class="shipping-details">	
 								<p>Free Shipping to </p> <span class="flag-icon flag-icon-au"></span>

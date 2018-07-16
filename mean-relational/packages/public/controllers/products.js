@@ -40,6 +40,10 @@
         $rootScope.userFirends = []; // friends Array;
         var userFirends = [];
         $rootScope.userFirends = userFirends;
+
+        $rootScope.allUsersin = []; // all users Array;
+        var allUsersin = [];
+        $rootScope.allUsersin = allUsersin;
         
 
         /**
@@ -194,7 +198,8 @@
         
         $rootScope.showProductDetail = function(productID) {
             console.log('showProductDetail');
-            console.log(productID);   
+            console.log(productID);
+            $rootScope.productDetailTab = 22;
               if(angular.isNumber(productID)){
                 $rootScope.CurrentProductDetail = $rootScope.CurrentProduct(productID);
                 $rootScope.groupCartId = grp_cartId;
@@ -420,8 +425,10 @@
         $rootScope.startCount = 0;  
         $rootScope.startTimeout = function () {  
             $rootScope.startCount = $rootScope.startCount + 1;  
+            console.log('counter calls '+$rootScope.startCount);
             $rootScope.getProducts();
-            $rootScope.mytimeout = $timeout($rootScope.startTimeout, 100000);  
+            $rootScope.getOffers();
+            $rootScope.mytimeout = $timeout($rootScope.startTimeout, 20000);  
         };
 
         $rootScope.stopTimeout = function () {  
@@ -430,7 +437,51 @@
             console.log('Timer Stopped No More Products');  
         };
 
-        
+        $rootScope.getOffers = function () {
+          console.log('offerData');
+            var lastOfferID = $rootScope.lastOfferID;
+            var body = '';
+            var data = '';
+            if(lastOfferID === undefined){
+              lastOfferID = $rootScope.lastOfferID;
+            }
+            var postData = {
+              'lastOfferID':lastOfferID
+            };
+            var url = $rootScope.baseUrl+'api/getAllOffers';
+
+            var configObj = { method: 'POST', url: url, data: postData, headers: $rootScope.headers};
+            $http(configObj)
+              .then(function onFulfilled(response) {
+                console.log('response');
+                console.log(response);
+               
+                  body = response.data;
+                  console.log('body');
+                  console.log(body);
+                  
+                  var newData = JSON.stringify(body);
+                  console.log('newdata');
+                  console.log(newData);
+                 
+                  var offerData = JSON.parse(newData);
+                  console.log('offer');
+                  console.log(offerData);
+
+                    if(offerData.length < 2){
+                      console.log('offerData');
+                      console.log(offerData);
+                      //$rootScope.stopTimeout();
+                    }
+
+                    $rootScope.offerData = offerData;
+
+              })
+              .catch( function onRejection(errorResponse) {
+                  console.log('Error: ', errorResponse.status);
+                  console.log(errorResponse);
+              }); 
+        };
 
         $rootScope.getProducts = function () {
                 var lastProductID = $rootScope.lastProductID;
@@ -443,7 +494,7 @@
                 var postData = {
                   'lastProductID':lastProductID,
                   'nextProducts':nextProducts
-                }
+                };
                 //var url = $rootScope.baseUrl+'api/getAllProdsInLocDefault_thin/PK/'+lastProductID+'/'+nextProducts;
                 var url = $rootScope.baseUrl+'api/getAllProdsInLocDefault_thin';
                 if($rootScope.AislesIsSelected){
@@ -611,10 +662,22 @@
         };
 
         $rootScope.addorCreateCart = function(prodId, img){   
-          $rootScope.cart.push({
+           products.get({ productId: prodId}, function(product) {
+                //$rootScope.cart.product[prodId] = product
+                var img_loc_url = product.img_loc, expr = 'http';
+                if(img_loc_url.indexOf(expr) === -1){
+                  img_loc_url = $rootScope.ApiUploadUrl+img_loc_url;
+                }
+                 $rootScope.cart.push({
+                  'buy_now_price':product.buy_now_price,
+                  'img_loc':img_loc_url,
+                  'name':product.name
+                });
+            });
+          /*$rootScope.cart.push({
             'userid':prodId,
             'img_loc':img
-          });
+          });*/
           if(!cartCreated){
             if(isGuest){  
               $rootScope.createCart(prodId);
@@ -633,7 +696,7 @@
           console.log('Online: '+Online);
           //if(list.indexOf(createItem.artNr) !== -1) {
           console.log($rootScope.friendsCart);
-          if (!userExistsInCart(userId)) {
+          if (!$rootScope.userExistsInCart(userId)) {
             $rootScope.friendsCart.push({
               'userid':userId,
               'img_loc':img,
@@ -853,6 +916,32 @@
         };
         $rootScope.myfriends();
 
+        $rootScope.allUsersall  = function () {
+          //var UserID 	= Session.getItem('UserID');
+          var url     = $rootScope.baseUrl+'api/getAllUsers';
+          var  configObj = { method: 'GET',url: url, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        var dataJson = JSON.parse(JSON.stringify(response.data));
+                        if(dataJson !== undefined ){
+                              angular.forEach(dataJson,function(value){
+                                if(value['USERID'])
+                                   value['userid']  = value['USERID'];
+                                   // check if avatar val null , then get default avatar
+                                  value['img_loc'] = $rootScope.getDefaultAvatar(value['img_loc']);
+                                  $rootScope.allUsersin.push(value);
+                                
+                            });
+                              Session.setItem('allUsersall',$rootScope.allUsersin);
+                        }
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse.status);
+                        console.log(errorResponse);
+                });
+        
+      };
+      $rootScope.allUsersall();
+
         // send friend request
         $rootScope.sendFriendRequest = function(userid){
             var UserID = Session.getItem('UserID');
@@ -983,11 +1072,12 @@
           console.log(event);
           var x = event.pageX;
           var y = event.pageY; 
+          console.log('onProdDragStart');
           console.log(x+','+y);
-          dragElement.css('top',(x-35)+'px');
-          dragElement.css('left',(y-35)+'px');
-          dragElement.css({'min-height':'50px','width':'70px','height': '60px'});
-          dragElement.find('img').css({'height':'50px','width':'50px'});
+          //dragElement.css('top',(x-35)+'px');
+          //dragElement.css('left',(y-35)+'px');
+          dragElement.css({'min-height':'200px','width':'200px','height': '200px'});
+          dragElement.find('img').css({'height':'200px','width':'200px'});
         };
 
         // on prod drag
@@ -995,8 +1085,11 @@
           var dragElement = ui.helper;
           var relX = (event.pageX)+'px';
           var relY = (event.pageY)+'px';
+          console.log('onProdDrag');
           console.log(relY+','+relX);
-          dragElement.css({'top':'0!important', 'left':'0!important'});
+          //dragElement.css({'top':'0!important', 'left':'0!important'});
+          dragElement.css('top',(relX)+'px');
+          dragElement.css('left',(relY)+'px');
         };
 
         // drop prod on user
@@ -1044,23 +1137,38 @@
 
         $rootScope.getDefaultAvatar = function(url){
           if(url == null)
-            url = '/images/default-avatar.png';
+            url = 'anerve/usr_images/default-avatar.png';
           return url;
        };
-       function userExistsInCart(userID) {
+       $rootScope.instagramPosts =function(e){
+                var url = $rootScope.baseUrl+'api/instagramPosts';
+                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.instagramPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+      };
+       $rootScope.userExistsInCart =function(userID){
             for (var i = 0, len = $rootScope.friendsCart.length; i < len; i++) {
                 if ($rootScope.friendsCart[i].userid === userID)
                     return true;
             }
 
             return false;
-        }
-
-        if (window.user != null && window.user.connections != null && window.user.connections != ''){
-            var connections = JSON.parse(window.user.connections);
-            if(connections.twitter != undefined && connections.twitter != 0 ){
-              // get twitter timeline
-              function timeline(){
+        };
+        $rootScope.tumblrPosts =function(e){
+                var url = $rootScope.baseUrl+'api/tumblrPosts';
+                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
+                $http(configObj)
+                    .then(function onFulfilled(response) {
+                        $rootScope.tumblrPosts = response.data;
+                    }).catch( function onRejection(errorResponse) {
+                        console.log('Error: ', errorResponse);
+                }); 
+        };
+        $rootScope.timeline = function(e){
                 var url = $rootScope.baseUrl+'api/timeline';
                 var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
                 $http(configObj)
@@ -1069,14 +1177,15 @@
                     }).catch( function onRejection(errorResponse) {
                         console.log('Error: ', errorResponse);
                 }); 
-              }
-              timeline();
+        };
 
-            
-
+        if(window.user != null && window.user.connections != null && window.user.connections != ''){
+            var connections = JSON.parse(window.user.connections);
+            if(connections.twitter != undefined && connections.twitter != 0 ){
+              // get twitter timeline
+              $rootScope.timeline();
               // post tweet
-
-              $rootScope.postTwitter =function(e){
+              $rootScope.postTwitter = function(e){
                 e.preventDefault();
                 var url = $rootScope.baseUrl+'api/postTweet';
                 var postData = {'msg':$rootScope.data.tw_text};
@@ -1102,38 +1211,14 @@
                 });
               };
             }
-
-
             if(connections.tumblr != undefined && connections.tumblr != 0 ){
               console.log('tumblr');
+              console.log(connections.tumblr);
               // tumblr methods
-              function tumblrPosts(){
-                var url = $rootScope.baseUrl+'api/tumblrPosts';
-                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        $rootScope.tumblrPosts = response.data;
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                }); 
-              }
-              tumblrPosts();
-
+              $rootScope.tumblrPosts();
             }
-
             if(connections.instagram != undefined && connections.instagram != 0){
-              function instagramPosts(){
-                var url = $rootScope.baseUrl+'api/instagramPosts';
-                var configObj = { method: 'POST',url: url, headers: $rootScope.headers};
-                $http(configObj)
-                    .then(function onFulfilled(response) {
-                        $rootScope.instagramPosts = response.data;
-                    }).catch( function onRejection(errorResponse) {
-                        console.log('Error: ', errorResponse);
-                }); 
-              }
-              instagramPosts();
-
+              $rootScope.instagramPosts();
             }
         }
         // watch

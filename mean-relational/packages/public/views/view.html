@@ -31,7 +31,7 @@
                     </span>
                 </div>
             </div>
-              <div class="well user-detail-wrap tab-content col-md-12">
+            <div class="well user-detail-wrap tab-content col-md-12">
                 <div class="pv-dashboard-section" id="profile">
                     <div class="users-detail">
                          <div class="detail-block">
@@ -105,11 +105,11 @@
                             {{buyerProduct.name}}
                         </div>
                         <div class="product-price">
-                            {{buyerProduct.cost_price}}
+                            {{buyerProduct.buy_now_price}}
                         </div>
                         <span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID && buyerProduct.action != 3" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
                         <div ng-if="buyerProduct.action == 3"  class="" style="position: absolute;left:0;bottom:0;width: 100%">
-                            <span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ UploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
+                            <span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ ApiUploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
                             </span>
                             <span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID" style="position: absolute;right:0;bottom:0;cursor: pointer">
                             <i class="fa fa-check btn btn-success" ng-click="acceptProdInCart(buyerProduct.groupCartProductId)" title="Accept"></i>
@@ -119,112 +119,111 @@
                     </div>
                     <div class="product-images">
                         <div class="product-image">
-                            <img src="{{UploadUrl}}{{buyerProduct.img_loc}}" alt="">
+                            <img src="{{ApiUploadUrl}}{{buyerProduct.img_loc}}" alt="">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="soical-posts" id="social_posts">
                 <ul class="nav nav-pills">
-                  <li ng-class="{'active':social.current == 'twitter'}"><a data-toggle="pill" ng-click="social.current = 'twitter'">Twitter</a></li>
-                  <li ng-class="{'active':social.current == 'tumblr'}"><a data-toggle="pill" ng-click="social.current = 'tumblr'">Tumblr</a></li>
-                  <li ng-class="{'active':social.current == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="social.current = 'facebook'">Facebook</a></li>
-                  <li ng-class="{'active':social.current == 'instagram'}"><a data-toggle="pill" ng-click="social.current = 'instagram'">Instagram</a></li>
+                    <li ng-class="{'active':social.current == 'twitter'}"><a data-toggle="pill" ng-click="social.current = 'twitter'">Twitter</a></li>
+                    <li ng-class="{'active':social.current == 'tumblr'}"><a data-toggle="pill" ng-click="social.current = 'tumblr'">Tumblr</a></li>
+                    <li ng-class="{'active':social.current == 'facebook'}"><a data-toggle="pill" href="#fb" ng-click="social.current = 'facebook'">Facebook</a></li>
+                    <li ng-class="{'active':social.current == 'instagram'}"><a data-toggle="pill" ng-click="social.current = 'instagram'">Instagram</a></li>
 
-                  <div class="pull-right">
-                      <div class=""" >
-                        <lable>Limit: </lable>
-                        <select ng-change = "limitChange(social.current)" class="form-control" ng-model="social.limit">
-                            <option ng-repeat="val in social[social.current]">{{val}}</option>
-                        </select>
-                      </div>
+                    <div class="pull-right">
+                        <div class="" >
+                            <lable>Limit: </lable>
+                            <select ng-change = "limitChange(social.current)" class="form-control" ng-model="social.limit">
+                                <option ng-repeat="val in social[social.current]">{{val}}</option>
+                            </select>
+                        </div>
 
-                  </div>
+                    </div>
                 </ul>
 
                 <div class="tab-content">
-                  <div id="fb" ng-class="{'tab-pane fade in active':social.current == 'facebook', 'tab-pane fade':social.current != 'facebook'}">
-                    <p>Facebook Posts</p>
-                  </div>
-                  <div id="tw" ng-class="{'tab-pane fade in active':social.current == 'twitter', 'tab-pane fade':social.current != 'twitter'}">
-                    <div class="post-wrap col-xs-12">
-                        <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.twitterPosts track by $index">
-                            <div class="tweet head">
-                            <span class="small-avatar"><img src="{{ post.user.profile_image_url}}" /> </span>
-                             {{post.user.screen_name}}
-                            <span class="pull-right" ng-if="post.can_reblog == true">
-                            <i class="fa fa-pencil" ng-click="showPostModal(social.current)"></i>
-                            <i ng-click="deleteTweet($index)" class="fa fa-trash"></i>
-                            </span>
-                            </div>
-                            <div class="body">{{ post.text }}</div>
-                            <div class="options">
-                                <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
-                                <a title="Unlike" ng-click="dislikeTweet($index)"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
-                                <a title="Retweet" ng-click="retweet($index)"><i class="fa fa-reply btn-info btn btn-xs"></i></a>
-                                <a ng-if="usctr.user.twitterUserId == post.user.id_str" title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
-                            </div>
-                        </li>
+                    <div id="fb" ng-class="{'tab-pane fade in active':social.current == 'facebook', 'tab-pane fade':social.current != 'facebook'}">
+                        <p>Facebook Posts</p>
                     </div>
-                  </div>
-                  <div id="tb" ng-class="{'tab-pane fade in active':social.current == 'tumblr', 'tab-pane fade':social.current != 'tumblr'}">
-                    <div class="post-wrap col-xs-12">
-                        <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.tumblrPosts track by $index">
-                            <div class="tumblr head">
-                            <span class="pull-right">
-                            <i class="fa fa-pencil" ng-if="post.can_reblog == true" ng-click="$root.showPostModal(social.current, $index)"></i>
-                            <i ng-click="delTumblrPost($index)" class="fa fa-trash"></i>
-                            </span>
-                            Type: {{ post.type | capitalize}} </div>
-                            <div class="body col-xs-12">
-                                <span ng-if="post.type == 'text'">{{ post.body | htmlToPlaintext }}</span>
-                                <img class="img-responsive main" ng-if="post.type == 'photo'" src="{{ post.photos[0].original_size.url }}" />
-                                <video ng-if="post.type == 'video'" style="width:100%" controls>
-                                    <source src="{{ post.video_url }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div ng-if="post.type=='quote'">
-                                    <strong>Quote: </strong> <span>{{ post.text }}</span><br>
-                                    <strong>Source: </strong> <span>{{ post.source }}</span>
+                    <div id="tw" ng-class="{'tab-pane fade in active':social.current == 'twitter', 'tab-pane fade':social.current != 'twitter'}">
+                        <div class="post-wrap col-xs-12">
+                            <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.twitterPosts track by $index">
+                                <div class="tweet head">
+                                <span class="small-avatar"><img src="{{ post.user.profile_image_url}}" /> </span>
+                                {{post.user.screen_name}}
+                                <span class="pull-right" ng-if="post.can_reblog == true">
+                                <i class="fa fa-pencil" ng-click="showPostModal(social.current)"></i>
+                                <i ng-click="deleteTweet($index)" class="fa fa-trash"></i>
+                                </span>
                                 </div>
-                                <div ng-if="post.type=='link'">
-                                    <img src="{{ post.link_image }}" class="pull-right" style="width:30px;height:30px" />
-                                    <strong>Page Title: </strong> <span>{{ post.title }}</span><br>
-                                    <strong>Description: </strong> <span>{{ post.description | htmlToPlaintext  }}</span><br>
-                                    <strong>Author: </strong> <span>{{ post.link_author }}</span><br>
-                                    <strong>Link: </strong> <span>{{ post.url }}</span>
+                                <div class="body">{{ post.text }}</div>
+                                <div class="options">
+                                    <a title="{{ post.favorite_count}} Likes" ng-click="likeTweet($index)"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
+                                    <a title="Unlike" ng-click="dislikeTweet($index)"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
+                                    <a title="Retweet" ng-click="retweet($index)"><i class="fa fa-reply btn-info btn btn-xs"></i></a>
+                                    <a ng-if="usctr.user.twitterUserId == post.user.id_str" title="Delete" ng-click="deleteTweet($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
                                 </div>
-                            </div>
-                            <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
-                                <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
-                            </div>
-                        </li>
+                            </li>
+                        </div>
                     </div>
-                  </div>
-                  <div id="inst" ng-class="{'tab-pane fade in active':social.current == 'instagram', 'tab-pane fade':social.current != 'instagram'}">
-                    
-                    <div class="post-wrap col-xs-12">
-                        <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.instagramPosts.data track by $index">
-                            <div class="instagram head">
-                                <span class="small-avatar"><img src="{{ post.user.profile_picture}}" /> </span>
-                                {{post.user.full_name}}
-                            </div>
-                            <div class="body">
-                                <img class="img-responsive main" ng-if="post.type == 'image'" src="{{ post.images.low_resolution.url }}" />
-                                <div class="media-txt" ng-if="post.caption.text != ''">
-                                    <span>{{ post.caption.text }}</span>
+                    <div id="tb" ng-class="{'tab-pane fade in active':social.current == 'tumblr', 'tab-pane fade':social.current != 'tumblr'}">
+                        <div class="post-wrap col-xs-12">
+                            <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.tumblrPosts track by $index">
+                                <div class="tumblr head">
+                                <span class="pull-right">
+                                <i class="fa fa-pencil" ng-if="post.can_reblog == true" ng-click="$root.showPostModal(social.current, $index)"></i>
+                                <i ng-click="delTumblrPost($index)" class="fa fa-trash"></i>
+                                </span>
+                                Type: {{ post.type | capitalize}} </div>
+                                <div class="body col-xs-12">
+                                    <span ng-if="post.type == 'text'">{{ post.body | htmlToPlaintext }}</span>
+                                    <img class="img-responsive main" ng-if="post.type == 'photo'" src="{{ post.photos[0].original_size.url }}" />
+                                    <video ng-if="post.type == 'video'" style="width:100%" controls>
+                                        <source src="{{ post.video_url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <div ng-if="post.type=='quote'">
+                                        <strong>Quote: </strong> <span>{{ post.text }}</span><br>
+                                        <strong>Source: </strong> <span>{{ post.source }}</span>
+                                    </div>
+                                    <div ng-if="post.type=='link'">
+                                        <img src="{{ post.link_image }}" class="pull-right" style="width:30px;height:30px" />
+                                        <strong>Page Title: </strong> <span>{{ post.title }}</span><br>
+                                        <strong>Description: </strong> <span>{{ post.description | htmlToPlaintext  }}</span><br>
+                                        <strong>Author: </strong> <span>{{ post.link_author }}</span><br>
+                                        <strong>Link: </strong> <span>{{ post.url }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="options">
-                                <a title="{{ post.likes.count}} Likes" ng-click="post.user_has_liked != true ? likeOrUnlike($index, 'like') : ''"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
-                                <a title="Unlike" ng-click="likeOrUnlike($index, 'unlike')"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
-                            </div>
-                        </li>
+                                <div class="options" ng-if="usctr.user.USERID == hdctr.global.user.USERID">
+                                    <a title="Delete" ng-click="delTumblrPost($index)"><i class="fa fa-trash btn-warning btn btn-xs"></i></a>
+                                </div>
+                            </li>
+                        </div>
                     </div>
-                  </div>
+                    <div id="inst" ng-class="{'tab-pane fade in active':social.current == 'instagram', 'tab-pane fade':social.current != 'instagram'}">
+                        
+                        <div class="post-wrap col-xs-12">
+                            <li class="prof-social post col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="post in $root.instagramPosts.data track by $index">
+                                <div class="instagram head">
+                                    <span class="small-avatar"><img src="{{ post.user.profile_picture}}" /> </span>
+                                    {{post.user.full_name}}
+                                </div>
+                                <div class="body">
+                                    <img class="img-responsive main" ng-if="post.type == 'image'" src="{{ post.images.low_resolution.url }}" />
+                                    <div class="media-txt" ng-if="post.caption.text != ''">
+                                        <span>{{ post.caption.text }}</span>
+                                    </div>
+                                </div>
+                                <div class="options">
+                                    <a title="{{ post.likes.count}} Likes" ng-click="post.user_has_liked != true ? likeOrUnlike($index, 'like') : ''"><i class="fa fa-thumbs-up btn-success btn btn-xs"></i></a>
+                                    <a title="Unlike" ng-click="likeOrUnlike($index, 'unlike')"><i class="fa fa-thumbs-down btn-danger btn btn-xs"></i></a>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
                 </div>
             </div>
-          </div>
         </div>       
     </div>
 </section>
@@ -246,19 +245,19 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                    <input type="file" nv-file-select="" uploader="uploaderProfile" ng-click="uploaderProfile.clearQueue();" /><br/>
-                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderProfile.uploadAll()" ng-disabled="!uploaderProfile.getNotUploadedItems().length">
-                                        <span class="glyphicon glyphicon-upload"></span>
-                                        Upload
-                                    </button>
-                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderProfile.cancelAll()" ng-disabled="!uploaderProfile.isUploading">
-                                        <span class="glyphicon glyphicon-ban-circle"></span>
-                                        Cancel
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderProfile.clearQueue()" ng-disabled="!uploaderProfile.queue.length">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                        Remove
-                                    </button>
+                                <input type="file" nv-file-select="" uploader="uploaderProfile" ng-click="uploaderProfile.clearQueue();" /><br/>
+                                <button type="button" class="btn btn-success btn-s" ng-click="uploaderProfile.uploadAll()" ng-disabled="!uploaderProfile.getNotUploadedItems().length">
+                                    <span class="glyphicon glyphicon-upload"></span>
+                                    Upload
+                                </button>
+                                <button type="button" class="btn btn-warning btn-s" ng-click="uploaderProfile.cancelAll()" ng-disabled="!uploaderProfile.isUploading">
+                                    <span class="glyphicon glyphicon-ban-circle"></span>
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger btn-s" ng-click="uploaderProfile.clearQueue()" ng-disabled="!uploaderProfile.queue.length">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                    Remove
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -292,19 +291,19 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                    <input type="file" nv-file-select="" uploader="uploaderCover" ng-click="uploaderCover.clearQueue();" /><br/>
-                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderCover.uploadAll()" ng-disabled="!uploaderCover.getNotUploadedItems().length">
-                                        <span class="glyphicon glyphicon-upload"></span>
-                                        Upload
-                                    </button>
-                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderCover.cancelAll()" ng-disabled="!uploaderCover.isUploading">
-                                        <span class="glyphicon glyphicon-ban-circle"></span>
-                                        Cancel
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderCover.clearQueue()" ng-disabled="!uploaderCover.queue.length">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                        Remove
-                                    </button>
+                                <input type="file" nv-file-select="" uploader="uploaderCover" ng-click="uploaderCover.clearQueue();" /><br/>
+                                <button type="button" class="btn btn-success btn-s" ng-click="uploaderCover.uploadAll()" ng-disabled="!uploaderCover.getNotUploadedItems().length">
+                                    <span class="glyphicon glyphicon-upload"></span>
+                                    Upload
+                                </button>
+                                <button type="button" class="btn btn-warning btn-s" ng-click="uploaderCover.cancelAll()" ng-disabled="!uploaderCover.isUploading">
+                                    <span class="glyphicon glyphicon-ban-circle"></span>
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger btn-s" ng-click="uploaderCover.clearQueue()" ng-disabled="!uploaderCover.queue.length">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                    Remove
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -315,24 +314,24 @@
 </div>
 <div ng-include="'public/views/posts-modal.html'"></div>
 <script>
-        $(document).ready(function() {
-            $(".btn-pref .btn").click(function () {
-                $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
-                $('.tab-pane').removeClass('active');
-                $($(this).attr('href')).addClass('active');
-                // $(".tab").addClass("active"); // instead of this do the below 
-                $(this).removeClass("btn-default").addClass("btn-primary");   
-            });
-            // show upload modal
-            $(document).on('click','.show-profile-md', function(e){
-                $('#upload_profile_image_modal').show();
-            })
-            $(document).on('click','.show-cover-md', function(e){
-                $('#upload_cover_image_modal').show();
-            })
+    $(document).ready(function() {
+        $(".btn-pref .btn").click(function () {
+            $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+            $('.tab-pane').removeClass('active');
+            $($(this).attr('href')).addClass('active');
+            // $(".tab").addClass("active"); // instead of this do the below 
+            $(this).removeClass("btn-default").addClass("btn-primary");   
         });
-            function closeModal(){
-                $('#upload_profile_image_modal').hide();
-                $('#upload_cover_image_modal').hide();
-            }
+        // show upload modal
+        $(document).on('click','.show-profile-md', function(e){
+            $('#upload_profile_image_modal').show();
+        })
+        $(document).on('click','.show-cover-md', function(e){
+            $('#upload_cover_image_modal').show();
+        })
+    });
+    function closeModal(){
+        $('#upload_profile_image_modal').hide();
+        $('#upload_cover_image_modal').hide();
+    }
 </script>

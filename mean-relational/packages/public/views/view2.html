@@ -107,7 +107,7 @@
                             {{buyerProduct.name}}
                         </div>
                         <div class="product-price">
-                            {{buyerProduct.cost_price}}
+                            {{buyerProduct.buy_now_price}}
                         </div>
                         <span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID && buyerProduct.action != 3" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
                         <div ng-if="buyerProduct.action == 3"  class="" style="position: absolute;left:0;bottom:0;width: 100%">

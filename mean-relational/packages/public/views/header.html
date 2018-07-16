@@ -2,10 +2,14 @@
     <p>Loading</p>
 </div-->
 <div id="splash_cont" class="animate ">
-  <div class="loading-center">
-    <img id="ruby" src="/public/assets/images/ruby.png" alt="Anerve Loading Image" />
-    <h3>Loading....</h3>
-    <div id='progressBar'></div>
+  <div class="cover-cover" style="width: 100%; height: 100%; background: #716e6e7a;">
+    <div class="loading-center">
+      <!--<img id="ruby" src="/public/assets/images/main_screen.jpg" alt="Anerve Loading Image" />-->
+      <h3>Anerve</h3>
+      <h3>Shopping with friends is fun</h3>
+      <div id='progressBar'></div>
+      <button class="btn btn-primary btn-lg" id="close_animate">Enter Shop</button>
+    </div>
   </div>
 </div>
 <script type="text/javascript" charset="utf-8">
@@ -15,7 +19,11 @@
     var splash = $("#splash_cont");
     setTimeout(function() {
       splash.removeClass("animate").addClass("hide");
-    }, 2000); // <-- time in milliseconds
+    }, 20000); // <-- time in milliseconds
+
+    $("#close_animate").on('click', function(){
+      $("#splash_cont").removeClass("animate").addClass("hide");
+    });
 
     $('#progressBar').append('<div id="bar"></div>');
 
@@ -25,7 +33,7 @@
     // Animate the #bar div
     $('#bar').animate({
         width: progress
-    }, 1800);
+    }, 18000);
 
 
 
@@ -107,7 +115,7 @@
                           </div>
                       </li>
                       <li>
-                        <h3 class="logo-text">Anerve</h3>
+                        <h3 class="logo-text"><a ui-sref='home' style="text-decoration: none;">Anerve</a></h3>
                       </li>
                       <!--li style="float:left;width:30px">
                           <a style="padding-left: 8px;height: 50px;" class="search-icon">
@@ -154,7 +162,9 @@
                               <strong>{{app.name}}</strong> 
                               <label class="pull-right btn btn-info btn-xs" ng-if="provider == app.key">(Logged In)</label>
                               <span class="pull-right">
-                                <a ng-if="provider != app.key" ng-click="redirectTo(app.href, app.connect)" ui-sref="#"  ng-class="{'Unlink':'btn-success', 'link it':'btn-danger'}[app.connect]" class="btn btn-xs " >{{app.connect}}</a>
+                                <a ng-if="provider != app.key" ng-click="redirectTo(app.href, app.connect)" ui-sref="#"  ng-class="{'Unlink':'btn-success', 'link it':'btn-danger'}[app.connect]" class="btn btn-xs " >
+                                  <div ng-bind-html="app.text"></div>
+                              </a>
                               </span>
                             </li>
                         </ul>
@@ -171,7 +181,7 @@
                             <li class="usr-img col-md-12" ng-show = "!requests.length">No More Requests</li>
                         </ul>
                     </li>
-                    <li class="dropdown" dropdown on-toggle="toggled(open)">
+                    <li class="dropdown user-profile-dropdown" dropdown on-toggle="toggled(open)">
                         <a href="#" class="dropdown-toggle" dropdown-toggle>
                             <span class="log-usr-img small-avatar"> 
                               <img src="{{ UploadUrl+getDefaultAvatar(hdctr.global.user.img_loc) }}"/> 

@@ -3,7 +3,7 @@ var path = require('path'),
 
 module.exports = {
 	root: rootPath,
-	port: process.env.PORT || 3000,
+	port: process.env.PORT || 5000,
     forceSequelizeSync: process.env.FORCE_DB_SYNC === 'true',
     enableSequelizeLog: true,
     timezone : '+05:00' ,

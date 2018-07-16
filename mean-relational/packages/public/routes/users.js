@@ -33,6 +33,12 @@
         })
         .state('view user', {
             url:'/users/:USERID',
+            templateUrl: '/public/views/profile_view.html',
+            controller: 'usersController',
+            controllerAs: 'usctr'
+        })
+        .state('test user', {
+            url:'/test/:USERID',
             templateUrl: '/public/views/view.html',
             controller: 'usersController',
             controllerAs: 'usctr'

@@ -79,7 +79,7 @@ angular
             }
 
 
-            function login(user) {
+            function login(user, redirect='/') {
                 // this is an ugly hack due to mean-admin needs
                 $http.post('/api/login', {
                         USERNAME: user.USERNAME,
@@ -88,7 +88,9 @@ angular
                     .then(function (res) {
                         console.log(res);
                         //location.url('/');
-                        $window.location.href = '/';
+                        //if(redirect != ''){
+                            $window.location.href = redirect;
+                        //}
                         //self.onIdentity(res);
                     }, function(err) {
                         console.log(err);
@@ -106,7 +108,8 @@ angular
                         SURNAME: user.SURNAME
                     })
                      .then(function (res) {
-                        $window.location.href = '/';
+                        self.login(user, '/users/'+res.data.USERID);
+                        //$window.location.href = '/users/'+res.data.USERID;
                         //self.onIdentity(res);
                     }, function(err) {
                         console.log(err);

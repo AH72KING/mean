@@ -1,0 +1,179 @@
+<div class="wrapper-profile container-wrapper">
+    <header>
+        <div class="container single-user-section" ng-init="usctr.findOne()">
+            <div class="profile-header card hovercard">
+                <div id="profile-cover-backgroud" class="profile-background card-background card-bkimg" style="background:url('{{UploadUrl}}{{usctr.user.user_img}}') no-repeat;background-size: 100%!important; margin-bottom: -80px;" >
+                </div>
+                <div class="pull-right relative">
+                    <button class="btn btn-primary show-upl-md show-profile-md" type="button" >
+                        <i class="fa fa-pencil"></i>
+                        Edit Profile Photo
+                    </button>
+                    <button class="btn btn-primary show-upl-md show-cover-md" type="button" >
+                        <i class="fa fa-pencil"></i>
+                        Edit Cover Photo
+                    </button>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="profile-image">
+                    <img fallback-src="{{ApiUploadUrl+'anerve/usr_images/default-avatar.png'}}" src="{{UploadUrl}}{{usctr.user.img_loc}}">
+                </div>
+                <div class="profile-user-settings">
+                    <h1 class="profile-user-name">{{usctr.user.GIVNAME}} {{usctr.user.SURNAME}} </h1>
+                    <a class="profile-edit-btn" href="/users/{{usctr.user.USERID}}/edit">Edit Profile</a>
+                    <div class="profile-settings-btn"><i class="fa fa-cog"></i></div>
+                </div>
+                <div class="profile-stats">
+                    <ul>
+                        <li><span class="profile-stat-count">164</span> posts</li>
+                        <li><span class="profile-stat-count">188</span> followers</li>
+                        <li><span class="profile-stat-count">206</span> following</li>
+                    </ul>
+                </div>
+                <div class="profile-bio">
+                    <p>
+                        <span class="profile-real-name">
+                            <span class="first-name">
+                                {{usctr.user.GIVNAME}}
+                            </span>
+                            <span class="last-name">
+                                {{usctr.user.SURNAME}}
+                            </span>
+                        </span> 
+                        <span class="profile-tag-line">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <!-- End of profile section -->
+        </div>
+        <!-- End of container -->
+    </header>
+</div>
+<main>
+	<div class="container">
+		<div class="gallery">
+			<div class="gallery-item" data-ng-repeat="buyerProduct in CurrentUserBuyerProductsDetail track by $index">
+				<img src="{{ApiUploadUrl}}{{buyerProduct.img_loc}}" class="gallery-image">
+				<div class="gallery-item-info">
+					<ul>
+						<li class="gallery-item-likes"><i class="fa fa-heart"></i> {{buyerProduct.name}}</li>
+						<li class="gallery-item-comments"><i class="fa fa-comment"></i> {{buyerProduct.buy_now_price}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- End of gallery -->
+		<div ng-hide="!CurrentUserBuyerProductsDetail.length" class="spinner"></div>
+	</div>
+	<!-- End of container-->
+</main>
+<div class="modal upload_modal" id="upload_profile_image_modal" role="dialog" aria-labelledby="profile-image-model" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="modaldialog">
+                    <div class="crop-profile">
+                        <div class="row" nv-file-drop="" uploader="uploaderProfile">
+                            <div class="col-md-12" style="margin-bottom: 20px">
+                                <div ng-repeat="item in uploaderProfile.queue">
+                                    <div class="cropArea crop-profile-area">
+                                        <img-crop image="item.image" result-image="item.croppedImage"></img-crop>
+                                    </div>
+                                    <div class="crop-profile-preview">
+                                        <img ng-src="{{item.croppedImage}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <input type="file" nv-file-select="" uploader="uploaderProfile" ng-click="uploaderProfile.clearQueue();" /><br/>
+                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderProfile.uploadAll()" ng-disabled="!uploaderProfile.getNotUploadedItems().length">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                        Upload
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderProfile.cancelAll()" ng-disabled="!uploaderProfile.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderProfile.clearQueue()" ng-disabled="!uploaderProfile.queue.length">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Remove
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-close-btn">
+                <a href="#" ng-click="closeModals()">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal upload_modal" id="upload_cover_image_modal" role="dialog" aria-labelledby="cover-image-model" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="modaldialog">
+                    <div class="crop-profile">
+                        <div class="row" nv-file-drop="" uploader="uploaderCover">
+                            <div class="col-md-12" style="margin-bottom: 20px">
+                                <div ng-repeat="item in uploaderCover.queue">
+                                    <div class="cropArea crop-profile-area">
+                                        <img-crop image="item.image" result-image="item.croppedImage"></img-crop>
+                                    </div>
+                                    <div>Cropped Image:</div>
+                                    <div>
+                                        <img ng-src="{{item.croppedImage}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <input type="file" nv-file-select="" uploader="uploaderCover" ng-click="uploaderCover.clearQueue();" /><br/>
+                                    <button type="button" class="btn btn-success btn-s" ng-click="uploaderCover.uploadAll()" ng-disabled="!uploaderCover.getNotUploadedItems().length">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                        Upload
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploaderCover.cancelAll()" ng-disabled="!uploaderCover.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploaderCover.clearQueue()" ng-disabled="!uploaderCover.queue.length">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Remove
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-include="'public/views/posts-modal.html'"></div>
+<script>
+        $(document).ready(function() {
+            $(".btn-pref .btn").click(function () {
+                $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+                $('.tab-pane').removeClass('active');
+                $($(this).attr('href')).addClass('active');
+                // $(".tab").addClass("active"); // instead of this do the below 
+                $(this).removeClass("btn-default").addClass("btn-primary");   
+            });
+            // show upload modal
+            $(document).on('click','.show-profile-md', function(e){
+                $('#upload_profile_image_modal').show();
+            })
+            $(document).on('click','.show-cover-md', function(e){
+                $('#upload_cover_image_modal').show();
+            })
+        });
+            function closeModal(){
+                $('#upload_profile_image_modal').hide();
+                $('#upload_cover_image_modal').hide();
+            }
+</script>

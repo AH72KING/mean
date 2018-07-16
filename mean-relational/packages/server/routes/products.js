@@ -15,6 +15,7 @@ app.route('/api/getAisles').get(products.getAisles);
 
 app.get('/api/createCart', products.createCart);
 
+app.route('/api/getAllOffers').post(products.getAllOffers);
 app.route('/api/addToCart').post(products.addToCart);
 app.route('/api/addUserToCart').post(products.addUserToCart);
 app.route('/api/removeUserFromCart').post(products.removeUserFromCart);

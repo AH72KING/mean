@@ -1,9 +1,9 @@
 <div class="user-detail-container">
 	<div class="user_image" style="height:auto">
 		<div class="user-taga" style="position: relative;">
-			<!-- <img src="{{UploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt=""> -->
+			<!-- <img src="{{ApiUploadUrl}}{{CurrentUserBuyerDetail.img_loc}}" alt=""> -->
 			<div class="user-image"  ng-class="{'online': CurrentUserBuyerDetail.online == 1}">
-				<img src="{{UploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
+				<img src="{{ApiUploadUrl}}{{getDefaultAvatar(CurrentUserBuyerDetail.img_loc)}}" alt="">
 			</div>
 			<!-- add friend button -->
 			<div ng-if="CurrentUserBuyerDetail.USERID != arctr.global.user.USERID">
@@ -39,12 +39,12 @@
 							</div>
 								<br>
 							<div class="product-price">
-								Price: {{buyerProduct.cost_price}}
+								Price: {{buyerProduct.buy_now_price}}
 							</div>
 
 							<span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID && buyerProduct.action != 3" ng-click="removeProdBtn(buyerProduct.groupCartProductId, index)" style="position: absolute;right:0;bottom:0;cursor: pointer"><i class="fa fa-times-rectangle fa-2x"></i></span>
 							<div ng-if="buyerProduct.action == 3"  class="" style="position: absolute;left:0;bottom:0;width: 100%">
-								<span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ UploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
+								<span class="small-avatar" title="Suggested By {{ buyerProduct.GIVNAME+' '+buyerProduct.SURNAME }}"> <img src="{{ ApiUploadUrl+getDefaultAvatar(buyerProduct.imgloc) }}"/>
 								</span>
 								<span ng-if="CurrentUserBuyerDetail.USERID == arctr.global.user.USERID" style="position: absolute;right:0;bottom:0;cursor: pointer">
 								<i class="fa fa-check btn btn-success" ng-click="acceptProdInCart(buyerProduct.groupCartProductId)" title="Accept"></i>
@@ -54,7 +54,7 @@
 						</div>
 						<div class="product-images">
 							<div class="product-image">
-								<img src="{{UploadUrl}}{{buyerProduct.img_loc}}" alt="">
+								<img src="{{ApiUploadUrl}}{{buyerProduct.img_loc}}" alt="">
 							</div>
 						</div>
 					</div>
@@ -70,7 +70,7 @@
 					<div class="usr-img list crt_usrs col-md-2" ng-repeat="user in cartUsers track by $index">
                       <div title="Remove User" ng-click="removeCartUsr(user.USERID, $index)" class="icon crt-usr-img" title="{{user.GIVNAME+' '+user.SURNAME}}">
 
-                      	<img fallback-src="{{UploadUrl+'/images/default-avatar.png'}}" src="{{UploadUrl+getDefaultAvatar(user.img_loc)}}" />
+                      	<img fallback-src="{{ApiUploadUrl+'anerve/usr_images/default-avatar.png'}}" src="{{ApiUploadUrl+getDefaultAvatar(user.img_loc)}}" />
 
                       </div>
                     </div>
@@ -85,7 +85,7 @@
 				 	</div>
 					<li class="crt_usrs list buyer-products col-md-12" ng-repeat="comment in cartComments track by $index">
                         <div class="icon col-md-2" title="{{comment.GIVNAME+' '+comment.SURNAME}}">
-                        	<img src="{{UploadUrl+getDefaultAvatar(comment.img_loc)}}" />
+                        	<img src="{{ApiUploadUrl+getDefaultAvatar(comment.img_loc)}}" />
                         </div>
                           <div class="msg col-md-10"> 
                           	{{ comment.chat_text  }} <small>({{ comment.chattime }})</small>
