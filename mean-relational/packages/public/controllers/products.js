@@ -664,13 +664,9 @@
         $rootScope.addorCreateCart = function(prodId, img){   
            products.get({ productId: prodId}, function(product) {
                 //$rootScope.cart.product[prodId] = product
-                var img_loc_url = product.img_loc, expr = 'http';
-                if(img_loc_url.indexOf(expr) === -1){
-                  img_loc_url = $rootScope.ApiUploadUrl+img_loc_url;
-                }
                  $rootScope.cart.push({
                   'buy_now_price':product.buy_now_price,
-                  'img_loc':img_loc_url,
+                  'img_loc':$rootScope.ApiUploadUrl+product.img_loc,
                   'name':product.name
                 });
             });

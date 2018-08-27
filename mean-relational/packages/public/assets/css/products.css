@@ -704,6 +704,7 @@ font-size: 30px;
 .product-detail-side-bar .product-owners p{}
 .product-detail-side-bar .product-owners ul{
     max-width: 80%;
+    margin: 0 auto;
     text-align: center;
 }
 .product-detail-side-bar .product-owners ul li{
@@ -731,6 +732,7 @@ font-size: 30px;
     padding: 10px;
     margin: 10px;
     background: #b7b7b7;
+    min-height: 300px;
 }
 .product-detail-side-bar .tabs-container .tab-contents .init-first{}
 .product-detail-side-bar .tabs-container .tab-contents .tabs-content{}

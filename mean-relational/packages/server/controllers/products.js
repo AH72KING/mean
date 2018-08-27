@@ -341,8 +341,9 @@ exports.createCart = function(req, res) {
 
             res2.on('end', function() {
                 
-                data = JSON.parse(body); 
-                              /*var cart_items     = data.cart_items;
+                try{
+                    data = JSON.parse(body);
+                                  /*var cart_items     = data.cart_items;
                               var cartUsers      = data.cartUsers;
                               var cart_chats     = data.cart_chats;
                               var cart_events    = data.cart_events;*/
@@ -356,12 +357,15 @@ exports.createCart = function(req, res) {
                               var createtime     = data.createtime;
                               var current_total  = data.current_total;
                               var currency       = data.currency;*/
-                if(RequestUser){
-                  localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
-                }else{
-                  localStorage.setItem('grp_cartId',grp_cartId);   
-                }           
-                return res.json(data);
+                  if(RequestUser){
+                    localStorage.setItem('grp_cartId_'+user_id,grp_cartId);   
+                  }else{
+                    localStorage.setItem('grp_cartId',grp_cartId);   
+                  }           
+                      return res.jsonp(data);  
+                }catch(e){
+                    return res.jsonp(e); 
+                }
             });
         });
 
@@ -407,8 +411,12 @@ exports.addToCart = function(req, res) {
 
         res2.on('end', function() { 
            // data = JSON.stringify(body);
-            data = JSON.parse(body);  
-            return res.jsonp(data);
+          try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+          }catch(e){
+              return res.jsonp(e); 
+          }
         });
     });
 
@@ -454,8 +462,12 @@ exports.addUserToCart = function(req, res){
         res2.on('end', function() { 
 
            // data = JSON.stringify(body);
-            data = JSON.parse(body);  
-            return res.jsonp(data);
+           try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+            }catch(e){
+                return res.jsonp(e); 
+            }
         });
     });
 
@@ -494,8 +506,12 @@ exports.removeUserFromCart = function(req, res){
         });
 
         res2.on('end', function() { 
-            data = JSON.parse(body);  
-            return res.jsonp(data);
+            try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+            }catch(e){
+                return res.jsonp(e); 
+            }
         });
     });
 
@@ -545,8 +561,12 @@ exports.nl_removefromCart = function(req, res) {
         });
 
         res2.on('end', function() { 
-            data = JSON.parse(body);  
-            return res.jsonp(data);
+            try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+            }catch(e){
+                return res.jsonp(e); 
+            }
         });
     });
 
@@ -622,8 +642,12 @@ exports.myfriends =  function(req, res){
         });
         res2.on('end', function() { 
           data = JSON.stringify(body);
-          data = JSON.parse(body);  
-          return res.jsonp(data);
+          try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+          }catch(e){
+              return res.jsonp(e); 
+          }
         });
     });
 
@@ -830,8 +854,12 @@ exports.suggestProd = function(req, res){
                     res2.on('end', function() { 
 
                        // data = JSON.stringify(body);
-                        data = JSON.parse(body);  
-                        return res.jsonp(data);
+                        try{
+                            data = JSON.parse(body);
+                            return res.jsonp(data);  
+                        }catch(e){
+                            return res.jsonp(e); 
+                        }
                     });
                 });
 
@@ -874,8 +902,12 @@ exports.acceptProdInCart = function(req, res){
           res2.on('end', function() { 
  
              // data = JSON.stringify(body);
-              data = JSON.parse(body);  
-              return res.jsonp(data);
+              try{
+                data = JSON.parse(body);
+                  return res.jsonp(data);  
+              }catch(e){
+                  return res.jsonp(e); 
+              }
           });
       });
 
@@ -954,8 +986,12 @@ exports.getAisles = function(req, res){
       });
       res2.on('end', function() { 
         //data = JSON.stringify(body);
-          data = JSON.parse(body);  
-          return res.jsonp(data);
+         try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+          }catch(e){
+              return res.jsonp(e); 
+          }
       });
     });
 
@@ -990,8 +1026,13 @@ exports.getAllOffers = function(req, res){
          //data = JSON.stringify(body);
            console.log(url);
            console.log(body);
-           var offerData = JSON.parse(body);  
-           return res.jsonp(offerData);
+           try{
+              var offerData = JSON.parse(body);
+              return res.jsonp(offerData);  
+            }
+            catch(e){
+              return res.jsonp(e); 
+            }
        });
      });
  
@@ -1026,8 +1067,12 @@ exports.getAllProdsInLocDefault_thin = function(req, res){
         //data = JSON.stringify(body);
           console.log(url);
           console.log(body);
-          data = JSON.parse(body);  
-          return res.jsonp(data);
+          try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+          }catch(e){
+              return res.jsonp(e); 
+          }
       });
     });
 
@@ -1060,8 +1105,12 @@ exports.getAllProdsInLocDefaultInAisle_mini = function(req, res){
       });
       res2.on('end', function() { 
         //data = JSON.stringify(body);
-          data = JSON.parse(body);  
-          return res.jsonp(data);
+          try{
+              data = JSON.parse(body);
+              return res.jsonp(data);  
+          }catch(e){
+              return res.jsonp(e); 
+          }
       });
     });
 
